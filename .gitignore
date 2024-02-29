@@ -161,3 +161,4 @@ cython_debug/
 
 data/lm-kbc/statistics.json
 data/lm-kbc/*/proc
+data/lm-kbc/*/raw
