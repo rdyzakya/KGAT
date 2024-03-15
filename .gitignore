@@ -162,3 +162,7 @@ cython_debug/
 data/lm-kbc/statistics.json
 data/lm-kbc/*/proc
 data/lm-kbc/*/raw
+
+data/subgraph-gen/statistics.json
+data/subgraph-gen/*/proc
+data/subgraph-gen/*/raw
