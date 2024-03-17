@@ -3,7 +3,7 @@ import pandas as pd
 import os
 
 def load_dataset(path):
-    with open(path, 'r') as fp:
+    with open(path, 'r', encoding="utf-8") as fp:
         data = fp.read().strip().splitlines()
     data = [{ i : v for i, v in enumerate(el.split())} for el in data]
     data = pd.DataFrame(data)
@@ -45,7 +45,7 @@ def convert(ds, out_path):
 
     res["coo"] = coo
 
-    with open(out_path, 'w') as fp:
+    with open(out_path, 'w', encoding="utf-8") as fp:
         json.dump(res, fp)
 
     return res
