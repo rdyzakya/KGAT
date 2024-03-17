@@ -148,7 +148,7 @@ download_file(url_conceptnet, url_conceptnet.split('/')[-1])
 if not os.path.exists("./conceptnet/raw"):
     os.makedirs("./conceptnet/raw")
 
-extract_zip("data_preprocessed_release.zip", "./qagnn/raw")
+extract_zip("data_preprocessed_release.zip", "./conceptnet/raw")
 
 os.remove(url_conceptnet.split('/')[-1])
 
