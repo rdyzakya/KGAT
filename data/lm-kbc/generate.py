@@ -91,6 +91,7 @@ url_mars = "https://github.com/zjunlp/MKG_Analogy"
 url_freebase = "https://download.microsoft.com/download/8/7/0/8700516A-AB3D-4850-B4BB-805C515AECE1/FB15K-237.2.zip"
 url_freebase_mid2name = "https://drive.usercontent.google.com/download?id=0B52yRXcdpG6MaHA5ZW9CZ21MbVk&export=download&authuser=0&confirm=t&uuid=9f09fae2-0885-4aff-bf65-e55c9ebeac19&at=APZUnTW9rF2jBHGa2Iqq5_zrX7kv%3A1709103664110"
 
+url_conceptnet = "https://nlp.stanford.edu/projects/myasu/QAGNN/data_preprocessed_release.zip"
 # lm-kbc 2022
 print("Downloading and preprocessing lm-kbc2022...")
 run_command(["git", "clone", url_lmkbc2022])
@@ -138,7 +139,20 @@ extract_gzip("mid2name.gz", "./freebase/raw/mid2name.tsv")
 os.remove(url_freebase.split('/')[-1])
 os.remove("mid2name.gz")
 
-# run_command(["cd", "freebase", "&&", "python", "convert.py"])
+run_command(["cd", "freebase", "&&", "python", "convert.py"])
+
+# conceptnet
+print("Downloading and preprocessing conceptnet...")
+download_file(url_conceptnet, url_conceptnet.split('/')[-1])
+
+if not os.path.exists("./conceptnet/raw"):
+    os.makedirs("./conceptnet/raw")
+
+extract_zip("data_preprocessed_release.zip", "./qagnn/raw")
+
+os.remove(url_conceptnet.split('/')[-1])
+
+run_command(["cd", "conceptnet", "&&", "python", "convert.py"])
 
 print("Processing statistics...")
 listdir = os.listdir()

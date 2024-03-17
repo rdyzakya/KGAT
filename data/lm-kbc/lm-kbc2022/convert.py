@@ -77,5 +77,5 @@ if not os.path.exists(proc_dir):
 
 for split in data_split:
     raw_path = os.path.join(raw_dir, f"{split}.jsonl")
-    res_path = os.path.join(proc_dir, f"{split}.json")
+    res_path = os.path.join(proc_dir, f"{split}.json") if split != "dev" else os.path.join(proc_dir, "val.json")
     convert(raw_path, res_path)

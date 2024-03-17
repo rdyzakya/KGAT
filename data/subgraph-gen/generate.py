@@ -94,7 +94,6 @@ extract_zip("data_preprocessed_release.zip", "./qagnn/raw")
 os.remove(url_qagnn.split('/')[-1])
 
 run_command(["cd", "qagnn", "&&", "python", "convert.py"])
-# data_preprocessed_release  data
 
 # # lm-kbc 2023
 # print("Downloading and preprocessing lm-kbc2023...")
