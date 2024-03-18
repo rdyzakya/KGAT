@@ -66,6 +66,7 @@ def load_json(path):
     return data
 
 url_atomic = "https://storage.googleapis.com/ai2-mosaic/public/atomic/v1.0/atomic_data.tgz"
+url_graphwriter = "https://github.com/rikdz/GraphWriter"
 url_qagnn = "https://nlp.stanford.edu/projects/myasu/QAGNN/data_preprocessed_release.zip"
 url_text2kg = "https://github.com/cenguix/Text2KGBench"
 
@@ -82,6 +83,17 @@ os.remove(url_atomic.split('/')[-1])
 
 run_command(["cd", "atomic", "&&", "python", "convert.py"])
 
+# graphwriter
+print("Downloading and preprocessing graphwriter...")
+run_command(["git", "clone", url_graphwriter])
+try:
+    shutil.copytree("./GraphWriter/data", "./graphwriter/raw")
+except:
+    pass
+change_permissions("./GraphWriter/.git", 0o777)
+shutil.rmtree("./GraphWriter")
+run_command(["cd", "graphwriter", "&&", "python", "convert.py"])
+
 # qagnn
 print("Downloading and preprocessing qagnn...")
 download_file(url_qagnn, url_qagnn.split('/')[-1])
@@ -95,24 +107,17 @@ os.remove(url_qagnn.split('/')[-1])
 
 run_command(["cd", "qagnn", "&&", "python", "convert.py"])
 
-# # lm-kbc 2023
-# print("Downloading and preprocessing lm-kbc2023...")
-# run_command(["git", "clone", url_lmkbc2023])
-# try:
-#     shutil.copytree("./dataset2023/data", "./lm-kbc2023/raw")
-# except:
-#     pass
-# change_permissions("./dataset2023/.git", 0o777)
-# shutil.rmtree("./dataset2023")
-# run_command(["cd", "lm-kbc2023", "&&", "python", "convert.py"])
+# text2kg
+print("Downloading and preprocessing text2kg...")
+run_command(["git", "clone", url_text2kg])
+try:
+    shutil.copytree("./Text2KGBench/data", "./Text2KGBench/raw")
+except:
+    pass
+change_permissions("./Text2KGBench/.git", 0o777)
+shutil.rmtree("./Text2KGBench")
+run_command(["cd", "text2kg", "&&", "python", "convert.py"])
 
-# # mars
-# run_command(["git", "clone", url_mars])
-# print("Downloading and preprocessing mars...")
-# try:
-#     shutil.copytree("./MKG_Analogy/MarT/dataset/MarKG", "./mars/raw")
-# except:
-#     pass
-# change_permissions("./MKG_Analogy/.git", 0o777)
-# shutil.rmtree("./MKG_Analogy")
-# run_command(["cd", "mars", "&&", "python", "convert.py"])
+# webnlg
+print("Downloading and preprocessing webnlg...")
+run_command(["cd", "webnlg", "&&", "python", "convert.py"])

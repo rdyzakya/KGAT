@@ -1,7 +1,6 @@
 import os
 import subprocess
 import shutil
-import networkx as nx
 import json
 import requests
 import gzip, zipfile
@@ -64,25 +63,6 @@ def load_json(path):
     with open(path, 'r') as fp:
         data = json.load(fp)
     return data
-
-def summarize_statistic(graph_data):
-    G = nx.DiGraph()
-
-    for s, o, r in graph_data["coo"]:
-        G.add_edge(s, o, relation=r)
-    
-    stats = {
-        "N Triples" : len(graph_data["coo"]),
-        "N Nodes" : graph_data["num_entities"],
-        "N Relation" : graph_data["num_relations"],
-        "Avg node degree" : len(graph_data["coo"])/ graph_data["num_entities"],
-        "Density" : nx.density(G),
-        "Avg degree centrality": sum(nx.degree_centrality(G).values())/graph_data["num_entities"],
-        "Avg betweenness centrality": sum(nx.betweenness_centrality(G).values())/graph_data["num_entities"],
-        "Avg closeness centrality": sum(nx.closeness_centrality(G).values())/graph_data["num_entities"],
-    }
-
-    return stats
 
 url_lmkbc2022 = "https://github.com/lm-kbc/dataset2022"
 url_lmkbc2023 = "https://github.com/lm-kbc/dataset2023"
@@ -153,20 +133,3 @@ extract_zip("data_preprocessed_release.zip", "./conceptnet/raw")
 os.remove(url_conceptnet.split('/')[-1])
 
 run_command(["cd", "conceptnet", "&&", "python", "convert.py"])
-
-print("Processing statistics...")
-listdir = os.listdir()
-statistics = dict()
-for path in listdir:
-    if not os.path.isdir(path):
-        continue
-    statistics[path] = dict()
-    proc_path = os.path.join(path, "proc")
-    for fname in os.listdir(proc_path):
-        graph_data = load_json(
-            os.path.join(proc_path, fname)
-        )
-        statistics[path][fname.split('.')[0]] = summarize_statistic(graph_data)
-
-with open("statistics.json", 'w') as fp:
-    json.dump(statistics, fp)
