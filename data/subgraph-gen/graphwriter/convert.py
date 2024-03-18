@@ -1,8 +1,13 @@
 import pandas as pd
 import random
 from tqdm import tqdm
+import numpy as np
+import json
 
 random.seed(42)
+
+min_ratio = 0.1
+max_ratio = 0.5
 
 def preprocess1(df, rel):
     result = []
@@ -28,7 +33,8 @@ def preprocess1(df, rel):
         })
     return result
 
-def preprocess2(ds, all_ds):
+def preprocess2(ds, all_ds, entity2id, rel2id):
+    result = []
     for el in tqdm(ds):
         text = el["text"]
         entities = el["entities"]
@@ -52,10 +58,38 @@ def preprocess2(ds, all_ds):
             random_threshold = (random.random() * (max_ratio - min_ratio)) + min_ratio
             if ratio <= random_threshold:
                 break
-        x_triplets = list(map(list, x_triplets))
-        y_triplets = list(map(list, y_triplets))
         
-        all_relations = []
+        # still in the form of string
+        x_triplets = list(x_triplets)
+        y_triplets = list(y_triplets)
+        
+        all_relations = list(set([t[2] for t in x_triplets]))
+
+        all_entities = sorted([entity2id[el] for el in all_entities])
+        all_relations = sorted([rel2id[el] for el in all_relations])
+        entities = [entity2id[el] for el in entities]
+
+        y_node_cls = [int(el in entities) for el in all_entities]
+
+        internal_entity2id = {k : v for v, k in enumerate(all_entities)}
+        internal_rel2id = {k : v for v, k in enumerate(all_relations)}
+
+        x_coo = [[internal_entity2id[el[0]], internal_entity2id[el[1]], internal_rel2id[el[2]]] for el in x_triplets]
+        y_coo = [[internal_entity2id[el[0]], internal_entity2id[el[1]], internal_rel2id[el[2]]] for el in y_triplets]
+
+        x_coo = np.transpose(x_coo).tolist()
+        y_coo = np.transpose(y_coo).tolist()
+
+        result.append({
+            "text" : text,
+            "entities" : all_entities,
+            "relations" : all_relations,
+            "x_coo" : x_coo,
+            "y_coo" : y_coo,
+            "y_node_cls" : y_node_cls
+        })
+    
+    return result
 
 train_path = "./raw/preprocessed.train.tsv"
 val_path = "./raw/preprocessed.val.tsv"
@@ -89,5 +123,15 @@ with open("./proc/relations.txt", 'w') as fp:
 entity2id = {el : i for i, el in enumerate(entities)}
 rel2id = {el : i for i, el in enumerate(relations)}
 
-min_ratio = 0.1
-max_ratio = 0.5
+train = preprocess2(train, all_ds, entity2id, rel2id)
+val = preprocess2(val, all_ds, entity2id, rel2id)
+test = preprocess2(test, all_ds, entity2id, rel2id)
+
+with open("./proc/train.json", 'w') as fp:
+    json.dump(train, fp)
+
+with open("./proc/val.json", 'w') as fp:
+    json.dump(val, fp)
+
+with open("./proc/test.json", 'w') as fp:
+    json.dump(test, fp)
