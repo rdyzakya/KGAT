@@ -51,15 +51,16 @@ def preprocess(ds, entity2id, rel2id):
         x_coo = [[internal_entity2id[entity2id[el[0]]], internal_entity2id[entity2id[el[2]]], internal_rel2id[rel2id[el[1]]]] for el in x_triples]
         y_coo = [[internal_entity2id[entity2id[el[0]]], internal_entity2id[entity2id[el[2]]], internal_rel2id[rel2id[el[1]]]] for el in y_triples]
 
-        x_coo = np.transpose(x_coo).tolist()
-        y_coo = np.transpose(y_coo).tolist()
+        # x_coo = np.transpose(x_coo).tolist()
+        # y_coo = np.transpose(y_coo).tolist()
+        y_coo_cls = [int(el in y_coo) for el in x_coo]
 
         result.append({
                 "text" : text,
                 "entities" : all_entities,
                 "relations" : all_relations,
                 "x_coo" : x_coo,
-                "y_coo" : y_coo,
+                "y_coo_cls" : y_coo_cls,
                 "y_node_cls" : y_node_cls
             })
     

@@ -122,19 +122,23 @@ def create_ds(all_statement, all_grounded, all_graph):
                 x_coo[:,2] = concept_index_vectorize(x_coo[:,2])
                 x_coo = x_coo.T
                 x_coo = x_coo[[1,2,0]] # subject - object - relation
-
+                x_coo = x_coo.T
+            
+            y_coo_cls = [0 for el in x_coo]
             if len(y_coo) > 0:
                 y_coo[:,1] = concept_index_vectorize(y_coo[:,1])
                 y_coo[:,2] = concept_index_vectorize(y_coo[:,2])
                 y_coo = y_coo.T
                 y_coo = y_coo[[1,2,0]]
+                y_coo = y_coo.T
+                y_coo_cls = [int(el in y_coo) for el in x_coo]
 
             entry = {
                 "text" : answer_statement,
                 "entities" : concept_indexs.tolist(),
                 "relations" : relation_indexs,
                 "x_coo" : x_coo.tolist(),
-                "y_coo" : y_coo.tolist(),
+                "y_coo_cls" : y_coo_cls,
                 "y_node_cls" : y_node_cls.tolist()
             }
             ds.append(entry)

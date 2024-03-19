@@ -17,11 +17,11 @@ def preprocess1(df, rel):
         masks = row[2].split()
         assert len(entities) == len(masks)
 
-        triplets = row[3].split(" ; ")
-        for i, t in enumerate(triplets):
+        triples = row[3].split(" ; ")
+        for i, t in enumerate(triples):
             s, r, o = t.split()
             s, r, o = int(s), int(r), int(o)
-            triplets[i] = (entities[s],entities[o],rel[r]) # subject - object - relation
+            triples[i] = (entities[s],entities[o],rel[r]) # subject - object - relation
         
         masks = [el[:-1] + f"_{i}>" for i, el in enumerate(masks)]
         text = row[4]
@@ -30,7 +30,7 @@ def preprocess1(df, rel):
         result.append({
             "text" : text,
             "entities" : entities,
-            "triplets" : triplets
+            "triples" : triples
         })
     return result
 
@@ -40,31 +40,31 @@ def preprocess2(ds, all_ds, entity2id, rel2id):
         text = el["text"]
         entities = el["entities"]
         all_entities = entities.copy()
-        y_triplets = set(el["triplets"])
-        x_triplets = y_triplets.copy()
+        y_triples = set(el["triples"])
+        x_triples = y_triples.copy()
         for s in all_ds:
-            s_triplets = set(s["triplets"])
+            s_triples = set(s["triples"])
             s_entities = s["entities"]
-            if y_triplets == s_triplets:
+            if y_triples == s_triples:
                 continue
 
-            nodes1 = set([t[0] for t in x_triplets] + [t[1] for t in x_triplets])
-            nodes2 = set([t[0] for t in s_triplets] + [t[1] for t in s_triplets])
+            nodes1 = set([t[0] for t in x_triples] + [t[1] for t in x_triples])
+            nodes2 = set([t[0] for t in s_triples] + [t[1] for t in s_triples])
 
             if len(nodes1.intersection(nodes2)) > 0:
-                x_triplets = x_triplets.union(s_triplets)
+                x_triples = x_triples.union(s_triples)
                 all_entities.extend(s_entities)
             
-            ratio = len(y_triplets) / len(x_triplets)
+            ratio = len(y_triples) / len(x_triples)
             random_threshold = (random.random() * (max_ratio - min_ratio)) + min_ratio
             if ratio <= random_threshold:
                 break
         
         # still in the form of string
-        x_triplets = list(x_triplets)
-        y_triplets = list(y_triplets)
+        x_triples = list(x_triples)
+        y_triples = list(y_triples)
         
-        all_relations = list(set([t[2] for t in x_triplets]))
+        all_relations = list(set([t[2] for t in x_triples]))
 
         all_entities = sorted([entity2id[el] for el in all_entities])
         all_relations = sorted([rel2id[el] for el in all_relations])
@@ -75,18 +75,17 @@ def preprocess2(ds, all_ds, entity2id, rel2id):
         internal_entity2id = {k : v for v, k in enumerate(all_entities)}
         internal_rel2id = {k : v for v, k in enumerate(all_relations)}
 
-        x_coo = [[internal_entity2id[entity2id[el[0]]], internal_entity2id[entity2id[el[1]]], internal_rel2id[rel2id[el[2]]]] for el in x_triplets]
-        y_coo = [[internal_entity2id[entity2id[el[0]]], internal_entity2id[entity2id[el[1]]], internal_rel2id[rel2id[el[2]]]] for el in y_triplets]
+        x_coo = [[internal_entity2id[entity2id[el[0]]], internal_entity2id[entity2id[el[1]]], internal_rel2id[rel2id[el[2]]]] for el in x_triples]
+        y_coo = [[internal_entity2id[entity2id[el[0]]], internal_entity2id[entity2id[el[1]]], internal_rel2id[rel2id[el[2]]]] for el in y_triples]
 
-        x_coo = np.transpose(x_coo).tolist()
-        y_coo = np.transpose(y_coo).tolist()
+        y_coo_cls = [int(el in y_coo) for el in x_coo]
 
         result.append({
             "text" : text,
             "entities" : all_entities,
             "relations" : all_relations,
             "x_coo" : x_coo,
-            "y_coo" : y_coo,
+            "y_coo_cls" : y_coo_cls,
             "y_node_cls" : y_node_cls
         })
     

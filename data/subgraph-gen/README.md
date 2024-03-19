@@ -6,7 +6,7 @@
 2. qagnn : https://github.com/michiyasunaga/qagnn
 3. text2kg : https://github.com/cenguix/Text2KGBench
 4. webnlg : https://huggingface.co/datasets/web_nlg
-5. graphwriter : https://github.com/rikdz/GraphWriter
+5. graph-writer : https://github.com/rikdz/GraphWriter
 
 ## Convention
 
@@ -16,6 +16,6 @@
     * text : text
     * entities : list of entity index (corresponds to entities.txt)
     * relations : list of relation index (corresponds to relations.txt)
-    * x_coo : input coo with shape of (3, TX) with TX is the number of triplets in x_coo
-    * y_coo : output coo with shape of (3, TY) with TY is the number of triplets in y_coo, the triplets that is related with the text
-    * y_node_cls : list of node labels that corresponds to entities (0 if the node is not related with the text, 1 otherwise)
+    * x_coo : list of coo triples (entity and relation index), for each triple contains \[subject_id, object_id, relation_id\]
+    * y_coo_cls : correspond to the x_coo (1 if the triples exist, 0 otherwise)
+    * y_node_cls : list of node labels that corresponds to entities (1 if the node is related with the text, 0 otherwise)

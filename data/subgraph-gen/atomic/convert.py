@@ -100,20 +100,22 @@ for el in tqdm(ds):
     en_map = {e : i for i, e in enumerate(entities)}
     r_map = {r : i for i, r in enumerate(relations)}
 
-    y_coo = np.array([
+    y_coo = [
         [en_map[entity_map[t[0]]], en_map[entity_map[t[1]]], r_map[rel_map[t[2]]]] for t in el_triples
-    ]).T.tolist()
+    ]
 
-    x_coo = np.array([
+    x_coo = [
         [en_map[entity_map[t[0]]], en_map[entity_map[t[1]]], r_map[rel_map[t[2]]]] for t in res_triples
-    ]).T.tolist()
+    ]
+
+    y_coo_cls = [int(el in y_coo) for el in x_coo]
     
     ds2.append({
         "text" : el["text"],
         "entities" : entities,
         "relations" : relations,
         "x_coo" : x_coo,
-        "y_coo" : y_coo,
+        "y_coo_cls" : y_coo_cls,
         "y_node_cls" : y_node_cls
     })
 
