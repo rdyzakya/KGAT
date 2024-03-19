@@ -87,12 +87,12 @@ run_command(["cd", "atomic", "&&", "python", "convert.py"])
 print("Downloading and preprocessing graphwriter...")
 run_command(["git", "clone", url_graphwriter])
 try:
-    shutil.copytree("./GraphWriter/data", "./graphwriter/raw")
+    shutil.copytree("./GraphWriter/data", "./graph-writer/raw")
 except:
     pass
 change_permissions("./GraphWriter/.git", 0o777)
 shutil.rmtree("./GraphWriter")
-run_command(["cd", "graphwriter", "&&", "python", "convert.py"])
+run_command(["cd", "graph-writer", "&&", "python", "convert.py"])
 
 # qagnn
 print("Downloading and preprocessing qagnn...")
