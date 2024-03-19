@@ -3,6 +3,7 @@ import random
 from tqdm import tqdm
 import numpy as np
 import json
+import os
 
 random.seed(42)
 
@@ -25,7 +26,7 @@ def preprocess1(df, rel):
         masks = [el[:-1] + f"_{i}>" for i, el in enumerate(masks)]
         text = row[4]
         for i, m in enumerate(masks):
-            text.replace(m, entities[i])
+            text = text.replace(m, entities[i])
         result.append({
             "text" : text,
             "entities" : entities,
@@ -42,13 +43,13 @@ def preprocess2(ds, all_ds, entity2id, rel2id):
         y_triplets = set(el["triplets"])
         x_triplets = y_triplets.copy()
         for s in all_ds:
-            s_triplets = s["triplets"]
+            s_triplets = set(s["triplets"])
             s_entities = s["entities"]
             if y_triplets == s_triplets:
                 continue
 
             nodes1 = set([t[0] for t in x_triplets] + [t[1] for t in x_triplets])
-            nodes2 = set([t[0] for t in y_triplets] + [t[1] for t in y_triplets])
+            nodes2 = set([t[0] for t in s_triplets] + [t[1] for t in s_triplets])
 
             if len(nodes1.intersection(nodes2)) > 0:
                 x_triplets = x_triplets.union(s_triplets)
@@ -74,8 +75,8 @@ def preprocess2(ds, all_ds, entity2id, rel2id):
         internal_entity2id = {k : v for v, k in enumerate(all_entities)}
         internal_rel2id = {k : v for v, k in enumerate(all_relations)}
 
-        x_coo = [[internal_entity2id[el[0]], internal_entity2id[el[1]], internal_rel2id[el[2]]] for el in x_triplets]
-        y_coo = [[internal_entity2id[el[0]], internal_entity2id[el[1]], internal_rel2id[el[2]]] for el in y_triplets]
+        x_coo = [[internal_entity2id[entity2id[el[0]]], internal_entity2id[entity2id[el[1]]], internal_rel2id[rel2id[el[2]]]] for el in x_triplets]
+        y_coo = [[internal_entity2id[entity2id[el[0]]], internal_entity2id[entity2id[el[1]]], internal_rel2id[rel2id[el[2]]]] for el in y_triplets]
 
         x_coo = np.transpose(x_coo).tolist()
         y_coo = np.transpose(y_coo).tolist()
@@ -115,9 +116,12 @@ for el in all_ds:
     entities.extend(el["entities"])
 entities = list(set(entities))
 
-with open("./proc/entities.txt", 'w') as fp:
+if not os.path.exists("./proc"):
+    os.makedirs("./proc")
+
+with open("./proc/entities.txt", 'w', encoding="utf-8") as fp:
     fp.write('\n'.join(entities))
-with open("./proc/relations.txt", 'w') as fp:
+with open("./proc/relations.txt", 'w', encoding="utf-8") as fp:
     fp.write('\n'.join(relations))
 
 entity2id = {el : i for i, el in enumerate(entities)}
