@@ -55,7 +55,7 @@ df_copy[2] = df_copy[2].apply(entity2id.get)
 
 df_copy = df_copy[[1,2,0]] # subject - object - relation
 
-coo = [list(el.values()) for el in df_copy.to_dict(orient="records")]
+triples = [list(el.values()) for el in df_copy.to_dict(orient="records")]
 
 df_copy["done"] = False
 ds = []
@@ -108,8 +108,8 @@ with open("./proc/entities.txt", 'w', encoding="utf-8") as fp:
 with open("./proc/relations.txt", 'w', encoding="utf-8") as fp:
     fp.write('\n'.join(relations))
 
-with open("./proc/coo.json", 'w') as fp:
-    json.dump(coo, fp)
+with open("./proc/triples.json", 'w') as fp:
+    json.dump(triples, fp)
 
 with open("./proc/train.json", 'w') as fp:
     json.dump(train, fp)

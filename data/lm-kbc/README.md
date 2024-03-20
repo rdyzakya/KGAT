@@ -9,10 +9,12 @@
 
 ## Convention
 1. Each dataset from each source will be splitted in to train (train.json), validation (val.json), and test (test.json)
-2. Each json file will contain keys such as:
-    * num_triplets : number of triplets
-    * num_entities : number of entities
-    * num_relations : number of relations
-    * entity : entity mapping, the key is the index, the value is the list of aliases for the corresponding entity
-    * relation : relation mapping, the key is the index, the value is the relation name
-    * coo : coordinate list, list of triplets, the order for each triplet is [subject index, object index, relation index] or [head index, tail index, relation index]
+2. Each dataset contains several additional files such as:
+    * entities.txt : list of entities
+    * relations.txt : list of relations
+    * triples.json : list of triples in the whole knowledge graph, the triple format is [subject id, object id, relation id]
+2. Each split json file will contain list of records with keys such as:
+    * subject : subject id, subject alias can be found in entities.txt
+    * relation : relation id, relation alias can be found in relations.txt
+    * objects : list of object ids (may be empty, only 1, more than 1), object alias can be found in entities.txt
+    * reference : list of triple index, the triple can be found in coo.json
