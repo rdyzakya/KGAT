@@ -107,7 +107,6 @@ def create_ds(all_statement, all_grounded, all_graph):
             y_node_cls = concept_indexs[amask]
             y_node_cls = np.isin(concept_indexs, y_node_cls).astype(np.int32)
             y_coo = x_coo[amask[x_coo[:,1]] | amask[x_coo[:,2]]]
-            # y_coo = x_coo[amask[x_coo[:,1]] | amask[x_coo[:,2]] | qmask[x_coo[:,1]] | qmask[x_coo[:,2]]]
             
             y_coo[:,1] = concept_indexs[y_coo[:,1]]
             y_coo[:,2] = concept_indexs[y_coo[:,2]]
@@ -121,7 +120,7 @@ def create_ds(all_statement, all_grounded, all_graph):
                 x_coo[:,1] = concept_index_vectorize(x_coo[:,1])
                 x_coo[:,2] = concept_index_vectorize(x_coo[:,2])
                 x_coo = x_coo.T
-                x_coo = x_coo[[1,2,0]] # subject - object - relation
+                x_coo = x_coo[[1,0,2]] # subject - relation - object
                 x_coo = x_coo.T
             
             y_coo_cls = [0 for el in x_coo]
@@ -129,7 +128,7 @@ def create_ds(all_statement, all_grounded, all_graph):
                 y_coo[:,1] = concept_index_vectorize(y_coo[:,1])
                 y_coo[:,2] = concept_index_vectorize(y_coo[:,2])
                 y_coo = y_coo.T
-                y_coo = y_coo[[1,2,0]]
+                y_coo = y_coo[[1,0,2]]
                 y_coo = y_coo.T
                 y_coo_cls = [int(el in y_coo) for el in x_coo]
 

@@ -101,11 +101,11 @@ for el in tqdm(ds):
     r_map = {r : i for i, r in enumerate(relations)}
 
     y_coo = [
-        [en_map[entity_map[t[0]]], en_map[entity_map[t[1]]], r_map[rel_map[t[2]]]] for t in el_triples
+        [en_map[entity_map[t[0]]], r_map[rel_map[t[2]]], en_map[entity_map[t[1]]]] for t in el_triples
     ]
 
     x_coo = [
-        [en_map[entity_map[t[0]]], en_map[entity_map[t[1]]], r_map[rel_map[t[2]]]] for t in res_triples
+        [en_map[entity_map[t[0]]], r_map[rel_map[t[2]]], en_map[entity_map[t[1]]]] for t in res_triples
     ]
 
     y_coo_cls = [int(el in y_coo) for el in x_coo]

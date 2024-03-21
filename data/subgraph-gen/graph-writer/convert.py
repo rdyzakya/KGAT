@@ -75,8 +75,8 @@ def preprocess2(ds, all_ds, entity2id, rel2id):
         internal_entity2id = {k : v for v, k in enumerate(all_entities)}
         internal_rel2id = {k : v for v, k in enumerate(all_relations)}
 
-        x_coo = [[internal_entity2id[entity2id[el[0]]], internal_entity2id[entity2id[el[1]]], internal_rel2id[rel2id[el[2]]]] for el in x_triples]
-        y_coo = [[internal_entity2id[entity2id[el[0]]], internal_entity2id[entity2id[el[1]]], internal_rel2id[rel2id[el[2]]]] for el in y_triples]
+        x_coo = [[internal_entity2id[entity2id[el[0]]], internal_rel2id[rel2id[el[2]]], internal_entity2id[entity2id[el[1]]]] for el in x_triples]
+        y_coo = [[internal_entity2id[entity2id[el[0]]], internal_rel2id[rel2id[el[2]]], internal_entity2id[entity2id[el[1]]]] for el in y_triples]
 
         y_coo_cls = [int(el in y_coo) for el in x_coo]
 
