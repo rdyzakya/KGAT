@@ -26,7 +26,9 @@ def find_reference(sub_id, rel_id, obj_ids, df):
             same_sub_idx = same_sub.index.to_list()
             res = res.union(same_sub_idx)
         elif decider <= 0.5: # same relation, so many
-            same_rel = df.loc[df[0] == rel_id].sample(random.randint(1, n_triples - len(res)), random_state=42)
+            same_rel = df.loc[df[0] == rel_id]
+            n_sample = min(random.randint(1, n_triples - len(res)), same_rel.shape[0])
+            same_rel = same_rel.sample(n_sample, random_state=42)
             same_rel = same_rel.loc[~same_rel.index.isin(current_triple_idx)]
             same_rel_idx = same_rel.index.to_list()
             res = res.union(same_rel_idx)
@@ -51,6 +53,16 @@ def find_reference(sub_id, rel_id, obj_ids, df):
             samples_idx = samples.index.to_list()
             res = res.union(samples_idx)
     return sorted(list(res))
+
+class NpEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        if isinstance(obj, np.floating):
+            return float(obj)
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return super(NpEncoder, self).default(obj)
 
 path = "./raw/data_preprocessed_release/cpnet/conceptnet.en.csv"
 
@@ -97,9 +109,9 @@ for i, row in tqdm(df_copy.sample(N, random_state=42).iterrows()):
 # empty, 15% from the not empty
 print(f"Processing {int(0.15 * len(ds))} iterations...")
 for i in tqdm(range(int(0.15 * len(ds)))):
-    random_subject = random.choice([df[1].sample(random_state=42).iloc[0], df[2].sample(random_state=42).iloc[0]])
-    related_relations = df.loc[df[1] == random_subject, 0].values.tolist()
-    random_relation = df.loc[~df[0].isin(related_relations), 0].sample(random_state=42).iloc[0]
+    random_subject = random.choice([df_copy[1].sample(random_state=42).iloc[0], df_copy[2].sample(random_state=42).iloc[0]])
+    related_relations = df_copy.loc[df_copy[1] == random_subject, 0].values.tolist()
+    random_relation = df_copy.loc[~df_copy[0].isin(related_relations), 0].sample(random_state=42).iloc[0]
 
     objects = []
 
@@ -126,13 +138,13 @@ with open("./proc/relations.txt", 'w', encoding="utf-8") as fp:
     fp.write('\n'.join(relations))
 
 with open("./proc/triples.json", 'w') as fp:
-    json.dump(triples, fp)
+    json.dump(triples, fp, cls=NpEncoder)
 
 with open("./proc/train.json", 'w') as fp:
-    json.dump(train, fp)
+    json.dump(train, fp, cls=NpEncoder)
 
 with open("./proc/val.json", 'w') as fp:
-    json.dump(val, fp)
+    json.dump(val, fp, cls=NpEncoder)
 
 with open("./proc/test.json", 'w') as fp:
-    json.dump(test, fp)
+    json.dump(test, fp, cls=NpEncoder)

@@ -26,7 +26,9 @@ def find_reference(sub_id, rel_id, obj_ids, df):
             same_sub_idx = same_sub.index.to_list()
             res = res.union(same_sub_idx)
         elif decider <= 0.5: # same relation, so many
-            same_rel = df.loc[df[1] == rel_id].sample(random.randint(1, n_triples - len(res)), random_state=42)
+            same_rel = df.loc[df[1] == rel_id]
+            n_sample = min(random.randint(1, n_triples - len(res)), same_rel.shape[0])
+            same_rel = same_rel.sample(n_sample, random_state=42)
             same_rel = same_rel.loc[~same_rel.index.isin(current_triple_idx)]
             same_rel_idx = same_rel.index.to_list()
             res = res.union(same_rel_idx)
@@ -66,6 +68,16 @@ def decode(ds_, mid2name):
     ds[2] = ds[2].apply(mid2name.get)
     return ds
 
+class NpEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        if isinstance(obj, np.floating):
+            return float(obj)
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return super(NpEncoder, self).default(obj)
+
 train_path = "./raw/Release/train.txt"
 val_path = "./raw/Release/valid.txt"
 test_path = "./raw/Release/test.txt"
@@ -85,14 +97,18 @@ val = decode(val, mid2name)
 test = decode(test, mid2name)
 
 df = pd.concat([train, val, test])
+df = df.dropna().reset_index(drop=True)
 
 entities = list(set(df[0].values.tolist() + df[2].values.tolist()))
-entity2id = {i : el for i, el in enumerate(entities)}
+entity2id = {el : i for i, el in enumerate(entities)}
 
 relations = df[1].unique().tolist()
-relation2id = {v : k for k, v in relations.items()}
+relation2id = {el : i for i, el in enumerate(relations)}
 
 df = df[[0,1,2]] # subject - relation - object
+df[0] = df[0].apply(entity2id.get)
+df[1] = df[1].apply(relation2id.get)
+df[2] = df[2].apply(entity2id.get)
 
 triples = [list(el.values()) for el in df.to_dict(orient="records")]
 
@@ -150,13 +166,13 @@ with open("./proc/relations.txt", 'w', encoding="utf-8") as fp:
     fp.write('\n'.join(relations))
 
 with open("./proc/triples.json", 'w') as fp:
-    json.dump(triples, fp)
+    json.dump(triples, fp, cls=NpEncoder)
 
 with open("./proc/train.json", 'w') as fp:
-    json.dump(train, fp)
+    json.dump(train, fp, cls=NpEncoder)
 
 with open("./proc/val.json", 'w') as fp:
-    json.dump(val, fp)
+    json.dump(val, fp, cls=NpEncoder)
 
 with open("./proc/test.json", 'w') as fp:
-    json.dump(test, fp)
+    json.dump(test, fp, cls=NpEncoder)
