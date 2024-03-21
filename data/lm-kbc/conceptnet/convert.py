@@ -9,6 +9,8 @@ from ordered_set import OrderedSet
 random.seed(42)
 np.random.seed(42)
 
+N = 20000
+
 def find_reference(sub_id, rel_id, obj_ids, df):
     n_triples = random.randint(20,500)
     res = OrderedSet()
@@ -75,7 +77,7 @@ ds = []
 
 # not empty
 print(f"Processing {df_copy.shape[0]} iterations...")
-for i, row in tqdm(df_copy.iterrows()):
+for i, row in tqdm(df_copy.sample(N, random_state=42).iterrows()):
     if row["done"]:
         continue
     sub_rel = df_copy.loc[(df_copy[0] == row[0]) & (df_copy[1] == row[1])]
@@ -101,7 +103,7 @@ for i in tqdm(range(int(0.15 * len(ds)))):
 
     objects = []
 
-    reference = find_reference(row[1], row[0], objects, df_copy)
+    reference = find_reference(random_subject, random_relation, objects, df_copy)
 
     ds.append({
         "subject" : random_subject,
