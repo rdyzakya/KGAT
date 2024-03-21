@@ -1,48 +1,61 @@
 import os
 import json
 import pandas as pd
+import numpy as np
 import random
 from tqdm import tqdm
+from ordered_set import OrderedSet
 
 random.seed(42)
+np.random.seed(42)
 
-def find_reference(sub_id, rel_id, df):
+def find_reference(sub_id, rel_id, obj_ids, df):
     n_triples = random.randint(20,500)
-    res = set()
+    res = OrderedSet()
+    current_idx = df.loc[(df[1] == sub_id) & (df[0] == rel_id) & (df[2].isin(obj_ids))].index
+    symmetry_idx = df.loc[(df[2] == sub_id) & (df[0] == rel_id) & (df[1].isin(obj_ids))].index
+
+    current_triple_idx = current_idx.to_list() + symmetry_idx.to_list()
     while len(res) < n_triples:
         decider = random.random()
-        if decider <= 0.25: # same entity
+        if decider <= 0.45: # same entity
             same_sub = df.loc[(df[1] == sub_id) | (df[2] == sub_id)]
-            res = res.union(same_sub.index.to_list())
-        elif decider <= 0.5: # same relation
-            same_rel = df.loc[df[0] == rel_id]
-            res = res.union(same_rel.index.to_list())
+            same_sub = same_sub.loc[~same_sub.index.isin(current_triple_idx)]
+            same_sub_idx = same_sub.index.to_list()
+            res = res.union(same_sub_idx)
+        elif decider <= 0.5: # same relation, so many
+            same_rel = df.loc[df[0] == rel_id].sample(random.randint(1, n_triples - len(res)), random_state=42)
+            same_rel = same_rel.loc[~same_rel.index.isin(current_triple_idx)]
+            same_rel_idx = same_rel.index.to_list()
+            res = res.union(same_rel_idx)
         elif decider <= 0.75: # tailing
             if len(res) == 0:
                 continue
             res_triples = df.loc[list(res)]
 
             res_nodes = res_triples[1].values.tolist() + res_triples[2].values.tolist()
-            if sub_id in res_nodes:
-                res_nodes.remove(sub_id)
 
             k = random.randint(1,len(res_nodes))
             chosen_nodes = random.choices(res_nodes, k=k)
 
             related_triples = df.loc[df[1].isin(chosen_nodes) | df[2].isin(chosen_nodes)]
-            res = res.union(related_triples.index.to_list())
+            related_triples = related_triples.loc[~related_triples.index.isin(current_triple_idx)]
+            related_triples_idx = related_triples.index.to_list()
+            res = res.union(related_triples_idx)
         else: #random
             n_random_triples = random.randint(1, n_triples - len(res))
             samples = df.sample(n_random_triples, random_state=42)
-            res = res.union(samples.index.to_list())
-    return res
+            samples = samples.loc[~samples.index.isin(current_triple_idx)]
+            samples_idx = samples.index.to_list()
+            res = res.union(samples_idx)
+    return sorted(list(res))
 
 path = "./raw/data_preprocessed_release/cpnet/conceptnet.en.csv"
 
 df = pd.read_csv(path, sep="\t", header=None)
 df = df.fillna(value="nan")
 
-entities = list(set(df[1].values.tolist() + df[2].values.tolist()))
+entities = list(OrderedSet(df[1].values.tolist() + df[2].values.tolist()))
 entity2id = {el : i for i, el in enumerate(entities)}
 
 relations = df[0].unique().tolist()
@@ -53,7 +66,7 @@ df_copy[0] = df_copy[0].apply(relation2id.get)
 df_copy[1] = df_copy[1].apply(entity2id.get)
 df_copy[2] = df_copy[2].apply(entity2id.get)
 
-df_copy = df_copy[[1,2,0]] # subject - object - relation
+df_copy = df_copy[[1,0,2]] # subject - relation - object
 
 triples = [list(el.values()) for el in df_copy.to_dict(orient="records")]
 
@@ -70,7 +83,7 @@ for i, row in tqdm(df_copy.iterrows()):
     
     objects = sub_rel[2].values.tolist()
 
-    reference = find_reference(row[1], row[0], df_copy)
+    reference = find_reference(row[1], row[0], objects, df_copy)
 
     ds.append({
         "subject" : row[1],
@@ -82,22 +95,24 @@ for i, row in tqdm(df_copy.iterrows()):
 # empty, 15% from the not empty
 print(f"Processing {int(0.15 * len(ds))} iterations...")
 for i in tqdm(range(int(0.15 * len(ds)))):
-    random_subject = random.choice([df[1].sample().iloc[0], df[2].sample().iloc[0]])
+    random_subject = random.choice([df[1].sample(random_state=42).iloc[0], df[2].sample(random_state=42).iloc[0]])
     related_relations = df.loc[df[1] == random_subject, 0].values.tolist()
-    random_relation = df.loc[~df[0].isin(related_relations), 0].sample().iloc[0]
+    random_relation = df.loc[~df[0].isin(related_relations), 0].sample(random_state=42).iloc[0]
 
-    reference = find_reference(row[1], row[0], df_copy)
+    objects = []
+
+    reference = find_reference(row[1], row[0], objects, df_copy)
 
     ds.append({
         "subject" : random_subject,
         "relation" : random_relation,
-        "objects" : [],
+        "objects" : objects,
         "reference" : reference
     })
 
 random.shuffle(ds)
 
-train, val, test = ds[:int(len(ds) * 0.8)], ds[int(len(ds) * 0.8), int(len(ds) * 0.9)], ds[int(len(ds) * 0.9):]
+train, val, test = ds[:int(len(ds) * 0.8)], ds[int(len(ds) * 0.8):int(len(ds) * 0.9)], ds[int(len(ds) * 0.9):]
 
 if not os.path.exists("./proc"):
     os.makedirs("./proc")
