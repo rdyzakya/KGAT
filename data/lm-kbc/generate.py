@@ -6,7 +6,7 @@ import requests
 import gzip, zipfile
 
 def run_command(command):
-    result = subprocess.run(command, check=True, capture_output=True, shell=False)
+    result = subprocess.run(command, check=True, capture_output=True, shell=True)
 
 def change_permissions(directory, permissions):
     """
