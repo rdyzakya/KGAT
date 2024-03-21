@@ -12,7 +12,7 @@
 2. Each dataset contains several additional files such as:
     * entities.txt : list of entities
     * relations.txt : list of relations
-    * triples.json : list of triples in the whole knowledge graph, the triple format is [subject id, object id, relation id]
+    * triples.json : list of triples in the whole knowledge graph, the triple format is [subject id, relation id, object id]
 2. Each split json file will contain list of records with keys such as:
     * subject : subject id, subject alias can be found in entities.txt
     * relation : relation id, relation alias can be found in relations.txt
