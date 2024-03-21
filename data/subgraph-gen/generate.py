@@ -6,7 +6,7 @@ import requests
 import tarfile, gzip, zipfile
 
 def run_command(command):
-    subprocess.run(command, check=True, capture_output=True, shell=True)
+    subprocess.run(command, check=True, capture_output=True, shell=False)
 
 def change_permissions(directory, permissions):
     """
@@ -22,30 +22,21 @@ def change_permissions(directory, permissions):
 
     for root, dirs, files in os.walk(directory):
         for file in files:
-            try:
-                os.chmod(os.path.join(root, file), permissions)
-            except OSError as e:
-                print(f"Error changing permissions for {file}: {e}")
+            os.chmod(os.path.join(root, file), permissions)
 
 def download_file(url, destination):
-    try:
-        with requests.get(url, stream=True) as response:
-            response.raise_for_status()
-            with open(destination, 'wb') as file:
-                for chunk in response.iter_content(chunk_size=8192):
-                    if chunk:
-                        file.write(chunk)
-        print(f"File downloaded successfully: {destination}")
-    except requests.exceptions.RequestException as e:
-        print(f"Error downloading file: {e}")
+    with requests.get(url, stream=True) as response:
+        response.raise_for_status()
+        with open(destination, 'wb') as file:
+            for chunk in response.iter_content(chunk_size=8192):
+                if chunk:
+                    file.write(chunk)
+    print(f"File downloaded successfully: {destination}")
 
 def untar_tgz(tgz_file, destination):
-    try:
-        with tarfile.open(tgz_file, 'r:gz') as tar:
-            tar.extractall(destination)
-        print(f"Files extracted successfully to: {destination}")
-    except tarfile.TarError as e:
-        print(f"Error extracting files: {e}")
+    with tarfile.open(tgz_file, 'r:gz') as tar:
+        tar.extractall(destination)
+    print(f"Files extracted successfully to: {destination}")
 
 def extract_gzip(gzip_file, output_file):
     with gzip.open(gzip_file, 'rb') as f_in:
@@ -53,12 +44,9 @@ def extract_gzip(gzip_file, output_file):
             shutil.copyfileobj(f_in, f_out)
 
 def extract_zip(zip_file, destination):
-    try:
-        with zipfile.ZipFile(zip_file, 'r') as zip_ref:
-            zip_ref.extractall(destination)
-        print(f"Files extracted successfully to: {destination}")
-    except Exception as e:
-        print(f"Error extracting files: {e}")
+    with zipfile.ZipFile(zip_file, 'r') as zip_ref:
+        zip_ref.extractall(destination)
+    print(f"Files extracted successfully to: {destination}")
 
 def load_json(path):
     with open(path, 'r') as fp:
