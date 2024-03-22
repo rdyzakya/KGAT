@@ -25,3 +25,5 @@ if [! -d "./atomic/raw"]; then
 
 # echo "Downloading and preprocessing webnlg..."
 # cd webnlg && python convert.py
+
+fi
