@@ -27,7 +27,7 @@ cd "./graph-writer" && python convert.py & cd ..
 echo "Downloading and preprocessing qagnn..."
 qagnn_raw="./qagnn/raw"
 if [ ! -d "$qagnn_raw" ]; then
-    if [ -d "../lm-kbc/conceptnet/raw"]; then
+    if [ -d "../lm-kbc/conceptnet/raw" ]; then
         cp -r "../lm-kbc/conceptnet/raw" "$qagnn_raw"
     else
         wget $url_qagnn

@@ -60,6 +60,3 @@ if [ ! -d "$mars_raw" ]; then
     rm -rf "./MKG_Analogy"
 fi
 cd "./mars" && python convert.py & cd ..
-
-
-echo "woiii"
