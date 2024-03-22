@@ -6,24 +6,43 @@ url_qagnn="https://nlp.stanford.edu/projects/myasu/QAGNN/data_preprocessed_relea
 url_text2kg="https://github.com/cenguix/Text2KGBench"
 
 echo "Downloading and preprocessing atomic..."
-if [! -d "./atomic/raw"]; then
-    wget &url_atomic
-    mkdir "./atomic/raw"
-    tar -xvf "atomic_data.tgz" -c "./atomic/raw"
+atomic_raw="./atomic/raw"
+if [ ! -d "$atomic_raw" ]; then
+    wget "$url_atomic"
+    mkdir "$atomic_raw"
+    tar -xzvf  "atomic_data.tgz" -C "$atomic_raw"
     rm "atomic_data.tgz"
+    cd "./atomic" && python convert.py
+
+echo "Downloading and preprocessing graphwriter..."
+graphwriter_raw="./graph-writer/raw"
+if [ ! -d "$graphwriter_raw" ]; then
+    git clone "$url_graphwriter"
+    cp -r "./GraphWriter/data" "$graphwriter_raw"
+    rm -rf "./GraphWriter"
+    cd "./graph-writer" && python convert.py
+
+echo "Downloading and preprocessing qagnn..."
+qagnn_raw="./qagnn/raw"
+if [ ! -d "$qagnn_raw" ]; then
+    if [ -d "../lm-kbc/conceptnet/raw"]; then
+        cp -r "../lm-kbc/conceptnet/raw" "$qagnn_raw"
+    else
+        wget $url_qagnn
+        unzip "data_preprocessed_release.zip" -d "$qagnn_raw"
+        rm "data_preprocessed_release.zip"
+    cd "./qagnn" && python convert.py
+
+echo "Downloading and preprocessing text2kg..."
+text2kg_raw="./text2kg/raw"
+if [ ! -d "$text2kg_raw" ]; then
+    git clone "$url_text2kg"
+    cp -r "./Text2KGBench/data" "$text2kg_raw"
+    rm -rf "./Text2KGBench"
+    cd "./text2kg" && python convert.py
 
 
-# echo "Downloading and preprocessing graphwriter..."
-# git clone $url_graphwriter
-
-# echo "Downloading and preprocessing qagnn..."
-# wget $url_qagnn
-
-# echo "Downloading and preprocessing text2kg..."
-# git clone $url_text2kg
-
-
-# echo "Downloading and preprocessing webnlg..."
-# cd webnlg && python convert.py
+echo "Downloading and preprocessing webnlg..."
+cd "./webnlg" && python convert.py
 
 fi
