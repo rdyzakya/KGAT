@@ -13,7 +13,7 @@ if [ ! -d "$atomic_raw" ]; then
     tar -xzvf  "atomic_data.tgz" -C "$atomic_raw"
     rm "atomic_data.tgz"
 fi
-cd "./atomic" && python convert.py
+cd "./atomic" && python convert.py && cd ..
 
 echo "Downloading and preprocessing graphwriter..."
 graphwriter_raw="./graph-writer/raw"
@@ -22,7 +22,7 @@ if [ ! -d "$graphwriter_raw" ]; then
     cp -r "./GraphWriter/data" "$graphwriter_raw"
     rm -rf "./GraphWriter"
 fi
-cd "./graph-writer" && python convert.py
+cd "./graph-writer" && python convert.py & cd ..
 
 echo "Downloading and preprocessing qagnn..."
 qagnn_raw="./qagnn/raw"
@@ -35,7 +35,7 @@ if [ ! -d "$qagnn_raw" ]; then
         rm "data_preprocessed_release.zip"
     fi
 fi
-cd "./qagnn" && python convert.py
+cd "./qagnn" && python convert.py && cd ..
 
 echo "Downloading and preprocessing text2kg..."
 text2kg_raw="./text2kg/raw"
@@ -47,4 +47,4 @@ fi
 cd "./text2kg" && python convert.py
 
 echo "Downloading and preprocessing webnlg..."
-cd "./webnlg" && python convert.py
+cd "./webnlg" && python convert.py && cd..
