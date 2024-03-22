@@ -1,9 +1,9 @@
 #!/bin/bash
 
-url_atomic = "https://storage.googleapis.com/ai2-mosaic/public/atomic/v1.0/atomic_data.tgz"
-url_graphwriter = "https://github.com/rikdz/GraphWriter"
-url_qagnn = "https://nlp.stanford.edu/projects/myasu/QAGNN/data_preprocessed_release.zip"
-url_text2kg = "https://github.com/cenguix/Text2KGBench"
+url_atomic="https://storage.googleapis.com/ai2-mosaic/public/atomic/v1.0/atomic_data.tgz"
+url_graphwriter="https://github.com/rikdz/GraphWriter"
+url_qagnn="https://nlp.stanford.edu/projects/myasu/QAGNN/data_preprocessed_release.zip"
+url_text2kg="https://github.com/cenguix/Text2KGBench"
 
 echo "Downloading and preprocessing atomic..."
 if [! -d "./atomic/raw"]; then
