@@ -12,7 +12,7 @@ url_conceptnet="https://nlp.stanford.edu/projects/myasu/QAGNN/data_preprocessed_
 echo "Downloading and preprocessing conceptnet..."
 conceptnet_raw="./conceptnet/raw"
 if [ ! -d "$conceptnet_raw" ]; then
-    if [ -d "../subgraph-gen/qagnn/raw"]; then
+    if [ -d "../subgraph-gen/qagnn/raw" ]; then
         cp -r "../subgraph-gen/qagnn/raw" "$conceptnet_raw"
     else
         wget $url_conceptnet
