@@ -23,7 +23,7 @@ if [ ! -d "$graphwriter_raw" ]; then
     cp -r "./GraphWriter/data" "$graphwriter_raw"
     rm -rf "./GraphWriter"
 fi
-cd "./graph-writer" && python convert.py & cd ..
+cd "./graph-writer" && python convert.py && cd ..
 wait
 
 echo "Downloading and preprocessing qagnn..."
