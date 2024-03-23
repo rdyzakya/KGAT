@@ -14,6 +14,7 @@ if [ ! -d "$atomic_raw" ]; then
     rm "atomic_data.tgz"
 fi
 cd "./atomic" && python convert.py && cd ..
+wait
 
 echo "Downloading and preprocessing graphwriter..."
 graphwriter_raw="./graph-writer/raw"
@@ -23,6 +24,7 @@ if [ ! -d "$graphwriter_raw" ]; then
     rm -rf "./GraphWriter"
 fi
 cd "./graph-writer" && python convert.py & cd ..
+wait
 
 echo "Downloading and preprocessing qagnn..."
 qagnn_raw="./qagnn/raw"
@@ -36,6 +38,7 @@ if [ ! -d "$qagnn_raw" ]; then
     fi
 fi
 cd "./qagnn" && python convert.py && cd ..
+wait
 
 echo "Downloading and preprocessing text2kg..."
 text2kg_raw="./text2kg/raw"
@@ -44,7 +47,8 @@ if [ ! -d "$text2kg_raw" ]; then
     cp -r "./Text2KGBench/data" "$text2kg_raw"
     rm -rf "./Text2KGBench"
 fi
-cd "./text2kg" && python convert.py
+cd "./text2kg" && python convert.py && cd ..
+wait
 
 echo "Downloading and preprocessing webnlg..."
 cd "./webnlg" && python convert.py && cd..
