@@ -21,6 +21,7 @@ if [ ! -d "$conceptnet_raw" ]; then
     fi
 fi
 cd "./conceptnet" && python convert.py && cd ..
+wait
 
 echo "Downloading and preprocessing freebase..."
 freebase_raw="./freebase/raw"
@@ -33,6 +34,7 @@ if [ ! -d "$freebase_raw" ]; then
     rm "mid2name.gz"
 fi
 cd "./freebase" && python convert.py && cd ..
+wait
 
 echo "Downloading and preprocessing lm-kbc2022..."
 lmkbc2022_raw="./lm-kbc2022/raw"
@@ -42,6 +44,7 @@ if [ ! -d "$lmkbc2022_raw" ]; then
     rm -rf "./dataset2022"
 fi
 cd "./lm-kbc2022" && python convert.py & cd ..
+wait
 
 echo "Downloading and preprocessing lm-kbc2023..."
 lmkbc2023_raw="./lm-kbc2023/raw"
@@ -50,7 +53,8 @@ if [ ! -d "$lmkbc2023_raw" ]; then
     cp -r "./dataset2023/data" "$lmkbc2023_raw"
     rm -rf "./dataset2023"
 fi
-cd "./lm-kbc2023" && python convert.py & cd ..
+cd "./lm-kbc2023" && python convert.py && cd ..
+wait
 
 echo "Downloading and preprocessing mars..."
 mars_raw="./mars/raw"
@@ -59,4 +63,4 @@ if [ ! -d "$mars_raw" ]; then
     cp -r "./MKG_Analogy/MarT/dataset/MarKG" "$mars_raw"
     rm -rf "./MKG_Analogy"
 fi
-cd "./mars" && python convert.py & cd ..
+cd "./mars" && python convert.py && cd ..
