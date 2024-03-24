@@ -1,0 +1,2 @@
+# GPT2ForSequenceClassification uses the last token in order to do the classification, as other causal models (e.g. GPT-1) do.
+# Source: https://huggingface.co/docs/transformers/en/model_doc/gpt2#transformers.GPT2ForSequenceClassification

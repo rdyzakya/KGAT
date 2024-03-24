@@ -114,7 +114,7 @@ n_entity = max(entity2id.values()) + 1
 entities = [[] for i in range(n_entity)]
 for k, v in entity2id.items():
     entities[v].append(k)
-entities = ['\t'.join(el) for el in entities]
+entities = [max(el, key=len) for el in entities] # take the longest
 
 if not os.path.exists("./proc"):
     os.makedirs("./proc")
