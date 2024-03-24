@@ -19,3 +19,7 @@
     * x_coo : list of coo triples (entity and relation index), for each triple contains [subject id, relation id, object id]
     * y_coo_cls : correspond to the x_coo (1 if the triples exist, 0 otherwise)
     * y_node_cls : list of node labels that corresponds to entities (1 if the node is related with the text, 0 otherwise)
+
+
+## TODO
+1. add edge cases where there are no subgraph that relates
