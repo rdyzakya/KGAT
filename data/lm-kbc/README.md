@@ -18,3 +18,6 @@
     * relation : relation id, relation alias can be found in relations.txt
     * objects : list of object ids (may be empty, only 1, more than 1), object alias can be found in entities.txt
     * reference : list of triple index, the triple can be found in coo.json
+
+## TODO
+1. freebase change or add using `from torch_geometric.datasets import FB15k_237` (see https://github.com/pyg-team/pytorch_geometric/blob/master/examples/kge_fb15k_237.py)
