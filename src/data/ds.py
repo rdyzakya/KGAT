@@ -86,7 +86,8 @@ class LMKBCDataset(Dataset):
         entities = list(entities)
         relations = list(relations)
         
-        x_coo = torch.tensor([[entities.index(t[0]), relations.index(t[1]), entities.index[t[2]]] for t in x_coo])  # 0 - subject ; 1 - relation ; 2 - object
+        
+        x_coo = torch.tensor([[entities.index(t[0]), relations.index(t[1]), entities.index(t[2])] for t in x_coo])  # 0 - subject ; 1 - relation ; 2 - object
 
         entities = [self.id2entity[el] for el in entities]
         relations = [self.id2relation[el] for el in relations]
@@ -97,4 +98,4 @@ class LMKBCDataset(Dataset):
 
     def process_input(self, subject, relation, objects):
         # return text_in, text_out
-        pass
+        return f"S : {subject} | R : {relation} | O : ", str(objects)
