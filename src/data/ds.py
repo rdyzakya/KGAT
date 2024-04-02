@@ -13,11 +13,69 @@ def load_id2map(path):
     data = {i : el for i, el in enumerate(data)}
     return data
 
+def flatten(list_of_lists):
+    return [item for sublist in list_of_lists for item in sublist]
+
 def subgraphgen_collate_fn(batch):
-    pass
+    text, entities, relations, x_coo, y_coo_cls = zip(*batch)
+
+    text = list(text)
+    entity_mask = [[i for _ in range(len(entities[i]))] for i in range(len(entities))]
+    relation_mask = [[i for _ in range(len(relations[i]))] for i in range(len(relations))]
+
+    entity_obj = {
+        "entities" : flatten(entities),
+        "mask" : flatten(entity_mask)
+    }
+
+    relation_obj = {
+        "relations" : flatten(relations),
+        "mask" : flatten(relation_mask)
+    }
+
+    for i in range(len(x_coo)):
+        if i == 0:
+            continue
+        x_coo[i][0] += len(entities[i-1])
+        x_coo[i][1] += len(relations[i-1])
+        x_coo[i][2] += len(entities[i-1])
+    
+    x_coo = torch.hstack(x_coo)
+    y_coo_cls = torch.hstack(y_coo_cls)
+    
+    return text, entity_obj, relation_obj, x_coo, y_coo_cls
+
 
 def lmkbc_collate_fn(batch):
-    pass
+    text_in, entities, relations, x_coo, text_out = zip(*batch)
+
+    text_in = list(text_in)
+
+    entity_mask = [[i for _ in range(len(entities[i]))] for i in range(len(entities))]
+    relation_mask = [[i for _ in range(len(relations[i]))] for i in range(len(relations))]
+
+    entity_obj = {
+        "entities" : flatten(entities),
+        "mask" : flatten(entity_mask)
+    }
+
+    relation_obj = {
+        "relations" : flatten(relations),
+        "mask" : flatten(relation_mask)
+    }
+
+    for i in range(len(x_coo)):
+        if i == 0:
+            continue
+        x_coo[i][0] += len(entities[i-1])
+        x_coo[i][1] += len(relations[i-1])
+        x_coo[i][2] += len(entities[i-1])
+    
+    x_coo = torch.hstack(x_coo)
+
+    text_out = list(text_out)
+
+    return text_in, entity_obj, relation_obj, x_coo, text_out
 
 class SubgraphGenerationDataset(Dataset):
     def __init__(self, path, id2entity, id2relation):
@@ -40,12 +98,12 @@ class SubgraphGenerationDataset(Dataset):
 
         x_coo = torch.tensor(self.data[i]["x_coo"]) # 0 - subject ; 1 - relation ; 2 - object
 
-        y_coo_cls = self.data[i]["y_coo_cls"]
-        y_coo_mask = [bool(el) for el in y_coo_cls]
-        y_coo = x_coo[y_coo_mask]
+        y_coo_cls = torch.tensor(self.data[i]["y_coo_cls"])
+        # y_coo_mask = [bool(el) for el in y_coo_cls]
+        # y_coo = x_coo[y_coo_mask]
 
         x_coo = x_coo.T
-        y_coo = y_coo.T
+        # y_coo = y_coo.T
 
         return text, entities, relations, x_coo, y_coo_cls
 
