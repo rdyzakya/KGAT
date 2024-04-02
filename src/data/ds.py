@@ -20,30 +20,25 @@ def subgraphgen_collate_fn(batch):
     text, entities, relations, x_coo, y_coo_cls = zip(*batch)
 
     text = list(text)
-    entity_mask = [[i for _ in range(len(entities[i]))] for i in range(len(entities))]
-    relation_mask = [[i for _ in range(len(relations[i]))] for i in range(len(relations))]
 
-    entity_obj = {
-        "entities" : flatten(entities),
-        "mask" : flatten(entity_mask)
-    }
-
-    relation_obj = {
-        "relations" : flatten(relations),
-        "mask" : flatten(relation_mask)
-    }
+    coo_mask = []
 
     for i in range(len(x_coo)):
+        coo_mask.extend([i for _ in range(x_coo[i].shape[1])])
         if i == 0:
             continue
         x_coo[i][0] += len(entities[i-1])
         x_coo[i][1] += len(relations[i-1])
         x_coo[i][2] += len(entities[i-1])
     
+    entities = flatten(entities)
+    relations = flatten(relations)
+    
     x_coo = torch.hstack(x_coo)
+    coo_mask = torch.tensor(coo_mask)
     y_coo_cls = torch.hstack(y_coo_cls)
     
-    return text, entity_obj, relation_obj, x_coo, y_coo_cls
+    return text, entities, relations, x_coo, coo_mask, y_coo_cls
 
 
 def lmkbc_collate_fn(batch):
@@ -51,31 +46,25 @@ def lmkbc_collate_fn(batch):
 
     text_in = list(text_in)
 
-    entity_mask = [[i for _ in range(len(entities[i]))] for i in range(len(entities))]
-    relation_mask = [[i for _ in range(len(relations[i]))] for i in range(len(relations))]
-
-    entity_obj = {
-        "entities" : flatten(entities),
-        "mask" : flatten(entity_mask)
-    }
-
-    relation_obj = {
-        "relations" : flatten(relations),
-        "mask" : flatten(relation_mask)
-    }
+    coo_mask = []
 
     for i in range(len(x_coo)):
+        coo_mask.extend([i for _ in range(x_coo[i].shape[1])])
         if i == 0:
             continue
         x_coo[i][0] += len(entities[i-1])
         x_coo[i][1] += len(relations[i-1])
         x_coo[i][2] += len(entities[i-1])
     
+    entities = flatten(entities)
+    relations = flatten(relations)
+    
     x_coo = torch.hstack(x_coo)
+    coo_mask = torch.tensor(coo_mask)
 
     text_out = list(text_out)
 
-    return text_in, entity_obj, relation_obj, x_coo, text_out
+    return text_in, entities, relations, x_coo, coo_mask, text_out
 
 class SubgraphGenerationDataset(Dataset):
     def __init__(self, path, id2entity, id2relation):
