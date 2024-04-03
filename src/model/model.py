@@ -1,4 +1,5 @@
 import torch
+from llama import Transformer, Tokenizer
 
 class SubgraphGenerator(torch.nn.Module):
     def __init__(self, *args, **kwargs) -> None:
