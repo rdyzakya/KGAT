@@ -10,7 +10,7 @@ class Template:
     
     def lmkbc(self, subject, relation):
         out = self.lmkbc_template.replace(SUBJECT_MASK, subject).replace(RELATION_MASK, relation)
-        out = out.split(KG_MASK)
+        out = [el for el in out.split(KG_MASK) if len(el) > 0]
         return out
     
     def subgraphgen(self, subject, relation):
