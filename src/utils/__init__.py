@@ -1,17 +1,7 @@
-KG_MASK = "[KNOWLEDGE_GRAPH]"
-SUBJECT_MASK = "[SUBJECT]"
-RELATION_MASK = "[RELATION]"
-OBJECT_MASK = "[OBJECT]"
+KG_MASK = "<KG>"
+SUBJECT_MASK = "<SUBJECT>"
+RELATION_MASK = "<RELATION>"
+OBJECT_MASK = "<OBJECT>"
 
-class Template:
-    def __init__(self, lmkbc_template, subgraphgen_template):
-        self.lmkbc_template = lmkbc_template
-        self.subgraphgen_template = subgraphgen_template
-    
-    def lmkbc(self, subject, relation):
-        out = self.lmkbc_template.replace(SUBJECT_MASK, subject).replace(RELATION_MASK, relation)
-        out = [el for el in out.split(KG_MASK) if len(el) > 0]
-        return out
-    
-    def subgraphgen(self, subject, relation):
-        return self.subgraphgen_template.replace(SUBJECT_MASK, subject).replace(RELATION_MASK, relation)
+def apply_template(text, subject, relation):
+    return text.replace(SUBJECT_MASK, subject).replace(RELATION_MASK, relation)

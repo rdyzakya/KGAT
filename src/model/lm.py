@@ -1,23 +1,40 @@
-from transformers import MistralForCausalLM
+from transformers import MistralForCausalLM, MistralPreTrainedModel
+from utils import KG_MASK
+import torch
 
 # https://github.com/huggingface/transformers/blob/main/src/transformers/models/mistral/modeling_mistral.py
 
-# class VTMistral(MistralForCausalLM):
-#     def __init__(self, config):
-#         super().__init__(config)
+class MistralForLMKBC(MistralPreTrainedModel):
+    def __init__(self, config, kg_id):
+        super().__init__(config)
+        self.clm = MistralForCausalLM(config)
+        self.kg_id = kg_id
     
-#     @add_start_docstrings_to_model_forward(MISTRAL_INPUTS_DOCSTRING)
-#     @replace_return_docstrings(output_type=CausalLMOutputWithPast, config_class=_CONFIG_FOR_DOC)
-#     def forward(
-#         self,
-#         input_ids: torch.LongTensor = None,
-#         attention_mask: Optional[torch.Tensor] = None,
-#         position_ids: Optional[torch.LongTensor] = None,
-#         past_key_values: Optional[List[torch.FloatTensor]] = None,
-#         inputs_embeds: Optional[torch.FloatTensor] = None,
-#         labels: Optional[torch.LongTensor] = None,
-#         use_cache: Optional[bool] = None,
-#         output_attentions: Optional[bool] = None,
-#         output_hidden_states: Optional[bool] = None,
-#         return_dict: Optional[bool] = None,
-#     ) -> Union[Tuple, CausalLMOutputWithPast]:
+    def prepare_one_input(self, input_id, attention_mask, virtual_token):
+        kg_idx = torch.argwhere(input_id == self.kg_id).flatten()
+        prev_k = 0
+        input_embeds = []
+        for k in kg_idx:
+            input_embeds.append(self.model.embed_tokens(input_id[prev_k:k]))
+            input_embeds.append(virtual_token)
+            prev_k = k + 1
+        n_added_vects = virtual_token.shape[0] * kg_idx.shape[0]
+
+        input_embeds = torch.vstack(input_embeds)[n_added_vects:] # padding
+        attention_mask = torch.cat([attention_mask, torch.ones(n_added_vects, dtype=attention_mask.dtype)])[n_added_vects:]
+
+        return input_embeds, attention_mask
+    
+    def forward(self, input_ids, attention_mask, virtual_tokens):
+        all_inputs_embeds = []
+        all_attention_masks = []
+
+        for iid, am, vt in zip(input_ids, attention_mask, virtual_tokens):
+            ie, am = self.prepare_one_input(iid, am, vt)
+            all_inputs_embeds.append(ie)
+            all_attention_masks.append(am)
+        
+        all_inputs_embeds = torch.stack(all_inputs_embeds)
+        all_attention_masks = torch.stack(all_attention_masks)
+
+        return self.clm.forward(inputs_embeds=all_inputs_embeds, attention_mask=attention_mask)
