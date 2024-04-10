@@ -21,10 +21,12 @@ def subgraphgen_collate_fn(batch):
 
     text = list(text)
 
-    coo_mask = []
+    batch = []
+
+    for i, e in enumerate(entities):
+        batch.extend([i for _ in range(len(e))])
 
     for i in range(len(x_coo)):
-        coo_mask.extend([i for _ in range(x_coo[i].shape[1])])
         if i == 0:
             continue
         x_coo[i][0] += len(entities[i-1])
@@ -35,10 +37,10 @@ def subgraphgen_collate_fn(batch):
     relations = flatten(relations)
     
     x_coo = torch.hstack(x_coo)
-    coo_mask = torch.tensor(coo_mask)
+    batch = torch.tensor(batch)
     y_coo_cls = torch.hstack(y_coo_cls)
     
-    return text, entities, relations, x_coo, coo_mask, y_coo_cls
+    return text, entities, relations, x_coo, batch, y_coo_cls
 
 
 def lmkbc_collate_fn(batch):
@@ -46,10 +48,12 @@ def lmkbc_collate_fn(batch):
 
     text_in = list(text_in)
 
-    coo_mask = []
+    batch = []
+
+    for i, e in enumerate(entities):
+        batch.extend([i for _ in range(len(e))])
 
     for i in range(len(x_coo)):
-        coo_mask.extend([i for _ in range(x_coo[i].shape[1])])
         if i == 0:
             continue
         x_coo[i][0] += len(entities[i-1])
@@ -60,11 +64,11 @@ def lmkbc_collate_fn(batch):
     relations = flatten(relations)
     
     x_coo = torch.hstack(x_coo)
-    coo_mask = torch.tensor(coo_mask)
+    batch = torch.tensor(batch)
 
     text_out = list(text_out)
 
-    return text_in, entities, relations, x_coo, coo_mask, text_out
+    return text_in, entities, relations, x_coo, batch, text_out
 
 class SubgraphGenerationDataset(Dataset):
     def __init__(self, path, id2entity, id2relation):
