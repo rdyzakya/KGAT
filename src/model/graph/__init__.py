@@ -1,2 +1,2 @@
-from .pooler import *
+from .graphpooler import *
 from .conv import *
