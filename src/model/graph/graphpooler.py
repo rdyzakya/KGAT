@@ -1,6 +1,8 @@
 import torch
 import torch_geometric
 
+### VIRTUAL NODE BASE
+
 class VirtualNodeGraphPooler(torch.nn.Module):
     def __init__(self):
         super().__init__()
@@ -35,7 +37,6 @@ class VirtualNodeGraphPooler(torch.nn.Module):
 
         return x, edge_index, edge_attribute, batch
 
-
 class GATCVirtualNodeGraphPooler(VirtualNodeGraphPooler):
     def __init__(self, in_channels, hidden_channels, out_channels, heads, edge_dim):
         super().__init__()
@@ -53,9 +54,6 @@ class GATCVirtualNodeGraphPooler(VirtualNodeGraphPooler):
                                   edge_dim=edge_dim,
                                   add_self_loops=False,
                                   concat=True)
-        # self.linear = torch.nn.Linear(in_features=out_channels,
-        #                               out_features=1,
-        #                               bias=True)
     
     def forward(self, x, edge_index, edge_attr, batch):
         x = self.conv1(x, edge_index, edge_attr, return_attention_weights=None)
@@ -72,19 +70,91 @@ class GATCVirtualNodeGraphPooler(VirtualNodeGraphPooler):
         batch = batch[:n_edge_index]
         edge_index = edge_index[:,:n_edge_index]
 
-        # head_batch = batch[edge_index[0]]
-        # tail_batch = batch[edge_index[1]]
+        head_batch = batch[edge_index[0]]
+        tail_batch = batch[edge_index[1]]
 
-        # if not (head_batch == tail_batch).all():
-        #     raise Exception("There is an intersection between batch, make sure there are no edge connected between two or more batches")
+        if not (head_batch == tail_batch).all():
+            raise Exception("There is an intersection between batch, make sure there are no edge connected between two or more batches")
+        
+        node_batch = head_batch
 
         graph_emb = graph_emb.view(-1, self.heads, self.out_channels)
 
-        # graph_emb2 = self.linear(graph_emb)
-        # graph_emb2 = graph_emb2[head_batch]
-        # graph_emb2 = graph_emb2.squeeze(-1)
+        edge_score = att_weights.log()
 
-        # pool_result = att_weights.log() * graph_emb2
-        # pool_result = pool_result.mean(-1).sigmoid()
+        return edge_score, graph_emb, node_batch
 
-        return att_weights.log(), graph_emb
+### AGGREGATE BASE
+
+class GATAggregateGraphPooler(torch.nn.Module):
+    def __init__(self, in_channels, hidden_channels, out_channels, heads, edge_dim, n_mlp_layers=5):
+        super().__init__()
+        self.heads = heads
+        self.out_channels = out_channels
+        self.conv1 = torch_geometric.nn.conv.GATConv(in_channels,
+                                  hidden_channels,
+                                  heads=heads,
+                                  edge_dim=edge_dim,
+                                  add_self_loops=False,
+                                  concat=False)
+        self.conv2 = torch_geometric.nn.conv.GATConv(hidden_channels,
+                                  hidden_channels,
+                                  heads=heads,
+                                  edge_dim=edge_dim,
+                                  add_self_loops=False,
+                                  concat=True)
+        self.pooler = torch_geometric.nn.pool.SAGPooling(in_channels=hidden_channels,
+                                                         ratio=0.999,
+                                                         GNN=torch_geometric.nn.conv.GATConv,
+                                                         nonlinearity=lambda x : torch.nn.functional.leaky_relu(x, negative_slope=1)) # linear
+        self.aggr = torch_geometric.nn.aggr.AttentionalAggregation(
+            gate_nn=torch_geometric.nn.models.MLP(in_channels=hidden_channels,
+                                                  hidden_channels=hidden_channels,
+                                                  out_channels=out_channels,
+                                                  num_layers=n_mlp_layers),
+            nn=torch_geometric.nn.models.MLP(in_channels=hidden_channels,
+                                                  hidden_channels=hidden_channels,
+                                                  out_channels=out_channels,
+                                                  num_layers=n_mlp_layers)
+        )
+    
+    def forward(self, x, edge_index, edge_attr, batch):
+        x = self.conv1(x, edge_index, edge_attr, return_attention_weights=None)
+        x = self.conv2(x, edge_index, edge_attr, return_attention_weights=None)
+        n_node = x.shape[0]
+        edge_score = []
+        graph_emb = []
+        for h in range(self.heads):
+            x_head, edge_index, edge_attr, batch, perm, score = self.pooler(x[:,h*self.out_channels:(h+1)*self.out_channels],
+                                                                            edge_index,
+                                                                            edge_attr,
+                                                                            batch)
+
+            assert x.shape[0] == n_node
+
+            def get_score(score_adj, edge_index):
+                # Flatten the coordinates tensor
+                flat_indices = edge_index.T[:, 0] * score_adj.size(1) + edge_index.T[:, 1]
+
+                # Use torch.index_select() to select elements from the matrix
+                selected_elements = torch.index_select(score_adj.view(-1), 0, flat_indices)
+
+                return selected_elements.unsqueeze(-1)
+
+            score_adj = torch.add(score.unsqueeze(1),score.unsqueeze(0))/2 # average of two node's score
+            edge_score.append(get_score(score_adj, edge_index))
+
+            graph_emb.append(self.aggr(x_head, batch))
+        
+        head_batch = batch[edge_index[0]]
+        tail_batch = batch[edge_index[1]]
+
+        if not (head_batch == tail_batch).all():
+            raise Exception("There is an intersection between batch, make sure there are no edge connected between two or more batches")
+        
+        node_batch = head_batch
+        
+        edge_score = torch.hstack(edge_score)
+        graph_emb = torch.hstack(graph_emb).view(-1, self.heads, self.out_channels)
+
+        return edge_score, graph_emb, node_batch
