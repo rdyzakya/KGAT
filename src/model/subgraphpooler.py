@@ -27,7 +27,7 @@ class SubgraphPooler(torch.nn.Module):
                             bias=True),
         )
     
-    def forward(self, text_emb, edge_score, graph_emb, node_batch):
+    def forward(self, text_emb, edge_score, graph_emb, edge_batch):
         # text emb shape is (row, emb_dim)
         # transform text emb
         transformed_text_emb = self.text_transform(text_emb)
@@ -35,11 +35,11 @@ class SubgraphPooler(torch.nn.Module):
         subgraph_emb = transformed_text_emb.unsqueeze(1) * graph_emb
         # fuse subgraph emb to edge_score
         transformed_subgraph_emb = self.graph_emb_fuser(subgraph_emb.transpose(1,2)).transpose(1,2)
-        transformed_subgraph_emb = transformed_subgraph_emb[node_batch]
+        transformed_subgraph_emb = transformed_subgraph_emb[edge_batch]
         transformed_subgraph_emb = transformed_subgraph_emb.squeeze(-1)
 
         fused_score = edge_score * transformed_subgraph_emb
         mean_fused_score = fused_score.mean(-1)
         mean_fused_score = mean_fused_score.sigmoid()
 
-        return mean_fused_score, subgraph_emb, node_batch
+        return mean_fused_score, subgraph_emb, edge_batch

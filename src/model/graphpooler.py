@@ -76,13 +76,13 @@ class GATCVirtualNodeGraphPooler(VirtualNodeGraphPooler):
         if not (head_batch == tail_batch).all():
             raise Exception("There is an intersection between batch, make sure there are no edge connected between two or more batches")
         
-        node_batch = head_batch
+        edge_batch = head_batch
 
         graph_emb = graph_emb.view(-1, self.heads, self.out_channels)
 
         edge_score = att_weights.log()
 
-        return edge_score, graph_emb, node_batch
+        return edge_score, graph_emb, edge_batch
 
 ### AGGREGATE BASE
 
@@ -152,9 +152,9 @@ class GATAggregateGraphPooler(torch.nn.Module):
         if not (head_batch == tail_batch).all():
             raise Exception("There is an intersection between batch, make sure there are no edge connected between two or more batches")
         
-        node_batch = head_batch
+        edge_batch = head_batch
         
         edge_score = torch.hstack(edge_score)
         graph_emb = torch.hstack(graph_emb).view(-1, self.heads, self.out_channels)
 
-        return edge_score, graph_emb, node_batch
+        return edge_score, graph_emb, edge_batch
