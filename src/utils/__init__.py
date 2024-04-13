@@ -5,8 +5,11 @@ SUBJECT_MASK = "<SUBJECT>"
 RELATION_MASK = "<RELATION>"
 OBJECT_MASK = "<OBJECT>"
 
-def apply_template(text, subject, relation):
-    return text.replace(SUBJECT_MASK, subject).replace(RELATION_MASK, relation)
+def apply_template(text, subject, relation, objects=None):
+    text = text.replace(SUBJECT_MASK, subject).replace(RELATION_MASK, relation)
+    if objects is None:
+        return text
+    return text.replace(OBJECT_MASK, str(objects))
 
 def inverse_sigmoid(y):
     """

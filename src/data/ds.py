@@ -1,6 +1,7 @@
 from torch.utils.data import Dataset
 import torch
 import json
+from ..utils import apply_template
 
 def load_json(path):
     with open(path, 'r', encoding="utf-8") as fp:
@@ -106,12 +107,13 @@ class SubgraphGenerationDataset(Dataset):
         return text, entities, relations, x_coo, y_coo_cls
 
 class LMKBCDataset(Dataset):
-    def __init__(self, path, id2entity, id2relation, triples, prompt):
+    def __init__(self, path, id2entity, id2relation, triples, prompt_template, graph_query_template):
         self.data = load_json(path)
         self.id2entity = id2entity
         self.id2relation = id2relation
         self.triples = triples
-        self.prompt = prompt
+        self.prompt_template = prompt_template
+        self.graph_query_template = graph_query_template
     
     def __len__(self):
         return len(self.data)
@@ -127,7 +129,7 @@ class LMKBCDataset(Dataset):
         relation = self.id2relation[relation_id]
         objects = [self.id2entity[el] for el in object_ids]
 
-        text_in, text_out = self.process_input(subject, relation, objects)
+        text_in, text_out = self.process_prompt(subject, relation, objects)
 
         x_coo = [self.triples[el] for el in reference]
         
@@ -152,6 +154,11 @@ class LMKBCDataset(Dataset):
 
         return text_in, entities, relations, x_coo, text_out
 
-    def process_input(self, subject, relation, objects):
+    def process_prompt(self, subject, relation, objects):
         # return text_in, text_out
-        return f"S : {subject} | R : {relation} | O : ", str(objects)
+        text_in = apply_template(self.prompt_template, subject=subject, relation=relation, objects='')
+        text_out = apply_template(self.prompt_template, subject=subject, relation=relation, objects=objects)
+        return text_in, text_out
+    
+    def process_graph_query(self, subject, relation):
+        return apply_template(self.graph_query_template, subject=subject, relation=relation, objects=None)
