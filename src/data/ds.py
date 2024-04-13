@@ -33,8 +33,8 @@ def subgraphgen_collate_fn(batch):
         x_coo[i][1] += prev_len_relation
         x_coo[i][2] += prev_len_entity
         
-        prev_len_entity += len(entities[i-1])
-        prev_len_relation += len(relations[i-1])
+        prev_len_entity += len(entities[i])
+        prev_len_relation += len(relations[i])
     
     entities = flatten(entities)
     relations = flatten(relations)
@@ -62,8 +62,8 @@ def lmkbc_collate_fn(batch):
         x_coo[i][1] += prev_len_relation
         x_coo[i][2] += prev_len_entity
         
-        prev_len_entity += len(entities[i-1])
-        prev_len_relation += len(relations[i-1])
+        prev_len_entity += len(entities[i])
+        prev_len_relation += len(relations[i])
     
     entities = flatten(entities)
     relations = flatten(relations)
