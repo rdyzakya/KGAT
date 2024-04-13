@@ -23,7 +23,7 @@ class GraphModule(torch.nn.Module):
         hidden_states = hidden_states[0]
 
         # get last token hidden state, as how any left-to-right model with seq-cls head do
-        sequence_lengths = torch.eq(input_ids, self.config.pad_token_id).int().argmax(-1) - 1
+        sequence_lengths = torch.eq(input_ids, self.transformer.config.pad_token_id).int().argmax(-1) - 1
         sequence_lengths = sequence_lengths % input_ids.shape[-1]
         sequence_lengths = sequence_lengths.to(hidden_states.device)
 
