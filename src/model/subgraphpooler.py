@@ -1,9 +1,8 @@
 import torch
 
 class SubgraphPooler(torch.nn.Module):
-    def __init__(self, graph_emb_dim, text_emb_dim, hidden_dim, lm):
+    def __init__(self, graph_emb_dim, text_emb_dim, hidden_dim):
         super().__init__()
-        self.lm = lm # Part of AutoModel, not CausalLM or WithLMHead
         self.graph_emb_fuser = torch.nn.Sequential(
             torch.nn.Conv1d(in_channels=graph_emb_dim,
                             out_channels=hidden_dim,
