@@ -87,7 +87,7 @@ class GATCVirtualNodeGraphPooler(VirtualNodeGraphPooler):
 ### AGGREGATE BASE
 
 class GATAggregateGraphPooler(torch.nn.Module):
-    def __init__(self, in_channels, hidden_channels, out_channels, heads, edge_dim, n_mlp_layers=5):
+    def __init__(self, in_channels, hidden_channels, out_channels, heads, edge_dim, n_mlp_layers=5, eps=1e-14):
         super().__init__()
         self.heads = heads
         self.out_channels = out_channels
@@ -104,7 +104,7 @@ class GATAggregateGraphPooler(torch.nn.Module):
                                   add_self_loops=False,
                                   concat=True)
         self.pooler = torch_geometric.nn.pool.SAGPooling(in_channels=hidden_channels,
-                                                         ratio=0.999,
+                                                         ratio=1-eps,
                                                          GNN=torch_geometric.nn.conv.GATConv,
                                                          nonlinearity=lambda x : torch.nn.functional.leaky_relu(x, negative_slope=1)) # linear
         self.aggr = torch_geometric.nn.aggr.AttentionalAggregation(
