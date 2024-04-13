@@ -1,11 +1,11 @@
 import torch
 
 class SubgraphPooler(torch.nn.Module):
-    def __init__(self, text_emb_dim, hidden_dim, lm, graphpooler):
+    def __init__(self, graph_emb_dim, text_emb_dim, hidden_dim, lm):
         super().__init__()
         self.lm = lm # Part of AutoModel, not CausalLM or WithLMHead
         self.graph_emb_fuser = torch.nn.Sequential(
-            torch.nn.Conv1d(in_channels=graphpooler.out_channels,
+            torch.nn.Conv1d(in_channels=graph_emb_dim,
                             out_channels=hidden_dim,
                             kernel_size=1,
                             stride=1),
@@ -22,7 +22,7 @@ class SubgraphPooler(torch.nn.Module):
                             bias=True),
             torch.nn.ReLU(),
             torch.nn.Linear(in_features=hidden_dim,
-                            out_features=graphpooler.out_channels,
+                            out_features=graph_emb_dim,
                             bias=True),
         )
     
