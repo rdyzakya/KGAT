@@ -20,12 +20,11 @@ class TextModule(torch.nn.Module):
             input_embeds.append(self.clm_embedding(input_id[prev_k:k]))
             input_embeds.append(virtual_token)
             prev_k = k + 1
-        n_added_vects = virtual_token.shape[0] * kg_idx.shape[0]
+        input_embeds.append(self.clm_embedding(input_id[prev_k:]))
+        n_added_vects = (virtual_token.shape[0]-1) * kg_idx.shape[0]
 
         input_embeds = torch.vstack(input_embeds)[n_added_vects:] # padding
         attention_mask = torch.cat([attention_mask, torch.ones(n_added_vects, dtype=attention_mask.dtype)])[n_added_vects:]
-
-        return input_embeds, attention_mask
     
     def forward_clm(self, input_ids, attention_mask, virtual_tokens):
         all_inputs_embeds = []
