@@ -1,4 +1,3 @@
-from utils import KG_MASK
 import torch
 
 # https://github.com/huggingface/transformers/blob/main/src/transformers/models/mistral/modeling_mistral.py
