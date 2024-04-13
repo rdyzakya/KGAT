@@ -25,13 +25,16 @@ def subgraphgen_collate_fn(batch):
 
     for i, e in enumerate(entities):
         batch.extend([i for _ in range(len(e))])
-
+    
+    prev_len_entity = 0
+    prev_len_relation = 0
     for i in range(len(x_coo)):
-        if i == 0:
-            continue
-        x_coo[i][0] += len(entities[i-1])
-        x_coo[i][1] += len(relations[i-1])
-        x_coo[i][2] += len(entities[i-1])
+        x_coo[i][0] += prev_len_entity
+        x_coo[i][1] += prev_len_relation
+        x_coo[i][2] += prev_len_entity
+        
+        prev_len_entity += len(entities[i-1])
+        prev_len_relation += len(relations[i-1])
     
     entities = flatten(entities)
     relations = flatten(relations)
@@ -52,12 +55,15 @@ def lmkbc_collate_fn(batch):
     for i, e in enumerate(entities):
         batch.extend([i for _ in range(len(e))])
 
+    prev_len_entity = 0
+    prev_len_relation = 0
     for i in range(len(x_coo)):
-        if i == 0:
-            continue
-        x_coo[i][0] += len(entities[i-1])
-        x_coo[i][1] += len(relations[i-1])
-        x_coo[i][2] += len(entities[i-1])
+        x_coo[i][0] += prev_len_entity
+        x_coo[i][1] += prev_len_relation
+        x_coo[i][2] += prev_len_entity
+        
+        prev_len_entity += len(entities[i-1])
+        prev_len_relation += len(relations[i-1])
     
     entities = flatten(entities)
     relations = flatten(relations)
