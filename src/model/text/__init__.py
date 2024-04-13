@@ -5,9 +5,10 @@ from .vt_transform import (
 import torch
 
 class TextModule(torch.nn.Module):
-    def __init__(self, vt_transformer, clm_model, kg_id):
+    def __init__(self, vt_transformer, clm_embedding, clm_model, kg_id):
         super().__init__()
         self.vt_transformer = vt_transformer
+        self.clm_embedding = clm_embedding
         self.clm = clm_model
         self.kg_id = kg_id
     
@@ -16,7 +17,7 @@ class TextModule(torch.nn.Module):
         prev_k = 0
         input_embeds = []
         for k in kg_idx:
-            input_embeds.append(self.model.embed_tokens(input_id[prev_k:k]))
+            input_embeds.append(self.clm_embedding(input_id[prev_k:k]))
             input_embeds.append(virtual_token)
             prev_k = k + 1
         n_added_vects = virtual_token.shape[0] * kg_idx.shape[0]
