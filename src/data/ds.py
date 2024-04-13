@@ -42,7 +42,6 @@ def subgraphgen_collate_fn(batch):
     
     return text, entities, relations, x_coo, batch, y_coo_cls
 
-
 def lmkbc_collate_fn(batch):
     text_in, entities, relations, x_coo, text_out = zip(*batch)
 

@@ -4,9 +4,10 @@ import torch
 # https://github.com/huggingface/transformers/blob/main/src/transformers/models/mistral/modeling_mistral.py
 
 class ModelForLMKBC(torch.nn.Module):
-    def __init__(self, transformer, subgraphpooler, vt_transformer, clm_model, kg_id):
+    def __init__(self, transformer, graphpooler, subgraphpooler, vt_transformer, clm_model, kg_id):
         super().__init__()
         self.transformer = transformer
+        self.graphpooler = graphpooler
         self.subgraphpooler = subgraphpooler
         self.vt_transformer = vt_transformer
         self.clm = clm_model
@@ -41,7 +42,7 @@ class ModelForLMKBC(torch.nn.Module):
 
         return self.clm.forward(inputs_embeds=all_inputs_embeds, attention_mask=attention_mask)
     
-    def forward_entities_or_relations(self, input_ids, attention_mask):
+    def get_text_last_hidden_state(self, input_ids, attention_mask):
         hidden_states = self.transformer(input_ids=input_ids, attention_mask=attention_mask)
         hidden_states = hidden_states[0]
 
@@ -55,9 +56,26 @@ class ModelForLMKBC(torch.nn.Module):
 
         return pooled_hidden_states
     
-    def forward(self, text_input_ids, text_attention_mask,
+    def forward(self, graph_query_input_ids, graph_query_attention_mask,
+                prompt_input_ids, prompt_attention_mask,
                 entities_input_ids, entities_attention_mask,
                 relations_input_ids, relations_attention_mask,
                 x_coo, batch):
         # text_in, entities, relations, x_coo, batch
-        pass
+
+        x = self.get_text_last_hidden_state(entities_input_ids, entities_attention_mask) # entities
+
+        edge_attr = self.get_text_last_hidden_state(relations_input_ids, relations_attention_mask)
+        edge_attr = edge_attr[x_coo[1]]
+
+        edge_index = x_coo[True, False, True]
+
+        # RETRIEVE GRAPH EMB
+        edge_score, graph_emb, edge_batch = self.graphpooler(x, edge_index, edge_attr, batch)
+        # RETRIEVE SUBGRAPH EMB
+        graph_query_emb = self.get_text_last_hidden_state(graph_query_input_ids, graph_query_attention_mask)
+        mean_fused_score, subgraph_emb, edge_batch = self.subgraphpooler(graph_query_emb, edge_score, graph_emb, edge_batch)
+        # TRANSFORM TO VT
+        vt = self.vt_transformer(subgraph_emb)
+        # INSERT TO CLM
+        return self.forward_clm(prompt_input_ids, prompt_attention_mask, vt)
