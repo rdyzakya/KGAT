@@ -47,9 +47,10 @@ def subgraphgen_collate_fn(batch):
     return text, entities, relations, x_coo, batch, y_coo_cls
 
 def lmkbc_collate_fn(batch):
-    text_in, entities, relations, x_coo, text_out = zip(*batch)
+    text_in, graph_query, entities, relations, x_coo, text_out = zip(*batch)
 
     text_in = list(text_in)
+    graph_query = list(graph_query)
 
     batch = []
 
@@ -74,7 +75,7 @@ def lmkbc_collate_fn(batch):
 
     text_out = list(text_out)
 
-    return text_in, entities, relations, x_coo, batch, text_out
+    return text_in, graph_query, entities, relations, x_coo, batch, text_out
 
 class SubgraphGenerationDataset(Dataset):
     def __init__(self, path, id2entity, id2relation):
@@ -130,6 +131,7 @@ class LMKBCDataset(Dataset):
         objects = [self.id2entity[el] for el in object_ids]
 
         text_in, text_out = self.process_prompt(subject, relation, objects)
+        graph_query = self.process_graph_query(subject, relation)
 
         x_coo = [self.triples[el] for el in reference]
         
@@ -152,7 +154,7 @@ class LMKBCDataset(Dataset):
 
         x_coo = x_coo.T
 
-        return text_in, entities, relations, x_coo, text_out
+        return text_in, graph_query, entities, relations, x_coo, text_out
 
     def process_prompt(self, subject, relation, objects):
         # return text_in, text_out
