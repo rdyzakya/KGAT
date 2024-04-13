@@ -42,7 +42,7 @@ class GraphModule(torch.nn.Module):
         edge_attr = self.get_text_last_hidden_state(relations_input_ids, relations_attention_mask)
         edge_attr = edge_attr[x_coo[1]]
 
-        edge_index = x_coo[True, False, True]
+        edge_index = x_coo[[True, False, True]]
 
         # RETRIEVE GRAPH EMB
         edge_score, graph_emb, edge_batch = self.graphpooler(x, edge_index, edge_attr, batch)
