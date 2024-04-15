@@ -1,7 +1,13 @@
 from torch.utils.data import Dataset
+from ..utils import Mask
 import torch
 import json
-from ..utils import apply_template
+
+def apply_template(text, subject, relation, objects=None):
+    text = text.replace(Mask.SUBJECT_MASK, subject).replace(Mask.RELATION_MASK, relation)
+    if objects is None:
+        return text
+    return text.replace(Mask.OBJECT_MASK, str(objects))
 
 def load_json(path):
     with open(path, 'r', encoding="utf-8") as fp:
