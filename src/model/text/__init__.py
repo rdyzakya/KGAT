@@ -40,7 +40,13 @@ class TextModule(torch.nn.Module):
         all_inputs_embeds = torch.stack(all_inputs_embeds)
         all_attention_masks = torch.stack(all_attention_masks)
 
-        return self.clm.forward(inputs_embeds=all_inputs_embeds, attention_mask=attention_mask)
+        model_inputs = self.clm.prepare_inputs_for_generation(
+            input_ids=input_ids,
+            inputs_embeds=all_inputs_embeds,
+            attention_mask=all_attention_masks
+        )
+
+        return self.clm.forward(**model_inputs)
     
     def forward(self, prompt_input_ids, prompt_attention_mask, subgraph_emb):
         # TRANSFORM TO VT
