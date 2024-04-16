@@ -2,6 +2,11 @@
     "data_dir" : "./data/subgraph-gen/atomic/proc",
     "ckpt_path" : null,
     "epoch" : 10,
+    "train_batch_per_device" : 8,
+    "val_batch_per_device" : 8,
+    "test_batch_per_device" : 8,
+    "device" : "0,1,2",
+    "shuffle" : true,
     "optimizer" : {
         "class_name" : "torch.optim.Adam",
         "kwargs" : {
