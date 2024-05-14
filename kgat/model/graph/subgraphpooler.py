@@ -38,6 +38,6 @@ class SubgraphPooler(torch.nn.Module):
 
         fused_score = edge_score * transformed_subgraph_emb
         mean_fused_score = fused_score.mean(-1)
-        mean_fused_score = mean_fused_score.sigmoid()
+        mean_fused_score = mean_fused_score # .sigmoid() done in BCEWithLogitsLoss
 
         return mean_fused_score, subgraph_emb, edge_batch
