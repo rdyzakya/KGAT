@@ -21,10 +21,10 @@ class GraphModule(torch.nn.Module):
 
     def get_text_last_hidden_state(self, input_ids, attention_mask):
         prepared_inputs = self.prepare_inputs(input_ids=input_ids, attention_mask=attention_mask)
-        input_ids = prepared_inputs["input_ids"]
-        attention_mask = prepared_inputs["attention_mask"]
-        position_ids = prepared_inputs["position_ids"]
-        hidden_states = self.transformer(input_ids=input_ids, attention_mask=attention_mask, position_ids=position_ids)
+        # input_ids = prepared_inputs["input_ids"]
+        # attention_mask = prepared_inputs["attention_mask"]
+        # position_ids = prepared_inputs["position_ids"]
+        hidden_states = self.transformer(**prepared_inputs)
         hidden_states = hidden_states[0]
 
         # get last token hidden state, as how any left-to-right model with seq-cls head do

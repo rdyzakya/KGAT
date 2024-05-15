@@ -5,6 +5,6 @@ from .ds import (
     load_json
 )
 from .collator import (
-    subgraphgen_collate_fn,
-    lmkbc_collate_fn,
+    SubgraphGenerationCollator,
+    LMKBCCollator,
 )
