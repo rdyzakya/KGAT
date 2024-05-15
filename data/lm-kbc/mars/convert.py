@@ -10,7 +10,7 @@ from tqdm import tqdm
 random.seed(42)
 np.random.seed(42)
 
-N = 20000
+N = 500
 
 entity_map_path = "./raw/entity2text.txt"
 relation_map_path = "./raw/relation2text.txt"

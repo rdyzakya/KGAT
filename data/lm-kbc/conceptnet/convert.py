@@ -9,7 +9,7 @@ from ordered_set import OrderedSet
 random.seed(42)
 np.random.seed(42)
 
-N = 20000
+N = 500
 
 def find_reference(sub_id, rel_id, obj_ids, df):
     n_triples = random.randint(20,500)
