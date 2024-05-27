@@ -5,6 +5,8 @@ import numpy as np
 import json
 from tqdm import tqdm
 
+from ordered_set import OrderedSet
+
 random.seed(42)
 
 dbpedia_train_dir_path = "./raw/dbpedia_webnlg/train"
@@ -25,8 +27,8 @@ for fname in os.listdir(wikidata_test_dir_path):
     path = os.path.join(wikidata_test_dir_path, fname)
     df = pd.concat([df, pd.read_json(path, lines=True)])
 
-entities = set()
-relations = set()
+entities = OrderedSet()
+relations = OrderedSet()
 
 for i, row in df.iterrows():
     triples = row["triples"]
@@ -58,17 +60,17 @@ max_ratio = 0.5
 
 for i1, row1 in tqdm(df.iterrows()):
     text = row1["sent"]
-    y_triples = set(map(lambda x: tuple((x["sub"], x["obj"], x["rel"])),row1["triples"]))
+    y_triples = OrderedSet(map(lambda x: tuple((x["sub"], x["obj"], x["rel"])),row1["triples"]))
     x_triples = y_triples.copy()
     if len(x_triples) == 0:
         continue
     for i2, row2 in df.iterrows():
         if i1 == i2:
             pass
-        s_triples = set(map(lambda x: tuple((x["sub"], x["obj"], x["rel"])),row2["triples"]))
+        s_triples = OrderedSet(map(lambda x: tuple((x["sub"], x["obj"], x["rel"])),row2["triples"]))
 
-        nodes1 = set([t[0] for t in x_triples] + [t[1] for t in x_triples])
-        nodes2 = set([t[0] for t in s_triples] + [t[1] for t in s_triples])
+        nodes1 = OrderedSet([t[0] for t in x_triples] + [t[1] for t in x_triples])
+        nodes2 = OrderedSet([t[0] for t in s_triples] + [t[1] for t in s_triples])
 
         if len(nodes1.intersection(nodes2)) > 0:
             x_triples = x_triples.union(s_triples)
@@ -78,10 +80,10 @@ for i1, row1 in tqdm(df.iterrows()):
         if ratio <= random_threshold:
             break
     
-    all_entities = list(set([t[0] for t in x_triples] + [t[1] for t in x_triples]))
-    all_relations = list(set([t[2] for t in x_triples]))
+    all_entities = list(OrderedSet([t[0] for t in x_triples] + [t[1] for t in x_triples]))
+    all_relations = list(OrderedSet([t[2] for t in x_triples]))
 
-    y_entities = list(set([t[0] for t in y_triples] + [t[1] for t in y_triples]))
+    y_entities = list(OrderedSet([t[0] for t in y_triples] + [t[1] for t in y_triples]))
 
     all_entities = sorted([entity2id[n] for n in all_entities])
     all_relations = sorted([rel2id[r] for r in all_relations])
@@ -109,11 +111,11 @@ random.shuffle(ds)
 
 train, val, test = ds[:int(0.8*len(ds))], ds[int(0.8*len(ds)):int(0.9*len(ds))], ds[int(0.9*len(ds)):]
 
-with open("./proc/train.json", 'w') as fp:
+with open("./proc/train.json", 'w', encoding="utf-8") as fp:
     json.dump(train, fp)
 
-with open("./proc/val.json", 'w') as fp:
+with open("./proc/val.json", 'w', encoding="utf-8") as fp:
     json.dump(val, fp)
 
-with open("./proc/test.json", 'w') as fp:
+with open("./proc/test.json", 'w', encoding="utf-8") as fp:
     json.dump(test, fp)

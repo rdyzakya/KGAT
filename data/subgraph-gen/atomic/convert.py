@@ -5,12 +5,14 @@ import pandas as pd
 import json
 import os
 
+from ordered_set import OrderedSet
+
 random.seed(42)
 
 data = pd.read_csv("./raw/v4_atomic_all_agg.csv")
 
 ds = []
-nodes = set()
+nodes = OrderedSet()
 for i, row in data.iterrows():
     text = row["event"]
     nodes.add(text)
@@ -22,7 +24,7 @@ for i, row in data.iterrows():
     del row["split"]
 
     for k, v in row.items():
-        v = list(set(eval(v)))
+        v = list(OrderedSet(eval(v)))
         for vv in v:
             if vv == "none":
                 continue
@@ -51,10 +53,10 @@ relations = [
 if not os.path.exists("./proc"):
     os.makedirs("./proc")
 
-with open("./proc/entities.txt", 'w') as fp:
+with open("./proc/entities.txt", 'w', encoding="utf-8") as fp:
     fp.write('\n'.join(nodes))
 
-with open("./proc/relations.txt", 'w') as fp:
+with open("./proc/relations.txt", 'w', encoding="utf-8") as fp:
     fp.write('\n'.join(relations))
 
 entity_map = {el : i for i, el in enumerate(nodes)}
@@ -65,7 +67,7 @@ max_ratio = 0.5
 
 ds2 = []
 for el in tqdm(ds):
-    el_triples = set(el["triples"])
+    el_triples = OrderedSet(el["triples"])
     res_triples = el_triples.copy()
     for s in ds:
         s_triples = s["triples"]
@@ -73,8 +75,8 @@ for el in tqdm(ds):
         if el_triples == s_triples:
             continue
 
-        nodes1 = set([t[1] for t in res_triples])
-        nodes2 = set([t[1] for t in s_triples])
+        nodes1 = OrderedSet([t[1] for t in res_triples])
+        nodes2 = OrderedSet([t[1] for t in s_triples])
 
         if len(nodes1.intersection(nodes2)) > 0:
             res_triples = res_triples.union(s_triples)
@@ -83,13 +85,13 @@ for el in tqdm(ds):
         random_threshold = (random.random() * (max_ratio - min_ratio)) + min_ratio
         if ratio <= random_threshold:
             break
-    all_nodes = list(set([t[0] for t in res_triples] + [t[1] for t in res_triples]))
-    all_rels = list(set([t[2] for t in res_triples]))
+    all_nodes = list(OrderedSet([t[0] for t in res_triples] + [t[1] for t in res_triples]))
+    all_rels = list(OrderedSet([t[2] for t in res_triples]))
 
     entities = sorted([entity_map[n] for n in all_nodes])
     relations = sorted([rel_map[r] for r in all_rels])
 
-    exist_entities = list(set([t[0] for t in el_triples] + [t[1] for t in el_triples]))
+    exist_entities = list(OrderedSet([t[0] for t in el_triples] + [t[1] for t in el_triples]))
     exist_entities = [entity_map[n] for n in exist_entities]
 
     y_node_cls = [int(n in exist_entities) for n in entities]
@@ -128,11 +130,11 @@ train_ds = ds2[:int(train_ratio * len(ds2))]
 dev_ds = ds2[len(train_ds):int(val_ratio * len(ds2)) + len(train_ds)]
 test_ds = ds2[int(val_ratio * len(ds2)) + len(train_ds):]
 
-with open("./proc/train.json", 'w') as fp:
+with open("./proc/train.json", 'w', encoding="utf-8") as fp:
     json.dump(train_ds, fp)
 
-with open("./proc/dev.json", 'w') as fp:
+with open("./proc/dev.json", 'w', encoding="utf-8") as fp:
     json.dump(dev_ds, fp)
 
-with open("./proc/test.json", 'w') as fp:
+with open("./proc/test.json", 'w', encoding="utf-8") as fp:
     json.dump(test_ds, fp)

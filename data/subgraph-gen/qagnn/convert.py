@@ -12,7 +12,7 @@ def open_pickle(path):
     return data
 
 def dump_json(path, obj):
-    with open(path, 'w') as fp:
+    with open(path, 'w', encoding="utf-8") as fp:
         json.dump(obj, fp)
 
 # Make output directory
@@ -40,9 +40,9 @@ triples = pd.read_csv("./raw/data_preprocessed_release/cpnet/conceptnet.en.csv",
 
 relations = triples[0].unique()
 
-with open(os.path.join(csqa_dir, "relation.txt"), 'w') as fp:
+with open(os.path.join(csqa_dir, "relation.txt"), 'w', encoding="utf-8") as fp:
     fp.write('\n'.join(sorted(relations)))
-with open(os.path.join(obqa_dir, "relation.txt"), 'w') as fp:
+with open(os.path.join(obqa_dir, "relation.txt"), 'w', encoding="utf-8") as fp:
     fp.write('\n'.join(sorted(relations)))
 
 # Get statements

@@ -5,6 +5,8 @@ import json
 from tqdm import tqdm
 import os
 
+from ordered_set import OrderedSet
+
 random.seed(42)
 
 min_ratio = 0.1
@@ -19,13 +21,13 @@ def preprocess(ds, entity2id, rel2id):
             continue
         text = random.choice(texts)
         y_triples = el1["modified_triple_sets"]["mtriple_set"][0]
-        y_triples = set([tuple(t.split(" | ")) for t in y_triples])
+        y_triples = OrderedSet([tuple(t.split(" | ")) for t in y_triples])
         x_triples = y_triples.copy()
         for el2 in ds:
             s_triples = el2["modified_triple_sets"]["mtriple_set"][0]
-            s_triples = set([tuple(t.split(" | ")) for t in s_triples])
-            nodes1 = set([t[0] for t in x_triples] + [t[1] for t in x_triples])
-            nodes2 = set([t[0] for t in s_triples] + [t[1] for t in s_triples])
+            s_triples = OrderedSet([tuple(t.split(" | ")) for t in s_triples])
+            nodes1 = OrderedSet([t[0] for t in x_triples] + [t[1] for t in x_triples])
+            nodes2 = OrderedSet([t[0] for t in s_triples] + [t[1] for t in s_triples])
 
             if len(nodes1.intersection(nodes2)) > 0:
                 x_triples = x_triples.union(s_triples)
@@ -35,10 +37,10 @@ def preprocess(ds, entity2id, rel2id):
             if ratio <= random_threshold:
                 break
         
-        all_entities = list(set([t[0] for t in x_triples] + [t[2] for t in x_triples]))
-        all_relations = list(set([t[1] for t in x_triples]))
+        all_entities = list(OrderedSet([t[0] for t in x_triples] + [t[2] for t in x_triples]))
+        all_relations = list(OrderedSet([t[1] for t in x_triples]))
 
-        y_entities = list(set([t[0] for t in y_triples] + [t[2] for t in y_triples]))
+        y_entities = list(OrderedSet([t[0] for t in y_triples] + [t[2] for t in y_triples]))
 
         all_entities = sorted([entity2id[n] for n in all_entities])
         all_relations = sorted([rel2id[r] for r in all_relations])
@@ -72,8 +74,8 @@ len_val = len(ds["dev"])
 
 ds = ds["train"].to_list() + ds["dev"].to_list() + ds["test"].to_list()
 
-entities = set()
-relations = set()
+entities = OrderedSet()
+relations = OrderedSet()
 
 for el in ds:
     triples = el["modified_triple_sets"]["mtriple_set"][0]
@@ -106,11 +108,11 @@ train = [el for el in train if len(el) > 0]
 val = [el for el in val if len(el) > 0]
 test = [el for el in test if len(el) > 0]
 
-with open("./proc/train.json", 'w') as fp:
+with open("./proc/train.json", 'w', encoding="utf-8") as fp:
     json.dump(train, fp)
 
-with open("./proc/val.json", 'w') as fp:
+with open("./proc/val.json", 'w', encoding="utf-8") as fp:
     json.dump(val, fp)
 
-with open("./proc/test.json", 'w') as fp:
+with open("./proc/test.json", 'w', encoding="utf-8") as fp:
     json.dump(test, fp)

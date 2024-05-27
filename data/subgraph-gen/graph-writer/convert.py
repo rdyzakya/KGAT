@@ -5,6 +5,8 @@ import numpy as np
 import json
 import os
 
+from ordered_set import OrderedSet
+
 random.seed(42)
 
 min_ratio = 0.1
@@ -40,16 +42,16 @@ def preprocess2(ds, all_ds, entity2id, rel2id):
         text = el["text"]
         entities = el["entities"]
         all_entities = entities.copy()
-        y_triples = set(el["triples"])
+        y_triples = OrderedSet(el["triples"])
         x_triples = y_triples.copy()
         for s in all_ds:
-            s_triples = set(s["triples"])
+            s_triples = OrderedSet(s["triples"])
             s_entities = s["entities"]
             if y_triples == s_triples:
                 continue
 
-            nodes1 = set([t[0] for t in x_triples] + [t[1] for t in x_triples])
-            nodes2 = set([t[0] for t in s_triples] + [t[1] for t in s_triples])
+            nodes1 = OrderedSet([t[0] for t in x_triples] + [t[1] for t in x_triples])
+            nodes2 = OrderedSet([t[0] for t in s_triples] + [t[1] for t in s_triples])
 
             if len(nodes1.intersection(nodes2)) > 0:
                 x_triples = x_triples.union(s_triples)
@@ -64,7 +66,7 @@ def preprocess2(ds, all_ds, entity2id, rel2id):
         x_triples = list(x_triples)
         y_triples = list(y_triples)
         
-        all_relations = list(set([t[2] for t in x_triples]))
+        all_relations = list(OrderedSet([t[2] for t in x_triples]))
 
         all_entities = sorted([entity2id[el] for el in all_entities])
         all_relations = sorted([rel2id[el] for el in all_relations])
@@ -101,7 +103,7 @@ train = pd.read_csv(train_path, sep='\t', header=None)
 val = pd.read_csv(val_path, sep='\t', header=None)
 test = pd.read_csv(test_path, sep='\t', header=None)
 
-with open(rel_path, 'r') as fp:
+with open(rel_path, 'r', encoding="utf-8") as fp:
     relations = fp.read().strip().splitlines()
 
 train = preprocess1(train, relations)
@@ -113,7 +115,7 @@ all_ds = train + val + test
 entities = []
 for el in all_ds:
     entities.extend(el["entities"])
-entities = list(set(entities))
+entities = list(OrderedSet(entities))
 
 if not os.path.exists("./proc"):
     os.makedirs("./proc")
@@ -130,11 +132,11 @@ train = preprocess2(train, all_ds, entity2id, rel2id)
 val = preprocess2(val, all_ds, entity2id, rel2id)
 test = preprocess2(test, all_ds, entity2id, rel2id)
 
-with open("./proc/train.json", 'w') as fp:
+with open("./proc/train.json", 'w', encoding="utf-8") as fp:
     json.dump(train, fp)
 
-with open("./proc/val.json", 'w') as fp:
+with open("./proc/val.json", 'w', encoding="utf-8") as fp:
     json.dump(val, fp)
 
-with open("./proc/test.json", 'w') as fp:
+with open("./proc/test.json", 'w', encoding="utf-8") as fp:
     json.dump(test, fp)
