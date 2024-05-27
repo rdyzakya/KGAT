@@ -9,8 +9,13 @@ import os
 random.seed(42)
 np.random.seed(42)
 
+config = json.load(open("../config.json"))
+
+N = config["N"]
+N_REF = config["N_REF"]
+
 def find_reference(sub_id, rel_id, obj_ids, df):
-    n_triples = random.randint(5,50)
+    n_triples = random.randint(N_REF//20,N_REF)
     res = OrderedSet()
     current_idx = df.loc[(df[0] == sub_id) & (df[1] == rel_id) & (df[2].isin(obj_ids))].index
     symmetry_idx = df.loc[(df[2] == sub_id) & (df[1] == rel_id) & (df[0].isin(obj_ids))].index
@@ -68,26 +73,39 @@ for i, row in df.iterrows():
     s, o, r = row.SubjectEntity, row.ObjectEntities, row.Relation
     o = [el for el in o if len(el) > 0]
 
-    if s not in entity2id.keys():
+    if s not in entity2id.keys(): # add entity
         entity2id[s] = num_entities
         num_entities += 1
+
+
+    # Otherwise, it will be a list of objects. In case of multi-token
+    # objects, a list of an entity's aliases will be given whenever possible. For example:
     
     for obj in o:
-        o_idx = None
-        for alias in obj:
-            if alias in entity2id.keys():
-                o_idx = entity2id[alias]
-        for alias in obj:
-            entity2id[alias] = o_idx or num_entities
-        if o_idx == None:
-            num_entities += 1
+        obj = min(obj, key=len) # choose the shortest token --> recording artist vs artist --> artist
+        if obj not in entity2id.keys(): # add entity
+            entity2id[obj] = num_entities
+            num_entities += 1 
+        # o_idx = None
+        # for alias in obj:
+        #     if alias in entity2id.keys():
+        #         o_idx = entity2id[alias]
+        #         break
+        # for alias in obj:
+        #     if o_idx == None:
+        #         entity2id[alias] = num_entities
+        #     else:
+        #         entity2id[alias] = o_idx
+        # if o_idx == None:
+        #     num_entities += 1
     
     if r not in relation2id.keys():
         relation2id[r] = num_relations
         num_relations += 1
     
     for obj in o:
-        triples.append((entity2id[s], relation2id[r], entity2id[obj[0]]))
+        obj = min(obj, key=len) # choose the shortest token --> recording artist vs artist --> artist
+        triples.append((entity2id[s], relation2id[r], entity2id[obj]))
 
 triples_df = pd.DataFrame(triples)
 
@@ -97,7 +115,7 @@ ds = []
 for i, row in tqdm(df.iterrows()):
     sub_id = entity2id[row["SubjectEntity"]]
     rel_id = relation2id[row["Relation"]]
-    obj_ids = [entity2id[el[0]] for el in row["ObjectEntities"] if len(el) > 0]
+    obj_ids = [entity2id[min(el, key=len)] for el in row["ObjectEntities"] if len(el) > 0]
 
     reference = find_reference(sub_id, rel_id, obj_ids, triples_df)
 
@@ -110,11 +128,13 @@ for i, row in tqdm(df.iterrows()):
 
 train, val, test = ds[:len(train)], ds[len(train):len(train)+len(val)], ds[len(train)+len(val):]
 
+
 n_entity = max(entity2id.values()) + 1
-entities = [[] for i in range(n_entity)]
+# entities = [max(el, key=len) for el in entities]
+assert n_entity == len(entity2id)
+entities = ["" for i in range(n_entity)]
 for k, v in entity2id.items():
-    entities[v].append(k)
-entities = [max(el, key=len) for el in entities] # take the longest
+    entities[v] = k
 
 if not os.path.exists("./proc"):
     os.makedirs("./proc")

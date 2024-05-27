@@ -10,14 +10,17 @@ from tqdm import tqdm
 random.seed(42)
 np.random.seed(42)
 
-N = 500
+config = json.load(open("../config.json"))
+
+N = config["N"]
+N_REF = config["N_REF"]
 
 entity_map_path = "./raw/entity2text.txt"
 relation_map_path = "./raw/relation2text.txt"
 triples_path = "./raw/wiki_tuple_ids.txt"
 
 def find_reference(sub_id, rel_id, obj_ids, df):
-    n_triples = random.randint(20,500)
+    n_triples = random.randint(N_REF//20,N_REF)
     res = OrderedSet()
     current_idx = df.loc[(df[0] == sub_id) & (df[1] == rel_id) & (df[2].isin(obj_ids))].index
     symmetry_idx = df.loc[(df[2] == sub_id) & (df[1] == rel_id) & (df[0].isin(obj_ids))].index

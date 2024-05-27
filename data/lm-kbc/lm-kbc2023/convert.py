@@ -9,8 +9,13 @@ import os
 random.seed(42)
 np.random.seed(42)
 
+config = json.load(open("../config.json"))
+
+N = config["N"]
+N_REF = config["N_REF"]
+
 def find_reference(sub_id, rel_id, obj_ids, df):
-    n_triples = random.randint(5,50)
+    n_triples = random.randint(N_REF//20,N_REF)
     res = OrderedSet()
     current_idx = df.loc[(df[0] == sub_id) & (df[1] == rel_id) & (df[2].isin(obj_ids))].index
     symmetry_idx = df.loc[(df[2] == sub_id) & (df[1] == rel_id) & (df[0].isin(obj_ids))].index
