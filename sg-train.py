@@ -1,12 +1,12 @@
 from argparse import ArgumentParser
-
-import torch.utils
-from kgat import (load_config_sg,
-                  load_json,
+from kgat import (load_json,
                   load_id2map,
                   SubgraphGenerationDataset,
-                  subgraphgen_collate_fn)
-import torch
+                  SubgraphGenerationCollator,
+                  SGTrainer,
+                  load_config_sg)
+from transformers import AutoTokenizer, TrainingArguments
+import evaluate
 import os
 
 def init_args():
@@ -15,43 +15,78 @@ def init_args():
                         default="./config/model/default.json")
     parser.add_argument("-t", "--train", type=str, help="train config json path",
                         default="./config/train/sg-default.json")
+    parser.add_argument("--data", type=str, help="Data directory",
+                        default="./data/subgraph-gen/atomic/proc")
     args = parser.parse_args()
     return args
-
-def main():
-    args = init_args()
-
-    train_config = load_json(args.train)
-
-    # PREPARE DATASET
-    train_ds, val_ds, test_ds = prepare_data(train_config["data_dir"])
-    # PREPARE DATALOADER
-    train_dataloader = torch.utils.data.DataLoader(train_ds,
-                                                   batch_size=train_config["train_batch_per_device"],
-                                                   # should be distribute accros devices
-                                                   shuffle=train_config["shuffle"],
-                                                   collate_fn=subgraphgen_collate_fn)
-    val_dataloader = torch.utils.data.DataLoader(val_ds,
-                                                batch_size=train_config["val_batch_per_device"],
-                                                # should be distribute accros devices
-                                                shuffle=False,
-                                                collate_fn=subgraphgen_collate_fn)
-    test_dataloader = torch.utils.data.DataLoader(test_ds,
-                                                batch_size=train_config["test_batch_per_device"],
-                                                # should be distribute accros devices
-                                                shuffle=False,
-                                                collate_fn=subgraphgen_collate_fn)
-    # PREPARE MODEL
-    model_config = load_json(args.model)
-    graph_module = load_config_sg(model_config)
-    # TRAIN
 
 def prepare_data(data_dir):
     id2entity = load_id2map(os.path.join(data_dir, "entities.txt"))
     id2rel = load_id2map(os.path.join(data_dir, "relations.txt"))
 
     train_ds = SubgraphGenerationDataset(os.path.join(data_dir, "train.json"), id2entity, id2rel)
-    val_ds = SubgraphGenerationDataset(os.path.join(data_dir, "val.json"), id2entity, id2rel)
+    val_ds = SubgraphGenerationDataset(os.path.join(data_dir, "dev.json"), id2entity, id2rel)
     test_ds = SubgraphGenerationDataset(os.path.join(data_dir, "test.json"), id2entity, id2rel)
 
     return train_ds, val_ds, test_ds
+
+# SHOULD USE SOMETHING LIKE PEFT
+def main():
+    args = init_args()
+
+    train_config = load_json(args.train)
+    model_config = load_json(args.model)
+
+    # PREPARE DATASET
+    train_ds, val_ds, test_ds = prepare_data(args.data)
+
+    # PREPARE MODEL
+    tokenizer = AutoTokenizer.from_pretrained(model_config["clm"]["model_name_or_path"], padding_side="left")
+    model = load_config_sg(model_config, clm=None)
+
+
+    # PREPARE TRAINER
+    sg_collator = SubgraphGenerationCollator(tokenizer=tokenizer)
+
+    # f1_score = evaluate.load("f1")
+    # accuracy = evaluate.load("accuracy")
+
+    # def compute_metrics(eval_pred):
+    #     predictions, labels = eval_pred
+    #     # predictions = np.argmax(predictions, axis=1)
+    #     predictions = predictions.argmax(-1)
+    #     f1 = f1_score.compute(predictions=predictions, references=labels, average="macro")
+    #     acc = accuracy.compute(predictions=predictions, references=labels)
+
+    #     res = {
+    #         "f1" : f1["f1"],
+    #         "accuracy" : acc["accuracy"]
+    #     }
+    #     return res
+
+    model.freeze_llm()
+
+    train_args = TrainingArguments(**train_config)
+    trainer = SGTrainer(
+        model=model,
+        args=train_args,
+        data_collator=sg_collator,
+        train_dataset=train_ds,
+        eval_dataset=val_ds,
+        tokenizer=tokenizer,
+        # compute_metrics=compute_metrics,
+        # callbacks = [EarlyStoppingCallback(early_stopping_patience=3)]
+    ) # argsss
+
+    print(trainer.accelerator.state)
+    raise Exception
+
+
+    # if trainer.is_fsdp_enabled:
+    #     trainer.accelerator.state.fsdp_plugin.set_state_dict_type("FULL_STATE_DICT")
+
+    # trainer.save_model(script_args.output_dir)
+
+
+if __name__ == "__main__":
+    main()

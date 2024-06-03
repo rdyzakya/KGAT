@@ -74,3 +74,8 @@ class GraphModule(torch.nn.Module):
         mean_fused_score, subgraph_emb, edge_batch = self.subgraphpooler(graph_query_emb, edge_score, graph_emb, edge_batch)
 
         return mean_fused_score, subgraph_emb, edge_batch
+    
+    def freeze_llm(self):
+        # transformer
+        for param in self.transformer.parameters():
+            param.requires_grad = False

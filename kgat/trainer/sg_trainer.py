@@ -1,4 +1,5 @@
 from transformers import Trainer
+from trl import SFTTrainer
 from torch.nn import (
     BCELoss,
     BCEWithLogitsLoss

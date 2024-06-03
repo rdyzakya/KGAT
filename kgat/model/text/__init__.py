@@ -53,3 +53,9 @@ class TextModule(torch.nn.Module):
         vt = self.vt_transformer(subgraph_emb)
         # INSERT TO CLM
         return self.forward_clm(prompt_input_ids, prompt_attention_mask, vt)
+    
+    def freeze_llm(self):
+        for param in self.clm_embedding.parameters():
+            param.requires_grad = False
+        for param in self.clm.parameters():
+            param.requires_grad = False
