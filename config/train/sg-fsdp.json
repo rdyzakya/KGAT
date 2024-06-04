@@ -14,5 +14,5 @@
     "metric_for_best_model": "f1-score",
     "push_to_hub": false,
     "save_total_limit": 3,
-    "fsdp" : false
+    "fsdp" : "full_shard"
 }
