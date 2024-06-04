@@ -54,7 +54,8 @@ def load_config_sg(json_dict, clm=None):
     graph_module = graph.GraphModule(transformer=transformer,
                                      graphpooler=graphpooler,
                                      subgraphpooler=subgraphpooler,
-                                     prepare_inputs_method=clm.prepare_inputs_for_generation)
+                                     prepare_inputs_method=clm.prepare_inputs_for_generation,
+                                     pad_token_id=json_dict["graph_module"]["pad_token_id"])
     
     return graph_module
 

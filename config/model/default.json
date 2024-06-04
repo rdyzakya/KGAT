@@ -22,7 +22,8 @@
                 "text_emb_dim" : "clm.transformer.embed_dim",
                 "hidden_dim" : 1024
             }
-        }
+        },
+        "pad_token_id" : 50256
     },
     "text_module" : {
         "vt_transformer" : {

@@ -12,13 +12,14 @@ from .subgraphpooler import (
 import torch
 
 class GraphModule(torch.nn.Module):
-    def __init__(self, transformer, graphpooler, subgraphpooler, prepare_inputs_method, batch_size=16):
+    def __init__(self, transformer, graphpooler, subgraphpooler, prepare_inputs_method, pad_token_id, batch_size=16):
         super().__init__()
         self.transformer = transformer
         self.graphpooler = graphpooler
         self.subgraphpooler = subgraphpooler
         self.prepare_inputs = prepare_inputs_method
         self.batch_size = batch_size
+        self.pad_token_id = pad_token_id
 
     def get_text_last_hidden_state(self, input_ids, attention_mask):
         prepared_inputs = self.prepare_inputs(input_ids=input_ids, attention_mask=attention_mask)
@@ -29,7 +30,7 @@ class GraphModule(torch.nn.Module):
         hidden_states = hidden_states[0]
 
         # get last token hidden state, as how any left-to-right model with seq-cls head do
-        sequence_lengths = torch.eq(input_ids, self.transformer.config.pad_token_id).int().argmax(-1) - 1
+        sequence_lengths = torch.eq(input_ids, self.pad_token_id).int().argmax(-1) - 1
         sequence_lengths = sequence_lengths % input_ids.shape[-1]
         sequence_lengths = sequence_lengths.to(hidden_states.device)
 
