@@ -53,6 +53,7 @@ def main():
 
     # PREPARE MODEL
     tokenizer = AutoTokenizer.from_pretrained(model_config["clm"]["model_name_or_path"], padding_side="left")
+    tokenizer.pad_token = tokenizer.eos_token
     model = load_config_sg(model_config, clm=None)
 
 
