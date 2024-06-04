@@ -9,6 +9,17 @@ from transformers import AutoTokenizer, TrainingArguments
 import evaluate
 import os
 
+from torch.distributed.fsdp import (
+   FullyShardedDataParallel,
+   CPUOffload,
+)
+from torch.distributed.fsdp.wrap import (
+   default_auto_wrap_policy,
+)
+from torch.nn.parallel import (
+    DistributedDataParallel
+)
+
 def init_args():
     parser = ArgumentParser()
     parser.add_argument("-m", "--model", type=str, help="model config json path", 
@@ -66,9 +77,16 @@ def main():
 
     model.freeze_llm()
 
+    model = DistributedDataParallel(model)
+    fsdp_model = FullyShardedDataParallel(
+    model(),
+    fsdp_auto_wrap_policy=default_auto_wrap_policy,
+    cpu_offload=CPUOffload(offload_params=True),
+    )
+
     train_args = TrainingArguments(**train_config)
     trainer = SGTrainer(
-        model=model,
+        model=fsdp_model,
         args=train_args,
         data_collator=sg_collator,
         train_dataset=train_ds,
