@@ -78,14 +78,13 @@ def main():
         # callbacks = [EarlyStoppingCallback(early_stopping_patience=3)]
     ) # argsss
 
-    print(trainer.accelerator.state)
-    raise Exception
+    trainer.train()
 
 
     # if trainer.is_fsdp_enabled:
     #     trainer.accelerator.state.fsdp_plugin.set_state_dict_type("FULL_STATE_DICT")
 
-    # trainer.save_model(script_args.output_dir)
+    trainer.save_model(train_config.output_dir)
 
 
 if __name__ == "__main__":
