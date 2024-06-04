@@ -9,16 +9,16 @@ from transformers import AutoTokenizer, TrainingArguments
 import evaluate
 import os
 
-from torch.distributed.fsdp import (
-   FullyShardedDataParallel,
-   CPUOffload,
-)
-from torch.distributed.fsdp.wrap import (
-   default_auto_wrap_policy,
-)
-from torch.nn.parallel import (
-    DistributedDataParallel
-)
+# from torch.distributed.fsdp import (
+#    FullyShardedDataParallel,
+#    CPUOffload,
+# )
+# from torch.distributed.fsdp.wrap import (
+#    default_auto_wrap_policy,
+# )
+# from torch.nn.parallel import (
+#     DistributedDataParallel
+# )
 
 def init_args():
     parser = ArgumentParser()
