@@ -51,6 +51,8 @@ class SubgraphGenerationCollator:
         entities = self.tokenizer(entities, padding=True, return_tensors="pt")
         relations = self.tokenizer(relations, padding=True, return_tensors="pt")
 
+        x_coo = x_coo.transpose(0,1)
+
         return {
             "graph_query_input_ids" : graph_query["input_ids"],
             "graph_query_attention_mask" : graph_query["attention_mask"],
