@@ -60,6 +60,8 @@ class GraphModule(torch.nn.Module):
                 entities_input_ids, entities_attention_mask,
                 relations_input_ids, relations_attention_mask,
                 x_coo, batch):
+        
+        x_coo = x_coo.tranpose(0,1)
 
         x = self.batch_text_last_hidden_state(entities_input_ids, entities_attention_mask)
 
