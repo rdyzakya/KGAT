@@ -1,4 +1,8 @@
-from argparse import ArgumentParser
+from args import train_sg_args
+import os
+args = train_sg_args()
+os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
+
 from kgat import (load_json,
                   load_id2map,
                   SubgraphGenerationDataset,
@@ -7,7 +11,6 @@ from kgat import (load_json,
                   load_config_sg)
 from transformers import AutoTokenizer, TrainingArguments
 import evaluate
-import os
 
 # from torch.distributed.fsdp import (
 #    FullyShardedDataParallel,
@@ -20,17 +23,6 @@ import os
 #     DistributedDataParallel
 # )
 
-def init_args():
-    parser = ArgumentParser()
-    parser.add_argument("-m", "--model", type=str, help="model config json path", 
-                        default="./config/model/default.json")
-    parser.add_argument("-t", "--train", type=str, help="train config json path",
-                        default="./config/train/sg-default.json")
-    parser.add_argument("--data", type=str, help="Data directory",
-                        default="./data/subgraph-gen/atomic/proc")
-    args = parser.parse_args()
-    return args
-
 def prepare_data(data_dir):
     id2entity = load_id2map(os.path.join(data_dir, "entities.txt"))
     id2rel = load_id2map(os.path.join(data_dir, "relations.txt"))
@@ -42,8 +34,7 @@ def prepare_data(data_dir):
     return train_ds, val_ds, test_ds
 
 # SHOULD USE SOMETHING LIKE PEFT
-def main():
-    args = init_args()
+def main(args):
 
     train_config = load_json(args.train)
     model_config = load_json(args.model)
@@ -59,7 +50,8 @@ def main():
 
 
     # PREPARE TRAINER
-    sg_collator = SubgraphGenerationCollator(tokenizer=tokenizer)
+    n_process = len(args.gpu.split(','))
+    sg_collator = SubgraphGenerationCollator(tokenizer=tokenizer, n_process=n_process)
 
     # f1_score = evaluate.load("f1")
     # accuracy = evaluate.load("accuracy")
@@ -108,4 +100,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(args)
