@@ -71,24 +71,24 @@ class SubgraphGenerationCollator:
     
     def pad_batch_input_ids(self, batch_input_ids):
         res = []
-        lengths = [0]
+        index = [0]
         for input_ids in batch_input_ids:
             res.extend(input_ids.flip(-1) if self.left else input_ids)
-            lengths.append(input_ids.shape[0])
+            index.append(input_ids.shape[0] + index[-1])
         res = pad_sequence(res, batch_first=True, padding_value=self.tokenizer.pad_token_id)
         res = res.flip(-1) if self.left else res
-        res = [res[lengths[i]:lengths[i+1]] for i in range(len(batch_input_ids))]
+        res = [res[index[i]:index[i+1]] for i in range(len(batch_input_ids))]
         return res
 
     def pad_batch_attention_mask(self, batch_attention_masks):
         res = []
-        lengths = [0]
+        index = [0]
         for attention_masks in batch_attention_masks:
             res.extend(attention_masks.flip(-1) if self.left else attention_masks)
-            lengths.append(attention_masks.shape[0])
+            index.append(attention_masks.shape[0] + index[-1])
         res = pad_sequence(res, batch_first=True, padding_value=0)
         res = res.flip(-1) if self.left else res
-        res = [res[lengths[i]:lengths[i+1]] for i in range(len(batch_attention_masks))]
+        res = [res[index[i]:index[i+1]] for i in range(len(batch_attention_masks))]
         return res
     
     def __call__(self, batch):
