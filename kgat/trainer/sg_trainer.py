@@ -20,7 +20,7 @@ class SGTrainer(Trainer):
         # y_coo = batch[5]
 
         # text, entities, relations, x_coo, y_coo_cls
-        label = inputs.pop("labels")
+        label = inputs.pop("y_coo_cls")
         mean_fused_score, _, _ = model(**inputs)
 
         assert len(mean_fused_score) == len(label)
