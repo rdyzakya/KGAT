@@ -22,6 +22,16 @@ class SGTrainer(Trainer):
         # text, entities, relations, x_coo, y_coo_cls
         label = inputs.pop("y_coo_cls")
         mean_fused_score, _, _ = model(**inputs)
+
+        assert len(mean_fused_score) == len(label)
+
+        mask = label != -1
+
+        mean_fused_score = mean_fused_score[mask]
+        label = label[mask]
+
+        label = label.float()
+        
         loss = self.criterion(mean_fused_score, label)
 
         if return_outputs:
