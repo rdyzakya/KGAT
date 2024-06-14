@@ -11,6 +11,7 @@ from kgat import (load_json,
                   load_config_sg)
 from transformers import AutoTokenizer, TrainingArguments
 import evaluate
+from sklearn.metrics import classification_report
 
 # from torch.distributed.fsdp import (
 #    FullyShardedDataParallel,
@@ -32,6 +33,19 @@ def prepare_data(data_dir):
     test_ds = SubgraphGenerationDataset(os.path.join(data_dir, "test.json"), id2entity, id2rel)
 
     return train_ds, val_ds, test_ds
+
+def compute_metrics(eval_preds):
+    labels = eval_preds.label_ids
+    preds = eval_preds.predictions.sigmoid().round() # sigmoid -> round
+
+    metrics = classification_report(y_true=labels, y_pred=preds, output_dict=True)
+
+    return {
+        "accuracy" : metrics["accuracy"],
+        "recall" : metrics["weighted avg"]["recall"],
+        "precision" : metrics["weighted avg"]["precision"],
+        "f1-score" : metrics["weighted avg"]["f1-score"]
+    }
 
 # SHOULD USE SOMETHING LIKE PEFT
 def main(args):
@@ -87,7 +101,7 @@ def main(args):
         train_dataset=train_ds,
         eval_dataset=val_ds,
         tokenizer=tokenizer,
-        # compute_metrics=compute_metrics,
+        compute_metrics=compute_metrics,
         # callbacks = [EarlyStoppingCallback(early_stopping_patience=3)]
     ) # argsss
 

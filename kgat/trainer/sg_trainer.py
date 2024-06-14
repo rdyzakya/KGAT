@@ -4,7 +4,6 @@ from torch.nn import (
     BCELoss,
     BCEWithLogitsLoss
 )
-from sklearn.metrics import classification_report
 
 class SGTrainer(Trainer):
     def __init__(self, *args, **kwargs):
@@ -37,16 +36,3 @@ class SGTrainer(Trainer):
         if return_outputs:
             return loss, mean_fused_score
         return loss
-    
-    def compute_metrics(eval_preds):
-        labels = eval_preds.label_ids
-        preds = eval_preds.predictions.sigmoid().round() # sigmoid -> round
-
-        metrics = classification_report(y_true=labels, y_pred=preds, output_dict=True)
-
-        return {
-            "accuracy" : metrics["accuracy"],
-            "recall" : metrics["weighted avg"]["recall"],
-            "precision" : metrics["weighted avg"]["precision"],
-            "f1-score" : metrics["weighted avg"]["f1-score"]
-        }
