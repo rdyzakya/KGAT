@@ -64,6 +64,13 @@ class GraphModule(torch.nn.Module):
                 entities_input_ids, entities_attention_mask,
                 relations_input_ids, relations_attention_mask,
                 x_coo, batch):
+        mask1 = batch != -1
+        batch = batch[mask1]
+        entities_input_ids = entities_input_ids[mask1]
+        entities_attention_mask = entities_attention_mask[mask1]
+
+        mask2 = x_coo != -1
+        x_coo = x_coo[mask2]
         
         x_coo = x_coo.transpose(0,1)
 
