@@ -44,9 +44,9 @@ def main(args):
 
     # PREPARE MODEL
     tokenizer = AutoTokenizer.from_pretrained(model_config["clm"]["model_name_or_path"], padding_side="left")
-    tokenizer.pad_token = tokenizer.eos_token
+    tokenizer.pad_token_id = tokenizer.eos_token_id
     model = load_config_sg(model_config, clm=None)
-    model.transformer.config.token_id = tokenizer.eos_token_id
+    model.transformer.config.pad_token_id = tokenizer.eos_token_id
 
 
     # PREPARE TRAINER

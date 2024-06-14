@@ -22,7 +22,10 @@ class GraphModule(torch.nn.Module):
         self.pad_token_id = pad_token_id
 
     def get_text_last_hidden_state(self, input_ids, attention_mask):
-        # BUG
+        # BUG VERSION LEVEL
+        # https://discuss.pytorch.org/t/solved-assertion-srcindex-srcselectdimsize-failed-on-gpu-for-torch-cat/1804/2
+        # update: problem solved. This is due to an out of bounds index in the embedding matrix. Thanks for the help!
+        # In my case it was mismatched tokenizer.pad_token_id, your model and tokenizer should use the same one :smiley:
         prepared_inputs = self.prepare_inputs(input_ids=input_ids, attention_mask=attention_mask)
         # input_ids = prepared_inputs["input_ids"]
         # attention_mask = prepared_inputs["attention_mask"]
