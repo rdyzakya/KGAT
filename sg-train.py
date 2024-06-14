@@ -11,6 +11,7 @@ from kgat import (load_json,
                   load_config_sg)
 from transformers import AutoTokenizer, TrainingArguments
 import evaluate
+import torch
 from sklearn.metrics import classification_report
 
 # from torch.distributed.fsdp import (
@@ -36,7 +37,8 @@ def prepare_data(data_dir):
 
 def compute_metrics(eval_preds):
     labels = eval_preds.label_ids
-    preds = eval_preds.predictions.sigmoid().round() # sigmoid -> round
+    preds = eval_preds.predictions
+    preds = torch.from_numpy(preds).sigmoid().round() # sigmoid -> round
 
     metrics = classification_report(y_true=labels, y_pred=preds, output_dict=True)
 

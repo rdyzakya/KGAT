@@ -14,5 +14,6 @@
     "metric_for_best_model": "f1-score",
     "push_to_hub": false,
     "save_total_limit": 3,
-    "fsdp" : false
+    "fsdp" : false,
+    "label_names" : ["y_coo_cls"]
 }
