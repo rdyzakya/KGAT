@@ -66,7 +66,7 @@ class SubgraphGenerationCollator:
             "relations_attention_mask" : relations["attention_mask"], # N_relations, length
             "x_coo" : x_coo, # N_triplets, 3
             "batch" : batch, # N_entities
-            "y_coo_cls" : y_coo_cls # N_triplets
+            "labels" : y_coo_cls # N_triplets
         }
     
     def pad_batch_input_ids(self, batch_input_ids):
@@ -101,7 +101,7 @@ class SubgraphGenerationCollator:
             "relations_attention_mask" : 0, # SUCCESS
             "x_coo" : -1, # SUCCESS
             "batch" : -1, # SUCCESS
-            "y_coo_cls" : -1, # SUCCESS
+            "labels" : -1, # SUCCESS
         }
         n = max(1, int(np.ceil(len(batch) / self.n_process)))
         
