@@ -66,7 +66,7 @@ class SubgraphGenerationCollator:
             "relations_attention_mask" : relations["attention_mask"], # N_relations, length
             "x_coo" : x_coo, # N_triplets, 3
             "batch" : batch, # N_entities
-            "labels" : y_coo_cls # N_triplets
+            "y_coo_cls" : y_coo_cls # N_triplets
         }
     
     def pad_batch_input_ids(self, batch_input_ids):
@@ -101,7 +101,7 @@ class SubgraphGenerationCollator:
             "relations_attention_mask" : 0, # SUCCESS
             "x_coo" : -1, # SUCCESS
             "batch" : -1, # SUCCESS
-            "labels" : -1, # SUCCESS
+            "y_coo_cls" : -1, # SUCCESS
         }
         n = max(1, int(np.ceil(len(batch) / self.n_process)))
         
@@ -120,7 +120,7 @@ class SubgraphGenerationCollator:
             elif "attention_mask" in k:
                 batch_values = self.pad_batch_attention_mask(batch_values)
             batch_values = pad_sequence(batch_values, batch_first=True, padding_value=pad_tokens[k])
-            batch_values = batch_values.view(-1) if k == "batch" or k == "labels" else batch_values.view(-1, batch_values.shape[-1])
+            batch_values = batch_values.view(-1) if k == "batch" or k == "y_coo_cls" else batch_values.view(-1, batch_values.shape[-1])
             res[k] = batch_values
         return res
 

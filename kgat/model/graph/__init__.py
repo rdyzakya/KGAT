@@ -63,7 +63,7 @@ class GraphModule(torch.nn.Module):
     def forward(self, graph_query_input_ids, graph_query_attention_mask,
                 entities_input_ids, entities_attention_mask,
                 relations_input_ids, relations_attention_mask,
-                x_coo, batch):
+                x_coo, batch, y_coo_cls=None):
         mask1 = batch != -1
         batch = batch[mask1]
         entities_input_ids = entities_input_ids[mask1]
