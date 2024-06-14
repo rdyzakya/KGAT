@@ -9,7 +9,7 @@ from torch.nn import (
     BCEWithLogitsLoss
 )
 import torch
-import torch_xla.core.xla_model as xm
+# import torch_xla.core.xla_model as xm
 import numpy as np
 
 logger = logging.get_logger(__name__)
@@ -143,8 +143,8 @@ class SGTrainer(Trainer):
             main_input_name = getattr(self.model, "main_input_name", "input_ids")
             inputs_decode = self._prepare_input(inputs[main_input_name]) if args.include_inputs_for_metrics else None
 
-            if is_torch_tpu_available():
-                xm.mark_step()
+            # if is_torch_tpu_available():
+            #     xm.mark_step()
 
             # Update containers on host
             if loss is not None:
