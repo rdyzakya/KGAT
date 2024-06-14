@@ -120,7 +120,7 @@ class SubgraphGenerationCollator:
             elif "attention_mask" in k:
                 batch_values = self.pad_batch_attention_mask(batch_values)
             batch_values = pad_sequence(batch_values, batch_first=True, padding_value=pad_tokens[k])
-            batch_values = batch_values.view(-1) if k == "batch" or k == "y_coo_cls" else batch_values.view(-1, batch_values.shape[-1])
+            batch_values = batch_values.view(-1) if k == "batch" or k == "labels" else batch_values.view(-1, batch_values.shape[-1])
             res[k] = batch_values
         return res
 
