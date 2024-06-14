@@ -47,6 +47,7 @@ def main(args):
     tokenizer.pad_token_id = tokenizer.eos_token_id
     model = load_config_sg(model_config, clm=None)
     model.transformer.config.pad_token_id = tokenizer.eos_token_id
+    model.transformer.resize_token_embeddings(len(tokenizer))
 
 
     # PREPARE TRAINER
