@@ -45,7 +45,7 @@ def main(args):
     train_ds, val_ds, test_ds = prepare_data(args.data)
 
     # PREPARE MODEL
-    tokenizer = AutoTokenizer.from_pretrained(model_config["clm"]["model_name_or_path"], padding_side="left")
+    tokenizer = AutoTokenizer.from_pretrained(model_config["structure"]["clm"]["model_name_or_path"], padding_side="left")
     tokenizer.pad_token_id = tokenizer.eos_token_id
     model = load_config_sg(model_config, clm=None)
     model.transformer.config.pad_token_id = tokenizer.eos_token_id
