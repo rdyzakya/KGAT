@@ -56,7 +56,7 @@ class SGTrainer:
             labels = batch.pop("y_coo_cls")
             labels = labels.to(self.device)
 
-            for k, v in batch:
+            for k, v in batch.items():
                 batch[k] = v.to(self.device)
 
             self.optimizer.zero_grad()
