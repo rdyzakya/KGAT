@@ -39,7 +39,7 @@ class SGTrainer:
         return DataLoader(dataset=ds, batch_size=batch_size, shuffle=False, pin_memory=True, collate_fn=self.collate_fn)
 
     def compute_metrics(self, preds, labels):
-        preds = preds.sigmoid().round() # sigmoid -> round
+        # preds = preds.sigmoid().round() # sigmoid -> round
 
         metrics = classification_report(y_true=labels, y_pred=preds, output_dict=True)
 
@@ -92,7 +92,7 @@ class SGTrainer:
             loss_data[0] += loss
             loss_data[1] += len(labels)
 
-            y_pred.extend(outputs.tolist())
+            y_pred.extend(outputs.sigmoid().round().tolist())
             y_true.extend(labels.tolist())
 
         metrics = self.compute_metrics(y_pred, y_true)
