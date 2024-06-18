@@ -40,8 +40,7 @@ def main(args):
 
     train_config = load_json(args.train)
     # model_config = load_json(args.model)
-    model_config = torch.load(args.model) #, map_location="cuda:0" if torch.cuda.is_available() else "cpu")
-
+    model_config = torch.load(args.model) if args.model.endswith(".pth") else load_json(args.model)
     # PREPARE DATASET
     train_ds, val_ds, test_ds = prepare_data(args.data)
 
