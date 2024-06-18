@@ -107,7 +107,7 @@ class SGTrainer:
 
     def train_loop(self):
 
-        train_steps = math.ceil(len(self.train_ds) / self.train_batch_size)
+        train_steps = math.ceil(len(self.train_ds) / self.train_batch_size) * self.epoch
         pbar = tqdm(total=train_steps, desc="Training")
 
         train_dataloader = self.prepare_dataloader(self.train_ds, self.train_batch_size)
