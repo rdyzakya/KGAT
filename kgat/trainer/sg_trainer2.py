@@ -141,6 +141,7 @@ class SGTrainer:
         return self.model, history
     
     def save_model(self, model_config, out_path):
+        self.accelerator.wait_for_everyone()
         self.model = self.accelerator.unwrap_model(self.model)
         result = {
             "structure" : model_config["structure"],
