@@ -93,7 +93,7 @@ class SGTrainer:
             loss_data[0] += loss
             loss_data[1] += len(labels)
 
-            y_pred.extend(outputs.sigmoid().round().tolist())
+            y_pred.extend(outputs.sigmoid().round().long().tolist())
             y_true.extend(labels.tolist())
 
         metrics = self.compute_metrics(y_pred, y_true)
