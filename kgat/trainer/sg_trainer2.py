@@ -60,7 +60,7 @@ class SGTrainer:
                 batch[k] = v.to(self.device)
 
             self.optimizer.zero_grad()
-            outputs = self.model(**batch)
+            outputs, _, _ = self.model(**batch)
             loss = self.criterion(outputs, labels)
             loss.backward()
             self.optimizer.step()
@@ -80,10 +80,10 @@ class SGTrainer:
             labels = batch.pop("y_coo_cls")
             labels = labels.to(self.device)
 
-            for k, v in batch:
+            for k, v in batch.items():
                 batch[k] = v.to(self.device)
 
-            outputs = self.model(**batch)
+            outputs, _, _ = self.model(**batch)
             loss = self.criterion(outputs, labels)
 
             loss_data[0] += loss
