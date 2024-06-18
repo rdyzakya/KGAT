@@ -22,19 +22,6 @@ def prepare_data(data_dir):
 
     return train_ds, val_ds, test_ds
 
-def save_model(model, model_config, out_path):
-    result = {
-        "structure" : model_config["structure"],
-        "state_dict" : {
-            "graph_module" : {}
-        }
-    }
-
-    result["state_dict"]["graph_module"]["graphpooler"] = model.graphpooler.state_dict()
-    result["state_dict"]["graph_module"]["subgraphpooler"] = model.subgraphpooler.state_dict()
-
-    torch.save(result, out_path)
-
 # SHOULD USE SOMETHING LIKE PEFT
 def main(args):
 
@@ -60,13 +47,14 @@ def main(args):
         val_ds=val_ds,
         train_batch_size=train_config["per_device_train_batch_size"],
         val_batch_size=train_config["per_device_eval_batch_size"],
-        epoch=train_config["num_train_epochs"]
+        epoch=train_config["num_train_epochs"],
+        gradient_accumulation_steps=train_config["gradient_accumulation_steps"]
     )
 
     model, history = trainer.train_loop()
 
-    os.makedirs(train_config["output_dir"])
-    save_model(model, model_config, out_path=os.path.join(train_config["output_dir"], "model.pth"))
+    os.makedirs(train_config["output_dir"], exist_ok=True)
+    trainer.save_model(model_config, out_path=os.path.join(train_config["output_dir"], "model.pth"))
     with open(os.path.join(train_config["output_dir"], "history.json"), 'w') as fp:
         json.dump(history, fp)
 

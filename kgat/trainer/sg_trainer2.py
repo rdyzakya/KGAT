@@ -6,6 +6,8 @@ from kgat.data import SubgraphGenerationCollator
 from torch.nn import BCEWithLogitsLoss
 import math
 
+from accelerate import Accelerator
+
 class SGTrainer:
     def __init__(self, model,
                  tokenizer,
@@ -15,15 +17,18 @@ class SGTrainer:
                  left=True,
                  train_batch_size=8,
                  val_batch_size=8,
-                 epoch=10):
+                 epoch=10,
+                 gradient_accumulation_steps=1):
         
-        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        model.to(device)
+        self.accelerator = Accelerator(gradient_accumulation_steps=gradient_accumulation_steps)
+        # device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        # model.to(device)
+
         self.model = model
         self.train_ds = train_ds
         self.criterion = BCEWithLogitsLoss()
         self.optimizer = torch.optim.Adam(model.parameters(), lr=3e-4)
-        self.device = device
+        self.device = self.accelerator.device
         self.scheduler = scheduler
         self.val_ds = val_ds
 
@@ -55,18 +60,19 @@ class SGTrainer:
         loss_data = torch.zeros(2).to(self.device)
         for batch in dataloader:
             labels = batch.pop("y_coo_cls")
-            labels = labels.to(self.device)
+            # labels = labels.to(self.device)
 
-            for k, v in batch.items():
-                batch[k] = v.to(self.device)
-
-            self.optimizer.zero_grad()
-            outputs, _, _ = self.model(**batch)
-            loss = self.criterion(outputs, labels.float())
-            loss.backward()
-            self.optimizer.step()
-            if self.scheduler:
-                self.scheduler.step()
+            # for k, v in batch.items():
+            #     batch[k] = v.to(self.device)
+            with self.accelerator.accumulate(self.model):
+                self.optimizer.zero_grad()
+                outputs, _, _ = self.model(**batch)
+                loss = self.criterion(outputs, labels.float())
+                # loss.backward()
+                self.accelerator.backward(loss)
+                self.optimizer.step()
+                if self.scheduler:
+                    self.scheduler.step()
             loss_data[0] += loss
             loss_data[1] += len(labels)
 
@@ -81,10 +87,10 @@ class SGTrainer:
         
         for batch in tqdm(dataloader, desc="Evaluation"):
             labels = batch.pop("y_coo_cls")
-            labels = labels.to(self.device)
+            # labels = labels.to(self.device)
 
-            for k, v in batch.items():
-                batch[k] = v.to(self.device)
+            # for k, v in batch.items():
+            #     batch[k] = v.to(self.device)
 
             with torch.no_grad():
                 outputs, _, _ = self.model(**batch)
@@ -111,6 +117,10 @@ class SGTrainer:
 
         train_dataloader = self.prepare_dataloader(self.train_ds, self.train_batch_size)
         val_dataloader = self.prepare_dataloader(self.val_ds, self.val_batch_size) if self.val_ds else None
+
+        self.model, self.optimizer, self.scheduler, train_dataloader, val_dataloader = self.accelerator.prepare(
+            self.model, self.optimizer, self.scheduler, train_dataloader, val_dataloader
+        )
         
         history = []
 
@@ -129,3 +139,17 @@ class SGTrainer:
             history.append(data)
 
         return self.model, history
+    
+    def save_model(self, model_config, out_path):
+        self.model = self.accelerator.unwrap_model(self.model)
+        result = {
+            "structure" : model_config["structure"],
+            "state_dict" : {
+                "graph_module" : {}
+            }
+        }
+
+        result["state_dict"]["graph_module"]["graphpooler"] = self.model.graphpooler.state_dict()
+        result["state_dict"]["graph_module"]["subgraphpooler"] = self.model.subgraphpooler.state_dict()
+
+        torch.save(result, out_path)
