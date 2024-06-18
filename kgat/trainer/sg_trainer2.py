@@ -61,7 +61,7 @@ class SGTrainer:
 
             self.optimizer.zero_grad()
             outputs, _, _ = self.model(**batch)
-            loss = self.criterion(outputs, labels)
+            loss = self.criterion(outputs, labels.float())
             loss.backward()
             self.optimizer.step()
             if self.scheduler:
@@ -84,7 +84,7 @@ class SGTrainer:
                 batch[k] = v.to(self.device)
 
             outputs, _, _ = self.model(**batch)
-            loss = self.criterion(outputs, labels)
+            loss = self.criterion(outputs, labels.float())
 
             loss_data[0] += loss
             loss_data[1] += len(labels)
