@@ -99,7 +99,7 @@ class SGTrainer:
         metrics = self.compute_metrics(y_pred, y_true)
 
         metrics.update({
-            "eval_loss" : loss_data[0] / loss_data[1]
+            "eval_loss" : (loss_data[0] / loss_data[1]).item()
         })
 
         return metrics
@@ -118,7 +118,7 @@ class SGTrainer:
             train_loss = self.run_epoch(train_dataloader, pbar)
             data = {
                 "epoch" : e+1,
-                "train_loss" : train_loss
+                "train_loss" : train_loss.item()
             }
             
             if val_dataloader:
