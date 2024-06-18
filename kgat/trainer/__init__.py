@@ -1,1 +1,1 @@
-from .sg_trainer import SGTrainer
+from .sg_trainer2 import SGTrainer

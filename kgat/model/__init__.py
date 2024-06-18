@@ -33,29 +33,33 @@ class ModelForLMKBC(torch.nn.Module):
 def load_config_sg(json_dict, clm=None):
     # construct clm
     if clm is None:
-        model_name_or_path = json_dict["clm"]["model_name_or_path"]
+        model_name_or_path = json_dict["structure"]["clm"]["model_name_or_path"]
         clm = AutoModelForCausalLM.from_pretrained(model_name_or_path)
     # construct graph module
     ## prepare transformer
-    transformer = eval(json_dict["graph_module"]["transformer"])
+    transformer = eval(json_dict["structure"]["graph_module"]["transformer"])
     ## construct graphpooler
-    graphpooler_class = getattr(graph, json_dict["graph_module"]["graphpooler"]["class"])
-    graphpooler_kwargs = json_dict["graph_module"]["graphpooler"]["kwargs"]
+    graphpooler_class = getattr(graph, json_dict["structure"]["graph_module"]["graphpooler"]["class"])
+    graphpooler_kwargs = json_dict["structure"]["graph_module"]["graphpooler"]["kwargs"]
     graphpooler_kwargs["in_channels"] = eval(graphpooler_kwargs["in_channels"])
     graphpooler_kwargs["edge_dim"] = eval(graphpooler_kwargs["edge_dim"])
     graphpooler = graphpooler_class(**graphpooler_kwargs)
     ## construct subgraphpooler
-    subgraphpooler_class = getattr(graph, json_dict["graph_module"]["subgraphpooler"]["class"])
-    subgraphpooler_kwargs = json_dict["graph_module"]["subgraphpooler"]["kwargs"]
+    subgraphpooler_class = getattr(graph, json_dict["structure"]["graph_module"]["subgraphpooler"]["class"])
+    subgraphpooler_kwargs = json_dict["structure"]["graph_module"]["subgraphpooler"]["kwargs"]
     subgraphpooler_kwargs["graph_emb_dim"] = graphpooler.out_channels
     subgraphpooler_kwargs["text_emb_dim"] = eval(subgraphpooler_kwargs["text_emb_dim"])
     subgraphpooler = subgraphpooler_class(**subgraphpooler_kwargs)
+
+    if "state_dict" in json_dict.keys():
+        graphpooler.load_state_dict(json_dict["state_dict"]["graph_module"]["graphpooler"])
+        subgraphpooler.load_state_dict(json_dict["state_dict"]["graph_module"]["subgraphpooler"])
 
     graph_module = graph.GraphModule(transformer=transformer,
                                      graphpooler=graphpooler,
                                      subgraphpooler=subgraphpooler,
                                      prepare_inputs_method=clm.prepare_inputs_for_generation,
-                                     pad_token_id=json_dict["graph_module"]["pad_token_id"])
+                                     pad_token_id=json_dict["structure"]["graph_module"]["pad_token_id"])
     
     return graph_module
 
