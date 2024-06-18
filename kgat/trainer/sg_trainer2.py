@@ -92,10 +92,8 @@ class SGTrainer:
             loss_data[0] += loss
             loss_data[1] += len(labels)
 
-            y_pred.append(outputs)
-            y_true.append(labels)
-        y_true = torch.cat(y_true)
-        y_pred = torch.cat(y_pred)
+            y_pred.extend(outputs.tolist())
+            y_true.extend(labels.tolist())
 
         metrics = self.compute_metrics(y_pred, y_true)
 
