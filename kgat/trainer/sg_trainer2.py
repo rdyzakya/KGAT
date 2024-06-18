@@ -86,7 +86,8 @@ class SGTrainer:
             for k, v in batch.items():
                 batch[k] = v.to(self.device)
 
-            outputs, _, _ = self.model(**batch)
+            with torch.no_grad():
+                outputs, _, _ = self.model(**batch)
             loss = self.criterion(outputs, labels.float())
 
             loss_data[0] += loss
