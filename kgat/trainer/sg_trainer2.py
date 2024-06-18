@@ -142,15 +142,16 @@ class SGTrainer:
     
     def save_model(self, model_config, out_path):
         self.accelerator.wait_for_everyone()
-        self.model = self.accelerator.unwrap_model(self.model)
-        result = {
-            "structure" : model_config["structure"],
-            "state_dict" : {
-                "graph_module" : {}
+        if self.accelerator.is_main_process():
+            self.model = self.accelerator.unwrap_model(self.model)
+            result = {
+                "structure" : model_config["structure"],
+                "state_dict" : {
+                    "graph_module" : {}
+                }
             }
-        }
 
-        result["state_dict"]["graph_module"]["graphpooler"] = self.model.graphpooler.state_dict()
-        result["state_dict"]["graph_module"]["subgraphpooler"] = self.model.subgraphpooler.state_dict()
+            result["state_dict"]["graph_module"]["graphpooler"] = self.model.graphpooler.state_dict()
+            result["state_dict"]["graph_module"]["subgraphpooler"] = self.model.subgraphpooler.state_dict()
 
-        torch.save(result, out_path)
+            torch.save(result, out_path)
