@@ -4,6 +4,7 @@ from tqdm import tqdm
 from torch.utils.data import DataLoader
 from kgat.data import SubgraphGenerationCollator
 from torch.nn import BCEWithLogitsLoss
+import math
 
 class SGTrainer:
     def __init__(self, model,
@@ -49,7 +50,7 @@ class SGTrainer:
             "eval_f1_score" : metrics["weighted avg"]["f1-score"]
         }
 
-    def run_epoch(self, dataloader):
+    def run_epoch(self, dataloader, pbar):
         self.model.train()
         loss_data = torch.zeros(2).to(self.device)
         for batch in dataloader:
@@ -68,6 +69,8 @@ class SGTrainer:
                 self.scheduler.step()
             loss_data[0] += loss
             loss_data[1] += len(labels)
+
+            pbar.update(1)
         return loss_data[0] / loss_data[1]
 
     def evaluation_loop(self, dataloader):
@@ -103,13 +106,17 @@ class SGTrainer:
         return metrics
 
     def train_loop(self):
+
+        train_steps = math.ceil(len(self.train_ds) / self.train_batch_size)
+        pbar = tqdm(total=train_steps, desc="Training")
+
         train_dataloader = self.prepare_dataloader(self.train_ds, self.train_batch_size)
         val_dataloader = self.prepare_dataloader(self.val_ds, self.val_batch_size) if self.val_ds else None
         
         history = []
 
-        for e in tqdm(range(self.epoch), desc="Training"):
-            train_loss = self.run_epoch(train_dataloader)
+        for e in range(self.epoch):
+            train_loss = self.run_epoch(train_dataloader, pbar)
             data = {
                 "epoch" : e+1,
                 "train_loss" : train_loss
