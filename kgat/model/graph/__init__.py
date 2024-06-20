@@ -14,6 +14,7 @@ from .virtual_token import (
     VirtualToken
 )
 import torch
+import warnings
 
 class GraphEncoderDecoder(torch.nn.Module):
     def __init__(self, input_dim=768, 
@@ -110,6 +111,13 @@ class VirtualTokenGenerator(torch.nn.Module):
     def forward(self, queries, entities, relations, x_coo, batch):
         edge_index = x_coo[:, [0,2]].transpose(0, 1)
         relation_index = x_coo[:, 1]
+
+        src_batch = batch[edge_index[0]]
+        tgt_batch = batch[edge_index[1]]
+        intersection_condition = src_batch != tgt_batch
+
+        if intersection_condition.any():
+            warnings.warn(f"There are intersections in the graph, please check node {intersection_condition.non_zero()}")
 
         injected_entities, injected_relations = self.injector(queries, entities, edge_index, relations, relation_index, batch)
 

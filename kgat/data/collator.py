@@ -5,7 +5,6 @@ import numpy as np
 def flatten(list_of_lists):
     return [item for sublist in list_of_lists for item in sublist]
 
-
 class SubgraphGenerationCollator:
     def __init__(self, tokenizer, n_process, left=True):
         self.tokenizer = tokenizer

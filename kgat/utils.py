@@ -1,0 +1,5 @@
+class Mask:
+    KG_MASK = "<KNOWLEDGE_GRAPH>"
+    SUBJECT_MASK = "<SUBJECT>"
+    RELATION_MASK = "<RELATION>"
+    OBJECT_MASK = "<OBJECT>"

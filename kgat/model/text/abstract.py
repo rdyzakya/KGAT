@@ -1,4 +1,5 @@
 from abc import ABC
+from ...utils import Mask
 import torch
 
 class LMKBCWrapper(ABC):
@@ -51,7 +52,7 @@ class LMKBCWrapper(ABC):
         tokenizer.padding_side = "left"
 
         # Add KG special token
-        self.config.kg_token = "[KNOWLEDGE_GRAPH]"
+        self.config.kg_token = Mask.KG_MASK
         tokenizer.kg_token = self.config.kg_token
         tokenizer.add_special_tokens({
             "additional_special_tokens" : [self.config.kg_token]
