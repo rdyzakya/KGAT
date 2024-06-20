@@ -247,7 +247,7 @@ class SubgraphGenerationTrainer:
             best_epoch = np.argmin(metrics_history) if self.best_metrics == "loss" else np.argmax(metrics_history)
             best_checkpoint = f"checkpoint-{best_epoch}"
             self.subgraph_generator.load_state_dict(
-                torch.load(os.path.join())
+                torch.load(os.path.join(self.out_dir, best_checkpoint, "model.pth"))["state_dict"]
             )
         return self.history
     
@@ -265,7 +265,7 @@ class SubgraphGenerationTrainer:
         self.test_metrics = test_metrics
         return test_metrics
     
-    def save(self, directory=None, save_history=True, save_evaluation_metrics=True):
+    def save(self, directory=None, save_history=True, save_evaluation_metrics=True, save_train_config=True):
         directory = directory or self.out_dir
         # Make directory
         os.makedirs(directory, exist_ok=True)
@@ -277,9 +277,38 @@ class SubgraphGenerationTrainer:
             # Save test metrics
             with open(os.path.join(directory, "evaluation_metrics.json"), 'w') as fp:
                 json.dump(self.test_metrics, fp)
+        if save_train_config:
+            # Save train config
+            with open(os.path.join(directory, "train_config.json"), 'w') as fp:
+                json.dump({
+                    "alpha" : self.alpha,
+                    "epoch" : self.epoch,
+                    "learning_rate" : self.learning_rate,
+                    "batch_size" : self.batch_size,
+                    "last_hidden_state_bsize" : self.last_hidden_state_bsize,
+                    "out_dir" : self.out_dir,
+                    "max_check_point" : self.max_check_point,
+                    "best_metrics" : self.best_metrics,
+                    "load_best_model_at_end" : self.load_best_model_at_end
+                }, fp)
+
         # Save model
         self.accelerator.wait_for_everyone()
-        self.accelerator.save_model(self.subgraph_generator, os.path.join(directory, "model.pth"))
+        unwrapped_model = self.accelerator.unwrap_model(self.subgraph_generator)
+        torch.save({
+            "state_dict" : unwrapped_model.state_dict(),
+            "architecture" : dict(
+                input_dim=unwrapped_model.input_dim, 
+                encoder_decoder_h_dim=unwrapped_model.encoder_decoder_h_dim, 
+                out_dim=unwrapped_model.out_dim, 
+                reshape_h_dim=unwrapped_model.reshape_h_dim,
+                n_injector_head=unwrapped_model.n_injector_head, 
+                injector_dropout_p=unwrapped_model.injector_dropout_p, 
+                encoder_dropout_p=unwrapped_model.encoder_dropout_p, 
+                n_encoder_head=unwrapped_model.n_encoder_head, 
+                n_encoder_layers=unwrapped_model.n_encoder_layers
+            )
+        }, os.path.join(directory, "model.pth"))
     
     def update_check_point(self):
         if len(self.history) > self.max_check_point:
@@ -299,4 +328,5 @@ class SubgraphGenerationTrainer:
         current_epoch = len(self.history) - 1
         self.save(directory=os.path.join(self.out_dir, f"checkpoint-{current_epoch}"),
                   save_history=True,
-                  save_evaluation_metrics=False)
+                  save_evaluation_metrics=False,
+                  save_train_config=False)

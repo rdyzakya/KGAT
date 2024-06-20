@@ -66,7 +66,16 @@ class SubgraphGenerator(torch.nn.Module):
                                                    encoder_dropout_p=encoder_dropout_p,
                                                    n_encoder_head=n_encoder_head, 
                                                    n_encoder_layers=n_encoder_layers)
-        self.out_dim = out_dim
+
+        self.input_dim = input_dim 
+        self.encoder_decoder_h_dim = encoder_decoder_h_dim 
+        self.out_dim = out_dim 
+        self.reshape_h_dim = reshape_h_dim
+        self.n_injector_head = n_injector_head
+        self.injector_dropout_p = injector_dropout_p
+        self.encoder_dropout_p = encoder_dropout_p
+        self.n_encoder_head = n_encoder_head
+        self.n_encoder_layers = n_encoder_layers
     
     def forward(self, queries, entities, relations, x_coo, batch):
         edge_index = x_coo[:, [0,2]].transpose(0, 1)

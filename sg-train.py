@@ -52,10 +52,13 @@ trainer = SubgraphGenerationTrainer(
     val_ds=val_ds,
     test_ds=test_ds,
     epoch=args.epoch,
-    learning_rate=args.learning_rate,
-    batch_size=args.batch_size,
-    last_hidden_state_bsize=args.hs_bsize,
-    out_dir=args.out
+    learning_rate=args.lr,
+    batch_size=args.bsize,
+    last_hidden_state_bsize=args.hsbsize,
+    out_dir=args.out,
+    max_check_point=args.mcp,
+    best_metrics=args.best_metrics,
+    load_best_model_at_end=args.load_best
 )
 
 train_history = trainer.train()
