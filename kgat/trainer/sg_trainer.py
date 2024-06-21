@@ -69,30 +69,15 @@ class SubgraphGenerationTrainer(Trainer):
         assert torch.logical_or(labels == 1, labels == 0).all(), f"The label value only allow 1 and 0, your label values are {labels.unique()}"
         report = classification_report(y_pred=preds.tolist(), y_true=labels.tolist(), output_dict=True)
         accuracy = report["accuracy"]
-        precision = report["weighted avg"]["precision"]
-        recall = report["weighted avg"]["recall"]
-        f1 = report["weighted avg"]["f1-score"]
+        precision = report["macro avg"]["precision"]
+        recall = report["macro avg"]["recall"]
+        f1 = report["macro avg"]["f1-score"]
         return {
             f"{prefix}accuracy" : accuracy,
             f"{prefix}precision" : precision,
             f"{prefix}recall" : recall,
             f"{prefix}f1" : f1,
         }
-        # tp = torch.logical_and(preds == 1, labels == 1).sum()
-        # tn = torch.logical_and(preds == 0, labels == 0).sum()
-        # fp = torch.logical_and(preds == 1, labels == 0).sum()
-        # fn = torch.logical_and(preds == 0, labels == 1).sum()
-
-        # accuracy = (tp + tn) / (tp + tn + fp + fn)
-        # precision = tp / (tp + fp) if (tp + fp) > 0 else torch.tensor(0.0)
-        # recall = tp / (tp + fn) if (tp + fn) > 0 else torch.tensor(0.0)
-        # f1 = (2 * precision * recall) / (precision + recall) if (precision + recall) > 0 else torch.tensor(0.0)
-        # return {
-        #     f"{prefix}accuracy" : accuracy.item(),
-        #     f"{prefix}precision" : precision.item(),
-        #     f"{prefix}recall" : recall.item(),
-        #     f"{prefix}f1" : f1.item(),
-        # }
 
     def run_epoch(self, dataloader, bar, train=True):
         if train:
