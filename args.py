@@ -4,6 +4,7 @@ def sg_train():
     parser = ArgumentParser()
     
     parser.add_argument("--gpu", type=str, help="GPU device id", default="0")
+    parser.add_argument("--data", type=str, help="Data directory", default="./data/subgraph-gen/atomic/proc")
     parser.add_argument("--model", type=str, help="Model config path", default="./config/model/default.json")
     parser.add_argument("--epoch", type=int, help="Number of epoch", default=10)
     parser.add_argument("--lr", type=float, help="Learning rate", default=1e-3)
