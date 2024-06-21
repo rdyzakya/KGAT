@@ -24,9 +24,11 @@ from transformers import (
 )
 
 import torch
+import numpy as np
 
 ### RANDOM SEED
 torch.manual_seed(args.seed)
+np.random.seed(args.seed)
 
 ### PREPARE DATASET
 id2entity = load_id2map(os.path.join(args.data, "entities.txt"))
