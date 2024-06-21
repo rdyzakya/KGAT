@@ -58,8 +58,7 @@ class SubgraphGenerationTrainer(Trainer):
     def create_score_matrix(self, n_entities, n_relations, x_coo, y_coo_cls=None):
         score_matrix = torch.zeros(n_entities, n_relations, n_entities, dtype=torch.float32)
         x_coo = x_coo[y_coo_cls.bool()] if y_coo_cls is not None else x_coo
-        for el in x_coo:
-            score_matrix[el[0], el[1], el[2]] = 1.0
+        score_matrix[x_coo[:,0], x_coo[:,1], x_coo[:,2]] = 1.0
         return score_matrix
 
     def compute_metrics(self, preds, labels, prefix=None):
@@ -126,27 +125,31 @@ class SubgraphGenerationTrainer(Trainer):
 
             with context_manager(train=train):
                 loss = 0
+                x_coo = batch["x_coo"]
 
                 if self.config.alpha > 0:
                     sg_out = self.pipeline.model(
                         queries=queries,
                         entities=entities,
                         relations=relations,
-                        x_coo=batch["x_coo"],
+                        x_coo=x_coo,
                         batch=batch["batch"]
                     )
 
                     sg_labels = self.create_score_matrix(
                         n_entities=entities.shape[0],
                         n_relations=relations.shape[0],
-                        x_coo=batch["x_coo"],
+                        x_coo=x_coo,
                         y_coo_cls=batch["y_coo_cls"]
                     )
 
-                    sg_loss = self.criterion(sg_out.view(-1), sg_labels.view(-1))
+                    filtered_sg_out = sg_out[x_coo[:,0], x_coo[:,1], x_coo[:,2]]
+                    filtered_sg_labels = sg_labels[x_coo[:,0], x_coo[:,1], x_coo[:,2]]
+
+                    sg_loss = self.criterion(filtered_sg_out, filtered_sg_labels)
                     
-                    all_sg_preds.append(sg_out.view(-1).sigmoid().round().int())
-                    all_sg_labels.append(sg_labels.view(-1).int())
+                    all_sg_preds.append(filtered_sg_out.sigmoid().round().int())
+                    all_sg_labels.append(filtered_sg_labels.int())
 
                     loss += self.config.alpha * sg_loss
 
@@ -154,13 +157,13 @@ class SubgraphGenerationTrainer(Trainer):
                     gg_out = self.pipeline.model.encoder_decoder(
                         entities=entities,
                         relations=relations,
-                        x_coo=batch["x_coo"]
+                        x_coo=x_coo
                     )
 
                     gg_labels = self.create_score_matrix(
                         n_entities=entities.shape[0],
                         n_relations=relations.shape[0],
-                        x_coo=batch["x_coo"],
+                        x_coo=x_coo,
                         y_coo_cls=None
                     )
 
