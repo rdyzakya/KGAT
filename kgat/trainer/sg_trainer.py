@@ -2,6 +2,7 @@ from torch.nn import BCEWithLogitsLoss
 from ..data import SubgraphGenerationCollator
 import torch
 from .utils import context_manager
+from sklearn.metrics import classification_report
 import time
 
 from .trainer import Trainer
@@ -66,22 +67,32 @@ class SubgraphGenerationTrainer(Trainer):
 
         assert torch.logical_or(preds == 1, preds == 0).all(), f"The predictions value only allow 1 and 0, your prediction values are {preds.unique()}"
         assert torch.logical_or(labels == 1, labels == 0).all(), f"The label value only allow 1 and 0, your label values are {labels.unique()}"
-        
-        tp = torch.logical_and(preds == 1, labels == 1).sum()
-        tn = torch.logical_and(preds == 0, labels == 0).sum()
-        fp = torch.logical_and(preds == 1, labels == 0).sum()
-        fn = torch.logical_and(preds == 0, labels == 1).sum()
-
-        accuracy = (tp + tn) / (tp + tn + fp + fn)
-        precision = tp / (tp + fp) if (tp + fp) > 0 else torch.tensor(0.0)
-        recall = tp / (tp + fn) if (tp + fn) > 0 else torch.tensor(0.0)
-        f1 = (2 * precision * recall) / (precision + recall) if (precision + recall) > 0 else torch.tensor(0.0)
+        report = classification_report(y_pred=preds, y_true=labels)
+        accuracy = report["accuracy"]
+        precision = report["weighted avg"]["precision"]
+        recall = report["weighted avg"]["recall"]
+        f1 = report["weighted avg"]["f1-score"]
         return {
-            f"{prefix}accuracy" : accuracy.item(),
-            f"{prefix}precision" : precision.item(),
-            f"{prefix}recall" : recall.item(),
-            f"{prefix}f1" : f1.item(),
+            f"{prefix}accuracy" : accuracy,
+            f"{prefix}precision" : precision,
+            f"{prefix}recall" : recall,
+            f"{prefix}f1" : f1,
         }
+        # tp = torch.logical_and(preds == 1, labels == 1).sum()
+        # tn = torch.logical_and(preds == 0, labels == 0).sum()
+        # fp = torch.logical_and(preds == 1, labels == 0).sum()
+        # fn = torch.logical_and(preds == 0, labels == 1).sum()
+
+        # accuracy = (tp + tn) / (tp + tn + fp + fn)
+        # precision = tp / (tp + fp) if (tp + fp) > 0 else torch.tensor(0.0)
+        # recall = tp / (tp + fn) if (tp + fn) > 0 else torch.tensor(0.0)
+        # f1 = (2 * precision * recall) / (precision + recall) if (precision + recall) > 0 else torch.tensor(0.0)
+        # return {
+        #     f"{prefix}accuracy" : accuracy.item(),
+        #     f"{prefix}precision" : precision.item(),
+        #     f"{prefix}recall" : recall.item(),
+        #     f"{prefix}f1" : f1.item(),
+        # }
 
     def run_epoch(self, dataloader, bar, train=True):
         if train:
