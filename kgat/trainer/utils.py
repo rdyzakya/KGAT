@@ -9,5 +9,5 @@ class EmptyContextManager:
 
 def context_manager(train=True):
     if train:
-        return EmptyContextManager
+        return EmptyContextManager()
     return torch.no_grad()
