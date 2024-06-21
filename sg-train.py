@@ -58,7 +58,9 @@ trainer = SubgraphGenerationTrainer(
     out_dir=args.out,
     max_check_point=args.mcp,
     best_metrics=args.best_metrics,
-    load_best_model_at_end=args.load_best
+    load_best_model_at_end=args.load_best,
+    optimizer=args.optim,
+    optimizer_kwargs={}
 )
 
 train_history = trainer.train()
