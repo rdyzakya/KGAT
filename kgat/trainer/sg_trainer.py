@@ -91,7 +91,9 @@ class SubgraphGenerationTrainer(Trainer):
             self.pipeline.model.eval()
         self.pipeline.lmkbc_model.eval()
 
-        loss_data = torch.zeros(2, dtype=torch.float32)
+        # loss_data = torch.zeros(2, dtype=torch.float32, device=)
+        sum_loss = 0
+        len_data = 0
 
         all_sg_preds = []
         all_sg_labels = []
@@ -176,14 +178,14 @@ class SubgraphGenerationTrainer(Trainer):
             if train:
                 self.accelerator.backward(loss)
                 self.optimizer.step()
-            loss_data[0] += loss
-            loss_data[1] += (sg_out.shape[0] * sg_out.shape[1] * sg_out.shape[2])
+            sum_loss += loss
+            len_data += (sg_out.shape[0] * sg_out.shape[1] * sg_out.shape[2])
 
             bar.update(1)
         
         end_time = time.time()
 
-        total_loss = loss_data[0] / loss_data[1]
+        total_loss = sum_loss / len_data
 
         prefix = "train_" if train else "val_"
         metrics = {
