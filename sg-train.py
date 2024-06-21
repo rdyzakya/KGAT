@@ -7,7 +7,8 @@ os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
 
 from kgat.model import (
     SubgraphGenerator,
-    load_model_lmkbc
+    load_model_lmkbc,
+    Pipeline
 )
 
 from kgat.data import (
@@ -43,15 +44,17 @@ lmkbc_model = load_model_lmkbc(model_name_or_path)
 tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
 tokenizer = lmkbc_model.prepare_tokenizer(tokenizer)
 
+
 subgraphgenerator = SubgraphGenerator(
     input_dim=lmkbc_model.embed_dim,
     **model_config
 )
 
+pipeline = Pipeline(model=subgraphgenerator, lmkbc_model=lmkbc_model)
+
 ### TRAIN
 trainer = SubgraphGenerationTrainer(
-    model=subgraphgenerator,
-    lmkbc_model=lmkbc_model,
+    pipeline=pipeline,
     tokenizer=tokenizer,
     train_ds=train_ds,
     val_ds=val_ds,

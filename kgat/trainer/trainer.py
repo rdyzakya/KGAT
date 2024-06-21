@@ -22,8 +22,7 @@ def get_optimizer(name):
 
 class Trainer(ABC):
     def __init__(self, 
-                 model, 
-                 lmkbc_model, 
+                 pipeline,
                  tokenizer,
                  train_ds,
                  val_ds=None,
@@ -40,8 +39,7 @@ class Trainer(ABC):
                  optimizer_kwargs={},
                  **kwargs):
         
-        self.model = model
-        self.lmkbc_model = lmkbc_model
+        self.pipeline = pipeline
         self.tokenizer = tokenizer
         self.train_dataloader = DataLoader(train_ds, batch_size=batch_size, shuffle=False, collate_fn=self.collate_fn)
         self.val_dataloader = DataLoader(val_ds, batch_size=batch_size, shuffle=False, collate_fn=self.collate_fn) if val_ds else None
@@ -61,7 +59,7 @@ class Trainer(ABC):
                              **config_kwargs)
         self.history = []
         self.test_metrics = {}
-        self.optimizer = get_optimizer(optimizer)(self.model.parameters(), lr=learning_rate, **optimizer_kwargs)
+        self.optimizer = get_optimizer(optimizer)(self.pipeline.model.parameters(), lr=learning_rate, **optimizer_kwargs)
     
     def __is_config_args(self, value):
         return isinstance(value, int) or isinstance(value, float) or isinstance(value, str)
@@ -73,14 +71,12 @@ class Trainer(ABC):
         raise NotImplementedError("Abstract class")
     
     def prepare_train(self):
-        (self.lmkbc_model, 
-         self.model, 
+        (self.pipeline,
          self.train_dataloader, 
          self.val_dataloader, 
          self.test_dataloader, 
          self.optimizer) = self.accelerator.prepare(
-            self.lmkbc_model,
-            self.model,
+            self.pipeline,
             self.train_dataloader,
             self.val_dataloader,
             self.test_dataloader,
@@ -99,7 +95,7 @@ class Trainer(ABC):
             last_checkpoint = max(checkpoints, key=lambda x: int(x.replace("checkpoint-",'')))
             last_epoch = int(last_checkpoint.replace("checkpoint-",''))
             print(f"Resume training on epoch {last_epoch+1}")
-            self.model.load_state_dict(
+            self.pipeline.model.load_state_dict(
                 torch.load(os.path.join(self.config.out_dir, last_checkpoint, "model.pth"))
             )
             train_bar.update(train_steps * last_epoch)
@@ -125,7 +121,7 @@ class Trainer(ABC):
             metrics_history = [el[f"val_{self.config.best_metrics}"] for el in self.history]
             best_epoch = np.argmin(metrics_history) if self.config.best_metrics == "loss" else np.argmax(metrics_history)
             best_checkpoint = f"checkpoint-{best_epoch}"
-            self.model.load_state_dict(
+            self.pipeline.model.load_state_dict(
                 torch.load(os.path.join(self.config.out_dir, best_checkpoint, "model.pth"))["state_dict"]
             )
         return self.history
@@ -164,7 +160,7 @@ class Trainer(ABC):
 
         # Save model
         self.accelerator.wait_for_everyone()
-        unwrapped_model = self.accelerator.unwrap_model(self.model)
+        unwrapped_model = self.accelerator.unwrap_model(self.pipeline.model)
         torch.save({
             "state_dict" : unwrapped_model.state_dict(),
             "architecture" : dict(

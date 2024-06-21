@@ -9,8 +9,7 @@ from .trainer import Trainer
 
 class SubgraphGenerationTrainer(Trainer):
     def __init__(self, 
-                 model, 
-                 lmkbc_model, 
+                 pipeline,
                  tokenizer,
                  train_ds,
                  alpha=1.0,
@@ -31,8 +30,7 @@ class SubgraphGenerationTrainer(Trainer):
                                                      n_process=torch.cuda.device_count(), 
                                                      left=True)
         self.criterion = BCEWithLogitsLoss()
-        super().__init__(model=model,
-                         lmkbc_model=lmkbc_model,
+        super().__init__(pipeline=pipeline,
                          tokenizer=tokenizer,
                          train_ds=train_ds,
                          val_ds=val_ds,
