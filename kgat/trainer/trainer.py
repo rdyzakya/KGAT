@@ -146,9 +146,10 @@ class Trainer(ABC):
         test_metrics = self.run_epoch(self.test_dataloader, test_bar, train=False)
 
         # RuntimeError: dictionary keys changed during iteration
+        new_metrics = {}
         for k in test_metrics.keys():
-            test_metrics[k.replace("val", "test")] = test_metrics.pop(k)
-        self.test_metrics = test_metrics
+            new_metrics[k.replace("val", "test")] = test_metrics[k]
+        self.test_metrics = new_metrics
         return self.test_metrics
     
     def save(self, directory=None, save_history=True, save_evaluation_metrics=True, save_train_config=True):
