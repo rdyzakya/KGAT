@@ -34,6 +34,19 @@ class SubgraphGenerationCollator:
         entities = flatten(entities)
         relations = flatten(relations)
         
+        relations_id_map =[i for i in range(len(relations))]
+        relations_is_duplicate = [False for el in relations]
+        for i in range(len(relations)):
+            for j in range(i+1, len(relations)):
+                if relations[j] == relations[i] and not relations_is_duplicate[i]:
+                    relations_id_map[j] = i
+                    relations_is_duplicate[j] = True
+
+        relations = [relations[i] for i in sorted(set(relations_id_map))]
+
+        for i in range(len(x_coo)):
+            x_coo[i][1] = relations_id_map[x_coo[i][1]]
+        
         x_coo = torch.hstack(x_coo)
         batch = torch.tensor(batch)
         y_coo_cls = torch.hstack(y_coo_cls)
