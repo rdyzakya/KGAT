@@ -86,7 +86,7 @@ class SubgraphGenerationTrainer(Trainer):
         for batch in dataloader:
             if train:
                 self.optimizer.zero_grad()
-            with context_manager(train=train):
+            with torch.no_grad():
                 queries = self.pipeline.lmkbc_model.batch_last_hidden_state(
                     input_ids=batch["graph_query_input_ids"],
                     attention_mask=batch["graph_query_attention_mask"],
@@ -104,7 +104,8 @@ class SubgraphGenerationTrainer(Trainer):
                     attention_mask=batch["relations_attention_mask"],
                     batch_size=self.config.last_hidden_state_bsize
                 )
-                
+
+            with context_manager(train=train):
                 sg_out = self.pipeline.model(
                     queries=queries,
                     entities=entities,
