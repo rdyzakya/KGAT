@@ -170,14 +170,17 @@ class SubgraphGenerationTrainer(Trainer):
                     )
 
                     ### TODO filter berdasarkan batch, biar ga ada intersection antar batch
-                    gg_loss = self.criterion(gg_out.view(-1), gg_labels.view(-1))
+                    gg_out = gg_out.transpose(0,1)[:,batch["batch"].unsqueeze(-1) == batch["batch"]].view(-1)
+                    gg_labels = gg_labels.transpose(0,1)[:,batch["batch"].unsqueeze(-1) == batch["batch"]].view(-1)
+                    
+                    gg_loss = self.criterion(gg_out, gg_labels)
 
-                    all_gg_preds.append(gg_out.view(-1).sigmoid().round().int())
-                    all_gg_labels.append(gg_labels.view(-1).int())
+                    all_gg_preds.append(gg_out.sigmoid().round().int())
+                    all_gg_labels.append(gg_labels.int())
 
                     loss += (1 - self.config.alpha) * gg_loss
-                    sum_loss_gg += gg_loss.item() * (gg_out.shape[0] * gg_out.shape[1] * gg_out.shape[2])
-                    len_data_gg += (gg_out.shape[0] * gg_out.shape[1] * gg_out.shape[2])
+                    sum_loss_gg += gg_loss.item() * gg_out.shape[0]
+                    len_data_gg += gg_out.shape[0]
             if train:
                 self.accelerator.backward(loss)
                 self.optimizer.step()
