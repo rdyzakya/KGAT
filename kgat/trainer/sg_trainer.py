@@ -2,7 +2,7 @@ from torch.nn import BCEWithLogitsLoss
 from ..data import SubgraphGenerationCollator
 from sklearn.metrics import classification_report
 import torch
-import utils
+from .utils import *
 import time
 
 from .trainer import Trainer
