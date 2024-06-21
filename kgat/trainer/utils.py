@@ -4,7 +4,7 @@ class EmptyContextManager:
     def __enter__(self):
         pass
 
-    def __exit__(self, **kwargs):
+    def __exit__(self, *args, **kwargs):
         pass
 
 def context_manager(train=True):
