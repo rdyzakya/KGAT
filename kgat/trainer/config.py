@@ -5,7 +5,7 @@ class Config:
     def to_dict(self):
         result = {}
         for el in dir(self):
-            if el.startswith("__"):
+            if el.startswith("__") and el == "to_dict":
                 continue
             # else
             result[el] = self.__getattribute__(el)
