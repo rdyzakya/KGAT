@@ -70,7 +70,8 @@ trainer = SubgraphGenerationTrainer(
     load_best_model_at_end=args.load_best,
     optimizer=args.optim,
     optimizer_kwargs={},
-    neg_loss_weight=neg_loss_weight
+    neg_loss_weight=neg_loss_weight,
+    alpha=args.alpha
 )
 
 train_history = trainer.train()
