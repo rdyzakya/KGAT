@@ -68,6 +68,7 @@ class SubgraphGenerationTrainer(Trainer):
     def run_epoch(self, dataloader, bar, train=True):
         if train:
             self.model.train()
+            self.lmkbc_model.freeze()
         else:
             self.model.eval()
         self.lmkbc_model.eval()

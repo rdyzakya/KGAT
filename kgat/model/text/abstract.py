@@ -111,8 +111,7 @@ class LMKBCWrapper(ABC):
         result_embeds, result_attention_mask = self.prepare_lmkbc(input_ids, attention_mask, graph_embeddings)
         return self.generate(inputs_embeds=result_embeds, attention_mask=result_attention_mask, **kwargs)
     
-    def train(self, *args, **kwargs):
-        super().train(*args, **kwargs)
+    def freeze(self):
         # Freeze
         for param in self.parameters():
             param.requires_grad = False
