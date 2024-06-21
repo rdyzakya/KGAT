@@ -2,7 +2,7 @@ from torch.nn import BCEWithLogitsLoss
 from ..data import SubgraphGenerationCollator
 from sklearn.metrics import classification_report
 import torch
-from .utils import *
+from .utils import context_manager
 import time
 
 from .trainer import Trainer
@@ -105,7 +105,7 @@ class SubgraphGenerationTrainer(Trainer):
                     attention_mask=batch["relations_attention_mask"],
                     batch_size=self.config.last_hidden_state_bsize
                 )
-            with utils.context_manager(train=train):
+            with context_manager(train=train):
                 sg_out = self.model(
                     queries=queries,
                     entities=entities,
