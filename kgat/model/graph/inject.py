@@ -14,7 +14,7 @@ class Injector(torch.nn.Module):
         # add the query node
         node_features = torch.vstack([entities, queries])
         # add new general relation type
-        relation_features = torch.vstack([relations, torch.ones((1, relations.shape[1]))])
+        relation_features = torch.vstack([relations, torch.ones((1, relations.shape[1]), device=relations.device, dtype=relations.dtype)])
         # add connection between the query node and all other node (batch needed to know which)
         src_index = batch + entities.shape[0]
         tgt_index = torch.arange(0, entities.shape[0])
