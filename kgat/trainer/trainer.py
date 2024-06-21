@@ -65,14 +65,6 @@ class Trainer(ABC):
     
     def __is_config_args(self, value):
         return isinstance(value, int) or isinstance(value, float) or isinstance(value, str)
-    
-    @property
-    def collate_fn(self):
-        raise NotImplementedError("Abstract class, define collate_fn in the child class after that call super().__init__(*args, **kwargs)")
-    
-    @property
-    def criterion(self):
-        raise NotImplementedError("Abstract class, define criterion in the child class after that call super().__init__(*args, **kwargs)")
 
     def run_epoch(self):
         raise NotImplementedError("Abstract class")
