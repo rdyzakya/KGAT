@@ -198,8 +198,7 @@ class Trainer(ABC):
             # Delete Check point if exceed limit
             checkpoints = [el for el in os.listdir(self.config.out_dir) if re.match(r"checkpoint-\d+", el)
                         and os.path.isdir(os.path.join(self.config.out_dir, el)) and el != best_checkpoint]
-            checkpoints = sorted(checkpoints, key=lambda x: int(x.replace("checkpoint-", '')))
-            deleted_checkpoint = checkpoints.pop(0)
+            deleted_checkpoint = min(checkpoints, key=lambda x: int(x.replace("checkpoint-", '')))
             shutil.rmtree(os.path.join(self.config.out_dir, deleted_checkpoint))
         
         # Save model
