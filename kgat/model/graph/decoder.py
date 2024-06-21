@@ -10,7 +10,7 @@ class RESCAL(torch.nn.Module):
         n_entity = entity_vectors.shape[0]
         n_relations = relation_matrices.shape[0]
 
-        scores = torch.zeros(n_entity, n_relations, n_entity)
+        scores = torch.zeros(n_entity, n_relations, n_entity, device=entity_vectors.device)
     
         for r in range(n_relations):
             R_k = relation_matrices[r]
