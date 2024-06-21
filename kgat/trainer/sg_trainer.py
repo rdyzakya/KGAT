@@ -20,7 +20,7 @@ class SubgraphGenerationTrainer(Trainer):
                  last_hidden_state_bsize=16,
                  out_dir="./out",
                  max_check_point=3,
-                 best_metrics="loss",
+                 best_metrics="sg_loss",
                  load_best_model_at_end=False,
                  optimizer="sgd",
                  optimizer_kwargs={},
@@ -91,9 +91,11 @@ class SubgraphGenerationTrainer(Trainer):
             self.pipeline.model.eval()
         self.pipeline.lmkbc_model.eval()
 
-        # loss_data = torch.zeros(2, dtype=torch.float32, device=)
-        sum_loss = 0
-        len_data = 0
+        sum_loss_sg = 0
+        len_data_sg = 0
+
+        sum_loss_gg = 0
+        len_data_gg = 0
 
         all_sg_preds = []
         all_sg_labels = []
@@ -154,6 +156,8 @@ class SubgraphGenerationTrainer(Trainer):
                     all_sg_labels.append(filtered_sg_labels.int())
 
                     loss += self.config.alpha * sg_loss
+                    sum_loss_sg += sg_loss.item() * x_coo.shape[0].item()
+                    len_data_sg += x_coo.shape[0].item()
 
                 if self.config.alpha < 1.0:
                     gg_out = self.pipeline.model.encoder_decoder(
@@ -169,28 +173,31 @@ class SubgraphGenerationTrainer(Trainer):
                         y_coo_cls=None
                     )
 
+                    ### TODO filter berdasarkan batch, biar ga ada intersection antar batch
                     gg_loss = self.criterion(gg_out.view(-1), gg_labels.view(-1))
 
                     all_gg_preds.append(gg_out.view(-1).sigmoid().round().int())
                     all_gg_labels.append(gg_labels.view(-1).int())
 
                     loss += (1 - self.config.alpha) * gg_loss
+                    sum_loss_gg += gg_loss.item() * (gg_out.shape[0].item() * gg_out.shape[1].item() * gg_out.shape[2].item())
+                    len_data_gg += (gg_out.shape[0].item() * gg_out.shape[1].item() * gg_out.shape[2].item())
             if train:
                 self.accelerator.backward(loss)
                 self.optimizer.step()
-            sum_loss += loss
-            len_data += (sg_out.shape[0] * sg_out.shape[1] * sg_out.shape[2])
 
             bar.update(1)
         
         end_time = time.time()
 
-        total_loss = sum_loss / len_data
+        loss_sg = sum_loss_sg / len_data_sg
+        loss_gg = sum_loss_gg / len_data_gg
 
         prefix = "train_" if train else "val_"
         metrics = {
             f"{prefix}time" : end_time - start_time,
-            f"{prefix}loss" : total_loss.item()
+            f"{prefix}sg_loss" : loss_sg,
+            f"{prefix}gg_loss" : loss_gg
         }
 
         if self.config.alpha > 0:

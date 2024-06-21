@@ -152,6 +152,7 @@ class LMKBCCollator:
             prev_len_relation += len(relations[i])
         
         entities = flatten(entities)
+        # TODO bikin relation unik
         relations = flatten(relations)
         
         x_coo = torch.hstack(x_coo)

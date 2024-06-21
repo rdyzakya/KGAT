@@ -12,7 +12,7 @@ def sg_train():
     parser.add_argument("--hsbsize", type=int, help="Hidden state batch size", default=32)
     parser.add_argument("--out", type=str, help="Output directory", default="./out")
     parser.add_argument("--mcp", type=int, help="Max number of checkpoint", default=3)
-    parser.add_argument("--best_metrics", type=str, help="Best metrics option", default="loss")
+    parser.add_argument("--best_metrics", type=str, help="Best metrics option", default="sg_loss")
     parser.add_argument("--load_best", action="store_true", help="Load best model at the end")
     parser.add_argument("--optim", type=str, help="Optimizer type", default="adam")
     parser.add_argument("--n_data_train", type=int, help="First n data in training data (for debug)")

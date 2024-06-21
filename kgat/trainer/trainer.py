@@ -145,6 +145,7 @@ class Trainer(ABC):
         test_bar = tqdm(total=test_steps, desc="Test")
         test_metrics = self.run_epoch(self.test_dataloader, test_bar, train=False)
 
+        # RuntimeError: dictionary keys changed during iteration
         for k in test_metrics.keys():
             test_metrics[k.replace("val", "test")] = test_metrics.pop(k)
         self.test_metrics = test_metrics
