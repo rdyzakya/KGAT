@@ -104,7 +104,7 @@ class Trainer(ABC):
             last_epoch = int(last_checkpoint.replace("checkpoint-",''))
             self.log(f"Resume training on epoch {last_epoch+1}")
             self.pipeline.model.load_state_dict(
-                torch.load(os.path.join(self.config.out_dir, last_checkpoint, "model.pth"))
+                torch.load(os.path.join(self.config.out_dir, last_checkpoint, "model.pth"))["state_dict"]
             )
             train_bar.update(train_steps * last_epoch)
         
