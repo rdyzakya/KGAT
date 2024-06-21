@@ -27,8 +27,8 @@ from transformers import (
 id2entity = load_id2map(os.path.join(args.data, "entities.txt"))
 id2rel = load_id2map(os.path.join(args.data, "relations.txt"))
 
-train_ds = SubgraphGenerationDataset(os.path.join(args.data, "train.json"), id2entity, id2rel)
-val_ds = SubgraphGenerationDataset(os.path.join(args.data, "dev.json"), id2entity, id2rel)
+train_ds = SubgraphGenerationDataset(os.path.join(args.data, "train.json"), id2entity, id2rel, n_data=args.n_data_train)
+val_ds = SubgraphGenerationDataset(os.path.join(args.data, "dev.json"), id2entity, id2rel, n_data=args.n_data_val)
 test_ds = SubgraphGenerationDataset(os.path.join(args.data, "test.json"), id2entity, id2rel)
 
 ### PREPARE MODEL AND TOKENIZER
