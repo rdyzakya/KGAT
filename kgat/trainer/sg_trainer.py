@@ -49,7 +49,7 @@ class SubgraphGenerationTrainer(Trainer):
 
     def create_score_matrix(self, n_entities, n_relations, x_coo, y_coo_cls=None):
         score_matrix = torch.zeros(n_entities, n_relations, n_entities, dtype=torch.float32)
-        x_coo = x_coo[y_coo_cls.bool()] if y_coo_cls else x_coo
+        x_coo = x_coo[y_coo_cls == 1] if y_coo_cls else x_coo
         for el in x_coo:
             score_matrix[el[0], el[1], el[2]] = 1.0
         return score_matrix
