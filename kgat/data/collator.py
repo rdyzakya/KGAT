@@ -34,20 +34,27 @@ class SubgraphGenerationCollator:
         entities = flatten(entities)
         relations = flatten(relations)
 
-        relations_id_map =[i for i in range(len(relations))]
-        relations_is_duplicate = [False for el in relations]
-        for i in range(len(relations)):
-            for j in range(i+1, len(relations)):
-                if relations[j] == relations[i] and not relations_is_duplicate[i]:
-                    relations_id_map[j] = i
-                    relations_is_duplicate[j] = True
+        new_relations = sorted(set(relations))
+        new_relations_id_map = torch.tensor([new_relations.index(el) for el in relations])
 
-        relations = [relations[i] for i in sorted(set(relations_id_map))]
+        relations = new_relations
 
-        for i in range(len(x_coo)):
-            x_coo[i][1] = relations_id_map[x_coo[i][1].item()]
+
+        # relations_id_map = torch.arange(0, len(relations))
+        # relations_is_duplicate = [False for el in relations]
+        # for i in range(len(relations)):
+        #     for j in range(i+1, len(relations)):
+        #         if relations[j] == relations[i] and not relations_is_duplicate[i]:
+        #             relations_id_map[j] = i
+        #             relations_is_duplicate[j] = True
+
+        # relations = [relations[i] for i in relations_id_map.unique().sort()[0]]
+
+        # for i in range(len(x_coo)):
+        #     x_coo[i][1] = relations_id_map[x_coo[i][1]]
         
         x_coo = torch.hstack(x_coo)
+        x_coo[1,:] = new_relations_id_map[x_coo[1,:]]
         batch = torch.tensor(batch)
         y_coo_cls = torch.hstack(y_coo_cls)
 
