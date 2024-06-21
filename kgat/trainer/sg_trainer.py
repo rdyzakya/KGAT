@@ -67,11 +67,11 @@ class SubgraphGenerationTrainer(Trainer):
 
     def run_epoch(self, dataloader, bar, train=True):
         if train:
-            self.model.train()
-            self.lmkbc_model.freeze()
+            self.pipeline.model.train()
+            self.pipeline.lmkbc_model.freeze()
         else:
-            self.model.eval()
-        self.lmkbc_model.eval()
+            self.pipeline.model.eval()
+        self.pipeline.lmkbc_model.eval()
 
         loss_data = torch.zeros(2, dtype=torch.float32)
 
@@ -87,25 +87,25 @@ class SubgraphGenerationTrainer(Trainer):
             if train:
                 self.optimizer.zero_grad()
             with torch.no_grad():
-                queries = self.lmkbc_model.batch_last_hidden_state(
+                queries = self.pipeline.lmkbc_model.batch_last_hidden_state(
                     input_ids=batch["graph_query_input_ids"],
                     attention_mask=batch["graph_query_attention_mask"],
                     batch_size=self.config.last_hidden_state_bsize
                 )
 
-                entities = self.lmkbc_model.batch_last_hidden_state(
+                entities = self.pipeline.lmkbc_model.batch_last_hidden_state(
                     input_ids=batch["entities_input_ids"],
                     attention_mask=batch["entities_attention_mask"],
                     batch_size=self.config.last_hidden_state_bsize
                 )
 
-                relations = self.lmkbc_model.batch_last_hidden_state(
+                relations = self.pipeline.lmkbc_model.batch_last_hidden_state(
                     input_ids=batch["relations_input_ids"],
                     attention_mask=batch["relations_attention_mask"],
                     batch_size=self.config.last_hidden_state_bsize
                 )
             with context_manager(train=train):
-                sg_out = self.model(
+                sg_out = self.pipeline.model(
                     queries=queries,
                     entities=entities,
                     relations=relations,
@@ -128,7 +128,7 @@ class SubgraphGenerationTrainer(Trainer):
                 loss = self.config.alpha * sg_loss
 
                 if self.config.alpha < 1.0:
-                    gg_out = self.model.encoder_decoder(
+                    gg_out = self.pipeline.model.encoder_decoder(
                         entities=entities,
                         relations=relations,
                         x_coo=batch["x_coo"]
