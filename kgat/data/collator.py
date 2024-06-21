@@ -11,7 +11,7 @@ class SubgraphGenerationCollator:
         self.n_process = n_process
         self.left = left
 
-    def call_per_process(self, batch):
+    def __call__(self, batch):
         text, entities, relations, x_coo, y_coo_cls = zip(*batch)
 
         text = list(text)
@@ -90,38 +90,38 @@ class SubgraphGenerationCollator:
         res = [res[index[i]:index[i+1]] for i in range(len(batch_attention_masks))]
         return res
     
-    def __call__(self, batch):
-        pad_tokens = {
-            "graph_query_input_ids" : self.tokenizer.pad_token_id, # SUCCESS
-            "graph_query_attention_mask" : 0, # SUCCESS
-            "entities_input_ids" : self.tokenizer.pad_token_id, # SUCCESS
-            "entities_attention_mask" : 0, # SUCCESS
-            "relations_input_ids" : self.tokenizer.pad_token_id, # SUCCESS
-            "relations_attention_mask" : 0, # SUCCESS
-            "x_coo" : -1, # SUCCESS
-            "batch" : -1, # SUCCESS
-            "y_coo_cls" : -1, # SUCCESS
-        }
-        n = max(1, int(np.ceil(len(batch) / self.n_process)))
+    # def __call__(self, batch):
+    #     pad_tokens = {
+    #         "graph_query_input_ids" : self.tokenizer.pad_token_id, # SUCCESS
+    #         "graph_query_attention_mask" : 0, # SUCCESS
+    #         "entities_input_ids" : self.tokenizer.pad_token_id, # SUCCESS
+    #         "entities_attention_mask" : 0, # SUCCESS
+    #         "relations_input_ids" : self.tokenizer.pad_token_id, # SUCCESS
+    #         "relations_attention_mask" : 0, # SUCCESS
+    #         "x_coo" : -1, # SUCCESS
+    #         "batch" : -1, # SUCCESS
+    #         "y_coo_cls" : -1, # SUCCESS
+    #     }
+    #     n = max(1, int(np.ceil(len(batch) / self.n_process)))
         
-        batch = [batch[i:i+n] for i in range(0,len(batch),n)]
+    #     batch = [batch[i:i+n] for i in range(0,len(batch),n)]
 
-        batch = [self.call_per_process(el) for el in batch]
+    #     batch = [self.call_per_process(el) for el in batch]
 
-        keys = pad_tokens.keys()
+    #     keys = pad_tokens.keys()
         
-        res = {}
+    #     res = {}
         
-        for k in keys:
-            batch_values = [el[k] for el in batch]
-            if "input_ids" in k:
-                batch_values = self.pad_batch_input_ids(batch_values)
-            elif "attention_mask" in k:
-                batch_values = self.pad_batch_attention_mask(batch_values)
-            batch_values = pad_sequence(batch_values, batch_first=True, padding_value=pad_tokens[k])
-            batch_values = batch_values.view(-1) if k == "batch" or k == "y_coo_cls" else batch_values.view(-1, batch_values.shape[-1])
-            res[k] = batch_values
-        return res
+    #     for k in keys:
+    #         batch_values = [el[k] for el in batch]
+    #         if "input_ids" in k:
+    #             batch_values = self.pad_batch_input_ids(batch_values)
+    #         elif "attention_mask" in k:
+    #             batch_values = self.pad_batch_attention_mask(batch_values)
+    #         batch_values = pad_sequence(batch_values, batch_first=True, padding_value=pad_tokens[k])
+    #         batch_values = batch_values.view(-1) if k == "batch" or k == "y_coo_cls" else batch_values.view(-1, batch_values.shape[-1])
+    #         res[k] = batch_values
+    #     return res
 
 
 class LMKBCCollator:
