@@ -23,7 +23,7 @@ def load_id2map(path):
 class SubgraphGenerationDataset(Dataset):
     def __init__(self, path, id2entity, id2relation, n_data=None):
         self.data = load_json(path)
-        self.data = self.data if n_data else self.data[:n_data]
+        self.data = self.data if not n_data else self.data[:n_data]
         self.id2entity = id2entity
         self.id2relation = id2relation
     
@@ -54,7 +54,7 @@ class SubgraphGenerationDataset(Dataset):
 class LMKBCDataset(Dataset):
     def __init__(self, path, id2entity, id2relation, triples, prompt_template, graph_query_template, n_data=None):
         self.data = load_json(path)
-        self.data = self.data if n_data else self.data[:n_data]
+        self.data = self.data if not n_data else self.data[:n_data]
         self.id2entity = id2entity
         self.id2relation = id2relation
         self.triples = triples
