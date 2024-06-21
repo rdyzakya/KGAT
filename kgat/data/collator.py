@@ -68,27 +68,27 @@ class SubgraphGenerationCollator:
             "y_coo_cls" : y_coo_cls # N_triplets
         }
     
-    def pad_batch_input_ids(self, batch_input_ids):
-        res = []
-        index = [0]
-        for input_ids in batch_input_ids:
-            res.extend(input_ids.flip(-1) if self.left else input_ids)
-            index.append(input_ids.shape[0] + index[-1])
-        res = pad_sequence(res, batch_first=True, padding_value=self.tokenizer.pad_token_id)
-        res = res.flip(-1) if self.left else res
-        res = [res[index[i]:index[i+1]] for i in range(len(batch_input_ids))]
-        return res
+    # def pad_batch_input_ids(self, batch_input_ids):
+    #     res = []
+    #     index = [0]
+    #     for input_ids in batch_input_ids:
+    #         res.extend(input_ids.flip(-1) if self.left else input_ids)
+    #         index.append(input_ids.shape[0] + index[-1])
+    #     res = pad_sequence(res, batch_first=True, padding_value=self.tokenizer.pad_token_id)
+    #     res = res.flip(-1) if self.left else res
+    #     res = [res[index[i]:index[i+1]] for i in range(len(batch_input_ids))]
+    #     return res
 
-    def pad_batch_attention_mask(self, batch_attention_masks):
-        res = []
-        index = [0]
-        for attention_masks in batch_attention_masks:
-            res.extend(attention_masks.flip(-1) if self.left else attention_masks)
-            index.append(attention_masks.shape[0] + index[-1])
-        res = pad_sequence(res, batch_first=True, padding_value=0)
-        res = res.flip(-1) if self.left else res
-        res = [res[index[i]:index[i+1]] for i in range(len(batch_attention_masks))]
-        return res
+    # def pad_batch_attention_mask(self, batch_attention_masks):
+    #     res = []
+    #     index = [0]
+    #     for attention_masks in batch_attention_masks:
+    #         res.extend(attention_masks.flip(-1) if self.left else attention_masks)
+    #         index.append(attention_masks.shape[0] + index[-1])
+    #     res = pad_sequence(res, batch_first=True, padding_value=0)
+    #     res = res.flip(-1) if self.left else res
+    #     res = [res[index[i]:index[i+1]] for i in range(len(batch_attention_masks))]
+    #     return res
     
     # def __call__(self, batch):
     #     pad_tokens = {
@@ -125,8 +125,10 @@ class SubgraphGenerationCollator:
 
 
 class LMKBCCollator:
-    def __init__(self, tokenizer):
+    def __init__(self, tokenizer, n_process, left=True):
         self.tokenizer = tokenizer
+        self.n_process = n_process
+        self.left = left
 
     def __call__(self, batch):
         text_in, graph_query, entities, relations, x_coo, text_out = zip(*batch)

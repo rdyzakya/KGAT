@@ -163,8 +163,6 @@ class SubgraphGenerationTrainer(Trainer):
         all_sg_preds = torch.cat(all_sg_preds)
         all_sg_labels = torch.cat(all_sg_labels)
 
-        all_gg_preds = torch.cat(all_gg_preds)
-        all_gg_labels = torch.cat(all_gg_labels)
 
         prefix = "train_" if train else "val_"
 
@@ -176,6 +174,8 @@ class SubgraphGenerationTrainer(Trainer):
             self.compute_metrics(all_sg_preds, all_sg_labels, prefix=f"{prefix}sg_")
         )
         if self.config.alpha < 1.0:
+            all_gg_preds = torch.cat(all_gg_preds)
+            all_gg_labels = torch.cat(all_gg_labels)
             metrics.update(
                 self.compute_metrics(all_gg_preds, all_gg_labels, prefix=f"{prefix}gg_")
             )
