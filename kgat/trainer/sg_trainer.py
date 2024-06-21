@@ -182,12 +182,11 @@ class SubgraphGenerationTrainer(Trainer):
 
         total_loss = loss_data[0] / loss_data[1]
 
+        prefix = "train_" if train else "val_"
         metrics = {
             f"{prefix}time" : end_time - start_time,
             f"{prefix}loss" : total_loss.item()
         }
-
-        prefix = "train_" if train else "val_"
 
         if self.config.alpha > 0:
             all_sg_preds = torch.cat(all_sg_preds)
