@@ -23,12 +23,12 @@ class SubgraphGenerationTrainer(Trainer):
                  best_metrics="loss",
                  load_best_model_at_end=False,
                  optimizer="sgd",
-                 optimizer_kwargs={}):
+                 optimizer_kwargs={},
+                 neg_loss_weight=1.0):
         
         self.collate_fn = SubgraphGenerationCollator(tokenizer=tokenizer, 
                                                      n_process=torch.cuda.device_count(), 
                                                      left=True)
-        self.criterion = BCEWithLogitsLoss()
         super().__init__(pipeline=pipeline,
                          tokenizer=tokenizer,
                          train_ds=train_ds,
@@ -44,7 +44,16 @@ class SubgraphGenerationTrainer(Trainer):
                          load_best_model_at_end=load_best_model_at_end,
                          optimizer=optimizer,
                          optimizer_kwargs=optimizer_kwargs,
-                         alpha=alpha)
+                         alpha=alpha,
+                         neg_loss_weight=neg_loss_weight)
+        
+    def criterion(self, preds, labels):
+        weight = torch.ones_like(labels)
+        neg_loss_weight = (labels == 1).sum() / (labels == 0).sum() if self.config.neg_loss_weight == "auto" else self.config.neg_loss_weight
+        weight[labels == 0] = neg_loss_weight
+
+        crit = BCEWithLogitsLoss(weight=weight)
+        return crit(preds, labels)
 
     def create_score_matrix(self, n_entities, n_relations, x_coo, y_coo_cls=None):
         score_matrix = torch.zeros(n_entities, n_relations, n_entities, dtype=torch.float32)
@@ -59,8 +68,8 @@ class SubgraphGenerationTrainer(Trainer):
         assert torch.logical_or(preds == 1, preds == 0).all(), f"The predictions value only allow 1 and 0, your prediction values are {preds.unique()}"
         assert torch.logical_or(labels == 1, labels == 0).all(), f"The label value only allow 1 and 0, your label values are {labels.unique()}"
         
-        tp = (preds == 1).sum()
-        tn = (preds == 0).sum()
+        tp = torch.logical_and(preds == 1, labels == 1).sum()
+        tn = torch.logical_and(preds == 0, labels == 0).sum()
         fp = torch.logical_and(preds == 1, labels == 0).sum()
         fn = torch.logical_and(preds == 0, labels == 1).sum()
 
@@ -116,27 +125,30 @@ class SubgraphGenerationTrainer(Trainer):
                 )
 
             with context_manager(train=train):
-                sg_out = self.pipeline.model(
-                    queries=queries,
-                    entities=entities,
-                    relations=relations,
-                    x_coo=batch["x_coo"],
-                    batch=batch["batch"]
-                )
+                loss = 0
 
-                sg_labels = self.create_score_matrix(
-                    n_entities=entities.shape[0],
-                    n_relations=relations.shape[0],
-                    x_coo=batch["x_coo"],
-                    y_coo_cls=batch["y_coo_cls"]
-                )
+                if self.config.alpha > 0:
+                    sg_out = self.pipeline.model(
+                        queries=queries,
+                        entities=entities,
+                        relations=relations,
+                        x_coo=batch["x_coo"],
+                        batch=batch["batch"]
+                    )
 
-                sg_loss = self.criterion(sg_out.view(-1), sg_labels.view(-1))
-                
-                all_sg_preds.append(sg_out.view(-1).sigmoid().round().int())
-                all_sg_labels.append(sg_labels.view(-1).int())
+                    sg_labels = self.create_score_matrix(
+                        n_entities=entities.shape[0],
+                        n_relations=relations.shape[0],
+                        x_coo=batch["x_coo"],
+                        y_coo_cls=batch["y_coo_cls"]
+                    )
 
-                loss = self.config.alpha * sg_loss
+                    sg_loss = self.criterion(sg_out.view(-1), sg_labels.view(-1))
+                    
+                    all_sg_preds.append(sg_out.view(-1).sigmoid().round().int())
+                    all_sg_labels.append(sg_labels.view(-1).int())
+
+                    loss += self.config.alpha * sg_loss
 
                 if self.config.alpha < 1.0:
                     gg_out = self.pipeline.model.encoder_decoder(
@@ -170,19 +182,19 @@ class SubgraphGenerationTrainer(Trainer):
 
         total_loss = loss_data[0] / loss_data[1]
 
-        all_sg_preds = torch.cat(all_sg_preds)
-        all_sg_labels = torch.cat(all_sg_labels)
-
-
-        prefix = "train_" if train else "val_"
-
         metrics = {
             f"{prefix}time" : end_time - start_time,
             f"{prefix}loss" : total_loss.item()
         }
-        metrics.update(
-            self.compute_metrics(all_sg_preds, all_sg_labels, prefix=f"{prefix}sg_")
-        )
+
+        prefix = "train_" if train else "val_"
+
+        if self.config.alpha > 0:
+            all_sg_preds = torch.cat(all_sg_preds)
+            all_sg_labels = torch.cat(all_sg_labels)
+            metrics.update(
+                self.compute_metrics(all_sg_preds, all_sg_labels, prefix=f"{prefix}sg_")
+            )
         if self.config.alpha < 1.0:
             all_gg_preds = torch.cat(all_gg_preds)
             all_gg_labels = torch.cat(all_gg_labels)

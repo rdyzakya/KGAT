@@ -23,6 +23,11 @@ from transformers import (
     AutoTokenizer
 )
 
+import torch
+
+### RANDOM SEED
+torch.manual_seed(args.seed)
+
 ### PREPARE DATASET
 id2entity = load_id2map(os.path.join(args.data, "entities.txt"))
 id2rel = load_id2map(os.path.join(args.data, "relations.txt"))
@@ -48,6 +53,7 @@ subgraphgenerator = SubgraphGenerator(
 pipeline = Pipeline(model=subgraphgenerator, lmkbc_model=lmkbc_model)
 
 ### TRAIN
+neg_loss_weight = args.nlw if args.nlw == "auto" else float(args.nlw)
 trainer = SubgraphGenerationTrainer(
     pipeline=pipeline,
     tokenizer=tokenizer,
@@ -63,7 +69,8 @@ trainer = SubgraphGenerationTrainer(
     best_metrics=args.best_metrics,
     load_best_model_at_end=args.load_best,
     optimizer=args.optim,
-    optimizer_kwargs={}
+    optimizer_kwargs={},
+    neg_loss_weight=neg_loss_weight
 )
 
 train_history = trainer.train()

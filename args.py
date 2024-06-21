@@ -17,6 +17,8 @@ def sg_train():
     parser.add_argument("--optim", type=str, help="Optimizer type", default="adam")
     parser.add_argument("--n_data_train", type=int, help="First n data in training data (for debug)")
     parser.add_argument("--n_data_val", type=int, help="First n data in validation data (for debug)")
+    parser.add_argument("--seed", type=int, help="Random seed initialization", default=42)
+    parser.add_argument("--nlw", type=str, help="Negative loss weight (float or 'auto')", default="1.0")
 
     args = parser.parse_args()
     return args
