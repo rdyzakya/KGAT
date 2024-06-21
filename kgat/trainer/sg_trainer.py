@@ -67,7 +67,7 @@ class SubgraphGenerationTrainer(Trainer):
 
         assert torch.logical_or(preds == 1, preds == 0).all(), f"The predictions value only allow 1 and 0, your prediction values are {preds.unique()}"
         assert torch.logical_or(labels == 1, labels == 0).all(), f"The label value only allow 1 and 0, your label values are {labels.unique()}"
-        report = classification_report(y_pred=preds, y_true=labels, output_dict=True)
+        report = classification_report(y_pred=preds.tolist(), y_true=labels.tolist(), output_dict=True)
         accuracy = report["accuracy"]
         precision = report["weighted avg"]["precision"]
         recall = report["weighted avg"]["recall"]
