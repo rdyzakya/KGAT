@@ -50,8 +50,8 @@ subgraphgenerator = SubgraphGenerator(
 
 ### TRAIN
 trainer = SubgraphGenerationTrainer(
+    model=subgraphgenerator,
     lmkbc_model=lmkbc_model,
-    subgraph_generator=subgraphgenerator,
     tokenizer=tokenizer,
     train_ds=train_ds,
     val_ds=val_ds,
