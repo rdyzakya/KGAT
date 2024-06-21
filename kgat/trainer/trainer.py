@@ -71,7 +71,7 @@ class Trainer(ABC):
         raise NotImplementedError("Abstract class")
     
     def log(self, text):
-        if self.accelerator.is_main_process():
+        if self.accelerator.is_main_process:
             print(text)
     
     def prepare_train(self):
