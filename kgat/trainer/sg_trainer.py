@@ -156,8 +156,8 @@ class SubgraphGenerationTrainer(Trainer):
                     all_sg_labels.append(filtered_sg_labels.int())
 
                     loss += self.config.alpha * sg_loss
-                    sum_loss_sg += sg_loss.item() * x_coo.shape[0].item()
-                    len_data_sg += x_coo.shape[0].item()
+                    sum_loss_sg += sg_loss.item() * x_coo.shape[0]
+                    len_data_sg += x_coo.shape[0]
 
                 if self.config.alpha < 1.0:
                     gg_out = self.pipeline.model.encoder_decoder(
@@ -180,8 +180,8 @@ class SubgraphGenerationTrainer(Trainer):
                     all_gg_labels.append(gg_labels.view(-1).int())
 
                     loss += (1 - self.config.alpha) * gg_loss
-                    sum_loss_gg += gg_loss.item() * (gg_out.shape[0].item() * gg_out.shape[1].item() * gg_out.shape[2].item())
-                    len_data_gg += (gg_out.shape[0].item() * gg_out.shape[1].item() * gg_out.shape[2].item())
+                    sum_loss_gg += gg_loss.item() * (gg_out.shape[0] * gg_out.shape[1] * gg_out.shape[2])
+                    len_data_gg += (gg_out.shape[0] * gg_out.shape[1] * gg_out.shape[2])
             if train:
                 self.accelerator.backward(loss)
                 self.optimizer.step()
