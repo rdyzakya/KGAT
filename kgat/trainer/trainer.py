@@ -128,7 +128,7 @@ class Trainer(ABC):
         # Load best model at end
         if self.config.load_best_model_at_end and self.val_dataloader:
             metrics_history = [el[f"val_{self.config.best_metrics}"] for el in self.history]
-            best_epoch = np.argmin(metrics_history) if self.config.best_metrics == "loss" else np.argmax(metrics_history)
+            best_epoch = np.argmin(metrics_history) if self.config.best_metrics.endswith("loss") else np.argmax(metrics_history)
             best_checkpoint = f"checkpoint-{best_epoch}"
             self.pipeline.model.load_state_dict(
                 torch.load(os.path.join(self.config.out_dir, best_checkpoint, "model.pth"))["state_dict"]
