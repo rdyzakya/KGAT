@@ -64,11 +64,15 @@ class Trainer(ABC):
     def __is_config_args(self, value):
         return isinstance(value, int) or isinstance(value, float) or isinstance(value, str)
 
-    def run_epoch(self):
+    def run_epoch(self, bar, train=False):
         raise NotImplementedError("Abstract class")
     
     def compute_metrics(self, preds, labels, prefix=None):
         raise NotImplementedError("Abstract class")
+    
+    def log(self, text):
+        if self.accelerator.is_main_process():
+            print(text)
     
     def prepare_train(self):
         (self.pipeline,
@@ -84,6 +88,7 @@ class Trainer(ABC):
         )
     
     def train(self):
+        self.log(f"You are training using {torch.cuda.device_count()} GPU(s)")
         self.history = []
         train_steps_per_epoch = math.ceil(len(self.train_dataloader.dataset) / self.config.batch_size)
         train_steps = train_steps_per_epoch * self.config.epoch
@@ -94,7 +99,7 @@ class Trainer(ABC):
         if len(checkpoints) > 0:
             last_checkpoint = max(checkpoints, key=lambda x: int(x.replace("checkpoint-",'')))
             last_epoch = int(last_checkpoint.replace("checkpoint-",''))
-            print(f"Resume training on epoch {last_epoch+1}")
+            self.log(f"Resume training on epoch {last_epoch+1}")
             self.pipeline.model.load_state_dict(
                 torch.load(os.path.join(self.config.out_dir, last_checkpoint, "model.pth"))
             )
@@ -113,6 +118,7 @@ class Trainer(ABC):
                 val_bar = tqdm(total=val_steps, desc=f"Evaluation epoch {e+1}")
                 val_metrics = self.run_epoch(self.val_dataloader, val_bar, train=False)
                 entry.update(val_metrics)
+            self.log(entry)
             self.history.append(entry)
             self.update_check_point()
         

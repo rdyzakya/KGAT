@@ -23,11 +23,6 @@ from transformers import (
     AutoTokenizer
 )
 
-import torch
-
-### INFO
-print(f"You are training using {torch.cuda.device_count()} GPU(s)")
-
 ### PREPARE DATASET
 id2entity = load_id2map(os.path.join(args.data, "entities.txt"))
 id2rel = load_id2map(os.path.join(args.data, "relations.txt"))
