@@ -190,25 +190,25 @@ class SubgraphGenerationTrainer(Trainer):
         
         end_time = time.time()
 
-        loss_sg = sum_loss_sg / len_data_sg
-        loss_gg = sum_loss_gg / len_data_gg
 
         prefix = "train_" if train else "val_"
         metrics = {
             f"{prefix}time" : end_time - start_time,
-            f"{prefix}sg_loss" : loss_sg,
-            f"{prefix}gg_loss" : loss_gg
         }
 
         if self.config.alpha > 0:
+            loss_sg = sum_loss_sg / len_data_sg
             all_sg_preds = torch.cat(all_sg_preds)
             all_sg_labels = torch.cat(all_sg_labels)
+            metrics[f"{prefix}sg_loss"] = loss_sg
             metrics.update(
                 self.compute_metrics(all_sg_preds, all_sg_labels, prefix=f"{prefix}sg_")
             )
         if self.config.alpha < 1.0:
+            loss_gg = sum_loss_gg / len_data_gg
             all_gg_preds = torch.cat(all_gg_preds)
             all_gg_labels = torch.cat(all_gg_labels)
+            metrics[f"{prefix}gg_loss"] = loss_gg
             metrics.update(
                 self.compute_metrics(all_gg_preds, all_gg_labels, prefix=f"{prefix}gg_")
             )
