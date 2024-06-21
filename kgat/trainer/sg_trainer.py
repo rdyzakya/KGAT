@@ -73,7 +73,7 @@ class SubgraphGenerationTrainer(Trainer):
         fp = torch.logical_and(preds == 1, labels == 0).sum()
         fn = torch.logical_and(preds == 0, labels == 1).sum()
 
-        accuracy = tp + tn / (tp + tn + fp + fn)
+        accuracy = (tp + tn) / (tp + tn + fp + fn)
         precision = tp / (tp + fp) if (tp + fp) > 0 else torch.tensor(0.0)
         recall = tp / (tp + fn) if (tp + fn) > 0 else torch.tensor(0.0)
         f1 = (2 * precision * recall) / (precision + recall) if (precision + recall) > 0 else torch.tensor(0.0)
