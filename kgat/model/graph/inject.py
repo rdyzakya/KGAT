@@ -17,10 +17,10 @@ class Injector(torch.nn.Module):
         relation_features = torch.vstack([relations, torch.ones((1, relations.shape[1]), device=relations.device, dtype=relations.dtype)])
         # add connection between the query node and all other node (batch needed to know which)
         src_index = batch + entities.shape[0]
-        tgt_index = torch.arange(0, entities.shape[0])
+        tgt_index = torch.arange(0, entities.shape[0], dtype=src_index.dtype)
         added_edge_index = torch.vstack([src_index, tgt_index])
 
-        added_relation_index = torch.full_like(batch, fill_value=relation_features.shape[0]-1) # general relation
+        added_relation_index = torch.full_like(batch, fill_value=relation_features.shape[0]-1, dtype=relation_index.dtype) # general relation
 
         new_edge_index = torch.hstack([edge_index, added_edge_index])
         new_relation_index = torch.cat([relation_index, added_relation_index])
