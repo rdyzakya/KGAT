@@ -80,6 +80,10 @@ class SubgraphGenerationTrainer(Trainer):
         }
 
     def run_epoch(self, dataloader, bar, train=True):
+        # BUG walau udah pake torch manual seed, 
+        # udah dicek batchnya (baru graph query input ids 2 kali run sih), 
+        # udah cek params nya (2 kali) sama, 
+        # tapi hasil lossnya beda tiap beda run
         if train:
             self.pipeline.model.train()
             self.pipeline.lmkbc_model.freeze()
