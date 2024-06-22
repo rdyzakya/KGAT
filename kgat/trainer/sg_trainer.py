@@ -48,10 +48,10 @@ class SubgraphGenerationTrainer(Trainer):
                          alpha=alpha,
                          neg_loss_weight=neg_loss_weight)
         
-    def criterion(self, preds, labels):
-        # weight = torch.ones_like(labels)
-        # neg_loss_weight = (labels == 1).sum() / (labels == 0).sum() if self.config.neg_loss_weight == "auto" else self.config.neg_loss_weight
-        # weight[labels == 0] = neg_loss_weight
+    def criterion(self, preds, labels, nlw=1.0):
+        weight = torch.ones_like(labels)
+        neg_loss_weight = (labels == 1).sum() / (labels == 0).sum() if nlw == "auto" else nlw
+        weight[labels == 0] = neg_loss_weight
 
         crit = BCEWithLogitsLoss(weight=None)
         return crit(preds, labels)
@@ -104,10 +104,6 @@ class SubgraphGenerationTrainer(Trainer):
         }
 
     def run_epoch(self, dataloader, bar, train=True):
-        # BUG walau udah pake torch manual seed, 
-        # udah dicek batchnya (baru graph query input ids 2 kali run sih), 
-        # udah cek params nya (2 kali) sama, 
-        # tapi hasil lossnya beda tiap beda run
         if train:
             self.pipeline.model.train()
             self.pipeline.lmkbc_model.freeze()
@@ -174,7 +170,7 @@ class SubgraphGenerationTrainer(Trainer):
                     filtered_sg_out = sg_out[x_coo[:,0], x_coo[:,1], x_coo[:,2]]
                     filtered_sg_labels = sg_labels[x_coo[:,0], x_coo[:,1], x_coo[:,2]]
 
-                    sg_loss = self.criterion(filtered_sg_out, filtered_sg_labels)
+                    sg_loss = self.criterion(filtered_sg_out, filtered_sg_labels, nlw=1.0)
                     
                     all_sg_preds.append(filtered_sg_out.sigmoid().round().int())
                     all_sg_labels.append(filtered_sg_labels.int())
@@ -197,11 +193,10 @@ class SubgraphGenerationTrainer(Trainer):
                         y_coo_cls=None
                     )
 
-                    ### TODO filter berdasarkan batch, biar ga ada intersection antar batch
                     gg_out = gg_out.transpose(0,1)[:,batch["batch"].unsqueeze(-1) == batch["batch"]].view(-1)
                     gg_labels = gg_labels.transpose(0,1)[:,batch["batch"].unsqueeze(-1) == batch["batch"]].view(-1)
                     
-                    gg_loss = self.criterion(gg_out, gg_labels)
+                    gg_loss = self.criterion(gg_out, gg_labels, nlw=self.config.neg_loss_weight)
 
                     all_gg_preds.append(gg_out.sigmoid().round().int())
                     all_gg_labels.append(gg_labels.int())
