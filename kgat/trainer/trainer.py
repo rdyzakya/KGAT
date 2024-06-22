@@ -90,7 +90,7 @@ class Trainer(ABC):
             self.optimizer
         )
         self.lmkbc_model_device = self.pipeline.lmkbc_model.device
-        self.model_device = self.pipeline.model.device
+        self.model_device = self.accelerator.device
     
     def train(self):
         self.log(f"You are training using {torch.cuda.device_count()} GPU(s)")
