@@ -67,11 +67,35 @@ class SubgraphGenerationTrainer(Trainer):
 
         assert torch.logical_or(preds == 1, preds == 0).all(), f"The predictions value only allow 1 and 0, your prediction values are {preds.unique()}"
         assert torch.logical_or(labels == 1, labels == 0).all(), f"The label value only allow 1 and 0, your label values are {labels.unique()}"
-        report = classification_report(y_pred=preds.tolist(), y_true=labels.tolist(), output_dict=True)
-        accuracy = report["accuracy"]
-        precision = report["macro avg"]["precision"]
-        recall = report["macro avg"]["recall"]
-        f1 = report["macro avg"]["f1-score"]
+        # report = classification_report(y_pred=preds.tolist(), y_true=labels.tolist(), output_dict=True)
+        # accuracy = report["accuracy"]
+        # precision = report["macro avg"]["precision"]
+        # recall = report["macro avg"]["recall"]
+        # f1 = report["macro avg"]["f1-score"]
+
+        tp = torch.logical_and(labels == 1, preds == 1).sum()
+        tn = torch.logical_and(labels == 0, preds == 0).sum()
+        fp = torch.logical_and(labels == 0, preds == 1).sum()
+        fn = torch.logical_and(labels == 1, preds == 0).sum()
+
+        accuracy = ((tp + tn) / (tp + tn + fp + fn)).item() if (tp + tn + fp + fn) > 0 else 0.0
+        
+        precision_1 = ((tp) / (tp + fp)).item() if (tp + fp) > 0 else 0.0
+        recall_1 = ((tp) / (tp + fn)).item() if (tp + fn) > 0 else 0.0
+        f1_1 = ((2 * precision_1 * recall_1) / (precision_1 + recall_1)) if (precision_1 + recall_1) > 0 else 0.0
+
+        precision_0 = ((tn) / (tn + fn)).item() if (tn + fn) > 0 else 0.0
+        recall_0 = ((tn) / (tn + fp)).item() if (tn + fp) > 0 else 0.0
+        f1_0 = ((2 * precision_0 * recall_0) / (precision_0 + recall_0)) if (precision_0 + recall_0) > 0 else 0.0
+        
+        # macro avg
+        # https://docs.kolena.com/metrics/averaging-methods/#:~:text=If%20you%20want%20to%20treat,average%20instead%20of%20macro%20average.
+        # If you want to treat all classes equally, then using macro average would be a good choice. 
+        # If you have an imbalanced dataset but want to assign more weight to classes with more 
+        # samples, consider using weighted average instead of macro average.
+        precision = (precision_0 + precision_1) / 2
+        recall = (recall_0 + recall_1) / 2
+        f1 = (f1_0 + f1_1) / 2
         return {
             f"{prefix}accuracy" : accuracy,
             f"{prefix}precision" : precision,
