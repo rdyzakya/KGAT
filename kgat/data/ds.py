@@ -3,11 +3,11 @@ from ..utils import Mask
 import torch
 import json
 
-def apply_template(text, subject, relation, objects=None):
-    text = text.replace(Mask.SUBJECT_MASK, subject).replace(Mask.RELATION_MASK, relation)
-    if objects is None:
-        return text
-    return text.replace(Mask.OBJECT_MASK, str(objects))
+# def apply_template(text, subject, relation, objects=None):
+#     text = text.replace(Mask.SUBJECT_MASK, subject).replace(Mask.RELATION_MASK, relation)
+#     if objects is None:
+#         return text
+#     return text.replace(Mask.OBJECT_MASK, str(objects))
 
 def load_json(path):
     with open(path, 'r', encoding="utf-8") as fp:
@@ -52,7 +52,14 @@ class SubgraphGenerationDataset(Dataset):
         return text, entities, relations, x_coo, y_coo_cls
 
 class LMKBCDataset(Dataset):
-    def __init__(self, path, id2entity, id2relation, triples, prompt_template, graph_query_template, n_data=None):
+    def __init__(self, 
+                 path, 
+                 id2entity, 
+                 id2relation, 
+                 triples, 
+                 prompt_template=f"{Mask.KG_MASK} -> S : {Mask.SUBJECT_MASK} | R : {Mask.RELATION_MASK} | O : {Mask.OBJECT_MASK}", 
+                 graph_query_template=f"S : {Mask.SUBJECT_MASK} | R : {Mask.RELATION_MASK}", 
+                 n_data=None):
         self.data = load_json(path)
         self.data = self.data if not n_data else self.data[:n_data]
         self.id2entity = id2entity
@@ -75,8 +82,17 @@ class LMKBCDataset(Dataset):
         relation = self.id2relation[relation_id]
         objects = [self.id2entity[el] for el in object_ids]
 
-        text_in, text_out = self.process_prompt(subject, relation, objects)
-        graph_query = self.process_graph_query(subject, relation)
+        sr_graph_query = (self.graph_query_template
+                          .replace(Mask.SUBJECT_MASK, subject)
+                          .replace(Mask.RELATION_MASK, relation))
+        sro_texts = []
+        for o in objects:
+            sro_texts.append(
+                self.prompt_template
+                .replace(Mask.SUBJECT_MASK, subject)
+                .replace(Mask.RELATION_MASK, relation)
+                .replace(Mask.OBJECT_MASK, o)
+            )
 
         x_coo = [self.triples[el] for el in reference]
         
@@ -99,13 +115,15 @@ class LMKBCDataset(Dataset):
 
         x_coo = x_coo.T
 
-        return text_in, graph_query, entities, relations, x_coo, text_out
+        # text, entities, relations, x_coo, y_coo_cls
 
-    def process_prompt(self, subject, relation, objects):
-        # return text_in, text_out
-        text_in = apply_template(self.prompt_template, subject=subject, relation=relation, objects='')
-        text_out = apply_template(self.prompt_template, subject=subject, relation=relation, objects=objects)
-        return text_in, text_out
+        return sr_graph_query, entities, relations, x_coo, sro_texts
+
+    # def process_prompt(self, subject, relation, objects):
+    #     # return text_in, text_out
+    #     text_in = apply_template(self.prompt_template, subject=subject, relation=relation, objects='')
+    #     text_out = apply_template(self.prompt_template, subject=subject, relation=relation, objects=objects)
+    #     return text_in, text_out
     
-    def process_graph_query(self, subject, relation):
-        return apply_template(self.graph_query_template, subject=subject, relation=relation, objects=None)
+    # def process_graph_query(self, subject, relation):
+    #     return apply_template(self.graph_query_template, subject=subject, relation=relation, objects=None)

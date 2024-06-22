@@ -133,6 +133,12 @@ class VirtualTokenGenerator(torch.nn.Module):
         entities_emb, relations_emb = self.encoder(injected_entities, edge_index, injected_relations, relation_index)
 
         return self.virtual_token(entities_emb, batch)
+    
+    def freeze(self):
+        for param in self.injector.parameters():
+            param.requires_grad = False
+        for param in self.encoder.parameters():
+            param.requires_grad = False
 
 if __name__ == "__main__":
     input_dim = 768
