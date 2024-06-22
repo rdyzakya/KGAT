@@ -40,7 +40,7 @@ test_ds = SubgraphGenerationDataset(os.path.join(args.data, "test.json"), id2ent
 model_config = load_json(args.model)
 model_name_or_path = model_config.pop("model_name_or_path")
 
-lmkbc_model = load_model_lmkbc(model_name_or_path)
+lmkbc_model = load_model_lmkbc(model_name_or_path, device_map="auto")
 tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
 tokenizer = lmkbc_model.prepare_tokenizer(tokenizer)
 
