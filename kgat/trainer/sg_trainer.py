@@ -130,22 +130,26 @@ class SubgraphGenerationTrainer(Trainer):
                 self.optimizer.zero_grad()
             with torch.no_grad():
                 queries = self.pipeline.lmkbc_model.batch_last_hidden_state(
-                    input_ids=batch["graph_query_input_ids"],
-                    attention_mask=batch["graph_query_attention_mask"],
+                    input_ids=batch["graph_query_input_ids"].to(self.lmkbc_model_device),
+                    attention_mask=batch["graph_query_attention_mask"].to(self.lmkbc_model_device),
                     batch_size=self.config.last_hidden_state_bsize
                 )
 
                 entities = self.pipeline.lmkbc_model.batch_last_hidden_state(
-                    input_ids=batch["entities_input_ids"],
-                    attention_mask=batch["entities_attention_mask"],
+                    input_ids=batch["entities_input_ids"].to(self.lmkbc_model_device),
+                    attention_mask=batch["entities_attention_mask"].to(self.lmkbc_model_device),
                     batch_size=self.config.last_hidden_state_bsize
                 )
 
                 relations = self.pipeline.lmkbc_model.batch_last_hidden_state(
-                    input_ids=batch["relations_input_ids"],
-                    attention_mask=batch["relations_attention_mask"],
+                    input_ids=batch["relations_input_ids"].to(self.lmkbc_model_device),
+                    attention_mask=batch["relations_attention_mask"].to(self.lmkbc_model_device),
                     batch_size=self.config.last_hidden_state_bsize
                 )
+            
+            queries = queries.to(self.model_device)
+            entities = entities.to(self.model_device)
+            relations = relations.to(self.model_device)
 
             with context_manager(train=train):
                 loss = 0

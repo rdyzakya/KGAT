@@ -78,17 +78,19 @@ class Trainer(ABC):
             print(text)
     
     def prepare_train(self):
-        (self.pipeline,
+        (self.pipeline.model,
          self.train_dataloader, 
          self.val_dataloader, 
          self.test_dataloader, 
          self.optimizer) = self.accelerator.prepare(
-            self.pipeline,
+            self.pipeline.model,
             self.train_dataloader,
             self.val_dataloader,
             self.test_dataloader,
             self.optimizer
         )
+        self.lmkbc_model_device = self.pipeline.lmkbc_model.device
+        self.model_device = self.pipeline.model.device
     
     def train(self):
         self.log(f"You are training using {torch.cuda.device_count()} GPU(s)")
