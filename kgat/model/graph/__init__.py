@@ -134,7 +134,7 @@ class VirtualTokenGenerator(torch.nn.Module):
 
         return self.virtual_token(entities_emb, batch)
     
-    def freeze(self):
+    def freeze_injector_and_encoder(self):
         for param in self.injector.parameters():
             param.requires_grad = False
         for param in self.encoder.parameters():

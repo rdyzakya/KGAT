@@ -71,7 +71,7 @@ class LMKBCCollator:
 
     def __call__(self, batch):
         # text_in, graph_query, entities, relations, x_coo, text_out = zip(*batch)
-        sr_graph_query, entities, relations, x_coo, sro_texts = zip(*batch)
+        sr_graph_query, entities, relations, x_coo, sro_texts, objects = zip(*batch)
 
         sr_graph_query = list(sr_graph_query)
 
@@ -114,12 +114,15 @@ class LMKBCCollator:
         x_coo = x_coo.transpose(0,1)
 
         lmkbc_text = flatten(sro_texts)
+        lmkbc_text = [el + self.tokenizer.eos_token for el in lmkbc_text]
         lmkbc_text = self.tokenizer(lmkbc_text, padding=True, return_tensors="pt")
 
         lmkbc_input_ids = lmkbc_text["input_ids"]
         lmkbc_attention_mask = lmkbc_text["attention_mask"]
         lmkbc_labels = lmkbc_input_ids.clone()
-        lmkbc_labels[lmkbc_attention_mask == 0] = -1
+        lmkbc_labels[lmkbc_attention_mask == 0] = -100
+        lmkbc_labels[lmkbc_labels == self.tokenizer.kg_token_id] = -100 # accustomed to n_virtual_token
+
 
         #  shift_logits = lm_logits[..., :-1, :].contiguous()
         # shift_labels = labels[..., 1:].contiguous()
@@ -136,5 +139,7 @@ class LMKBCCollator:
             "lmkbc_input_ids" : lmkbc_input_ids,
             "lmkbc_attention_mask" : lmkbc_attention_mask,
             "lmkbc_labels" : lmkbc_labels,
-            "graph_emb_batch" : graph_emb_batch # N_lmkbc_text
+            "graph_emb_batch" : graph_emb_batch, # N_lmkbc_text
+            "objects" : flatten(objects)
+            # TODO weights?
         }

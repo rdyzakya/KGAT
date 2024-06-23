@@ -2,6 +2,8 @@ from torch.utils.data import Dataset
 from ..utils import Mask
 import torch
 import json
+import re
+import warnings
 
 # def apply_template(text, subject, relation, objects=None):
 #     text = text.replace(Mask.SUBJECT_MASK, subject).replace(Mask.RELATION_MASK, relation)
@@ -59,6 +61,7 @@ class LMKBCDataset(Dataset):
                  triples, 
                  prompt_template=f"{Mask.KG_MASK} -> S : {Mask.SUBJECT_MASK} | R : {Mask.RELATION_MASK} | O : {Mask.OBJECT_MASK}", 
                  graph_query_template=f"S : {Mask.SUBJECT_MASK} | R : {Mask.RELATION_MASK}", 
+                 n_virtual_token=1,
                  n_data=None):
         self.data = load_json(path)
         self.data = self.data if not n_data else self.data[:n_data]
@@ -67,6 +70,12 @@ class LMKBCDataset(Dataset):
         self.triples = triples
         self.prompt_template = prompt_template
         self.graph_query_template = graph_query_template
+        self.n_virtual_token = n_virtual_token
+
+        if len(re.findall(Mask.KG_MASK, prompt_template)) != n_virtual_token:
+            new_prompt_template = prompt_template.replace(Mask.KG_MASK, ''.join([Mask.KG_MASK for _ in range(n_virtual_token)]))
+            warnings.warn(f"Number of knowledge graph mask in your template is not the same with `n_virtual_token`, we transform it from {prompt_template} to {new_prompt_template}")
+            assert len(re.findall(Mask.KG_MASK, new_prompt_template)) == n_virtual_token, f"Please make the knowledge graph mask in a contiguous manner like `{Mask.KG_MASK}{Mask.KG_MASK} <- 2 masks`"
     
     def __len__(self):
         return len(self.data)
@@ -87,12 +96,11 @@ class LMKBCDataset(Dataset):
                           .replace(Mask.RELATION_MASK, relation))
         sro_texts = []
         for o in objects:
-            sro_texts.append(
-                self.prompt_template
+            entry = (self.prompt_template
                 .replace(Mask.SUBJECT_MASK, subject)
                 .replace(Mask.RELATION_MASK, relation)
-                .replace(Mask.OBJECT_MASK, o)
-            )
+                .replace(Mask.OBJECT_MASK, o))
+            sro_texts.append(entry)
 
         x_coo = [self.triples[el] for el in reference]
         
@@ -117,7 +125,7 @@ class LMKBCDataset(Dataset):
 
         # text, entities, relations, x_coo, y_coo_cls
 
-        return sr_graph_query, entities, relations, x_coo, sro_texts
+        return sr_graph_query, entities, relations, x_coo, sro_texts, objects
 
     # def process_prompt(self, subject, relation, objects):
     #     # return text_in, text_out

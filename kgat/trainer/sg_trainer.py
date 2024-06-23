@@ -2,7 +2,6 @@ from torch.nn import BCEWithLogitsLoss
 from ..data import SubgraphGenerationCollator
 import torch
 from .utils import context_manager
-from sklearn.metrics import classification_report
 import time
 
 from .trainer import Trainer
@@ -197,8 +196,9 @@ class SubgraphGenerationTrainer(Trainer):
                         y_coo_cls=None
                     )
 
-                    gg_out = gg_out.transpose(0,1)[:,batch["batch"].unsqueeze(-1) == batch["batch"]].view(-1)
-                    gg_labels = gg_labels.transpose(0,1)[:,batch["batch"].unsqueeze(-1) == batch["batch"]].view(-1)
+                    gg_mask = batch["batch"].unsqueeze(-1) == batch["batch"]
+                    gg_out = gg_out.transpose(0,1)[:,gg_mask].view(-1)
+                    gg_labels = gg_labels.transpose(0,1)[:,gg_mask].view(-1)
                     
                     gg_loss = self.criterion(gg_out, gg_labels, nlw=self.config.neg_loss_weight)
 
