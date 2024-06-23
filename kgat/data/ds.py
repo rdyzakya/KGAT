@@ -62,6 +62,7 @@ class LMKBCDataset(Dataset):
                  prompt_template=f"{Mask.KG_MASK} -> S : {Mask.SUBJECT_MASK} | R : {Mask.RELATION_MASK} | O : {Mask.OBJECT_MASK}", 
                  graph_query_template=f"S : {Mask.SUBJECT_MASK} | R : {Mask.RELATION_MASK}", 
                  n_virtual_token=1,
+                 test=False,
                  n_data=None):
         self.data = load_json(path)
         self.data = self.data if not n_data else self.data[:n_data]
@@ -71,6 +72,7 @@ class LMKBCDataset(Dataset):
         self.prompt_template = prompt_template
         self.graph_query_template = graph_query_template
         self.n_virtual_token = n_virtual_token
+        self.test = test
 
         if len(re.findall(Mask.KG_MASK, prompt_template)) != n_virtual_token:
             new_prompt_template = prompt_template.replace(Mask.KG_MASK, ''.join([Mask.KG_MASK for _ in range(n_virtual_token)]))
@@ -95,12 +97,20 @@ class LMKBCDataset(Dataset):
                           .replace(Mask.SUBJECT_MASK, subject)
                           .replace(Mask.RELATION_MASK, relation))
         sro_texts = []
-        for o in objects:
-            entry = (self.prompt_template
-                .replace(Mask.SUBJECT_MASK, subject)
-                .replace(Mask.RELATION_MASK, relation)
-                .replace(Mask.OBJECT_MASK, o))
-            sro_texts.append(entry)
+        if not self.test:
+            for o in objects:
+                entry = (self.prompt_template
+                    .replace(Mask.SUBJECT_MASK, subject)
+                    .replace(Mask.RELATION_MASK, relation)
+                    .replace(Mask.OBJECT_MASK, o))
+                sro_texts.append(entry)
+        else:
+            sro_texts.append(
+                self.prompt_template
+                    .replace(Mask.SUBJECT_MASK, subject)
+                    .replace(Mask.RELATION_MASK, relation)
+                    .replace(Mask.OBJECT_MASK, '')
+            )
 
         x_coo = [self.triples[el] for el in reference]
         

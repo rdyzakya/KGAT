@@ -64,10 +64,11 @@ class SubgraphGenerationCollator:
 
 
 class LMKBCCollator:
-    def __init__(self, tokenizer, n_process, left=True):
+    def __init__(self, tokenizer, n_process, left=True, test=False):
         self.tokenizer = tokenizer
         self.n_process = n_process
         self.left = left
+        self.test = test
 
     def __call__(self, batch):
         # text_in, graph_query, entities, relations, x_coo, text_out = zip(*batch)
@@ -114,7 +115,7 @@ class LMKBCCollator:
         x_coo = x_coo.transpose(0,1)
 
         lmkbc_text = flatten(sro_texts)
-        lmkbc_text = [el + self.tokenizer.eos_token for el in lmkbc_text]
+        lmkbc_text = [el + self.tokenizer.eos_token for el in lmkbc_text] if not self.test else lmkbc_text
         lmkbc_text = self.tokenizer(lmkbc_text, padding=True, return_tensors="pt")
 
         lmkbc_input_ids = lmkbc_text["input_ids"]
@@ -126,6 +127,8 @@ class LMKBCCollator:
 
         #  shift_logits = lm_logits[..., :-1, :].contiguous()
         # shift_labels = labels[..., 1:].contiguous()
+
+        n_object = torch.tensor([len(o) for o in objects])
 
         return {
             "graph_query_input_ids" : graph_query["input_ids"], # N_query, length
@@ -140,6 +143,7 @@ class LMKBCCollator:
             "lmkbc_attention_mask" : lmkbc_attention_mask,
             "lmkbc_labels" : lmkbc_labels,
             "graph_emb_batch" : graph_emb_batch, # N_lmkbc_text
-            "objects" : flatten(objects)
+            "objects" : flatten(objects),
+            "n_object" : n_object
             # TODO weights?
         }

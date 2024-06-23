@@ -116,6 +116,7 @@ class VirtualTokenGenerator(torch.nn.Module):
                                     n_layers=n_encoder_hidden_layers)
         self.virtual_token = VirtualToken(n_virtual_token=n_virtual_token,
                                           n_features=out_dim)
+        self.n_object_predictor = torch.nn.Linear(out_dim * n_virtual_token, 1, bias=True)
         
     def forward(self, queries, entities, relations, x_coo, batch):
         edge_index = x_coo[:, [0,2]].transpose(0, 1)
@@ -132,7 +133,11 @@ class VirtualTokenGenerator(torch.nn.Module):
 
         entities_emb, relations_emb = self.encoder(injected_entities, edge_index, injected_relations, relation_index)
 
-        return self.virtual_token(entities_emb, batch)
+        out_vt = self.virtual_token(entities_emb, batch)
+
+        out_n_object = self.n_object_predictor(out_vt.view(-1, out_vt.shape[1] * out_vt.shape[2]))
+
+        return out_vt, out_n_object
     
     def freeze_injector_and_encoder(self):
         for param in self.injector.parameters():

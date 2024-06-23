@@ -139,20 +139,7 @@ class Trainer(ABC):
     
 
     def predict(self, test_dataloader=None):
-        if not self.test_dataloader and test_dataloader is None:
-            raise Exception("You should fill test_ds when initializing trainer if you want to predict or fill the test_dataloader params in this function")
-        self.test_dataloader = self.test_dataloader or test_dataloader
-        
-        test_steps = math.ceil(len(self.test_dataloader.dataset) / self.config.batch_size)
-        test_bar = tqdm(total=test_steps, desc="Test")
-        test_metrics = self.run_epoch(self.test_dataloader, test_bar, train=False)
-
-        # RuntimeError: dictionary keys changed during iteration
-        new_metrics = {}
-        for k in test_metrics.keys():
-            new_metrics[k.replace("val", "test")] = test_metrics[k]
-        self.test_metrics = new_metrics
-        return self.test_metrics
+        raise NotImplementedError("Abstract class")
     
     def save(self, directory=None, save_history=True, save_evaluation_metrics=True, save_train_config=True):
         directory = directory or self.config.out_dir

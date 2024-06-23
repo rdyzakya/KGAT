@@ -1,1 +1,2 @@
 from .sg_trainer import SubgraphGenerationTrainer
+from .lmkbc_trainer import LMKBCTrainer
