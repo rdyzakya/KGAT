@@ -1,6 +1,7 @@
 import torch
 from torch.nn.utils.rnn import pad_sequence
 import numpy as np
+from ..utils import NULL_SYM
 
 def flatten(list_of_lists):
     return [item for sublist in list_of_lists for item in sublist]
@@ -127,7 +128,8 @@ class LMKBCCollator:
 
         #  shift_logits = lm_logits[..., :-1, :].contiguous()
         # shift_labels = labels[..., 1:].contiguous()
-
+        if len(objects) == 1 and objects[0] == NULL_SYM:
+            objects = []
         n_object = torch.tensor([len(o) for o in objects])
 
         return {

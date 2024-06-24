@@ -2,6 +2,7 @@ from torch.nn import CrossEntropyLoss, MSELoss
 from ..data import LMKBCCollator
 import torch
 from .utils import context_manager
+from ..utils import NULL_SYM
 import time
 
 from .trainer import Trainer
@@ -154,6 +155,8 @@ class LMKBCTrainer(Trainer):
                     tp += 1
                 else:
                     fp += 1
+            if len(label) == 0 and label[0] == NULL_SYM:
+                continue
             for l in label:
                 if l not in pred:
                     fn += 1
