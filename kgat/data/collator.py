@@ -128,9 +128,7 @@ class LMKBCCollator:
 
         #  shift_logits = lm_logits[..., :-1, :].contiguous()
         # shift_labels = labels[..., 1:].contiguous()
-        if len(objects) == 1 and objects[0] == NULL_SYM:
-            objects = []
-        n_object = torch.tensor([len(o) for o in objects])
+        n_object = torch.tensor([len(o) if o != [NULL_SYM] else 0 for o in objects])
 
         return {
             "graph_query_input_ids" : graph_query["input_ids"], # N_query, length
