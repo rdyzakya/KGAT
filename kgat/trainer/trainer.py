@@ -59,6 +59,7 @@ class Trainer(ABC):
                              **config_kwargs)
         self.history = []
         self.test_metrics = {}
+        self.prediction_result = [] # list of dicts
         self.optimizer = get_optimizer(optimizer)(self.pipeline.model.parameters(), lr=learning_rate, **optimizer_kwargs)
     
     def __is_config_args(self, value):
@@ -141,7 +142,8 @@ class Trainer(ABC):
     def predict(self, test_dataloader=None):
         raise NotImplementedError("Abstract class")
     
-    def save(self, directory=None, save_history=True, save_evaluation_metrics=True, save_train_config=True):
+    def save(self, directory=None, save_history=True, save_evaluation_metrics=True, save_train_config=True, save_prediction_result=True):
+        # TODO : save prediction result
         directory = directory or self.config.out_dir
         # Make directory
         os.makedirs(directory, exist_ok=True)
@@ -157,6 +159,10 @@ class Trainer(ABC):
             # Save train config
             with open(os.path.join(directory, "train_config.json"), 'w') as fp:
                 json.dump(self.config.to_dict(), fp)
+        if save_prediction_result:
+            # Save prediction resukt
+            with open(os.path.join(directory, "preds.json"), 'w') as fp:
+                json.dump(self.prediction_result, fp)
 
         # Save model
         self.accelerator.wait_for_everyone()

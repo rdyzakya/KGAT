@@ -1,5 +1,5 @@
 from torch.utils.data import Dataset
-from ..utils import Mask
+from ..utils import Mask, NULL_SYM
 import torch
 import json
 import re
@@ -91,7 +91,8 @@ class LMKBCDataset(Dataset):
 
         subject = self.id2entity[subject_id]
         relation = self.id2relation[relation_id]
-        objects = [self.id2entity[el] for el in object_ids]
+        objects = [self.id2entity[el] for el in object_ids] # TODO if empty?
+        objects = [NULL_SYM] if len(objects) == 0 else objects # empty object
 
         sr_graph_query = (self.graph_query_template
                           .replace(Mask.SUBJECT_MASK, subject)

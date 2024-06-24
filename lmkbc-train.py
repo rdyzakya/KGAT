@@ -6,6 +6,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
 
 from kgat.model import (
     VirtualTokenGenerator,
+    SubgraphGenerator,
     load_model_lmkbc,
     Pipeline
 )
@@ -21,6 +22,8 @@ from kgat.trainer import LMKBCTrainer
 from transformers import (
     AutoTokenizer
 )
+
+import torch
 
 from seed import seed_everything
 
@@ -40,5 +43,71 @@ train_ds = LMKBCDataset(os.path.join(args.data, "train.json"),
                         graph_query_template=args.gqt,
                         n_virtual_token=args.nvt,
                         n_data=args.n_data_train)
-val_ds = LMKBCDataset(os.path.join(args.data, "dev.json"), id2entity, id2rel, n_data=args.n_data_val)
-test_ds = LMKBCDataset(os.path.join(args.data, "test.json"), id2entity, id2rel)
+val_ds = LMKBCDataset(os.path.join(args.data, "dev.json"), 
+                        id2entity, 
+                        id2rel, 
+                        triples, 
+                        prompt_template=args.pt,
+                        graph_query_template=args.gqt,
+                        n_virtual_token=args.nvt,
+                        n_data=args.n_data_val)
+test_ds = LMKBCDataset(os.path.join(args.data, "test.json"), 
+                        id2entity, 
+                        id2rel, 
+                        triples, 
+                        prompt_template=args.pt,
+                        graph_query_template=args.gqt,
+                        n_virtual_token=args.nvt,)
+
+### PREPARE MODEL AND TOKENIZER
+model_config = load_json(args.model)
+model_name_or_path = model_config.pop("model_name_or_path")
+
+lmkbc_model = load_model_lmkbc(model_name_or_path, device_map="auto")
+tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
+tokenizer = lmkbc_model.prepare_tokenizer(tokenizer)
+
+subgraphgenerator = SubgraphGenerator(
+    input_dim=lmkbc_model.embed_dim,
+    **model_config
+)
+
+# LOAD MODEL
+if args.from_sg:
+    subgraphgenerator.load_state_dict(
+        torch.load(args.from_sg)["state_dict"]
+    )
+
+vt_generator = VirtualTokenGenerator.from_subgraph_generator(
+    subgraphgenerator,
+    n_virtual_token=args.nvt
+)
+
+pipeline = Pipeline(model=vt_generator, lmkbc_model=lmkbc_model)
+
+### TRAIN
+trainer = LMKBCTrainer(
+    pipeline=pipeline,
+    tokenizer=tokenizer,
+    train_ds=train_ds,
+    val_ds=val_ds,
+    test_ds=test_ds,
+    epoch=args.epoch,
+    learning_rate=args.lr,
+    batch_size=args.bsize,
+    last_hidden_state_bsize=args.hsbsize,
+    out_dir=args.out,
+    max_check_point=args.mcp,
+    best_metrics=args.best_metrics,
+    load_best_model_at_end=args.load_best,
+    optimizer=args.optim,
+    optimizer_kwargs={},
+)
+
+train_history = trainer.train()
+
+### EVALUATION
+test_metrics = trainer.predict()
+
+### SAVE MODEL, HISTORY, AND EVALUATION RESULT
+trainer.save()

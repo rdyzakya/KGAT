@@ -143,7 +143,7 @@ class LMKBCCollator:
             "lmkbc_attention_mask" : lmkbc_attention_mask,
             "lmkbc_labels" : lmkbc_labels,
             "graph_emb_batch" : graph_emb_batch, # N_lmkbc_text
-            "objects" : flatten(objects),
+            "objects" : objects, # unflattened, used in test
             "n_object" : n_object
             # TODO weights?
         }

@@ -143,6 +143,30 @@ class LMKBCTrainer(Trainer):
 
         return metrics
     
+    def compute_metrics(self, preds, labels):
+        tp = 0
+        fp = 0
+        fn = 0
+
+        for pred, label in zip(preds, labels):
+            for p in pred:
+                if p in label:
+                    tp += 1
+                else:
+                    fp += 1
+            for l in label:
+                if l not in pred:
+                    fn += 1
+
+        precision = tp / (tp + fp)
+        recall = tp / (tp + fn)
+        f1 = (2 * precision * recall) / (precision + recall)
+        return {
+            "precision" : precision,
+            "recall" : recall,
+            "f1" : f1
+        }
+    
     def predict(self, test_dataloader=None):
         if not self.test_dataloader and test_dataloader is None:
             raise Exception("You should fill test_ds when initializing trainer if you want to predict or fill the test_dataloader params in this function")
@@ -151,6 +175,8 @@ class LMKBCTrainer(Trainer):
         test_steps = math.ceil(len(self.test_dataloader.dataset) / self.config.batch_size)
         test_bar = tqdm(total=test_steps, desc="Test")
         # test_metrics = self.run_epoch(self.test_dataloader, test_bar, train=False)
+        all_preds = []
+        all_labels = []
         for batch in self.test_dataloader:
             with torch.no_grad():
                 queries = self.pipeline.lmkbc_model.batch_last_hidden_state(
@@ -182,32 +208,32 @@ class LMKBCTrainer(Trainer):
                         x_coo=batch["x_coo"],
                         batch=batch["entities_batch"]
                     )
-
+                n_object_out = n_object_out.round.int()
                 # generate_lmkbc(self, input_ids, attention_mask, graph_embeddings, batch=None, **kwargs)
-                generation_result = self.pipeline.lmkbc_model.generate_lmkbc(input_ids, 
-                                                                             attention_mask, 
-                                                                             graph_embeddings, 
-                                                                             batch=None,
-                                                                             num_beams=,
-                                                                             num_return_sequences=4,
-                                                                             )
-                
-                # num_beams = len(objects)
-                # do sample? No i guess
-                # return sequence = len(objects)
-                
-                # logits = self.pipeline.lmkbc_model.forward_lmkbc(
-                #     batch["lmkbc_input_ids"], batch["lmkbc_attention_mask"], vt_out, batch=batch["graph_emb_batch"]
-                # )
+                generation_result = []
+                for gqii, am, vo, no in zip(batch["graph_query_input_ids"], batch["graph_qery_attention_mask"], vt_out, n_object_out):
+                    if no > 0:
+                        gr = self.pipeline.lmkbc_model.generate_lmkbc(
+                            gqii.unsqueeze(0),
+                            am.unsqueeze(0),
+                            vo.unsqueeze(0),
+                            batch=None,
+                            num_beams=no.item(),
+                            num_return_sequences=no.item()
+                        )
 
-                # loss = self.criterion(logits.view(-1, logits.shape[-1]), batch["lmkbc_labels"])
-                # sum_loss += loss.item() * logits.shape[0]
-                # len_data += logits.shape[0]
+                        gr = self.tokenizer.batch_decode(gr, skip_special_tokens=True)
+
+                        generation_result.append(gr)
+                    else:
+                        generation_result.append([]) # empty
+            all_preds.extend(generation_result)
+            all_labels.extend(batch["objects"])
             test_bar.update(1)
 
         # RuntimeError: dictionary keys changed during iteration
-        new_metrics = {}
-        for k in test_metrics.keys():
-            new_metrics[k.replace("val", "test")] = test_metrics[k]
-        self.test_metrics = new_metrics
+        # new_metrics = {}
+        # for k in test_metrics.keys():
+        #     new_metrics[k.replace("val", "test")] = test_metrics[k]
+        self.test_metrics = self.compute_metrics(all_preds, all_labels)
         return self.test_metrics

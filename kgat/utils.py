@@ -3,3 +3,5 @@ class Mask:
     SUBJECT_MASK = "<SUBJECT>"
     RELATION_MASK = "<RELATION>"
     OBJECT_MASK = "<OBJECT>"
+
+NULL_SYM = "" # empty

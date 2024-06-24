@@ -136,6 +136,7 @@ class VirtualTokenGenerator(torch.nn.Module):
         out_vt = self.virtual_token(entities_emb, batch)
 
         out_n_object = self.n_object_predictor(out_vt.view(-1, out_vt.shape[1] * out_vt.shape[2]))
+        out_n_object = out_n_object.relu() # >= 0
 
         return out_vt, out_n_object
     
