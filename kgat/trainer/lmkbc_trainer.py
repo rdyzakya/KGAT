@@ -125,8 +125,8 @@ class LMKBCTrainer(Trainer):
                 lmkbc_sum_loss += lmkbc_loss.item() * logits.shape[0]
                 lmkbc_len_data += logits.shape[0]
 
-                n_object_sum_loss += n_object_loss.item() * n_object_loss.shape[0]
-                n_object_len_data += n_object_loss.shape[0]
+                n_object_sum_loss += n_object_loss.item() * n_object_out.shape[0]
+                n_object_len_data += n_object_out.shape[0]
             if train:
                 self.accelerator.backward(loss)
                 self.optimizer.step()
