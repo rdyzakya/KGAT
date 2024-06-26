@@ -109,13 +109,13 @@ class LMKBCWrapper(ABC):
         return embeds, attention_mask
     
     def forward_lmkbc(self, input_ids, attention_mask, graph_embeddings, batch=None):
-        batch = batch or torch.arange(0,input_ids.shape[0])
+        batch = torch.arange(0,input_ids.shape[0]) if batch is None else batch
         graph_embeddings = graph_embeddings[batch]
         result_embeds, result_attention_mask = self.prepare_lmkbc(input_ids, attention_mask, graph_embeddings)
         return self.forward(inputs_embeds=result_embeds, attention_mask=result_attention_mask)
     
     def generate_lmkbc(self, input_ids, attention_mask, graph_embeddings, batch=None, **kwargs):
-        batch = batch or torch.arange(0,input_ids.shape[0])
+        batch = torch.arange(0,input_ids.shape[0]) if batch is None else batch
         graph_embeddings = graph_embeddings[batch]
         result_embeds, result_attention_mask = self.prepare_lmkbc(input_ids, attention_mask, graph_embeddings)
 
