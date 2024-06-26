@@ -114,7 +114,7 @@ class LMKBCTrainer(Trainer):
                 
                 logits = self.pipeline.lmkbc_model.forward_lmkbc(
                     batch["lmkbc_input_ids"], batch["lmkbc_attention_mask"], vt_out, batch=batch["graph_emb_batch"]
-                )
+                )[0]
 
                 lmkbc_loss = self.criterion(logits.view(-1, logits.shape[-1]), batch["lmkbc_labels"], lmkbc=True)
                 n_object_loss = self.criterion(n_object_out, batch["n_object"], lmkbc=False)
