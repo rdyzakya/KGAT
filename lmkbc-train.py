@@ -43,7 +43,7 @@ train_ds = LMKBCDataset(os.path.join(args.data, "train.json"),
                         graph_query_template=args.gqt,
                         n_virtual_token=args.nvt,
                         n_data=args.n_data_train)
-val_ds = LMKBCDataset(os.path.join(args.data, "dev.json"), 
+val_ds = LMKBCDataset(os.path.join(args.data, "val.json"), 
                         id2entity, 
                         id2rel, 
                         triples, 
