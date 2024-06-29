@@ -139,7 +139,7 @@ class LMKBCTrainer(Trainer):
         metrics = {
             f"{prefix}time" : end_time - start_time,
             f"{prefix}lmkbc_loss" : lmkbc_sum_loss / lmkbc_len_data,
-            f"{prefix}n_object_loss" : n_object_loss / n_object_len_data
+            f"{prefix}n_object_loss" : n_object_sum_loss / n_object_len_data
         }
 
         return metrics
