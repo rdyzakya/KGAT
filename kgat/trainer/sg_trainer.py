@@ -258,3 +258,16 @@ class SubgraphGenerationTrainer(Trainer):
             new_metrics[k.replace("val", "test")] = test_metrics[k]
         self.test_metrics = new_metrics
         return self.test_metrics
+    
+    def architecture(self, unwrapped_model):
+        return dict(
+                input_dim=unwrapped_model.input_dim, 
+                encoder_decoder_h_dim=unwrapped_model.encoder_decoder_h_dim, 
+                out_dim=unwrapped_model.out_dim, 
+                reshape_h_dim=unwrapped_model.reshape_h_dim,
+                n_injector_head=unwrapped_model.n_injector_head, 
+                injector_dropout_p=unwrapped_model.injector_dropout_p, 
+                encoder_dropout_p=unwrapped_model.encoder_dropout_p, 
+                n_encoder_head=unwrapped_model.n_encoder_head, 
+                n_encoder_layers=unwrapped_model.n_encoder_layers
+            )

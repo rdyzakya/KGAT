@@ -25,6 +25,13 @@ class GATBlock(torch.nn.Module):
 class GraphEncoder(torch.nn.Module):
     def __init__(self, input_dim, h_dim, out_dim, n_head=1, p=0.2, n_layers=1):
         super().__init__()
+        self.input_dim = input_dim
+        self.h_dim = h_dim
+        self.out_dim = out_dim
+        self.n_head = n_head
+        self.p = p
+        self.n_layers = n_layers
+        
         if n_layers == 1:
             self.gnn = GATBlock(input_dim, out_dim, n_head=n_head, p=p)
         elif n_layers == 2:

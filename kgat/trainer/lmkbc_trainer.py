@@ -240,3 +240,16 @@ class LMKBCTrainer(Trainer):
         #     new_metrics[k.replace("val", "test")] = test_metrics[k]
         self.test_metrics = self.compute_metrics(all_preds, all_labels)
         return self.test_metrics
+    
+    def architecture(self, unwrapped_model):
+        return dict(
+                input_dim = unwrapped_model.injector.input_dim,
+                encoder_h_dim = unwrapped_model.encoder.h_dim,
+                n_encoder_head = unwrapped_model.encoder.n_head,
+                out_dim = unwrapped_model.encoder.h_dim,
+                n_injector_head = unwrapped_model.injector.n_head,
+                injector_dropout_p = unwrapped_model.injector.p,
+                encoder_dropout_p = unwrapped_model.encoder.p,
+                n_encoder_layers = unwrapped_model.encoder.n_layers,
+                n_virtual_token = unwrapped_model.virtual_token.n_virtual_token,
+            )

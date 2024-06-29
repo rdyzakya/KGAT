@@ -100,7 +100,7 @@ class VirtualTokenGenerator(torch.nn.Module):
                  n_encoder_head=1, 
                  injector_dropout_p=0.2,
                  encoder_dropout_p=0.2, 
-                 n_encoder_hidden_layers=1,
+                 n_encoder_layers=1,
                  n_virtual_token=3,
                  injector=None,
                  encoder=None):
@@ -113,10 +113,21 @@ class VirtualTokenGenerator(torch.nn.Module):
                                     out_dim=out_dim,
                                     n_head=n_encoder_head,
                                     p=encoder_dropout_p,
-                                    n_layers=n_encoder_hidden_layers)
+                                    n_layers=n_encoder_layers)
         self.virtual_token = VirtualToken(n_virtual_token=n_virtual_token,
                                           n_features=out_dim)
         self.n_object_predictor = torch.nn.Linear(out_dim * n_virtual_token, 1, bias=True)
+
+        self.input_dim = self.injector.input_dim
+        self.encoder_h_dim = self.encoder.h_dim
+        self.out_dim = self.encoder.h_dim
+        self.n_injector_head = self.injector.n_head
+        self.n_encoder_head = self.encoder.n_head
+        self.injector_dropout_p = self.injector.p
+        self.encoder_dropout_p = self.encoder.p
+        self.n_encoder_layers = self.encoder.n_layers
+        self.n_virtual_token = self.virtual_token.n_virtual_token
+
         
     def forward(self, queries, entities, relations, x_coo, batch):
         edge_index = x_coo[:, [0,2]].transpose(0, 1)

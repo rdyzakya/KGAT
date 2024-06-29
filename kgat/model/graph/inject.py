@@ -4,6 +4,10 @@ from torch_geometric.nn import GATv2Conv
 class Injector(torch.nn.Module):
     def __init__(self, input_dim, n_head=1, p=0.2):
         super().__init__()
+        self.input_dim = input_dim
+        self.n_head = n_head
+        self.p = p
+
         self.attention = GATv2Conv(input_dim, input_dim, heads=n_head, concat=False, dropout=p, add_self_loops=False, edge_dim=input_dim)
         # self.sum = SumAggregation()
         self.lin_edge = torch.nn.Linear(n_head * input_dim, input_dim, bias=True)

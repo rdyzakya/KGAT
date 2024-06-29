@@ -74,6 +74,9 @@ class Trainer(ABC):
     def compute_metrics(self, preds, labels, prefix=None):
         raise NotImplementedError("Abstract class")
     
+    def architecture(self, unwrapped_model):
+        raise NotImplementedError("Abstract class")
+    
     def log(self, text):
         if self.accelerator.is_main_process:
             print(text)
@@ -169,17 +172,7 @@ class Trainer(ABC):
         unwrapped_model = self.accelerator.unwrap_model(self.pipeline.model)
         torch.save({
             "state_dict" : unwrapped_model.state_dict(),
-            "architecture" : dict(
-                input_dim=unwrapped_model.input_dim, 
-                encoder_decoder_h_dim=unwrapped_model.encoder_decoder_h_dim, 
-                out_dim=unwrapped_model.out_dim, 
-                reshape_h_dim=unwrapped_model.reshape_h_dim,
-                n_injector_head=unwrapped_model.n_injector_head, 
-                injector_dropout_p=unwrapped_model.injector_dropout_p, 
-                encoder_dropout_p=unwrapped_model.encoder_dropout_p, 
-                n_encoder_head=unwrapped_model.n_encoder_head, 
-                n_encoder_layers=unwrapped_model.n_encoder_layers
-            )
+            "architecture" : self.architecture(unwrapped_model)
         }, os.path.join(directory, "model.pth"))
     
     def update_check_point(self):
