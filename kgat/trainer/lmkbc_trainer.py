@@ -214,7 +214,7 @@ class LMKBCTrainer(Trainer):
                 n_object_out = n_object_out.round().int()
                 # generate_lmkbc(self, input_ids, attention_mask, graph_embeddings, batch=None, **kwargs)
                 generation_result = []
-                for gqii, am, vo, no in zip(batch["graph_query_input_ids"], batch["graph_qery_attention_mask"], vt_out, n_object_out):
+                for gqii, am, vo, no in zip(batch["graph_query_input_ids"], batch["graph_query_attention_mask"], vt_out, n_object_out):
                     if no > 0:
                         gr = self.pipeline.lmkbc_model.generate_lmkbc(
                             gqii.unsqueeze(0),
