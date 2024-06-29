@@ -211,7 +211,7 @@ class LMKBCTrainer(Trainer):
                         x_coo=batch["x_coo"],
                         batch=batch["entities_batch"]
                     )
-                n_object_out = n_object_out.round.int()
+                n_object_out = n_object_out.round().int()
                 # generate_lmkbc(self, input_ids, attention_mask, graph_embeddings, batch=None, **kwargs)
                 generation_result = []
                 for gqii, am, vo, no in zip(batch["graph_query_input_ids"], batch["graph_qery_attention_mask"], vt_out, n_object_out):
