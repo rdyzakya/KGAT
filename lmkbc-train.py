@@ -57,7 +57,8 @@ test_ds = LMKBCDataset(os.path.join(args.data, "test.json"),
                         triples, 
                         prompt_template=args.pt,
                         graph_query_template=args.gqt,
-                        n_virtual_token=args.nvt,)
+                        n_virtual_token=args.nvt,
+                        n_data=args.n_data_test)
 
 ### PREPARE MODEL AND TOKENIZER
 model_config = load_json(args.model)
