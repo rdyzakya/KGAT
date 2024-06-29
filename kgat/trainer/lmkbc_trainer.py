@@ -117,7 +117,7 @@ class LMKBCTrainer(Trainer):
                 )[0]
 
                 lmkbc_loss = self.criterion(logits.view(-1, logits.shape[-1]), batch["lmkbc_labels"], lmkbc=True)
-                n_object_loss = self.criterion(n_object_out, batch["n_object"], lmkbc=False)
+                n_object_loss = self.criterion(n_object_out, batch["n_object"].float(), lmkbc=False)
 
                 loss = self.config.beta1 * lmkbc_loss + self.config.beta2 * n_object_loss
                 # sum_loss += loss.item() * logits.shape[0]
