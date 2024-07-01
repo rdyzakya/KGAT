@@ -14,7 +14,7 @@ class DoubleLinear(torch.nn.Module):
         return x
 
 class ToSequence(torch.nn.Module):
-    def __init__(self, n_virtual_token, n_features):
+    def __init__(self, n_features, n_virtual_token=1):
         super().__init__()
         self.linear = torch.nn.ModuleList([
             DoubleLinear(n_features=n_features) for _ in range(n_virtual_token)
@@ -30,10 +30,10 @@ class ToSequence(torch.nn.Module):
         return result
 
 class VirtualToken(torch.nn.Module):
-    def __init__(self, n_virtual_token, n_features):
+    def __init__(self, n_features, n_virtual_token=1):
         super().__init__()
         self.aggregation = MeanAggregation()
-        self.to_sequence = ToSequence(n_virtual_token, n_features)
+        self.to_sequence = ToSequence(n_features, n_virtual_token)
 
         self.n_virtual_token = n_virtual_token
     
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     n_virtual_token = 3
     n_features = 768
 
-    virtual_token = VirtualToken(n_virtual_token, n_features)
+    virtual_token = VirtualToken(n_features, n_virtual_token)
 
     entities = torch.randn(16, n_features) # 16 entities
     relations = torch.randn(4, n_features) # 4 relations

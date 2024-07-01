@@ -2,7 +2,7 @@ import torch
 from torch_geometric.nn import GATv2Conv
 
 class Injector(torch.nn.Module):
-    def __init__(self, input_dim, n_head=1, p=0.2):
+    def __init__(self, input_dim, n_head=8, p=0.0):
         super().__init__()
         self.input_dim = input_dim
         self.n_head = n_head

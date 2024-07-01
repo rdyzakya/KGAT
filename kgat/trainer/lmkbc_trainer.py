@@ -55,6 +55,9 @@ class LMKBCTrainer(Trainer):
             crit = CrossEntropyLoss(ignore_index=-100)
             return crit(preds.view(-1, preds.shape[-1]), labels.view(-1))
         else:
+            # /raid/m13519061/anaconda3/envs/absa/lib/python3.10/site-packages/torch/nn/modules/loss.py:536: 
+            # UserWarning: Using a target size (torch.Size([2])) that is different to the input size (torch.Size([2, 1])). 
+            # This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
             crit = MSELoss()
             return crit(preds, labels)
     
@@ -142,12 +145,15 @@ class LMKBCTrainer(Trainer):
             f"{prefix}n_object_loss" : n_object_sum_loss / n_object_len_data
         }
 
-        return metrics
+        return metrics, None, None
     
     def compute_metrics(self, preds, labels):
         tp = 0
         fp = 0
         fn = 0
+
+        preds = [list(set(el)) for el in preds]
+        labels = [list(set(el)) for el in labels]
 
         for pred, label in zip(preds, labels):
             for p in pred:
@@ -178,8 +184,11 @@ class LMKBCTrainer(Trainer):
         test_steps = math.ceil(len(self.test_dataloader.dataset) / self.config.batch_size)
         test_bar = tqdm(total=test_steps, desc="Test")
         # test_metrics = self.run_epoch(self.test_dataloader, test_bar, train=False)
-        all_preds = []
-        all_labels = []
+        all_lmkbc_preds = []
+        all_lmkbc_labels = []
+
+        all_n_predictor_preds = []
+        all_n_predictor_labels = []
         for batch in self.test_dataloader:
             with torch.no_grad():
                 queries = self.pipeline.lmkbc_model.batch_last_hidden_state(
@@ -212,6 +221,10 @@ class LMKBCTrainer(Trainer):
                         batch=batch["entities_batch"]
                     )
                 n_object_out = n_object_out.round().int()
+
+                all_n_predictor_preds.extend(n_object_out)
+                all_n_predictor_labels.extend(batch["n_object"].float().tolist())
+
                 # generate_lmkbc(self, input_ids, attention_mask, graph_embeddings, batch=None, **kwargs)
                 generation_result = []
                 for gqii, am, vo, no in zip(batch["graph_query_input_ids"], batch["graph_query_attention_mask"], vt_out, n_object_out):
@@ -230,23 +243,32 @@ class LMKBCTrainer(Trainer):
                         generation_result.append(gr)
                     else:
                         generation_result.append([]) # empty
-            all_preds.extend(generation_result)
-            all_labels.extend(batch["objects"])
+            all_lmkbc_preds.extend(generation_result)
+            all_lmkbc_labels.extend(batch["objects"])
             test_bar.update(1)
 
         # RuntimeError: dictionary keys changed during iteration
         # new_metrics = {}
         # for k in test_metrics.keys():
         #     new_metrics[k.replace("val", "test")] = test_metrics[k]
-        self.test_metrics = self.compute_metrics(all_preds, all_labels)
-        return self.test_metrics
+        self.test_metrics = self.compute_metrics(all_lmkbc_preds, all_lmkbc_labels)
+        self.preds = {
+            "lmkbc_preds" : all_lmkbc_preds,
+            "n_predictor_preds" : all_n_predictor_preds
+        }
+        self.labels = {
+            "lmkbc_labels" : all_lmkbc_labels,
+            "n_predictor_labels" : all_n_predictor_labels
+        }
+        return self.test_metrics, self.preds, self.labels
     
     def architecture(self, unwrapped_model):
         return dict(
-                input_dim = unwrapped_model.injector.input_dim,
-                encoder_h_dim = unwrapped_model.encoder.h_dim,
+                # input_dim = unwrapped_model.injector.input_dim,
+                # encoder_h_dim = unwrapped_model.encoder.h_dim,
+                # out_dim = unwrapped_model.encoder.h_dim,
+                dim=unwrapped_model.dim,
                 n_encoder_head = unwrapped_model.encoder.n_head,
-                out_dim = unwrapped_model.encoder.h_dim,
                 n_injector_head = unwrapped_model.injector.n_head,
                 injector_dropout_p = unwrapped_model.injector.p,
                 encoder_dropout_p = unwrapped_model.encoder.p,

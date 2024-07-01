@@ -241,7 +241,7 @@ class SubgraphGenerationTrainer(Trainer):
             metrics.update(
                 self.compute_metrics(all_gg_preds, all_gg_labels, prefix=f"{prefix}gg_")
             )
-        return metrics
+        return metrics, (all_sg_preds, all_gg_preds), (all_sg_labels, all_gg_labels)
     
     def predict(self, test_dataloader=None):
         if not self.test_dataloader and test_dataloader is None:
@@ -250,21 +250,30 @@ class SubgraphGenerationTrainer(Trainer):
         
         test_steps = math.ceil(len(self.test_dataloader.dataset) / self.config.batch_size)
         test_bar = tqdm(total=test_steps, desc="Test")
-        test_metrics = self.run_epoch(self.test_dataloader, test_bar, train=False)
+        test_metrics, preds, labels = self.run_epoch(self.test_dataloader, test_bar, train=False)
 
         # RuntimeError: dictionary keys changed during iteration
         new_metrics = {}
         for k in test_metrics.keys():
             new_metrics[k.replace("val", "test")] = test_metrics[k]
         self.test_metrics = new_metrics
-        return self.test_metrics
+        self.preds = {
+            "sg_preds" : preds[0],
+            "gg_preds" : preds[1]
+        }
+        self.labels = {
+            "sg_labels" : labels[0],
+            "gg_labels" : labels[1]
+        }
+        return self.test_metrics, self.preds, self.labels
     
     def architecture(self, unwrapped_model):
         return dict(
-                input_dim=unwrapped_model.input_dim, 
-                encoder_decoder_h_dim=unwrapped_model.encoder_decoder_h_dim, 
-                out_dim=unwrapped_model.out_dim, 
-                reshape_h_dim=unwrapped_model.reshape_h_dim,
+                # input_dim=unwrapped_model.input_dim, 
+                # encoder_decoder_h_dim=unwrapped_model.encoder_decoder_h_dim, 
+                # out_dim=unwrapped_model.out_dim, 
+                # reshape_h_dim=unwrapped_model.reshape_h_dim,
+                dim=unwrapped_model.dim,
                 n_injector_head=unwrapped_model.n_injector_head, 
                 injector_dropout_p=unwrapped_model.injector_dropout_p, 
                 encoder_dropout_p=unwrapped_model.encoder_dropout_p, 
