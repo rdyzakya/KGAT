@@ -46,7 +46,7 @@ tokenizer = lmkbc_model.prepare_tokenizer(tokenizer)
 
 
 subgraphgenerator = SubgraphGenerator(
-    input_dim=lmkbc_model.embed_dim,
+    dim=lmkbc_model.embed_dim,
     **model_config
 )
 
