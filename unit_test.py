@@ -16,19 +16,24 @@ from kgat.model.graph import (
 
 import torch
 
+def count_parameters(model):
+    return sum(p.numel() for p in model.parameters())
+
 class ModelModule(unittest.TestCase):
 
     def test_decoder(self):
         entities = torch.randn(256, 768) # 256 entities with 768 dimension
-        relation_matrices = torch.randn(16, 768, 768) # 16 relations with 768 * 768 dimension
+        relations = torch.randn(16, 768) # 16 relations with 768 * 768 dimension
 
-        decoder = RESCAL()
+        decoder = RESCAL(dim=768)
 
-        scores = decoder(entities, relation_matrices)
+        scores = decoder(entities, relations)
 
         self.assertEqual(scores.shape[0],entities.shape[0])
-        self.assertEqual(scores.shape[1],relation_matrices.shape[0])
+        self.assertEqual(scores.shape[1],relations.shape[0])
         self.assertEqual(scores.shape[2],entities.shape[0])
+
+        print(f"TEST DECODER DIM : 768 --> {count_parameters(decoder)}")
 
     def test_encoder(self):
         dim = 768
@@ -50,6 +55,8 @@ class ModelModule(unittest.TestCase):
         self.assertEqual(out[0].shape[1], dim)
         self.assertEqual(out[1].shape[0], relations.shape[0])
         self.assertEqual(out[1].shape[1], dim)
+
+        print(f"TEST ENCODER DIM : 768 | HEAD : 3 | N_LAYERS : 4 --> {count_parameters(encoder)}")
     
     def test_injector(self):
         input_dim = 768
@@ -78,19 +85,9 @@ class ModelModule(unittest.TestCase):
 
         self.assertEqual(out_node.shape, entities.shape)
         self.assertEqual(out_edge.shape, relations.shape)
+
+        print(f"TEST INJECTOR INPUT_DIM : 768 | N_HEAD : 2 --> {count_parameters(injector)}")
     
-    def test_relation(self):
-        input_dim = 768
-        # h_dim = 64
-        relations = torch.randn(16, input_dim)
-
-        reshaper = ReshapeRelation(input_dim=input_dim)
-
-        relation_matrices = reshaper(relations)
-
-        self.assertEqual(relation_matrices.shape[0], relations.shape[0])
-        self.assertEqual(relation_matrices.shape[1], relations.shape[1])
-        self.assertEqual(relation_matrices.shape[2], relations.shape[1])
     
     def test_virtual_token(self):
         n_virtual_token = 3
@@ -114,6 +111,8 @@ class ModelModule(unittest.TestCase):
         self.assertEqual(out.shape[0], batch_index.max()+1)
         self.assertEqual(out.shape[1], n_virtual_token)
         self.assertEqual(out.shape[2], entities.shape[1])
+
+        print(f"TEST VIRTUAL TOKEN DIM : 768 | N_VT : 3 --> {count_parameters(virtual_token)}")
     
     def test_all(self):
         # input_dim = 768
@@ -169,6 +168,9 @@ class ModelModule(unittest.TestCase):
         self.assertEqual(vt_out.shape[1], n_virtual_token)
         self.assertEqual(vt_out.shape[2], queries.shape[1])
         self.assertEqual(n_object_out.shape[0], queries.shape[0])
+
+        print(f"TEST SG --> {count_parameters(subgenerator)}")
+        print(f"TEST VTGEN --> {count_parameters(vt_generator)}")
 
 if __name__ == '__main__':
     unittest.main()

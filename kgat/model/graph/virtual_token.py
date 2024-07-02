@@ -1,5 +1,5 @@
 import torch
-from torch_geometric.nn import MeanAggregation
+from torch_geometric.nn import AttentionalAggregation
 
 class DoubleLinear(torch.nn.Module):
     def __init__(self, n_features):
@@ -30,9 +30,11 @@ class ToSequence(torch.nn.Module):
         return result
 
 class VirtualToken(torch.nn.Module):
-    def __init__(self, n_features, n_virtual_token=1):
+    def __init__(self, n_features, n_virtual_token=1, gate_nn=None):
         super().__init__()
-        self.aggregation = MeanAggregation()
+        gate_nn = gate_nn or torch.nn.Linear(n_features, n_features, bias=True)
+        nn = torch.nn.Linear(n_features, n_features, bias=True)
+        self.aggregation = AttentionalAggregation(gate_nn=gate_nn, nn=nn)
         self.to_sequence = ToSequence(n_features, n_virtual_token)
 
         self.n_virtual_token = n_virtual_token

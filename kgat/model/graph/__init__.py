@@ -33,8 +33,8 @@ class GraphEncoderDecoder(torch.nn.Module):
                                     n_head=n_encoder_head,
                                     p=encoder_dropout_p,
                                     n_layers=n_encoder_layers)
-        self.relation = ReshapeRelation(input_dim=dim)
-        self.decoder = RESCAL()
+        # self.relation = ReshapeRelation(input_dim=dim)
+        self.decoder = RESCAL(dim=dim)
     
     def forward(self, entities, relations, x_coo):
         # x_coo shape is N_triplets * 3
@@ -42,8 +42,8 @@ class GraphEncoderDecoder(torch.nn.Module):
         relation_index = x_coo[:, 1]
 
         entities_emb, relations_emb = self.encoder(entities, edge_index, relations, relation_index)
-        relation_matrices = self.relation(relations_emb)
-        score = self.decoder(entities_emb, relation_matrices)
+        # relation_matrices = self.relation(relations_emb)
+        score = self.decoder(entities_emb, relations_emb)
         return score
 
 class SubgraphGenerator(torch.nn.Module):
@@ -94,9 +94,11 @@ class VirtualTokenGenerator(torch.nn.Module):
     def from_subgraph_generator(subgraph_generator : SubgraphGenerator, n_virtual_token):
         injector = subgraph_generator.injector
         encoder = subgraph_generator.encoder_decoder.encoder
+        gate_nn = subgraph_generator.encoder_decoder.decoder.gate_nn
         dim = subgraph_generator.dim
         return VirtualTokenGenerator(injector=injector, encoder=encoder,
-                                     n_virtual_token=n_virtual_token, dim=dim)
+                                     n_virtual_token=n_virtual_token, dim=dim,
+                                     gate_nn=gate_nn)
 
     # def __init__(self, input_dim=768,
     #              encoder_h_dim=1024, 
@@ -117,7 +119,8 @@ class VirtualTokenGenerator(torch.nn.Module):
                  n_encoder_layers=1,
                  n_virtual_token=3,
                  injector=None,
-                 encoder=None):
+                 encoder=None,
+                 gate_nn=None):
         super().__init__()
         self.injector = injector or Injector(input_dim=dim,
                                             n_head=n_injector_head,
@@ -127,7 +130,8 @@ class VirtualTokenGenerator(torch.nn.Module):
                                     p=encoder_dropout_p,
                                     n_layers=n_encoder_layers)
         self.virtual_token = VirtualToken(n_virtual_token=n_virtual_token,
-                                          n_features=dim)
+                                          n_features=dim,
+                                          gate_nn=gate_nn)
         self.n_object_predictor = torch.nn.Linear(dim * n_virtual_token, 1, bias=True)
 
         # self.input_dim = self.injector.input_dim
@@ -165,9 +169,12 @@ class VirtualTokenGenerator(torch.nn.Module):
         return out_vt, out_n_object
     
     def freeze_injector_and_encoder(self):
+        # Freeze any component from subgraph generator
         for param in self.injector.parameters():
             param.requires_grad = False
         for param in self.encoder.parameters():
+            param.requires_grad = False
+        for param in self.virtual_token.aggregation.gate_nn.parameters():
             param.requires_grad = False
 
 if __name__ == "__main__":

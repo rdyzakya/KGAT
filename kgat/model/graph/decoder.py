@@ -1,20 +1,36 @@
 import torch
 
-class RESCAL(torch.nn.Module):
+class OuterProduct(torch.nn.Module):
     def __init__(self):
         super().__init__()
     
-    def forward(self, entity_vectors, relation_matrices):
-        # entities shape : N_entity * h_dim
-        # relations shape : N_relation * h_dim * h_dim
-        n_entity = entity_vectors.shape[0]
-        n_relations = relation_matrices.shape[0]
+    def forward(self, x):
+        x = x.unsqueeze(-1) * x.unsqueeze(-2)
+        return x
 
-        scores = torch.zeros(n_entity, n_relations, n_entity, device=entity_vectors.device)
+class RESCAL(torch.nn.Module):
+    def __init__(self, dim):
+        super().__init__()
+        self.outer_product = OuterProduct()
+        self.gate_nn = torch.nn.Linear(dim, dim, bias=True)
+        self.dim = dim
+    
+    def forward(self, entities, relations):
+        # entities shape : N_entity * h_dim
+        # relations shape : N_relation * h_dim
+        n_entity = entities.shape[0]
+        n_relations = relations.shape[0]
+
+        scores = torch.zeros(n_entity, n_relations, n_entity, device=entities.device)
+
+        entities = self.gate_nn(entities)
+        relations = self.gate_nn(relations)
+
+        relation_matrices = self.outer_product(relations)
     
         for r in range(n_relations):
             R_k = relation_matrices[r]
-            scores[:, r, :] = torch.matmul(entity_vectors, R_k).matmul(entity_vectors.transpose(0,1))
+            scores[:, r, :] = torch.matmul(entities, R_k).matmul(entities.transpose(0,1))
         
         return scores
 
