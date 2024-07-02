@@ -241,8 +241,8 @@ class SubgraphGenerationTrainer(Trainer):
             metrics.update(
                 self.compute_metrics(all_gg_preds, all_gg_labels, prefix=f"{prefix}gg_")
             )
-        sg_preds_labels = self.construct_preds_labels(all_sg_preds.tolist(), all_sg_labels.tolist())
-        gg_preds_labels = self.construct_preds_labels(all_gg_preds.tolist(), all_gg_labels.tolist())
+        sg_preds_labels = self.construct_preds_labels(all_sg_preds.tolist(), all_sg_labels.tolist()) if self.config.alpha > 0 else []
+        gg_preds_labels = self.construct_preds_labels(all_gg_preds.tolist(), all_gg_labels.tolist()) if self.config.alpha < 1.0 else []
 
         preds_labels = {
             "sg" : sg_preds_labels,
