@@ -151,7 +151,7 @@ class VirtualTokenGenerator(torch.nn.Module):
         intersection_condition = src_batch != tgt_batch
 
         if intersection_condition.any():
-            warnings.warn(f"There are intersections in the graph, please check node {intersection_condition.non_zero()}")
+            warnings.warn(f"There are intersections in the graph, please check node {intersection_condition.nonzero()}")
 
         injected_entities, injected_relations = self.injector(queries, entities, edge_index, relations, relation_index, batch)
 
@@ -159,7 +159,7 @@ class VirtualTokenGenerator(torch.nn.Module):
 
         out_vt = self.virtual_token(entities_emb, batch)
 
-        out_n_object = self.n_object_predictor(out_vt.view(-1, out_vt.shape[1] * out_vt.shape[2]))
+        out_n_object = self.n_object_predictor(out_vt.reshape(-1, out_vt.shape[1] * out_vt.shape[2]))
         out_n_object = out_n_object.relu() # >= 0
 
         return out_vt, out_n_object
