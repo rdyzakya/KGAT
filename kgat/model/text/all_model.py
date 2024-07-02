@@ -6,7 +6,7 @@ from transformers import (
 from .abstract import LMKBCWrapper
 
 catalog = [
-    "MistralForLMKBC"
+    "MistralForLMKBC",
     "LlamaForLMKBC",
     "GPT2ForLMKBC",
 ]
