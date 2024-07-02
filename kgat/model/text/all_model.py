@@ -6,9 +6,9 @@ from transformers import (
 from .abstract import LMKBCWrapper
 
 catalog = [
-    "GPT2ForLMKBC",
-    "LlamaForLMKBC",
     "MistralForLMKBC"
+    "LlamaForLMKBC",
+    "GPT2ForLMKBC",
 ]
 
 class GPT2ForLMKBC(LMKBCWrapper, GPT2LMHeadModel):
