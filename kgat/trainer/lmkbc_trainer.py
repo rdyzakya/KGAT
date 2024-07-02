@@ -145,7 +145,7 @@ class LMKBCTrainer(Trainer):
             f"{prefix}n_object_loss" : n_object_sum_loss / n_object_len_data
         }
 
-        return metrics, None, None
+        return metrics, None
     
     def compute_metrics(self, preds, labels):
         tp = 0
@@ -222,7 +222,7 @@ class LMKBCTrainer(Trainer):
                     )
                 n_object_out = n_object_out.round().int()
 
-                all_n_predictor_preds.extend(n_object_out)
+                all_n_predictor_preds.extend(n_object_out.tolist())
                 all_n_predictor_labels.extend(batch["n_object"].float().tolist())
 
                 # generate_lmkbc(self, input_ids, attention_mask, graph_embeddings, batch=None, **kwargs)
@@ -252,15 +252,19 @@ class LMKBCTrainer(Trainer):
         # for k in test_metrics.keys():
         #     new_metrics[k.replace("val", "test")] = test_metrics[k]
         self.test_metrics = self.compute_metrics(all_lmkbc_preds, all_lmkbc_labels)
-        self.preds = {
-            "lmkbc_preds" : all_lmkbc_preds,
-            "n_predictor_preds" : all_n_predictor_preds
+        # self.preds = {
+        #     "lmkbc_preds" : all_lmkbc_preds,
+        #     "n_predictor_preds" : all_n_predictor_preds
+        # }
+        # self.labels = {
+        #     "lmkbc_labels" : all_lmkbc_labels,
+        #     "n_predictor_labels" : all_n_predictor_labels
+        # }
+        self.prediction_result = {
+            "lmkbc" : self.construct_preds_labels(all_lmkbc_preds, all_lmkbc_labels),
+            "n_predictor" : self.construct_preds_labels(all_n_predictor_preds, all_n_predictor_labels)
         }
-        self.labels = {
-            "lmkbc_labels" : all_lmkbc_labels,
-            "n_predictor_labels" : all_n_predictor_labels
-        }
-        return self.test_metrics, self.preds, self.labels
+        return self.test_metrics, self.prediction_result
     
     def architecture(self, unwrapped_model):
         return dict(

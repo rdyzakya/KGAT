@@ -241,7 +241,14 @@ class SubgraphGenerationTrainer(Trainer):
             metrics.update(
                 self.compute_metrics(all_gg_preds, all_gg_labels, prefix=f"{prefix}gg_")
             )
-        return metrics, (all_sg_preds, all_gg_preds), (all_sg_labels, all_gg_labels)
+        sg_preds_labels = self.construct_preds_labels(all_sg_preds.tolist(), all_sg_labels.tolist())
+        gg_preds_labels = self.construct_preds_labels(all_gg_preds.tolist(), all_gg_labels.tolist())
+
+        preds_labels = {
+            "sg" : sg_preds_labels,
+            "gg" : gg_preds_labels
+        }
+        return metrics, preds_labels
     
     def predict(self, test_dataloader=None):
         if not self.test_dataloader and test_dataloader is None:
@@ -250,22 +257,15 @@ class SubgraphGenerationTrainer(Trainer):
         
         test_steps = math.ceil(len(self.test_dataloader.dataset) / self.config.batch_size)
         test_bar = tqdm(total=test_steps, desc="Test")
-        test_metrics, preds, labels = self.run_epoch(self.test_dataloader, test_bar, train=False)
+        test_metrics, preds_labels = self.run_epoch(self.test_dataloader, test_bar, train=False)
 
         # RuntimeError: dictionary keys changed during iteration
         new_metrics = {}
         for k in test_metrics.keys():
             new_metrics[k.replace("val", "test")] = test_metrics[k]
         self.test_metrics = new_metrics
-        self.preds = {
-            "sg_preds" : preds[0],
-            "gg_preds" : preds[1]
-        }
-        self.labels = {
-            "sg_labels" : labels[0],
-            "gg_labels" : labels[1]
-        }
-        return self.test_metrics, self.preds, self.labels
+        self.prediction_result = preds_labels
+        return self.test_metrics, self.prediction_result
     
     def architecture(self, unwrapped_model):
         return dict(

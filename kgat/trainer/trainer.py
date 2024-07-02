@@ -59,8 +59,7 @@ class Trainer(ABC):
                              **config_kwargs)
         self.history = []
         self.test_metrics = {}
-        self.preds = {}
-        self.labels = {}
+        self.prediction_result = []
         self.optimizer = get_optimizer(optimizer)(self.pipeline.model.parameters(), lr=learning_rate, **optimizer_kwargs)
     
     def __is_config_args(self, value):
@@ -118,7 +117,7 @@ class Trainer(ABC):
         self.prepare_train()
 
         for e in range(self.config.epoch):
-            train_metrics, preds, labels = self.run_epoch(self.train_dataloader, train_bar, train=True)
+            train_metrics, preds_labels = self.run_epoch(self.train_dataloader, train_bar, train=True)
             entry = {
                 "epoch" : e+1
             }
@@ -126,7 +125,7 @@ class Trainer(ABC):
             if self.val_dataloader:
                 val_steps = math.ceil(len(self.val_dataloader.dataset) / self.config.batch_size)
                 val_bar = tqdm(total=val_steps, desc=f"Evaluation epoch {e+1}")
-                val_metrics, preds, labels = self.run_epoch(self.val_dataloader, val_bar, train=False)
+                val_metrics, preds_labels = self.run_epoch(self.val_dataloader, val_bar, train=False)
                 entry.update(val_metrics)
             self.log(entry)
             self.history.append(entry)
@@ -195,4 +194,14 @@ class Trainer(ABC):
         self.save(directory=os.path.join(self.config.out_dir, f"checkpoint-{current_epoch}"),
                   save_history=True,
                   save_evaluation_metrics=False,
-                  save_train_config=False)
+                  save_train_config=False,
+                  save_prediction_result=False)
+    
+    def construct_preds_labels(self, preds, labels):
+        result = []
+        for p, l in zip(preds, labels):
+            result.append({
+                "preds" : p,
+                "labels" : l
+            })
+        return result
