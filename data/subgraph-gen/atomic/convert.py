@@ -62,8 +62,10 @@ with open("./proc/relations.txt", 'w', encoding="utf-8") as fp:
 entity_map = {el : i for i, el in enumerate(nodes)}
 rel_map = {el : i for i, el in enumerate(relations)}
 
-min_ratio = 0.1
-max_ratio = 0.5
+config = json.load(open("../config.json", 'r'))
+
+min_ratio = config["MIN_RATIO"]
+max_ratio = config["MAX_RATIO"]
 
 ds2 = []
 for el in tqdm(ds):

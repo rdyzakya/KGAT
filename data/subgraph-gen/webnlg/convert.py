@@ -9,8 +9,10 @@ from ordered_set import OrderedSet
 
 random.seed(42)
 
-min_ratio = 0.1
-max_ratio = 0.5
+config = json.load(open("../config.json", 'r'))
+
+min_ratio = config["MIN_RATIO"]
+max_ratio = config["MAX_RATIO"]
 
 def preprocess(ds, entity2id, rel2id):
     result = []

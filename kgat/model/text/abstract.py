@@ -74,7 +74,7 @@ class LMKBCWrapper(ABC):
 
         mask = input_ids == self.config.kg_token_id
 
-        assert (mask.sum(-1) == 1).all() # all input ids should contain only 1 KG token
+        assert (mask.sum(-1) == 1).all(), f"all input ids should contain only 1 KG token , {mask.sum(-1).unique()}"
 
         input_ids[mask] = 0 # change to 0, because we don't resize the params
 

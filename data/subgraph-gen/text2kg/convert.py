@@ -55,8 +55,10 @@ with open("./proc/relations.txt", 'w', encoding="utf-8") as fp:
 
 ds = []
 
-min_ratio = 0.1
-max_ratio = 0.5
+config = json.load(open("../config.json", 'r'))
+
+min_ratio = config["MIN_RATIO"]
+max_ratio = config["MAX_RATIO"]
 
 for i1, row1 in tqdm(df.iterrows()):
     text = row1["sent"]
