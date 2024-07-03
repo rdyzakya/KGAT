@@ -5,11 +5,11 @@ from transformers import (
 )
 from .abstract import LMKBCWrapper
 
-catalog = [
-    "MistralForLMKBC",
-    "LlamaForLMKBC",
-    "GPT2ForLMKBC",
-]
+catalog = {
+    "MistralForLMKBC" : ["mistralai/Mistral-7B-v0.1", "mistralai/Mistral-7B-v0.3"],
+    "LlamaForLMKBC" : ["meta-llama/Meta-Llama-3-8B", "meta-llama/Llama-2-7b-hf"],
+    "GPT2ForLMKBC" : ["openai-community/gpt2", "gpt2"],
+}
 
 class GPT2ForLMKBC(LMKBCWrapper, GPT2LMHeadModel):
     @property

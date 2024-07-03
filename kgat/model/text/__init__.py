@@ -2,13 +2,12 @@ from .all_model import catalog
 from .abstract import LMKBCWrapper
 
 def load_model_lmkbc(model_name_or_path, **kwargs) -> LMKBCWrapper:
-    for class_name in catalog:
+    for class_name in catalog.keys():
+        if model_name_or_path not in catalog[class_name]:
+            continue
         constructor = getattr(all_model, class_name)
-        try:
-            model = constructor.from_pretrained(model_name_or_path, **kwargs)
-            return model
-        except:
-            pass
+        model = constructor.from_pretrained(model_name_or_path, **kwargs)
+        return model
     raise NotImplementedError(f"Not implemented yet for {model_name_or_path}")
 
 # if __name__ == "__main__":
