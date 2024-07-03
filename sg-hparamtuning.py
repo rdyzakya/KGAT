@@ -48,8 +48,8 @@ for i, combination in enumerate(combinations):
     
     # CALL accelerate launch sg-train.py --gpu 0,6,7 --n_data_train 1024 --n_data_val 1024 --n_data_test 1024 --bsize 4 --epoch 10 --data "./data/subgraph-gen/qagnn/csqa" --model "./config/model/sg-hparam.json" --best_metrics "sg_f1"
     subprocess.run([
-        'accelerate', 'launch', 'sg-train.py', '--gpu', '0,6,7', '--n_data_train', '1024', '--n_data_val', '1024',
-        '--n_data_test', '1024', '--bsize', '4', '--epoch', '10', '--data', './data/subgraph-gen/qagnn/csqa',
+        'accelerate', 'launch', 'sg-train.py', '--gpu', '0,5,6,7', '--n_data_train', '1024', '--n_data_val', '1024',
+        '--n_data_test', '1024', '--bsize', '4', '--epoch', '10', '--data', './data/subgraph-gen/qagnn/proc/csqa',
         '--model', './config/model/sg-hparam.json', '--best_metrics', 'sg_f1', '--load_best'
     ])
     

@@ -40,9 +40,9 @@ triples = pd.read_csv("./raw/data_preprocessed_release/cpnet/conceptnet.en.csv",
 
 relations = triples[0].unique()
 
-with open(os.path.join(csqa_dir, "relation.txt"), 'w', encoding="utf-8") as fp:
+with open(os.path.join(csqa_dir, "relations.txt"), 'w', encoding="utf-8") as fp:
     fp.write('\n'.join(sorted(relations)))
-with open(os.path.join(obqa_dir, "relation.txt"), 'w', encoding="utf-8") as fp:
+with open(os.path.join(obqa_dir, "relations.txt"), 'w', encoding="utf-8") as fp:
     fp.write('\n'.join(sorted(relations)))
 
 # Get statements
