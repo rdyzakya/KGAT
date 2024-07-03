@@ -8,10 +8,39 @@ class OuterProduct(torch.nn.Module):
         x = x.unsqueeze(-1) * x.unsqueeze(-2)
         return x
 
+class DiagonalMatrixTransformer(torch.nn.Module):
+    def __init__(self):
+        super(DiagonalMatrixTransformer, self).__init__()
+
+    def forward(self, x):
+        """
+        x: input feature vectors with shape (batch_size, vector_length)
+        Returns: square matrices with shape (batch_size, vector_length, vector_length)
+        """
+        # Ensure input is a 2D tensor
+        assert x.dim() == 2, "Input must be a 2D tensor with shape (batch_size, vector_length)"
+
+        # Get the batch size and vector length
+        batch_size, vector_length = x.size()
+
+        # Create a batch of identity matrices
+        identity_matrices = torch.eye(vector_length, device=x.device).unsqueeze(0).repeat(batch_size, 1, 1)
+
+        # Multiply each identity matrix by the corresponding feature vector
+        transformed_matrices = x.unsqueeze(2) * identity_matrices
+
+        return transformed_matrices
+
+to_matrix_catalog = {
+    "diagonal" : DiagonalMatrixTransformer(),
+    "outer_product" : OuterProduct()
+}
+
 class RESCAL(torch.nn.Module):
-    def __init__(self, dim):
+    def __init__(self, dim, to_matrix="diagonal"):
         super().__init__()
-        self.outer_product = OuterProduct()
+        assert to_matrix in to_matrix_catalog.keys(), f"to_matrix should be from {to_matrix_catalog.keys()}"
+        self.to_matrix = to_matrix_catalog[to_matrix]
         self.gate_nn = torch.nn.Linear(dim, dim, bias=True)
         self.dim = dim
     
@@ -26,7 +55,7 @@ class RESCAL(torch.nn.Module):
         entities = self.gate_nn(entities)
         relations = self.gate_nn(relations)
 
-        relation_matrices = self.outer_product(relations)
+        relation_matrices = self.to_matrix(relations)
     
         for r in range(n_relations):
             R_k = relation_matrices[r]

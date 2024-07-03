@@ -27,14 +27,15 @@ class GraphEncoderDecoder(torch.nn.Module):
     def __init__(self, dim=768, 
                  encoder_dropout_p=0.2, 
                  n_encoder_head=1, 
-                 n_encoder_layers=1):
+                 n_encoder_layers=1,
+                 to_matrix="diagonal"):
         super().__init__()
         self.encoder = GraphEncoder(dim=dim,
                                     n_head=n_encoder_head,
                                     p=encoder_dropout_p,
                                     n_layers=n_encoder_layers)
         # self.relation = ReshapeRelation(input_dim=dim)
-        self.decoder = RESCAL(dim=dim)
+        self.decoder = RESCAL(dim=dim, to_matrix=to_matrix)
     
     def forward(self, entities, relations, x_coo):
         # x_coo shape is N_triplets * 3
@@ -61,7 +62,8 @@ class SubgraphGenerator(torch.nn.Module):
                  injector_dropout_p=0.2, 
                  encoder_dropout_p=0.2, 
                  n_encoder_head=1, 
-                 n_encoder_layers=1):
+                 n_encoder_layers=1,
+                 to_matrix="diagonal"):
         super().__init__()
         self.injector = Injector(input_dim=dim,
                                 n_head=n_injector_head,
@@ -69,7 +71,8 @@ class SubgraphGenerator(torch.nn.Module):
         self.encoder_decoder = GraphEncoderDecoder(dim=dim,
                                                    encoder_dropout_p=encoder_dropout_p,
                                                    n_encoder_head=n_encoder_head, 
-                                                   n_encoder_layers=n_encoder_layers)
+                                                   n_encoder_layers=n_encoder_layers,
+                                                   to_matrix=to_matrix)
 
         # self.input_dim = input_dim 
         # self.encoder_decoder_h_dim = encoder_decoder_h_dim 

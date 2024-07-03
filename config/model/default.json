@@ -4,5 +4,6 @@
     "injector_dropout_p" : 0.2, 
     "encoder_dropout_p" : 0.2, 
     "n_encoder_head" : 1, 
-    "n_encoder_layers" : 1
+    "n_encoder_layers" : 1,
+    "to_matrix" : "diagonal"
 }
