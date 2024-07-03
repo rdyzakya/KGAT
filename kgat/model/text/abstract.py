@@ -126,5 +126,7 @@ class LMKBCWrapper(ABC):
     
     def freeze(self):
         # Freeze
-        for param in self.parameters():
+        for param in self.backbone.parameters():
+            param.requires_grad = False
+        for param in self.embeddings.parameters():
             param.requires_grad = False

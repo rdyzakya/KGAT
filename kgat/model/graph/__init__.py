@@ -165,7 +165,7 @@ class VirtualTokenGenerator(torch.nn.Module):
 
         out_n_object = self.n_object_predictor(out_vt.reshape(-1, out_vt.shape[1] * out_vt.shape[2]))
         out_n_object = out_n_object.relu() # >= 0
-        out_n_object = out_n_object.squeeze() # squeeze so (-1, 1) --> (-1)
+        out_n_object = out_n_object
 
         return out_vt, out_n_object
     
