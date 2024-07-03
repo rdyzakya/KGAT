@@ -116,7 +116,7 @@ train, val, test = ds[:int(0.8*len(ds))], ds[int(0.8*len(ds)):int(0.9*len(ds))],
 with open("./proc/train.json", 'w', encoding="utf-8") as fp:
     json.dump(train, fp)
 
-with open("./proc/val.json", 'w', encoding="utf-8") as fp:
+with open("./proc/dev.json", 'w', encoding="utf-8") as fp:
     json.dump(val, fp)
 
 with open("./proc/test.json", 'w', encoding="utf-8") as fp:

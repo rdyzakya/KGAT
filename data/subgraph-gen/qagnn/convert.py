@@ -144,18 +144,26 @@ def create_ds(all_statement, all_grounded, all_graph):
 
     return ds
 
+
+
 ## CSQA
 print("Create CSQA dataset...")
 train_ds_csqa = create_ds(train_statement_csqa, train_grounded_csqa, train_graph_csqa)
 dump_json(os.path.join(csqa_dir, "train.json"), train_ds_csqa)
 dev_ds_csqa = create_ds(dev_statement_csqa, dev_grounded_csqa, dev_graph_csqa)
+len_dev_csqa = len(dev_ds_csqa)
+dev_ds_csqa, test_ds_csqa = dev_ds_csqa[:len_dev_csqa//2], dev_ds_csqa[len_dev_csqa//2:]
 dump_json(os.path.join(csqa_dir, "dev.json"), dev_ds_csqa)
+dump_json(os.path.join(csqa_dir, "test.json"), test_ds_csqa)
 
 ## OBQA
 print("Create OBQA dataset...")
 train_ds_obqa = create_ds(train_statement_obqa, train_grounded_obqa, train_graph_obqa)
 dump_json(os.path.join(obqa_dir, "train.json"), train_ds_obqa)
 dev_ds_obqa = create_ds(dev_statement_obqa, dev_grounded_obqa, dev_graph_obqa)
+len_dev_obqa = len(dev_ds_obqa)
+dev_ds_obqa, test_ds_obqa = dev_ds_obqa[:len_dev_obqa//2], dev_ds_obqa[len_dev_obqa//2:]
 dump_json(os.path.join(obqa_dir, "dev.json"), dev_ds_obqa)
+dump_json(os.path.join(obqa_dir, "test.json"), test_ds_obqa)
 
 print("Done!")

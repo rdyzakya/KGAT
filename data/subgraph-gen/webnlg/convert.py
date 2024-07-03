@@ -113,7 +113,7 @@ test = [el for el in test if len(el) > 0]
 with open("./proc/train.json", 'w', encoding="utf-8") as fp:
     json.dump(train, fp)
 
-with open("./proc/val.json", 'w', encoding="utf-8") as fp:
+with open("./proc/dev.json", 'w', encoding="utf-8") as fp:
     json.dump(val, fp)
 
 with open("./proc/test.json", 'w', encoding="utf-8") as fp:
