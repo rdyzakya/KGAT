@@ -28,10 +28,10 @@ if not os.path.exists(obqa_dir):
 
 # Copy entity file
 print("Copying entity file...")
-shutil.copy("./raw/data_preprocessed_release/cpnet/concept.txt", os.path.join(csqa_dir, "entity.txt"))
-shutil.copy("./raw/data_preprocessed_release/cpnet/concept.txt", os.path.join(obqa_dir, "entity.txt"))
+shutil.copy("./raw/data_preprocessed_release/cpnet/concept.txt", os.path.join(csqa_dir, "entities.txt"))
+shutil.copy("./raw/data_preprocessed_release/cpnet/concept.txt", os.path.join(obqa_dir, "entities.txt"))
 
-with open(os.path.join(csqa_dir, "entity.txt"), 'r', encoding="utf-8") as fp:
+with open(os.path.join(csqa_dir, "entities.txt"), 'r', encoding="utf-8") as fp:
     concepts = fp.read().strip().splitlines()
 
 # Create relation file
