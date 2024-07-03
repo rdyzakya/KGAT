@@ -140,7 +140,8 @@ def create_ds(all_statement, all_grounded, all_graph):
                 "y_coo_cls" : y_coo_cls,
                 "y_node_cls" : y_node_cls.tolist()
             }
-            ds.append(entry)
+            if len(x_coo) > 0:
+                ds.append(entry)
 
     return ds
 
