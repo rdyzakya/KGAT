@@ -30,6 +30,8 @@ os.makedirs('./sg-paramtuning', exist_ok=True)
 
 # FOR EVERY COMBINATION:
 for i, combination in enumerate(combinations):
+    if os.path.exists(f'./sg-paramtuning/{i}.json'):
+        continue
     # Create a dictionary from the combination
     hparam_dict = {
         "model_name_or_path": combination[0],
