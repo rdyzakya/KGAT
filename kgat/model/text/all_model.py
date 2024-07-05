@@ -1,7 +1,8 @@
 from transformers import (
     GPT2LMHeadModel,
     LlamaForCausalLM,
-    MistralForCausalLM
+    MistralForCausalLM,
+    AutoModelForCausalLM
 )
 from .abstract import LMKBCWrapper
 
@@ -11,7 +12,7 @@ catalog = {
     "GPT2ForLMKBC" : ["openai-community/gpt2", "gpt2"],
 }
 
-class GPT2ForLMKBC(LMKBCWrapper, GPT2LMHeadModel):
+class GPT2ForLMKBC(LMKBCWrapper, AutoModelForCausalLM):
     @property
     def backbone(self):
         return self.transformer
@@ -20,7 +21,7 @@ class GPT2ForLMKBC(LMKBCWrapper, GPT2LMHeadModel):
     def embeddings(self):
         return self.transformer.wte
     
-class LlamaForLMKBC(LMKBCWrapper, LlamaForCausalLM):
+class LlamaForLMKBC(LMKBCWrapper, AutoModelForCausalLM):
     @property
     def backbone(self):
         return self.model
@@ -29,7 +30,7 @@ class LlamaForLMKBC(LMKBCWrapper, LlamaForCausalLM):
     def embeddings(self):
         return self.model.embed_tokens
     
-class MistralForLMKBC(LMKBCWrapper, MistralForCausalLM):
+class MistralForLMKBC(LMKBCWrapper, AutoModelForCausalLM):
     @property
     def backbone(self):
         return self.model
