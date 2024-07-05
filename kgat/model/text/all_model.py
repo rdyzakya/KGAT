@@ -12,7 +12,7 @@ catalog = {
     "GPT2ForLMKBC" : ["openai-community/gpt2", "gpt2"],
 }
 
-class GPT2ForLMKBC(LMKBCWrapper, AutoModelForCausalLM):
+class GPT2ForLMKBC(LMKBCWrapper, GPT2LMHeadModel):
     @property
     def backbone(self):
         return self.transformer
@@ -21,7 +21,7 @@ class GPT2ForLMKBC(LMKBCWrapper, AutoModelForCausalLM):
     def embeddings(self):
         return self.transformer.wte
     
-class LlamaForLMKBC(LMKBCWrapper, AutoModelForCausalLM):
+class LlamaForLMKBC(LMKBCWrapper, LlamaForCausalLM):
     @property
     def backbone(self):
         return self.model
@@ -30,7 +30,7 @@ class LlamaForLMKBC(LMKBCWrapper, AutoModelForCausalLM):
     def embeddings(self):
         return self.model.embed_tokens
     
-class MistralForLMKBC(LMKBCWrapper, AutoModelForCausalLM):
+class MistralForLMKBC(LMKBCWrapper, MistralForCausalLM):
     @property
     def backbone(self):
         return self.model

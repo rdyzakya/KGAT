@@ -11,7 +11,7 @@ def load_model_lmkbc(model_name_or_path, checkpoint, device_map="auto", no_split
         config = AutoConfig.from_pretrained(model_name_or_path)
         constructor = getattr(all_model, class_name)
         with init_empty_weights():
-            model = constructor.from_config(config)
+            model = constructor(config)
         model = load_checkpoint_and_dispatch(
             model, checkpoint=checkpoint, device_map=device_map, no_split_module_classes=no_split_module_classes
         )
