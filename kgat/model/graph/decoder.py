@@ -37,12 +37,12 @@ to_matrix_catalog = {
 }
 
 class RESCAL(torch.nn.Module):
-    def __init__(self, dim, to_matrix="diagonal"):
+    def __init__(self, n_features, to_matrix="diagonal"):
         super().__init__()
         assert to_matrix in to_matrix_catalog.keys(), f"to_matrix should be from {to_matrix_catalog.keys()}"
         self.to_matrix = to_matrix_catalog[to_matrix]
-        self.gate_nn = torch.nn.Linear(dim, dim, bias=True)
-        self.dim = dim
+        self.gate_nn = torch.nn.Linear(n_features, n_features, bias=True)
+        self.n_features = n_features
     
     def forward(self, entities, relations):
         # entities shape : N_entity * h_dim

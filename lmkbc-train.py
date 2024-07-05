@@ -63,14 +63,14 @@ test_ds = LMKBCDataset(os.path.join(args.data, "test.json"),
 ### PREPARE MODEL AND TOKENIZER
 model_config = load_json(args.model)
 model_name_or_path = model_config.pop("model_name_or_path")
-checkpoint = model_config.pop("checkpoint")
+# checkpoint = model_config.pop("checkpoint")
 
-lmkbc_model = load_model_lmkbc(model_name_or_path, checkpoint=checkpoint, device_map="auto", no_split_module_classes=['Block'])
+lmkbc_model = load_model_lmkbc(model_name_or_path, checkpoint=None, device_map="auto", no_split_module_classes=['Block'])
 tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
 tokenizer = lmkbc_model.prepare_tokenizer(tokenizer)
 
 subgraphgenerator = SubgraphGenerator(
-    dim=lmkbc_model.embed_dim,
+    n_features=lmkbc_model.embed_dim,
     **model_config
 )
 

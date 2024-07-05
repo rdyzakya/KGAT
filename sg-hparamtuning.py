@@ -6,19 +6,20 @@ import os
 
 hyper_params = {
     "model_name_or_path" : ["meta-llama/Meta-Llama-3-8B"],
-    "checkpoint" : ["/raid/m13519061/.cache/huggingface/models--meta-llama--Meta-Llama-3-8B/snapshots/62bd457b6fe961a42a631306577e622c83876cb6"],
+    # "checkpoint" : ["/raid/m13519061/.cache/huggingface/models--meta-llama--Meta-Llama-3-8B/snapshots/62bd457b6fe961a42a631306577e622c83876cb6"],
+    "h_dim" : [512, 256, 128],
     "n_injector_head" : [8,4],
     "injector_dropout_p" : [0.1], 
     "encoder_dropout_p" : [0.1], 
     "n_encoder_head" : [8,4],
-    "n_encoder_layers" : [8,4,2],
+    "n_encoder_layers" : [6,4,2],
     "to_matrix" : ["diagonal", "outer_product"]
 }
 
 # CREATE COMBINATION USING ITERTOOLS
 combinations = list(itertools.product(
     hyper_params["model_name_or_path"],
-    hyper_params["checkpoint"],
+    hyper_params["h_dim"],
     hyper_params["n_injector_head"],
     hyper_params["injector_dropout_p"],
     hyper_params["encoder_dropout_p"],
@@ -37,7 +38,7 @@ for i, combination in enumerate(combinations):
     # Create a dictionary from the combination
     hparam_dict = {
         "model_name_or_path": combination[0],
-        "checkpoint" : combination[1],
+        "h_dim" : combination[1],
         "n_injector_head": combination[2],
         "injector_dropout_p": combination[3],
         "encoder_dropout_p": combination[4],

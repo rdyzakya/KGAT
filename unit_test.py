@@ -25,7 +25,7 @@ class ModelModule(unittest.TestCase):
         entities = torch.randn(256, 768) # 256 entities with 768 dimension
         relations = torch.randn(16, 768) # 16 relations with 768 * 768 dimension
 
-        decoder = RESCAL(dim=768)
+        decoder = RESCAL(n_features=768)
 
         scores = decoder(entities, relations)
 
@@ -36,15 +36,16 @@ class ModelModule(unittest.TestCase):
         print(f"TEST DECODER DIM : 768 --> {count_parameters(decoder)}")
 
     def test_encoder(self):
-        dim = 768
+        n_features = 768
+        h_dim = 512
         n_head = 3
         p = 0.2
         n_layers = 4
 
-        encoder = GraphEncoder(dim=dim, n_head=n_head, p=p, n_layers=n_layers)
+        encoder = GraphEncoder(n_features=n_features, h_dim=h_dim, n_head=n_head, p=p, n_layers=n_layers)
 
-        entities = torch.randn(256, dim)
-        relations = torch.randn(16, dim)
+        entities = torch.randn(256, n_features)
+        relations = torch.randn(16, n_features)
 
         edge_index = torch.randint(256, (2, 64))
         relation_index = torch.randint(16, (64,))
@@ -52,9 +53,9 @@ class ModelModule(unittest.TestCase):
         out = encoder(entities, edge_index, relations, relation_index)
 
         self.assertEqual(out[0].shape[0], entities.shape[0])
-        self.assertEqual(out[0].shape[1], dim)
+        self.assertEqual(out[0].shape[1], n_features)
         self.assertEqual(out[1].shape[0], relations.shape[0])
-        self.assertEqual(out[1].shape[1], dim)
+        self.assertEqual(out[1].shape[1], n_features)
 
         print(f"TEST ENCODER DIM : 768 | HEAD : 3 | N_LAYERS : 4 --> {count_parameters(encoder)}")
     
@@ -119,7 +120,8 @@ class ModelModule(unittest.TestCase):
         # encoder_decoder_h_dim = 1024
         # out_dim = 768
         # reshape_h_dim = 128
-        dim = 768
+        n_features = 768
+        h_dim = 512
         n_injector_head = 2
         injector_dropout_p = 0.2
         encoder_dropout_p = 0.2
@@ -127,9 +129,9 @@ class ModelModule(unittest.TestCase):
         n_encoder_layers = 2
         n_virtual_token = 3
 
-        queries = torch.randn(8, dim) # 8 queries
-        entities = torch.randn(256, dim) # 256 entities
-        relations = torch.randn(16, dim) # 16 relations (relation type)
+        queries = torch.randn(8, n_features) # 8 queries
+        entities = torch.randn(256, n_features) # 256 entities
+        relations = torch.randn(16, n_features) # 16 relations (relation type)
 
         edge_index = torch.randint(256, (2, 64))
         relation_index = torch.randint(16, (64,))
@@ -139,7 +141,8 @@ class ModelModule(unittest.TestCase):
 
         batch = torch.arange(0, 8).repeat(256//8)
 
-        subgenerator = SubgraphGenerator(dim=dim,
+        subgenerator = SubgraphGenerator(n_features=n_features,
+                                         h_dim=h_dim,
                                         n_injector_head=n_injector_head,
                                         injector_dropout_p=injector_dropout_p, 
                                         encoder_dropout_p=encoder_dropout_p,
