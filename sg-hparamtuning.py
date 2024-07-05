@@ -18,6 +18,7 @@ hyper_params = {
 # CREATE COMBINATION USING ITERTOOLS
 combinations = list(itertools.product(
     hyper_params["model_name_or_path"],
+    hyper_params["checkpoint"],
     hyper_params["n_injector_head"],
     hyper_params["injector_dropout_p"],
     hyper_params["encoder_dropout_p"],
@@ -36,12 +37,13 @@ for i, combination in enumerate(combinations):
     # Create a dictionary from the combination
     hparam_dict = {
         "model_name_or_path": combination[0],
-        "n_injector_head": combination[1],
-        "injector_dropout_p": combination[2],
-        "encoder_dropout_p": combination[3],
-        "n_encoder_head": combination[4],
-        "n_encoder_layers": combination[5],
-        "to_matrix": combination[6]
+        "checkpoint" : combination[1],
+        "n_injector_head": combination[2],
+        "injector_dropout_p": combination[3],
+        "encoder_dropout_p": combination[4],
+        "n_encoder_head": combination[5],
+        "n_encoder_layers": combination[6],
+        "to_matrix": combination[7]
     }
     
     # WRITE THE DICTIONARY TO ./config/model/sg-hparam.json
