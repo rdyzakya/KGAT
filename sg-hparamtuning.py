@@ -6,11 +6,12 @@ import os
 
 hyper_params = {
     "model_name_or_path" : ["meta-llama/Meta-Llama-3-8B"],
-    "n_injector_head" : [4,8],
+    "checkpoint" : ["/raid/m13519061/.cache/huggingface/models--meta-llama--Meta-Llama-3-8B/snapshots/62bd457b6fe961a42a631306577e622c83876cb6"],
+    "n_injector_head" : [8,4],
     "injector_dropout_p" : [0.1], 
     "encoder_dropout_p" : [0.1], 
-    "n_encoder_head" : [4,8],
-    "n_encoder_layers" : [2,4,8],
+    "n_encoder_head" : [8,4],
+    "n_encoder_layers" : [8,4,2],
     "to_matrix" : ["diagonal", "outer_product"]
 }
 
@@ -50,7 +51,7 @@ for i, combination in enumerate(combinations):
     
     # CALL accelerate launch sg-train.py --gpu 0,6,7 --n_data_train 1024 --n_data_val 1024 --n_data_test 1024 --bsize 4 --epoch 10 --data "./data/subgraph-gen/qagnn/csqa" --model "./config/model/sg-hparam.json" --best_metrics "sg_f1"
     subprocess.run([
-        'accelerate', 'launch', 'sg-train.py', '--gpu', '0,1,2,3', '--n_data_train', '512', '--n_data_val', '256',
+        'accelerate', 'launch', 'sg-train.py', '--gpu', '0,1,2,3,4,5,6,7', '--n_data_train', '512', '--n_data_val', '256',
         '--n_data_test', '256', '--bsize', '2', '--epoch', '5', '--data', './data/subgraph-gen/qagnn/proc/csqa',
         '--model', './config/model/sg-hparam.json', '--best_metrics', 'sg_f1', '--lr', '0.00001'
     ])

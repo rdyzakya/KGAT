@@ -51,11 +51,12 @@ class SubgraphGenerationTrainer(Trainer):
                          neg_loss_weight=neg_loss_weight)
         
     def criterion(self, preds, labels, nlw=1.0):
-        weight = torch.ones_like(labels)
-        neg_loss_weight = (labels == 1).sum() / (labels == 0).sum() if nlw == "auto" else nlw
-        weight[labels == 0] = neg_loss_weight
+        # weight = torch.ones_like(labels)
+        # neg_loss_weight = (labels == 1).sum() / (labels == 0).sum() if nlw == "auto" else nlw
+        # weight[labels == 0] = neg_loss_weight
 
-        crit = BCEWithLogitsLoss(weight=weight)
+        # crit = BCEWithLogitsLoss(weight=weight)
+        crit = BCEWithLogitsLoss()
         return crit(preds, labels)
 
     def create_score_matrix(self, n_entities, n_relations, x_coo, y_coo_cls=None):

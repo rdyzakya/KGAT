@@ -1,12 +1,20 @@
 from .all_model import catalog
 from .abstract import LMKBCWrapper
+from accelerate import init_empty_weights
+from accelerate import load_checkpoint_and_dispatch
+from transformers import AutoConfig
 
-def load_model_lmkbc(model_name_or_path, **kwargs) -> LMKBCWrapper:
+def load_model_lmkbc(model_name_or_path, checkpoint, device_map="auto", no_split_module_classes=['Block']) -> LMKBCWrapper:
     for class_name in catalog.keys():
         if model_name_or_path not in catalog[class_name]:
             continue
+        config = AutoConfig.from_pretrained(model_name_or_path)
         constructor = getattr(all_model, class_name)
-        model = constructor.from_pretrained(model_name_or_path, **kwargs)
+        with init_empty_weights():
+            model = constructor.from_config(config)
+        model = load_checkpoint_and_dispatch(
+            model, checkpoint=checkpoint, device_map=device_map, no_split_module_classes=no_split_module_classes
+        )
         return model
     raise NotImplementedError(f"Not implemented yet for {model_name_or_path}")
 
