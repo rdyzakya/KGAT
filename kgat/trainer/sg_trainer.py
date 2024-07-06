@@ -271,7 +271,7 @@ class SubgraphGenerationTrainer(Trainer):
     def architecture(self, unwrapped_model):
         return dict(
                 n_features=unwrapped_model.n_features,
-                h_dim=unwrapped_model.h_dime,
+                h_dim=unwrapped_model.h_dim,
                 n_injector_head=unwrapped_model.n_injector_head, 
                 injector_dropout_p=unwrapped_model.injector_dropout_p, 
                 encoder_dropout_p=unwrapped_model.encoder_dropout_p, 
