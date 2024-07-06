@@ -56,7 +56,7 @@ for i, combination in enumerate(combinations):
     subprocess.run([
         'accelerate', 'launch', 'sg-train.py', '--gpu', '0,1,2,3,4,5,6,7', '--n_data_train', '1024', '--n_data_val', '1024',
         '--n_data_test', '1024', '--bsize', '4', '--epoch', '10', '--data', './data/subgraph-gen/qagnn/proc/csqa',
-        '--model', './config/model/sg-hparam.json', '--best_metrics', 'sg_f1', '--lr', '0.00001', '--split_size', '300'
+        '--model', './config/model/sg-hparam.json', '--best_metrics', 'sg_f1', '--lr', '0.00001', '--split_size', '300', '--alpha', '0.8'
     ])
     
     # CREATE ./sg-paramtuning folder/{i}.json WHERE i IS THE INDEX OF THE COMBINATION, ADD 3 KEYS : "evaluation_metrics", "history", "hparam"
