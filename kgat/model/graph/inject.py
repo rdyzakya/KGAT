@@ -10,7 +10,7 @@ class Injector(torch.nn.Module):
 
         self.attention = GATv2Conv(input_dim, input_dim, heads=n_head, concat=False, dropout=p, add_self_loops=False, edge_dim=input_dim)
         # self.sum = SumAggregation()
-        self.lin_edge = torch.nn.Linear(n_head * input_dim, input_dim, bias=True)
+        # self.lin_edge = torch.nn.Linear(n_head * input_dim, input_dim, bias=True)
     
     def forward(self, queries, entities, edge_index, relations, relation_index, batch):
 
@@ -34,11 +34,11 @@ class Injector(torch.nn.Module):
                                        edge_attr=relation_features[new_relation_index])
         out_node = out_node[:entities.shape[0]]
 
-        out_edge = self.attention.lin_edge(relations)
-        out_edge = out_edge.relu()
-        out_edge = self.lin_edge(out_edge)
+        # out_edge = self.attention.lin_edge(relations)
+        # out_edge = out_edge.relu()
+        # out_edge = self.lin_edge(out_edge)
 
-        return out_node, out_edge
+        return out_node, relations
 
 
 
