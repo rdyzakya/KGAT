@@ -22,6 +22,7 @@ def sg_train():
     parser.add_argument("--seed", type=int, help="Random seed initialization", default=42)
     parser.add_argument("--nlw", type=str, help="Negative loss weight (float or 'auto')", default="1.0")
     parser.add_argument("--alpha", type=float, help="Alpha term", default=1.0)
+    parser.add_argument("--split_size", type=int, help="Spit size", default=300)
 
     args = parser.parse_args()
     return args

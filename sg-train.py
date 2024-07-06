@@ -32,9 +32,9 @@ seed_everything(args.seed)
 id2entity = load_id2map(os.path.join(args.data, "entities.txt"))
 id2rel = load_id2map(os.path.join(args.data, "relations.txt"))
 
-train_ds = SubgraphGenerationDataset(os.path.join(args.data, "train.json"), id2entity, id2rel, n_data=args.n_data_train)
-val_ds = SubgraphGenerationDataset(os.path.join(args.data, "dev.json"), id2entity, id2rel, n_data=args.n_data_val)
-test_ds = SubgraphGenerationDataset(os.path.join(args.data, "test.json"), id2entity, id2rel, n_data=args.n_data_test)
+train_ds = SubgraphGenerationDataset(os.path.join(args.data, "train.json"), id2entity, id2rel, n_data=args.n_data_train, split_size=args.split_size)
+val_ds = SubgraphGenerationDataset(os.path.join(args.data, "dev.json"), id2entity, id2rel, n_data=args.n_data_val, split_size=args.split_size)
+test_ds = SubgraphGenerationDataset(os.path.join(args.data, "test.json"), id2entity, id2rel, n_data=args.n_data_test, split_size=args.split_size)
 
 ### PREPARE MODEL AND TOKENIZER
 model_config = load_json(args.model)

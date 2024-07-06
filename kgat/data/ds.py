@@ -4,6 +4,8 @@ import torch
 import json
 import re
 import warnings
+import random
+from tqdm import tqdm
 
 # def apply_template(text, subject, relation, objects=None):
 #     text = text.replace(Mask.SUBJECT_MASK, subject).replace(Mask.RELATION_MASK, relation)
@@ -23,11 +25,21 @@ def load_id2map(path):
     return data
 
 class SubgraphGenerationDataset(Dataset):
-    def __init__(self, path, id2entity, id2relation, n_data=None):
-        self.data = load_json(path)
-        self.data = self.data if not n_data else self.data[:n_data]
+    def __init__(self, path, id2entity, id2relation, n_data=None, split_size=300):
+        # random.seed(random_state)
+        data = load_json(path)
+        new_data = []
+        print("Before split by coo : ", len(data))
+        for entry in tqdm(data):
+            new_data.extend(
+                self.split_by_coo(entry, split_size=split_size)
+            )
+        print("After split by coo : ", len(new_data))
+        random.shuffle(new_data)
+        self.data = new_data if not n_data else new_data[:n_data]
         self.id2entity = id2entity
         self.id2relation = id2relation
+        # random.seed(None)
     
     def __len__(self):
         return len(self.data)
@@ -52,6 +64,78 @@ class SubgraphGenerationDataset(Dataset):
         # y_coo = y_coo.T
 
         return text, entities, relations, x_coo, y_coo_cls
+    
+    def split_by_coo(self, entry, split_size=300):
+        # text = entry["text"]
+        # entities = entry["entities"]
+        # relations = entry["relations"]
+        # x_coo = entry["x_coo"]
+        # y_coo_cls = entry["y_coo_cls"]
+        # y_node_cls = entry["y_node_cls"]
+
+        assert len(entry["x_coo"]) == len(entry["y_coo_cls"])
+        assert len(entry["entities"]) == len(entry["y_node_cls"])
+
+        if len(entry["x_coo"]) <= split_size:
+            return [entry]
+        # else
+        coo_index = [i for i in range(len(entry["x_coo"]))]
+        random.shuffle(coo_index)
+        chunks = [coo_index[i:i+split_size] for i in range(0,len(entry["x_coo"]),split_size)]
+
+        return [self.create_new_entry_from_chunk(c, entry) for c in chunks]
+    
+    def create_new_entry_from_chunk(self, chunk, entry):
+        text = entry["text"]
+        entities = entry["entities"]
+        relations = entry["relations"]
+        x_coo = entry["x_coo"]
+        y_coo_cls = entry["y_coo_cls"]
+        y_node_cls = entry["y_node_cls"]
+
+
+        result_x_coo = [x_coo[i] for i in chunk]
+        result_y_coo_cls = [y_coo_cls[i] for i in chunk]
+
+        # entity_idx = 0
+        entity_map = {}
+        relation_map = {}
+
+        for i in range(len(result_x_coo)):
+            entity1 = result_x_coo[i][0]
+            entity2 = result_x_coo[i][2]
+
+            if entity1 not in entity_map.keys():
+                entity_map[entity1] = len(entity_map)
+            if entity2 not in entity_map.keys():
+                entity_map[entity2] = len(entity_map)
+
+            relation = result_x_coo[i][1]
+            if relation not in relation_map.keys():
+                relation_map[relation] = len(relation_map)
+            
+            result_x_coo[i] = [
+                entity_map[entity1],
+                relation_map[relation],
+                entity_map[entity2]
+            ]
+        
+        inverse_entity_map = {v : k for k, v in entity_map.items()}
+        inverse_relation_map = {v : k for k, v in relation_map.items()}
+
+        result_entities = [entities[inverse_entity_map[i]] for i in range(len(inverse_entity_map))]
+        result_relations = [relations[inverse_relation_map[i]] for i in range(len(inverse_relation_map))]
+        result_y_node_cls = [y_node_cls[inverse_entity_map[i]] for i in range(len(inverse_entity_map))]
+
+        return dict(
+            text = text,
+            entities = result_entities,
+            relations = result_relations,
+            x_coo = result_x_coo,
+            y_coo_cls = result_y_coo_cls,
+            y_node_cls = result_y_node_cls
+        )
+            
 
 class LMKBCDataset(Dataset):
     def __init__(self, 
