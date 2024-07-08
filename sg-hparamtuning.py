@@ -4,6 +4,10 @@ import itertools
 import shutil
 import os
 
+GPU = '4,5,6,7'
+COMBO_START = 50
+OUT_DIR = "./out2"
+
 hyper_params = {
     "model_name_or_path" : ["meta-llama/Meta-Llama-3-8B"],
     # "checkpoint" : ["/raid/m13519061/.cache/huggingface/models--meta-llama--Meta-Llama-3-8B/snapshots/62bd457b6fe961a42a631306577e622c83876cb6"],
@@ -33,7 +37,7 @@ os.makedirs('./sg-paramtuning', exist_ok=True)
 
 # FOR EVERY COMBINATION:
 for i, combination in enumerate(combinations):
-    if os.path.exists(f'./sg-paramtuning/{i}.json'):
+    if os.path.exists(f'./sg-paramtuning/{i}.json') or i < COMBO_START:
         continue
     # Create a dictionary from the combination
     hparam_dict = {
@@ -54,20 +58,20 @@ for i, combination in enumerate(combinations):
     
     # CALL accelerate launch sg-train.py --gpu 0,6,7 --n_data_train 1024 --n_data_val 1024 --n_data_test 1024 --bsize 4 --epoch 10 --data "./data/subgraph-gen/qagnn/csqa" --model "./config/model/sg-hparam.json" --best_metrics "sg_f1"
     subprocess.run([
-        'accelerate', 'launch', 'sg-train.py', '--gpu', '0,1,2,3', '--n_data_train', '512', '--n_data_val', '512',
+        'accelerate', 'launch', 'sg-train.py', '--gpu', GPU, '--n_data_train', '512', '--n_data_val', '512',
         '--n_data_test', '512', '--bsize', '2', '--epoch', '5', '--data', './data/subgraph-gen/qagnn/proc/csqa',
-        '--model', './config/model/sg-hparam.json', '--best_metrics', 'sg_f1', '--lr', '0.00001', '--split_size', '100', '--alpha', '0.5'
+        '--model', './config/model/sg-hparam.json', '--best_metrics', 'sg_f1', '--lr', '0.00001', '--split_size', '100', '--alpha', '0.5', '--out', OUT_DIR
     ])
     
     # CREATE ./sg-paramtuning folder/{i}.json WHERE i IS THE INDEX OF THE COMBINATION, ADD 3 KEYS : "evaluation_metrics", "history", "hparam"
     result_dict = {"hparam": hparam_dict}
 
     # "evaluation_metrics" VALUE IS FROM ./out/evaluation_metrics.json
-    with open('./out/evaluation_metrics.json') as f:
+    with open(f'{OUT_DIR}/evaluation_metrics.json') as f:
         result_dict["evaluation_metrics"] = json.load(f)
     
     # "history" VALUE IS FROM ./out/history.json
-    with open('./out/history.json') as f:
+    with open(f'{OUT_DIR}/history.json') as f:
         result_dict["history"] = json.load(f)
     
     # Save the results in the sg-paramtuning folder
@@ -75,4 +79,4 @@ for i, combination in enumerate(combinations):
         json.dump(result_dict, f, indent=4)
 
     # REMOVE ./out
-    shutil.rmtree('./out')
+    shutil.rmtree(OUT_DIR)

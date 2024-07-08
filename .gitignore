@@ -166,3 +166,5 @@ data/lm-kbc/*/raw
 data/subgraph-gen/statistics.json
 data/subgraph-gen/*/proc
 data/subgraph-gen/*/raw
+
+sg-paramtuning-temp/
