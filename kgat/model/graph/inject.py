@@ -2,11 +2,12 @@ import torch
 from torch_geometric.nn import GATv2Conv, GATConv, TransformerConv
 
 class Injector(torch.nn.Module):
-    def __init__(self, input_dim, n_head=8, p=0.0, gnn_type="gatv2"):
+    def __init__(self, input_dim, n_head=8, p=0.0, gnn_type="gatv2", mp=True):
         super().__init__()
         self.input_dim = input_dim
         self.n_head = n_head
         self.p = p
+        self.mp = mp
 
         if gnn_type == "gatv2":
             self.attention = GATv2Conv(input_dim, input_dim, heads=n_head, concat=False, dropout=p, add_self_loops=False, edge_dim=input_dim)
@@ -35,7 +36,7 @@ class Injector(torch.nn.Module):
 
         added_relation_index = torch.full_like(batch, fill_value=relation_features.shape[0]-1, dtype=relation_index.dtype, device=relation_index.device) # general relation
 
-        new_edge_index = torch.hstack([edge_index, added_edge_index])
+        new_edge_index = torch.hstack([edge_index, added_edge_index]) if self.mp else added_edge_index
         new_relation_index = torch.cat([relation_index, added_relation_index])
 
         out_node = self.attention(node_features, 
