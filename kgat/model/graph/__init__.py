@@ -29,13 +29,15 @@ class GraphEncoderDecoder(torch.nn.Module):
                  encoder_dropout_p=0.2, 
                  n_encoder_head=1, 
                  n_encoder_layers=1,
-                 to_matrix="diagonal"):
+                 to_matrix="diagonal",
+                 gnn_type="gatv2"):
         super().__init__()
         self.encoder = GraphEncoder(n_features=n_features,
                                     h_dim=h_dim,
                                     n_head=n_encoder_head,
                                     p=encoder_dropout_p,
-                                    n_layers=n_encoder_layers)
+                                    n_layers=n_encoder_layers,
+                                    gnn_type=gnn_type)
         # self.relation = ReshapeRelation(input_dim=dim)
         self.decoder = RESCAL(n_features=n_features, to_matrix=to_matrix)
     
@@ -66,17 +68,20 @@ class SubgraphGenerator(torch.nn.Module):
                  encoder_dropout_p=0.2, 
                  n_encoder_head=1, 
                  n_encoder_layers=1,
-                 to_matrix="diagonal"):
+                 to_matrix="diagonal",
+                 gnn_type="gatv2"):
         super().__init__()
         self.injector = Injector(input_dim=n_features,
                                 n_head=n_injector_head,
-                                p=injector_dropout_p)
+                                p=injector_dropout_p,
+                                gnn_type=gnn_type)
         self.encoder_decoder = GraphEncoderDecoder(n_features=n_features,
                                                    h_dim=h_dim,
                                                    encoder_dropout_p=encoder_dropout_p,
                                                    n_encoder_head=n_encoder_head, 
                                                    n_encoder_layers=n_encoder_layers,
-                                                   to_matrix=to_matrix)
+                                                   to_matrix=to_matrix,
+                                                   gnn_type=gnn_type)
 
         # self.input_dim = input_dim 
         # self.encoder_decoder_h_dim = encoder_decoder_h_dim 
@@ -89,6 +94,7 @@ class SubgraphGenerator(torch.nn.Module):
         self.encoder_dropout_p = encoder_dropout_p
         self.n_encoder_head = n_encoder_head
         self.n_encoder_layers = n_encoder_layers
+        self.gnn_type = gnn_type
     
     def forward(self, queries, entities, relations, x_coo, batch):
         edge_index = x_coo[:, [0,2]].transpose(0, 1)
@@ -132,16 +138,19 @@ class VirtualTokenGenerator(torch.nn.Module):
                  n_virtual_token=3,
                  injector=None,
                  encoder=None,
-                 gate_nn=None):
+                 gate_nn=None,
+                 gnn_type="gatv2"):
         super().__init__()
         self.injector = injector or Injector(input_dim=n_features,
                                             n_head=n_injector_head,
-                                            p=injector_dropout_p)
+                                            p=injector_dropout_p,
+                                            gnn_type=gnn_type)
         self.encoder = encoder or GraphEncoder(n_features=n_features,
                                             h_dim=h_dim,
                                             n_head=n_encoder_head,
                                             p=encoder_dropout_p,
-                                            n_layers=n_encoder_layers)
+                                            n_layers=n_encoder_layers,
+                                            gnn_type=gnn_type)
         self.virtual_token = VirtualToken(n_virtual_token=n_virtual_token,
                                           n_features=n_features,
                                           gate_nn=gate_nn)
@@ -158,6 +167,8 @@ class VirtualTokenGenerator(torch.nn.Module):
         self.encoder_dropout_p = self.encoder.p
         self.n_encoder_layers = self.encoder.n_layers
         self.n_virtual_token = self.virtual_token.n_virtual_token
+        assert self.encoder.gnn_type == self.injector.gnn_type
+        self.gnn_type = self.encoder.gnn_type
 
         
     def forward(self, queries, entities, relations, x_coo, batch):

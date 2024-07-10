@@ -1,5 +1,5 @@
 import torch
-from torch_geometric.nn import GATv2Conv
+from torch_geometric.nn import GATv2Conv, GATConv, TransformerConv
 
 class GNNSequential(torch.nn.Sequential):
     def forward(self, x, edge_index, relations, relation_index):
@@ -7,11 +7,19 @@ class GNNSequential(torch.nn.Sequential):
             x, relations = module(x, edge_index, relations, relation_index)
         return x, relations
 
-class GATBlock(torch.nn.Module):
-    def __init__(self, input_dim, out_dim, edge_dim, n_head=8, p=0.2):
+class GNNBlock(torch.nn.Module):
+    def __init__(self, input_dim, out_dim, edge_dim, n_head=8, p=0.2, gnn_type="gatv2"):
         super().__init__()
-        self.gnn = GATv2Conv(input_dim, out_dim, heads=n_head, concat=False, dropout=p, edge_dim=edge_dim, add_self_loops=True)
+        if gnn_type == "gatv2":
+            self.gnn = GATv2Conv(input_dim, out_dim, heads=n_head, concat=False, dropout=p, edge_dim=edge_dim, add_self_loops=True)
+        elif gnn_type == "gat":
+            self.gnn = GATConv(input_dim, out_dim, heads=n_head, concat=False, dropout=p, edge_dim=edge_dim, add_self_loops=True)
+        elif gnn_type == "unimp":
+            self.gnn = TransformerConv(input_dim, out_dim, heads=n_head, concat=False, dropout=p, edge_dim=edge_dim)
+        else:
+            raise NotImplementedError("Only gat, gatv2, or unimp")
         # self.lin_edge = torch.nn.Linear(n_head * dim, dim)
+        self.gnn_type = gnn_type
     
     def forward(self, x, edge_index, relations, relation_index):
         edge_attr = relations[relation_index]
@@ -23,7 +31,7 @@ class GATBlock(torch.nn.Module):
         return x, relations
     
 class GraphEncoder(torch.nn.Module):
-    def __init__(self, n_features, h_dim, n_head=8, p=0.0, n_layers=4):
+    def __init__(self, n_features, h_dim, n_head=8, p=0.0, n_layers=4, gnn_type="gatv2"):
         super().__init__()
         # self.input_dim = input_dim
         # self.h_dim = h_dim
@@ -36,18 +44,19 @@ class GraphEncoder(torch.nn.Module):
         self.n_layers = n_layers
         
         if n_layers == 1:
-            self.gnn = GATBlock(n_features, n_features, n_features, n_head=n_head, p=p)
+            self.gnn = GNNBlock(n_features, n_features, n_features, n_head=n_head, p=p, gnn_type=gnn_type)
         elif n_layers == 2:
             self.gnn = GNNSequential(*[
-                GATBlock(n_features, h_dim, n_features, n_head=n_head, p=p),
-                GATBlock(h_dim, n_features, n_features, n_head=n_head, p=p)
+                GNNBlock(n_features, h_dim, n_features, n_head=n_head, p=p, gnn_type=gnn_type),
+                GNNBlock(h_dim, n_features, n_features, n_head=n_head, p=p, gnn_type=gnn_type)
             ])
         else:
             hidden_layer = [
-                GATBlock(h_dim, h_dim, n_features, n_head=n_head, p=p) for _ in range(n_layers-2)
+                GNNBlock(h_dim, h_dim, n_features, n_head=n_head, p=p, gnn_type=gnn_type) for _ in range(n_layers-2)
             ]
-            gnn = [GATBlock(n_features, h_dim, n_features, n_head=n_head, p=p)] + hidden_layer + [GATBlock(h_dim, n_features, n_features, n_head=n_head, p=p)]
+            gnn = [GNNBlock(n_features, h_dim, n_features, n_head=n_head, p=p, gnn_type=gnn_type)] + hidden_layer + [GNNBlock(h_dim, n_features, n_features, n_head=n_head, p=p, gnn_type=gnn_type)]
             self.gnn = GNNSequential(*gnn)
+        self.gnn_type = gnn_type
 
         # gnn = [
         #     GATBlock(dim, n_head=n_head, p=p) for _ in range(n_layers)

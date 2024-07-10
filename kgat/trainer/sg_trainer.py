@@ -276,5 +276,6 @@ class SubgraphGenerationTrainer(Trainer):
                 injector_dropout_p=unwrapped_model.injector_dropout_p, 
                 encoder_dropout_p=unwrapped_model.encoder_dropout_p, 
                 n_encoder_head=unwrapped_model.n_encoder_head, 
-                n_encoder_layers=unwrapped_model.n_encoder_layers
+                n_encoder_layers=unwrapped_model.n_encoder_layers,
+                gnn_type=unwrapped_model.gnn_type
             )

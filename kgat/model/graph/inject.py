@@ -1,14 +1,23 @@
 import torch
-from torch_geometric.nn import GATv2Conv
+from torch_geometric.nn import GATv2Conv, GATConv, TransformerConv
 
 class Injector(torch.nn.Module):
-    def __init__(self, input_dim, n_head=8, p=0.0):
+    def __init__(self, input_dim, n_head=8, p=0.0, gnn_type="gatv2"):
         super().__init__()
         self.input_dim = input_dim
         self.n_head = n_head
         self.p = p
 
-        self.attention = GATv2Conv(input_dim, input_dim, heads=n_head, concat=False, dropout=p, add_self_loops=False, edge_dim=input_dim)
+        if gnn_type == "gatv2":
+            self.attention = GATv2Conv(input_dim, input_dim, heads=n_head, concat=False, dropout=p, add_self_loops=False, edge_dim=input_dim)
+        elif gnn_type == "gat":
+            self.attention = GATConv(input_dim, input_dim, heads=n_head, concat=False, dropout=p, add_self_loops=False, edge_dim=input_dim)
+        elif gnn_type == "unimp":
+            self.attention = TransformerConv(input_dim, input_dim, heads=n_head, concat=False, dropout=p, edge_dim=input_dim)
+        else:
+            raise NotImplementedError("Only gat, gatv2, or unimp")
+
+        self.gnn_type = gnn_type
         # self.sum = SumAggregation()
         # self.lin_edge = torch.nn.Linear(n_head * input_dim, input_dim, bias=True)
     
