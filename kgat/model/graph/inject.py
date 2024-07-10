@@ -41,7 +41,7 @@ class Injector(torch.nn.Module):
 
         out_node = self.attention(node_features, 
                                        new_edge_index,
-                                       edge_attr=relation_features[new_relation_index])
+                                       edge_attr=relation_features[new_relation_index] if self.mp else None)
         out_node = out_node[:entities.shape[0]]
 
         # out_edge = self.attention.lin_edge(relations)
