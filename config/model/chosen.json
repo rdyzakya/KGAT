@@ -6,5 +6,6 @@
     "encoder_dropout_p" : 0.1, 
     "n_encoder_head" : 4, 
     "n_encoder_layers" : 2,
-    "to_matrix" : "diagonal"
+    "to_matrix" : "diagonal",
+    "gnn_type" : "gatv2"
 }
