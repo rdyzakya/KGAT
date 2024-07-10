@@ -37,7 +37,7 @@ class Injector(torch.nn.Module):
         added_relation_index = torch.full_like(batch, fill_value=relation_features.shape[0]-1, dtype=relation_index.dtype, device=relation_index.device) # general relation
 
         new_edge_index = torch.hstack([edge_index, added_edge_index]) if self.mp else added_edge_index
-        new_relation_index = torch.cat([relation_index, added_relation_index])
+        new_relation_index = torch.cat([relation_index, added_relation_index]) if self.mp else added_relation_index
 
         out_node = self.attention(node_features, 
                                        new_edge_index,
