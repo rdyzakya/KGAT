@@ -48,7 +48,7 @@ os.makedirs("./paramtuning/sg/iter4", exist_ok=True)
 
 for a in alphas:
 
-    if os.path.exists(f'./paramtuning/sg/iter4/{a}.json') and a < ALPHA_START:
+    if os.path.exists(f'./paramtuning/sg/iter4/{a}.json') and a < ALPHA_START and a == 0.5:
         continue
 
     # CALL accelerate launch sg-train.py --gpu 0,6,7 --n_data_train 1024 --n_data_val 1024 --n_data_test 1024 --bsize 4 --epoch 10 --data "./data/subgraph-gen/qagnn/csqa" --model "./config/model/sg-hparam.json" --best_metrics "sg_f1"
