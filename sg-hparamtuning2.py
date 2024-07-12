@@ -6,7 +6,7 @@ import os
 
 GPU = '0,1,2,3'
 # COMBO_START = 50
-ALPHA_START = 0.0
+ALPHA_START = 0.1
 OUT_DIR = "./out"
 
 # hyper_params = {

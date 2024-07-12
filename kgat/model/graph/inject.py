@@ -2,16 +2,24 @@ import torch
 from torch_geometric.nn import GATv2Conv, GATConv, TransformerConv
 
 class Injector(torch.nn.Module):
-    def __init__(self, input_dim, n_head=8, p=0.0, gnn_type="gatv2", mp=True, learnable_edge_attr=False):
+    def __init__(self, input_dim, n_head=8, p=0.0, gnn_type="gatv2", mp=True, inject_edge_attr="zeros"):
         super().__init__()
         self.input_dim = input_dim
         self.n_head = n_head
         self.p = p
         self.mp = mp
-        self.edge_attr = torch.nn.parameter.Parameter(
-            torch.randn(self.input_dim)
-        ) if learnable_edge_attr else torch.ones(self.input_dim)
-        self.learnable_edge_attr = learnable_edge_attr
+
+        if inject_edge_attr == "zeros":
+            self.edge_attr = torch.zeros(self.input_dim)
+        elif inject_edge_attr == "ones":
+            self.edge_attr = torch.ones(self.input_dim)
+        elif inject_edge_attr == "learn":
+            self.edge_attr = torch.nn.parameter.Parameter(
+                torch.randn(self.input_dim)
+            )
+        else:
+            raise NotImplementedError
+        self.inject_edge_attr = inject_edge_attr
 
         if gnn_type == "gatv2":
             self.attention = GATv2Conv(input_dim, input_dim, heads=n_head, concat=False, dropout=p, add_self_loops=False, edge_dim=input_dim)

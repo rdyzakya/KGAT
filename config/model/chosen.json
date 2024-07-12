@@ -9,5 +9,5 @@
     "to_matrix" : "diagonal",
     "gnn_type" : "gatv2",
     "mp" : true,
-    "learnable_edge_attr" : true
+    "inject_edge_attr" : "zeros"
 }

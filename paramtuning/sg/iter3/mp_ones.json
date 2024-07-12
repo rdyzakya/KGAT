@@ -8,7 +8,8 @@
         "n_encoder_head": 4,
         "n_encoder_layers": 2,
         "to_matrix": "diagonal",
-        "gnn_type" : "gatv2"
+        "gnn_type" : "gatv2",
+        "inject_edge_attr" : "ones"
     },
     "evaluation_metrics": {
         "test_time": 448.9739649295807,

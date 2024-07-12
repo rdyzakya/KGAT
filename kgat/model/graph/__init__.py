@@ -71,14 +71,14 @@ class SubgraphGenerator(torch.nn.Module):
                  to_matrix="diagonal",
                  gnn_type="gatv2",
                  mp=True,
-                 learnable_edge_attr=False):
+                 inject_edge_attr="zeros"):
         super().__init__()
         self.injector = Injector(input_dim=n_features,
                                 n_head=n_injector_head,
                                 p=injector_dropout_p,
                                 gnn_type=gnn_type,
                                 mp=mp,
-                                learnable_edge_attr=learnable_edge_attr)
+                                inject_edge_attr=inject_edge_attr)
         self.encoder_decoder = GraphEncoderDecoder(n_features=n_features,
                                                    h_dim=h_dim,
                                                    encoder_dropout_p=encoder_dropout_p,
@@ -100,7 +100,7 @@ class SubgraphGenerator(torch.nn.Module):
         self.n_encoder_layers = n_encoder_layers
         self.gnn_type = gnn_type
         self.mp = mp
-        self.learnable_edge_attr = learnable_edge_attr
+        self.inject_edge_attr = inject_edge_attr
     
     def forward(self, queries, entities, relations, x_coo, batch):
         edge_index = x_coo[:, [0,2]].transpose(0, 1)
@@ -147,14 +147,14 @@ class VirtualTokenGenerator(torch.nn.Module):
                  gate_nn=None,
                  gnn_type="gatv2",
                  mp=True,
-                 learnable_edge_attr=False):
+                 inject_edge_attr="zeros"):
         super().__init__()
         self.injector = injector or Injector(input_dim=n_features,
                                             n_head=n_injector_head,
                                             p=injector_dropout_p,
                                             gnn_type=gnn_type,
                                             mp=mp,
-                                            learnable_edge_attr=learnable_edge_attr)
+                                            inject_edge_attr=inject_edge_attr)
         self.encoder = encoder or GraphEncoder(n_features=n_features,
                                             h_dim=h_dim,
                                             n_head=n_encoder_head,
@@ -180,7 +180,7 @@ class VirtualTokenGenerator(torch.nn.Module):
         assert self.encoder.gnn_type == self.injector.gnn_type
         self.gnn_type = self.encoder.gnn_type
         self.mp = self.injector.mp
-        self.learnable_edge_attr = self.injector.learnable_edge_attr
+        self.inject_edge_attr = self.injector.inject_edge_attr
 
         
     def forward(self, queries, entities, relations, x_coo, batch):
