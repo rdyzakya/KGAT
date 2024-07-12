@@ -5,8 +5,9 @@ from tqdm import tqdm
 
 def data_to_row(json_dict):
     result = {}
-    for k, v in json_dict["hparam"].items():
-        result[k] = v
+    if "hparam" in json_dict.keys():
+        for k, v in json_dict["hparam"].items():
+            result[k] = v
     for k, v in json_dict["evaluation_metrics"].items():
         result[k] = v
     for i, h in enumerate(json_dict["history"]):
@@ -36,3 +37,5 @@ def save_iter(folder):
 
 save_iter("iter1")
 save_iter("iter2")
+save_iter("iter3")
+save_iter("iter4")

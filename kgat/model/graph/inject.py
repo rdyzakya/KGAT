@@ -2,12 +2,15 @@ import torch
 from torch_geometric.nn import GATv2Conv, GATConv, TransformerConv
 
 class Injector(torch.nn.Module):
-    def __init__(self, input_dim, n_head=8, p=0.0, gnn_type="gatv2", mp=True):
+    def __init__(self, input_dim, n_head=8, p=0.0, gnn_type="gatv2", mp=True, learnable_edge_attr=True):
         super().__init__()
         self.input_dim = input_dim
         self.n_head = n_head
         self.p = p
         self.mp = mp
+        self.edge_attr = torch.nn.parameter.Parameter(
+            torch.randn(self.input_dim)
+        ) if learnable_edge_attr else torch.ones(self.input_dim)
 
         if gnn_type == "gatv2":
             self.attention = GATv2Conv(input_dim, input_dim, heads=n_head, concat=False, dropout=p, add_self_loops=False, edge_dim=input_dim)
@@ -28,7 +31,8 @@ class Injector(torch.nn.Module):
         # add the query node
         node_features = torch.vstack([entities, queries])
         # add new general relation type
-        relation_features = torch.vstack([relations, torch.ones((1, relations.shape[1]), device=relations.device, dtype=relations.dtype)])
+        # relation_features = torch.vstack([relations, torch.ones((1, relations.shape[1]), device=relations.device, dtype=relations.dtype)])
+        relation_features = torch.vstack([relations, self.edge_attr.unsqueeze(0).to(relations.device).type(relations.dtype)])
         # add connection between the query node and all other node (batch needed to know which)
         src_index = batch + entities.shape[0]
         tgt_index = torch.arange(0, entities.shape[0], dtype=src_index.dtype, device=src_index.device)
