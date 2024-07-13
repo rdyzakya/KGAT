@@ -34,7 +34,9 @@ for phase in range(N_PHASE):
     ]
 
     if phase > 0:
+        all_phases = os.listdir(OUT_DIR)
+        all_phases = [int(el) for el in all_phases]
         command.extend([
-            '--ckpt', f'{OUT_DIR}/{phase-1}/checkpoint-0/model.pth'
+            '--ckpt', f'{OUT_DIR}/{max(all_phases)}/checkpoint-0/model.pth'
         ])
     subprocess.run(command)
