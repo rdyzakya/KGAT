@@ -277,5 +277,7 @@ class SubgraphGenerationTrainer(Trainer):
                 encoder_dropout_p=unwrapped_model.encoder_dropout_p, 
                 n_encoder_head=unwrapped_model.n_encoder_head, 
                 n_encoder_layers=unwrapped_model.n_encoder_layers,
-                gnn_type=unwrapped_model.gnn_type
+                gnn_type=unwrapped_model.gnn_type,
+                mp=unwrapped_model.mp,
+                inject_edge_attr=unwrapped_model.inject_edge_attr
             )
