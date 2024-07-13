@@ -66,7 +66,7 @@ class Trainer(ABC):
         return isinstance(value, int) or isinstance(value, float) or isinstance(value, str)
     
     def criterion(self, preds, labels):
-        raise NotImplementedError("Abstrack class")
+        raise NotImplementedError("Abstract class")
     
     def run_epoch(self, bar, train=False):
         raise NotImplementedError("Abstract class")

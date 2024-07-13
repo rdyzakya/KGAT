@@ -75,12 +75,13 @@ trainer = SubgraphGenerationTrainer(
     alpha=args.alpha
 )
 
-if not args.no_train:
+if not args.no_train and len(train_ds) > 0:
     train_history = trainer.train()
 
 ### EVALUATION
-if not args.no_test:
+if not args.no_test and len(test_ds) > 0:
     test_metrics = trainer.predict()
 
 ### SAVE MODEL, HISTORY, AND EVALUATION RESULT
-trainer.save()
+if not args.dont_save:
+    trainer.save()

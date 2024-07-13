@@ -30,6 +30,7 @@ def sg_train():
     parser.add_argument("--start_index_train", type=int, default=0)
     parser.add_argument("--start_index_val", type=int, default=0)
     parser.add_argument("--start_index_test", type=int, default=0)
+    parser.add_argument("--dont_save", action="store_true")
 
     args = parser.parse_args()
     return args
