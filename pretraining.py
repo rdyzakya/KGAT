@@ -6,8 +6,8 @@ import os
 DATASETS = [
     'atomic/proc',
     'graph-writer/proc',
-    'qagnn/proc/csqa'
-    'qagnn/proc/obqa'
+    'qagnn/proc/csqa',
+    'qagnn/proc/obqa',
     'text2kg/proc',
     'webnlg/proc'
 ]
