@@ -72,7 +72,8 @@ trainer = SubgraphGenerationTrainer(
     optimizer=args.optim,
     optimizer_kwargs={},
     neg_loss_weight=neg_loss_weight,
-    alpha=args.alpha
+    alpha=args.alpha,
+    logging_steps=args.logging_steps
 )
 
 if not args.no_train and len(train_ds) > 0:

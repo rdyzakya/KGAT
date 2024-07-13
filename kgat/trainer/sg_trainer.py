@@ -27,7 +27,8 @@ class SubgraphGenerationTrainer(Trainer):
                  load_best_model_at_end=False,
                  optimizer="sgd",
                  optimizer_kwargs={},
-                 neg_loss_weight=1.0):
+                 neg_loss_weight=1.0,
+                 logging_steps=None):
         
         self.collate_fn = SubgraphGenerationCollator(tokenizer=tokenizer, 
                                                      n_process=torch.cuda.device_count(), 
@@ -48,7 +49,8 @@ class SubgraphGenerationTrainer(Trainer):
                          optimizer=optimizer,
                          optimizer_kwargs=optimizer_kwargs,
                          alpha=alpha,
-                         neg_loss_weight=neg_loss_weight)
+                         neg_loss_weight=neg_loss_weight,
+                         logging_steps=logging_steps)
         
     def criterion(self, preds, labels, nlw=1.0):
         # weight = torch.ones_like(labels)
