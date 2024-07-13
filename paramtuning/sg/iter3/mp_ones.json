@@ -9,6 +9,7 @@
         "n_encoder_layers": 2,
         "to_matrix": "diagonal",
         "gnn_type" : "gatv2",
+        "mp" : true,
         "inject_edge_attr" : "ones"
     },
     "evaluation_metrics": {

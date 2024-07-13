@@ -7,6 +7,7 @@ def sg_train():
     parser.add_argument("--gpu", type=str, help="GPU device id", default="0")
     parser.add_argument("--data", type=str, help="Data directory", default="./data/subgraph-gen/atomic/proc")
     parser.add_argument("--model", type=str, help="Model config path", default="./config/model/default.json")
+    parser.add_argument("--ckpt", type=str, help="Model checkpoint")
     parser.add_argument("--epoch", type=int, help="Number of epoch", default=10)
     parser.add_argument("--lr", type=float, help="Learning rate", default=1e-3)
     parser.add_argument("--bsize", type=int, help="Batch size", default=8)
@@ -23,6 +24,12 @@ def sg_train():
     parser.add_argument("--nlw", type=str, help="Negative loss weight (float or 'auto')", default="1.0")
     parser.add_argument("--alpha", type=float, help="Alpha term", default=1.0)
     parser.add_argument("--split_size", type=int, help="Spit size", default=300)
+    parser.add_argument("--no_train", action="store_true")
+    parser.add_argument("--no_val", action="store_true")
+    parser.add_argument("--no_test", action="store_true")
+    parser.add_argument("--start_index_train", type=int, default=0)
+    parser.add_argument("--start_index_val", type=int, default=0)
+    parser.add_argument("--start_index_test", type=int, default=0)
 
     args = parser.parse_args()
     return args

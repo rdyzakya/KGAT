@@ -25,7 +25,7 @@ def load_id2map(path):
     return data
 
 class SubgraphGenerationDataset(Dataset):
-    def __init__(self, path, id2entity, id2relation, n_data=None, split_size=300):
+    def __init__(self, path, id2entity, id2relation, start_index=0, n_data=None, split_size=300):
         # random.seed(random_state)
         data = load_json(path)
         new_data = []
@@ -36,7 +36,8 @@ class SubgraphGenerationDataset(Dataset):
             )
         print("After split by coo : ", len(new_data))
         random.shuffle(new_data)
-        self.data = new_data if not n_data else new_data[:n_data]
+        end_index = start_index + n_data if n_data else -1
+        self.data = new_data[start_index:end_index]
         self.id2entity = id2entity
         self.id2relation = id2relation
         # random.seed(None)
@@ -147,9 +148,11 @@ class LMKBCDataset(Dataset):
                  graph_query_template=f"S : {Mask.SUBJECT_MASK} | R : {Mask.RELATION_MASK}", 
                  n_virtual_token=1,
                  test=False,
-                 n_data=None):
+                 n_data=None,
+                 start_index=0):
         self.data = load_json(path)
-        self.data = self.data if not n_data else self.data[:n_data]
+        end_index = start_index + n_data if n_data else -1
+        self.data = self.data[start_index:end_index]
         self.id2entity = id2entity
         self.id2relation = id2relation
         self.triples = triples

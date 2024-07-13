@@ -32,9 +32,9 @@ seed_everything(args.seed)
 id2entity = load_id2map(os.path.join(args.data, "entities.txt"))
 id2rel = load_id2map(os.path.join(args.data, "relations.txt"))
 
-train_ds = SubgraphGenerationDataset(os.path.join(args.data, "train.json"), id2entity, id2rel, n_data=args.n_data_train, split_size=args.split_size)
-val_ds = SubgraphGenerationDataset(os.path.join(args.data, "dev.json"), id2entity, id2rel, n_data=args.n_data_val, split_size=args.split_size)
-test_ds = SubgraphGenerationDataset(os.path.join(args.data, "test.json"), id2entity, id2rel, n_data=args.n_data_test, split_size=args.split_size)
+train_ds = SubgraphGenerationDataset(os.path.join(args.data, "train.json"), id2entity, id2rel, n_data=args.n_data_train, split_size=args.split_size, start_index=args.start_index_train) if not args.no_train else None
+val_ds = SubgraphGenerationDataset(os.path.join(args.data, "dev.json"), id2entity, id2rel, n_data=args.n_data_val, split_size=args.split_size, start_index=args.start_index_val) if not args.no_val else None
+test_ds = SubgraphGenerationDataset(os.path.join(args.data, "test.json"), id2entity, id2rel, n_data=args.n_data_test, split_size=args.split_size, start_index=args.start_index_test) if not args.no_test else None
 
 ### PREPARE MODEL AND TOKENIZER
 model_config = load_json(args.model)
@@ -49,7 +49,7 @@ tokenizer = lmkbc_model.prepare_tokenizer(tokenizer)
 subgraphgenerator = SubgraphGenerator(
     n_features=lmkbc_model.embed_dim,
     **model_config
-)
+) if not args.ckpt else SubgraphGenerator.load(args.ckpt)
 
 pipeline = Pipeline(model=subgraphgenerator, lmkbc_model=lmkbc_model)
 
@@ -75,10 +75,12 @@ trainer = SubgraphGenerationTrainer(
     alpha=args.alpha
 )
 
-train_history = trainer.train()
+if not args.no_train:
+    train_history = trainer.train()
 
 ### EVALUATION
-test_metrics = trainer.predict()
+if not args.no_test:
+    test_metrics = trainer.predict()
 
 ### SAVE MODEL, HISTORY, AND EVALUATION RESULT
 trainer.save()

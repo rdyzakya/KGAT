@@ -99,6 +99,7 @@ class SubgraphGenerator(torch.nn.Module):
         self.n_encoder_head = n_encoder_head
         self.n_encoder_layers = n_encoder_layers
         self.gnn_type = gnn_type
+        self.to_matrix = to_matrix
         self.mp = mp
         self.inject_edge_attr = inject_edge_attr
     
@@ -109,6 +110,16 @@ class SubgraphGenerator(torch.nn.Module):
         injected_entities, injected_relations = self.injector(queries, entities, edge_index, relations, relation_index, batch)
         score = self.encoder_decoder(injected_entities, injected_relations, x_coo)
         return score
+    
+    def load(path):
+        loaded_model = torch.load(path)
+        architecture = loaded_model["architecture"]
+        state_dict = loaded_model["state_dict"]
+
+        model = SubgraphGenerator(**architecture)
+        model.load_state_dict(state_dict)
+
+        return model
 
 class VirtualTokenGenerator(torch.nn.Module):
     def from_subgraph_generator(subgraph_generator : SubgraphGenerator, n_virtual_token):
@@ -214,6 +225,16 @@ class VirtualTokenGenerator(torch.nn.Module):
             param.requires_grad = False
         for param in self.virtual_token.aggregation.gate_nn.parameters():
             param.requires_grad = False
+    
+    def load(path):
+        loaded_model = torch.load(path)
+        architecture = loaded_model["architecture"]
+        state_dict = loaded_model["state_dict"]
+
+        model = VirtualTokenGenerator(**architecture)
+        model.load_state_dict(state_dict)
+
+        return model
 
 if __name__ == "__main__":
     input_dim = 768

@@ -279,4 +279,7 @@ class LMKBCTrainer(Trainer):
                 encoder_dropout_p = unwrapped_model.encoder.p,
                 n_encoder_layers = unwrapped_model.encoder.n_layers,
                 n_virtual_token = unwrapped_model.virtual_token.n_virtual_token,
+                gnn_type=unwrapped_model.gnn_type,
+                mp=unwrapped_model.mp,
+                inject_edge_attr=unwrapped_model.inject_edge_attr
             )
