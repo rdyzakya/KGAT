@@ -14,7 +14,7 @@ DATASETS = [
 
 GPU = '0,1,2,3'
 ALPHA = 0.9
-OUT_DIR = "./pretraining"
+OUT_DIR = "./pretraining-llama3"
 SPLIT_SIZE = 100
 N_PHASE = 20
 DATA_PER_PHASE = 2560 # 1 hour training est
