@@ -24,7 +24,7 @@ CONFIG = './config/model/llama3.json'
 LOGGING_STEPS = 100
 
 for phase in range(N_PHASE):
-    if os.path.exists(f'{OUT_DIR}/{phase-1}/checkpoint-0/model.pth'):
+    if os.path.exists(f'{OUT_DIR}/{phase}/checkpoint-0/model.pth'):
         continue
     ds = DATASETS[phase % len(DATASETS)]
     print(f"Training ./data/subgraph-gen/{ds}")
