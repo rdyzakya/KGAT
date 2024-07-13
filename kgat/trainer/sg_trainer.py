@@ -216,6 +216,18 @@ class SubgraphGenerationTrainer(Trainer):
                 self.accelerator.backward(loss)
                 self.optimizer.step()
 
+                if self.logging_steps:
+                    self.steps += 1
+                    if self.steps % self.logging_steps == 0:
+                        log_message = []
+                        if self.config.alpha > 0:
+                            loss_sg = sum_loss_sg / len_data_sg
+                            log_message.append(f"loss_sg : {loss_sg}")
+                        if self.config.alpha < 1.0:
+                            loss_gg = sum_loss_gg / len_data_gg
+                            log_message.append(f"loss_gg : {loss_gg}")
+                        self.log(" | ".join(log_message))
+
             bar.update(1)
         
         end_time = time.time()

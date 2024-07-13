@@ -37,6 +37,7 @@ class Trainer(ABC):
                  load_best_model_at_end=False,
                  optimizer="sgd",
                  optimizer_kwargs={},
+                 logging_steps=None,
                  **kwargs):
         
         self.pipeline = pipeline
@@ -61,6 +62,8 @@ class Trainer(ABC):
         self.test_metrics = {}
         self.prediction_result = []
         self.optimizer = get_optimizer(optimizer)(self.pipeline.model.parameters(), lr=learning_rate, **optimizer_kwargs)
+        self.logging_steps = logging_steps
+        self.steps = 0
     
     def __is_config_args(self, value):
         return isinstance(value, int) or isinstance(value, float) or isinstance(value, str)
