@@ -27,6 +27,7 @@ for phase in range(N_PHASE):
     if os.path.exists(f'{OUT_DIR}/{phase-1}/checkpoint-0/model.pth'):
         continue
     ds = DATASETS[phase % len(DATASETS)]
+    print(f"Training ./data/subgraph-gen/{ds}")
     start_index_train = (phase // len(DATASETS)) * DATA_PER_PHASE
     command = [
         'accelerate', 'launch', 'sg-train.py', '--gpu', GPU, '--n_data_train', str(DATA_PER_PHASE), '--bsize', str(BATCH_SIZE), '--epoch', '1',
