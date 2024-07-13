@@ -20,7 +20,7 @@ N_PHASE = 20
 DATA_PER_PHASE = 2560 # 1 hour training est
 LR = 1e-5
 BATCH_SIZE = 2
-CONFIG = './config/model/chosen.json'
+CONFIG = './config/model/llama3.json'
 
 for phase in range(N_PHASE):
     if os.path.exists(f'{OUT_DIR}/{phase-1}/checkpoint-0/model.pth'):
