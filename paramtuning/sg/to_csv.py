@@ -23,7 +23,8 @@ def save_iter(folder):
     for fname in tqdm(os.listdir(folder)):
         path = os.path.join(folder, fname)
         json_dict = json.load(open(path))
-        row = data_to_row(json_dict)
+        row = {"name" : fname.replace(".json", '')}
+        row.update(data_to_row(json_dict))
         df.append(row)
 
     df = pd.DataFrame(df)
