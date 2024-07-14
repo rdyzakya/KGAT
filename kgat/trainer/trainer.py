@@ -64,8 +64,6 @@ class Trainer(ABC):
         self.optimizer = get_optimizer(optimizer)(self.pipeline.model.parameters(), lr=learning_rate, **optimizer_kwargs)
         self.logging_steps = logging_steps
         self.steps = 0
-        self.lmkbc_model_device = self.pipeline.lmkbc_model.device
-        self.model_device = self.pipeline.model.device
     
     def __is_config_args(self, value):
         return isinstance(value, int) or isinstance(value, float) or isinstance(value, str)
