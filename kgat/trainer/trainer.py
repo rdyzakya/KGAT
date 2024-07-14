@@ -86,7 +86,7 @@ class Trainer(ABC):
         if self.accelerator.is_main_process:
             print(text)
     
-    def prepare_train(self):
+    def prepare_accelerator(self):
         (self.pipeline.model,
          self.train_dataloader, 
          self.val_dataloader, 
@@ -119,7 +119,7 @@ class Trainer(ABC):
             )
             train_bar.update(train_steps * last_epoch)
         
-        self.prepare_train()
+        self.prepare_accelerator()
 
         for e in range(self.config.epoch):
             train_metrics, preds_labels = self.run_epoch(self.train_dataloader, train_bar, train=True)
@@ -148,7 +148,8 @@ class Trainer(ABC):
     
 
     def predict(self, test_dataloader=None):
-        raise NotImplementedError("Abstract class")
+        self.prepare_accelerator()
+        return self.test_metrics, self.prediction_result
     
     def save(self, directory=None, save_history=True, save_evaluation_metrics=True, save_train_config=True, save_prediction_result=True):
         # TODO : save prediction result

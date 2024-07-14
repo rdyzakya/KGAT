@@ -177,6 +177,7 @@ class LMKBCTrainer(Trainer):
         }
     
     def predict(self, test_dataloader=None):
+        super().predict()
         if not self.test_dataloader and test_dataloader is None:
             raise Exception("You should fill test_ds when initializing trainer if you want to predict or fill the test_dataloader params in this function")
         self.test_dataloader = self.test_dataloader or test_dataloader
