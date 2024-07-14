@@ -280,6 +280,7 @@ class SubgraphGenerationTrainer(Trainer):
             new_metrics[k.replace("val", "test")] = test_metrics[k]
         self.test_metrics = new_metrics
         self.prediction_result = preds_labels
+        self.log(self.test_metrics)
         return self.test_metrics, self.prediction_result
     
     def architecture(self, unwrapped_model):
