@@ -25,7 +25,7 @@ LOGGING_STEPS = 100
 
 os.makedirs(os.path.join(OUT_DIR, "history"), exist_ok=True)
 
-all_phases = os.listdir(OUT_DIR)
+all_phases = [el for el in os.listdir(OUT_DIR) if el != "history"]
 MAX_PHASE = -1
 if len(all_phases) > 0:
     all_phases = [int(el) for el in all_phases]
@@ -45,7 +45,7 @@ for phase in range(N_PHASE):
     ]
 
     if phase > 0:
-        all_phases = os.listdir(OUT_DIR)
+        all_phases = [el for el in os.listdir(OUT_DIR) if el != "history"]
         all_phases = [int(el) for el in all_phases]
         MAX_PHASE = max(all_phases)
         command.extend([
