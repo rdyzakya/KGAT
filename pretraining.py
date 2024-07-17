@@ -22,11 +22,14 @@ LR = 1e-5
 BATCH_SIZE = 2
 CONFIG = './config/model/llama3.json'
 LOGGING_STEPS = 100
-all_phases = os.listdir(OUT_DIR)
-all_phases = [int(el) for el in all_phases]
-MAX_PHASE = max(all_phases)
 
 os.makedirs(os.path.join(OUT_DIR, "history"), exist_ok=True)
+
+all_phases = os.listdir(OUT_DIR)
+MAX_PHASE = -1
+if len(all_phases) > 0:
+    all_phases = [int(el) for el in all_phases]
+    MAX_PHASE = max(all_phases)
 
 for phase in range(N_PHASE):
     if os.path.exists(f'{OUT_DIR}/{phase}/checkpoint-0/model.pth') or phase < MAX_PHASE:
@@ -42,6 +45,9 @@ for phase in range(N_PHASE):
     ]
 
     if phase > 0:
+        all_phases = os.listdir(OUT_DIR)
+        all_phases = [int(el) for el in all_phases]
+        MAX_PHASE = max(all_phases)
         command.extend([
             '--ckpt', f'{OUT_DIR}/{MAX_PHASE}/checkpoint-0/model.pth'
         ])
