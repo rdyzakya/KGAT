@@ -15,9 +15,9 @@ DATASETS = [
 GPU = '0,1,2,3'
 ALPHA = 0.9
 OUT_DIR = "./pretraining-llama3"
-SPLIT_SIZE = 100
-N_PHASE = 10
-DATA_PER_PHASE = 2560 # 1 hour training est
+SPLIT_SIZE = 50
+N_PHASE = 80
+DATA_PER_PHASE = 512
 LR = 1e-5
 BATCH_SIZE = 2
 CONFIG = './config/model/llama3.json'
@@ -25,6 +25,8 @@ LOGGING_STEPS = 100
 all_phases = os.listdir(OUT_DIR)
 all_phases = [int(el) for el in all_phases]
 MAX_PHASE = max(all_phases)
+
+os.makedirs(os.path.join(OUT_DIR, "history"), exist_ok=True)
 
 for phase in range(N_PHASE):
     if os.path.exists(f'{OUT_DIR}/{phase}/checkpoint-0/model.pth') or phase < MAX_PHASE:
@@ -44,3 +46,6 @@ for phase in range(N_PHASE):
             '--ckpt', f'{OUT_DIR}/{MAX_PHASE}/checkpoint-0/model.pth'
         ])
     subprocess.run(command)
+
+    shutil.copy(f'{OUT_DIR}/{phase}/checkpoint-0/history.json', f'{OUT_DIR}/history/{phase}.json')
+    shutil.rmtree(f'{OUT_DIR}/{phase}')
