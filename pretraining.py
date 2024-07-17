@@ -54,4 +54,4 @@ for phase in range(N_PHASE):
     subprocess.run(command)
 
     shutil.copy(f'{OUT_DIR}/{phase}/checkpoint-0/history.json', f'{OUT_DIR}/history/{phase}.json')
-    shutil.rmtree(f'{OUT_DIR}/{phase}')
+    # shutil.rmtree(f'{OUT_DIR}/{phase}')
