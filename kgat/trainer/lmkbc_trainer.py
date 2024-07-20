@@ -75,8 +75,8 @@ class LMKBCTrainer(Trainer):
         lmkbc_sum_loss = 0
         lmkbc_len_data = 0
 
-        n_object_sum_loss = 0
-        n_object_len_data = 0
+        # n_object_sum_loss = 0
+        # n_object_len_data = 0
 
         start_time = time.time()
 
@@ -107,7 +107,7 @@ class LMKBCTrainer(Trainer):
             relations = relations.to(self.model_device)
 
             with context_manager(train=train):
-                vt_out, n_object_out = self.pipeline.model(
+                vt_out = self.pipeline.model(
                         queries=queries,
                         entities=entities,
                         relations=relations,
@@ -119,17 +119,21 @@ class LMKBCTrainer(Trainer):
                     batch["lmkbc_input_ids"], batch["lmkbc_attention_mask"], vt_out, batch=batch["graph_emb_batch"]
                 )[0]
 
-                lmkbc_loss = self.criterion(logits.view(-1, logits.shape[-1]), batch["lmkbc_labels"], lmkbc=True)
-                n_object_loss = self.criterion(n_object_out.view(-1), batch["n_object"].float().view(-1), lmkbc=False)
+                shift_logits = logits[..., :-1, :].contiguous()
+                shift_labels = batch["lmkbc_labels"][..., 1:].contiguous()
 
-                loss = self.config.beta1 * lmkbc_loss + self.config.beta2 * n_object_loss
+                lmkbc_loss = self.criterion(shift_logits.view(-1, shift_logits.size(-1)), shift_labels.view(-1), lmkbc=True)
+                # n_object_loss = self.criterion(n_object_out.view(-1), batch["n_object"].float().view(-1), lmkbc=False)
+
+                # loss = self.config.beta1 * lmkbc_loss + self.config.beta2 * n_object_loss
+                loss = lmkbc_loss
                 # sum_loss += loss.item() * logits.shape[0]
                 # len_data += logits.shape[0]
                 lmkbc_sum_loss += lmkbc_loss.item() * logits.shape[0]
                 lmkbc_len_data += logits.shape[0]
 
-                n_object_sum_loss += n_object_loss.item() * n_object_out.shape[0]
-                n_object_len_data += n_object_out.shape[0]
+                # n_object_sum_loss += n_object_loss.item() * n_object_out.shape[0]
+                # n_object_len_data += n_object_out.shape[0]
             if train:
                 self.accelerator.backward(loss)
                 self.optimizer.step()
@@ -142,7 +146,7 @@ class LMKBCTrainer(Trainer):
         metrics = {
             f"{prefix}time" : end_time - start_time,
             f"{prefix}lmkbc_loss" : lmkbc_sum_loss / lmkbc_len_data,
-            f"{prefix}n_object_loss" : n_object_sum_loss / n_object_len_data
+            # f"{prefix}n_object_loss" : n_object_sum_loss / n_object_len_data
         }
 
         return metrics, None
