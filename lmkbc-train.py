@@ -42,7 +42,8 @@ train_ds = LMKBCDataset(os.path.join(args.data, "train.json"),
                         prompt_template=args.pt,
                         graph_query_template=args.gqt,
                         n_virtual_token=args.nvt,
-                        n_data=args.n_data_train)
+                        n_data=args.n_data_train,
+                        start_index=args.start_index_train)
 val_ds = LMKBCDataset(os.path.join(args.data, "val.json"), 
                         id2entity, 
                         id2rel, 
@@ -50,7 +51,8 @@ val_ds = LMKBCDataset(os.path.join(args.data, "val.json"),
                         prompt_template=args.pt,
                         graph_query_template=args.gqt,
                         n_virtual_token=args.nvt,
-                        n_data=args.n_data_val)
+                        n_data=args.n_data_val,
+                        start_index=args.start_index_val)
 test_ds = LMKBCDataset(os.path.join(args.data, "test.json"), 
                         id2entity, 
                         id2rel, 
@@ -58,7 +60,9 @@ test_ds = LMKBCDataset(os.path.join(args.data, "test.json"),
                         prompt_template=args.pt,
                         graph_query_template=args.gqt,
                         n_virtual_token=args.nvt,
-                        n_data=args.n_data_test)
+                        n_data=args.n_data_test,
+                        test=True,
+                        start_index=args.start_index_test)
 
 ### PREPARE MODEL AND TOKENIZER
 model_config = load_json(args.model)

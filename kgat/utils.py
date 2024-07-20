@@ -4,4 +4,4 @@ class Mask:
     RELATION_MASK = "<RELATION>"
     OBJECT_MASK = "<OBJECT>"
 
-NULL_SYM = "" # empty
+NULL_SYM = "NONE" # empty

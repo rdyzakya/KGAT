@@ -59,6 +59,9 @@ def lmkbc_train():
     parser.add_argument("--load_best", action="store_true", help="Load best model at the end")
     parser.add_argument("--optim", type=str, help="Optimizer type", default="adam")
     parser.add_argument("--seed", type=int, help="Random seed initialization", default=42)
+    parser.add_argument("--start_index_train", type=int, default=0)
+    parser.add_argument("--start_index_val", type=int, default=0)
+    parser.add_argument("--start_index_test", type=int, default=0)
 
     args = parser.parse_args()
     return args

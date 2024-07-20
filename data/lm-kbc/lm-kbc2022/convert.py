@@ -11,7 +11,7 @@ np.random.seed(42)
 
 config = json.load(open("../config.json"))
 
-N = config["N"]
+# N = config["N"]
 MAX_REF = config["MAX_REF"]
 MIN_REF = config["MIN_REF"]
 
