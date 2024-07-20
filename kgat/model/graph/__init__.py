@@ -126,12 +126,12 @@ class VirtualTokenGenerator(torch.nn.Module):
         injector = subgraph_generator.injector
         encoder = subgraph_generator.encoder_decoder.encoder
         gate_nn = subgraph_generator.encoder_decoder.decoder.gate_nn
-        # n_features = subgraph_generator.n_features
+        n_features = subgraph_generator.n_features
         # h_dim = subgraph_generator.h_dim
 
         return VirtualTokenGenerator(injector=injector, encoder=encoder,
-                                     n_virtual_token=n_virtual_token, #n_features=n_features,
-                                    #  h_dim=h_dim,
+                                     n_virtual_token=n_virtual_token, 
+                                     n_features=n_features,
                                      gate_nn=gate_nn)
 
     # def __init__(self, input_dim=768,
