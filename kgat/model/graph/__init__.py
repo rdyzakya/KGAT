@@ -175,7 +175,7 @@ class VirtualTokenGenerator(torch.nn.Module):
         self.virtual_token = VirtualToken(n_virtual_token=n_virtual_token,
                                           n_features=n_features,
                                           gate_nn=gate_nn)
-        self.n_object_predictor = torch.nn.Linear(n_features * n_virtual_token, 1, bias=True)
+        # self.n_object_predictor = torch.nn.Linear(n_features * n_virtual_token, 1, bias=True)
 
         # self.input_dim = self.injector.input_dim
         # self.encoder_h_dim = self.encoder.h_dim
@@ -211,11 +211,12 @@ class VirtualTokenGenerator(torch.nn.Module):
 
         out_vt = self.virtual_token(entities_emb, batch)
 
-        out_n_object = self.n_object_predictor(out_vt.reshape(-1, out_vt.shape[1] * out_vt.shape[2]))
-        out_n_object = out_n_object.relu() # >= 0
-        out_n_object = out_n_object
+        # out_n_object = self.n_object_predictor(out_vt.reshape(-1, out_vt.shape[1] * out_vt.shape[2]))
+        # out_n_object = out_n_object.relu() # >= 0
+        # out_n_object = out_n_object
 
-        return out_vt, out_n_object
+        # return out_vt, out_n_object
+        return out_vt
     
     def freeze_injector_and_encoder(self):
         # Freeze any component from subgraph generator
