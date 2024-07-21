@@ -125,8 +125,9 @@ class LMKBCCollator:
         lmkbc_labels[lmkbc_attention_mask == 0] = -100
         lmkbc_labels[lmkbc_labels == self.tokenizer.kg_token_id] = -100 # accustomed to n_virtual_token
 
-        flattened_is_negative = torch.tensor(flatten(is_negative))
-        lmkbc_labels[flattened_is_negative, :-2] = -100 # mask
+        if not self.test:
+            flattened_is_negative = torch.tensor(flatten(is_negative))
+            lmkbc_labels[flattened_is_negative, :-2] = -100 # mask
 
         weights = []
         for i in range(len(sro_texts)):
