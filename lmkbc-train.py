@@ -92,17 +92,45 @@ vt_generator = VirtualTokenGenerator.from_subgraph_generator(
 pipeline = Pipeline(model=vt_generator, lmkbc_model=lmkbc_model)
 
 ### TRAIN
-trainer = LMKBCTrainer(
+trainer1 = LMKBCTrainer(
+    pipeline=pipeline,
+    tokenizer=tokenizer,
+    train_ds=train_ds,
+    val_ds=val_ds,
+    test_ds=None,
+    epoch=args.epoch1,
+    learning_rate=args.lr,
+    batch_size=args.bsize,
+    last_hidden_state_bsize=args.hsbsize,
+    out_dir=os.path.join(args.out, "phase1"),
+    max_check_point=args.mcp,
+    best_metrics=args.best_metrics,
+    load_best_model_at_end=False,
+    optimizer=args.optim,
+    logging_steps=args.logging_steps,
+    beam_size=args.beam,
+    optimizer_kwargs={},
+)
+
+train_history1 = trainer1.train()
+
+test_metrics1, prediction_result1 = trainer1.predict(test_dataloader=trainer1.train_dataloader)
+
+trainer1.save()
+
+### AUGMENTTTT
+
+trainer2 = LMKBCTrainer(
     pipeline=pipeline,
     tokenizer=tokenizer,
     train_ds=train_ds,
     val_ds=val_ds,
     test_ds=test_ds,
-    epoch=args.epoch,
+    epoch=args.epoch2,
     learning_rate=args.lr,
     batch_size=args.bsize,
     last_hidden_state_bsize=args.hsbsize,
-    out_dir=args.out,
+    out_dir=os.path.join(args.out, "phase2"),
     max_check_point=args.mcp,
     best_metrics=args.best_metrics,
     load_best_model_at_end=args.load_best,
@@ -112,10 +140,9 @@ trainer = LMKBCTrainer(
     optimizer_kwargs={},
 )
 
-train_history = trainer.train()
+train_history2 = trainer2.train()
 
-### EVALUATION
-test_metrics = trainer.predict()
+test_metrics2, prediction_result2 = trainer2.predict()
 
 ### SAVE MODEL, HISTORY, AND EVALUATION RESULT
-trainer.save()
+trainer2.save()
