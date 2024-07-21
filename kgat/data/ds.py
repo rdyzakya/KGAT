@@ -153,7 +153,7 @@ class LMKBCDataset(Dataset):
         end_index = start_index + n_data if n_data else -1
         self.data = self.data[start_index:end_index]
         for i in range(len(self.data)):
-            self.data["negative_objects"] = []
+            self.data[i]["negative_objects"] = []
         self.id2entity = id2entity
         self.id2relation = id2relation
         self.triples = triples
