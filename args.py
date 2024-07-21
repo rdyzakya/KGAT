@@ -41,8 +41,8 @@ def lmkbc_train():
     
     parser.add_argument("--gpu", type=str, help="GPU device id", default="0")
     parser.add_argument("--data", type=str, help="Data directory", default="./data/lm-kbc/conceptnet/proc")
-    parser.add_argument("--pt", type=str, help="Prompt template", default=f"{Mask.KG_MASK} -> S : {Mask.SUBJECT_MASK} | R : {Mask.RELATION_MASK} | O : {Mask.OBJECT_MASK}")
-    parser.add_argument("--gqt", type=str, help="Graph query template", default=f"S : {Mask.SUBJECT_MASK} | R : {Mask.RELATION_MASK}")
+    # parser.add_argument("--pt", type=str, help="Prompt template", default=f"{Mask.KG_MASK} -> S : {Mask.SUBJECT_MASK} | R : {Mask.RELATION_MASK} | O : {Mask.OBJECT_MASK}")
+    # parser.add_argument("--gqt", type=str, help="Graph query template", default=f"S : {Mask.SUBJECT_MASK} | R : {Mask.RELATION_MASK}")
     parser.add_argument("--nvt", type=int, help="N Virtual Token", default=1)
     parser.add_argument("--n_data_train", type=int, help="First n data in training data (for debug)")
     parser.add_argument("--n_data_val", type=int, help="First n data in validation data (for debug)")
