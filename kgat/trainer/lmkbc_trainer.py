@@ -27,6 +27,7 @@ class LMKBCTrainer(Trainer):
                  load_best_model_at_end=False,
                  optimizer="sgd",
                  optimizer_kwargs={},
+                 logging_steps=None,
                  beta1=1.0,
                  beta2=1.0):
         self.collate_fn = LMKBCCollator(tokenizer=tokenizer, 
@@ -48,7 +49,8 @@ class LMKBCTrainer(Trainer):
                          optimizer=optimizer,
                          optimizer_kwargs=optimizer_kwargs,
                          beta1=beta1,
-                         beta2=beta2)
+                         beta2=beta2,
+                         logging_steps=logging_steps)
     
     def criterion(self, preds, labels, lmkbc=True):
         if lmkbc:
@@ -137,6 +139,14 @@ class LMKBCTrainer(Trainer):
             if train:
                 self.accelerator.backward(loss)
                 self.optimizer.step()
+
+                if self.logging_steps:
+                    self.steps += 1
+                    if self.steps % self.logging_steps == 0:
+                        log_message = []
+                        loss_sg = lmkbc_sum_loss / lmkbc_len_data
+                        log_message.append(f"loss_sg : {loss_sg}")
+                        self.log(" | ".join(log_message))
             
             bar.update(1)
         

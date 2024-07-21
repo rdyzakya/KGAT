@@ -62,6 +62,7 @@ def lmkbc_train():
     parser.add_argument("--start_index_train", type=int, default=0)
     parser.add_argument("--start_index_val", type=int, default=0)
     parser.add_argument("--start_index_test", type=int, default=0)
+    parser.add_argument("--logging_steps", type=int)
 
     args = parser.parse_args()
     return args

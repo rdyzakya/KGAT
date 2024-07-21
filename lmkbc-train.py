@@ -107,6 +107,7 @@ trainer = LMKBCTrainer(
     best_metrics=args.best_metrics,
     load_best_model_at_end=args.load_best,
     optimizer=args.optim,
+    logging_steps=args.logging_steps,
     optimizer_kwargs={},
 )
 
