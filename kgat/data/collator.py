@@ -73,7 +73,7 @@ class LMKBCCollator:
 
     def __call__(self, batch):
         # text_in, graph_query, entities, relations, x_coo, text_out = zip(*batch)
-        sr_graph_query, entities, relations, x_coo, sro_texts, objects = zip(*batch)
+        sr_graph_query, entities, relations, x_coo, sro_texts, objects, is_negative = zip(*batch)
 
         sr_graph_query = list(sr_graph_query)
 
@@ -125,10 +125,18 @@ class LMKBCCollator:
         lmkbc_labels[lmkbc_attention_mask == 0] = -100
         lmkbc_labels[lmkbc_labels == self.tokenizer.kg_token_id] = -100 # accustomed to n_virtual_token
 
+        flattened_is_negative = torch.tensor(flatten(is_negative))
+        lmkbc_labels[flattened_is_negative, :-2] = -100 # mask
+
+        weights = []
+        for i in range(len(sro_texts)):
+            for j in range(len(sro_texts[i])):
+                weights.append(1/len(sro_texts[i]))
+        weights = torch.tensor(weights).repeat(lmkbc_input_ids.size(1),1).transpose(0,1) # .reshape(-1)
 
         #  shift_logits = lm_logits[..., :-1, :].contiguous()
         # shift_labels = labels[..., 1:].contiguous()
-        n_object = torch.tensor([len(o) if o != [NULL_SYM] else 0 for o in objects])
+        # n_object = torch.tensor([len(o) if o != [NULL_SYM] else 0 for o in objects])
 
         return {
             "graph_query_input_ids" : graph_query["input_ids"], # N_query, length
@@ -144,6 +152,7 @@ class LMKBCCollator:
             "lmkbc_labels" : lmkbc_labels,
             "graph_emb_batch" : graph_emb_batch, # N_lmkbc_text
             "objects" : objects, # unflattened, used in test
-            "n_object" : n_object
+            "weights" : weights
+            # "n_object" : n_object
             # TODO weights?
         }

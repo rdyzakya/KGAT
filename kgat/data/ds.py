@@ -6,6 +6,7 @@ import re
 import warnings
 import random
 from tqdm import tqdm
+from ordered_set import OrderedSet
 
 # def apply_template(text, subject, relation, objects=None):
 #     text = text.replace(Mask.SUBJECT_MASK, subject).replace(Mask.RELATION_MASK, relation)
@@ -144,8 +145,6 @@ class LMKBCDataset(Dataset):
                  id2entity, 
                  id2relation, 
                  triples, 
-                 prompt_template=f"{Mask.KG_MASK} -> S : {Mask.SUBJECT_MASK} | R : {Mask.RELATION_MASK} | O : {Mask.OBJECT_MASK}", 
-                 graph_query_template=f"S : {Mask.SUBJECT_MASK} | R : {Mask.RELATION_MASK}", 
                  n_virtual_token=1,
                  test=False,
                  n_data=None,
@@ -153,18 +152,21 @@ class LMKBCDataset(Dataset):
         self.data = load_json(path)
         end_index = start_index + n_data if n_data else -1
         self.data = self.data[start_index:end_index]
+        for i in range(len(self.data)):
+            self.data["negative_objects"] = []
         self.id2entity = id2entity
         self.id2relation = id2relation
         self.triples = triples
-        self.prompt_template = prompt_template
-        self.graph_query_template = graph_query_template
         self.n_virtual_token = n_virtual_token
         self.test = test
 
-        if len(re.findall(Mask.KG_MASK, prompt_template)) != n_virtual_token:
-            new_prompt_template = prompt_template.replace(Mask.KG_MASK, ''.join([Mask.KG_MASK for _ in range(n_virtual_token)]))
-            warnings.warn(f"Number of knowledge graph mask in your template is not the same with `n_virtual_token`, we transform it from {prompt_template} to {new_prompt_template}")
-            assert len(re.findall(Mask.KG_MASK, new_prompt_template)) == n_virtual_token, f"Please make the knowledge graph mask in a contiguous manner like `{Mask.KG_MASK}{Mask.KG_MASK} <- 2 masks`"
+        self.prompt_template = f"Based on the following knowledge graph {Mask.KG_MASK*n_virtual_token} we can infer that -> subject : {Mask.SUBJECT_MASK} | relation : {Mask.RELATION_MASK} | object : {Mask.OBJECT_MASK}"
+        self.graph_query_template = f"subject : {Mask.SUBJECT_MASK} | relation : {Mask.RELATION_MASK}"
+
+        # if len(re.findall(Mask.KG_MASK, self.prompt_template)) != n_virtual_token:
+        #     new_prompt_template = self.prompt_template.replace(Mask.KG_MASK, ''.join([Mask.KG_MASK for _ in range(n_virtual_token)]))
+        #     warnings.warn(f"Number of knowledge graph mask in your template is not the same with `n_virtual_token`, we transform it from {self.prompt_template} to {new_prompt_template}")
+        #     assert len(re.findall(Mask.KG_MASK, new_prompt_template)) == n_virtual_token, f"Please make the knowledge graph mask in a contiguous manner like `{Mask.KG_MASK}{Mask.KG_MASK} <- 2 masks`"
     
     def __len__(self):
         return len(self.data)
@@ -181,17 +183,26 @@ class LMKBCDataset(Dataset):
         objects = [self.id2entity[el] for el in object_ids] # TODO if empty?
         objects = [NULL_SYM] if len(objects) == 0 else objects # empty object
 
+        negative_objects = self.data[i]["negative_objects"]
+
         sr_graph_query = (self.graph_query_template
                           .replace(Mask.SUBJECT_MASK, subject)
                           .replace(Mask.RELATION_MASK, relation))
         sro_texts = []
+        is_negative = [False for _ in objects] + [True for _ in negative_objects]
         if not self.test:
             for o in objects:
                 entry = (self.prompt_template
                     .replace(Mask.SUBJECT_MASK, subject)
                     .replace(Mask.RELATION_MASK, relation)
                     .replace(Mask.OBJECT_MASK, o))
-                sro_texts.append(entry)
+                sro_texts.append(entry + " | true")
+            for o in negative_objects:
+                entry = (self.prompt_template
+                    .replace(Mask.SUBJECT_MASK, subject)
+                    .replace(Mask.RELATION_MASK, relation)
+                    .replace(Mask.OBJECT_MASK, o))
+                sro_texts.append(entry + " | false")
         else:
             sro_texts.append(
                 self.prompt_template
@@ -202,8 +213,8 @@ class LMKBCDataset(Dataset):
 
         x_coo = [self.triples[el] for el in reference]
         
-        entities = set()
-        relations = set()
+        entities = OrderedSet()
+        relations = OrderedSet()
 
         for s, r, o in x_coo:
             entities.add(s)
@@ -221,15 +232,4 @@ class LMKBCDataset(Dataset):
 
         x_coo = x_coo.T
 
-        # text, entities, relations, x_coo, y_coo_cls
-
-        return sr_graph_query, entities, relations, x_coo, sro_texts, objects
-
-    # def process_prompt(self, subject, relation, objects):
-    #     # return text_in, text_out
-    #     text_in = apply_template(self.prompt_template, subject=subject, relation=relation, objects='')
-    #     text_out = apply_template(self.prompt_template, subject=subject, relation=relation, objects=objects)
-    #     return text_in, text_out
-    
-    # def process_graph_query(self, subject, relation):
-    #     return apply_template(self.graph_query_template, subject=subject, relation=relation, objects=None)
+        return sr_graph_query, entities, relations, x_coo, sro_texts, objects, is_negative

@@ -54,7 +54,7 @@ class LMKBCTrainer(Trainer):
     
     def criterion(self, preds, labels, lmkbc=True):
         if lmkbc:
-            crit = CrossEntropyLoss(ignore_index=-100)
+            crit = CrossEntropyLoss(ignore_index=-100, reduction="none")
             return crit(preds.view(-1, preds.shape[-1]), labels.view(-1))
         else:
             # /raid/m13519061/anaconda3/envs/absa/lib/python3.10/site-packages/torch/nn/modules/loss.py:536: 
@@ -76,9 +76,6 @@ class LMKBCTrainer(Trainer):
 
         lmkbc_sum_loss = 0
         lmkbc_len_data = 0
-
-        # n_object_sum_loss = 0
-        # n_object_len_data = 0
 
         start_time = time.time()
 
@@ -123,19 +120,17 @@ class LMKBCTrainer(Trainer):
 
                 shift_logits = logits[..., :-1, :].contiguous()
                 shift_labels = batch["lmkbc_labels"][..., 1:].contiguous()
+                shift_weights = batch["weights"][..., 1:].contiguous()
 
                 lmkbc_loss = self.criterion(shift_logits.view(-1, shift_logits.size(-1)), shift_labels.view(-1), lmkbc=True)
-                # n_object_loss = self.criterion(n_object_out.view(-1), batch["n_object"].float().view(-1), lmkbc=False)
+                lmkbc_loss = lmkbc_loss * shift_weights.view(-1)
+                lmkbc_loss = lmkbc_loss[shift_labels.view(-1) != -100].mean()
 
-                # loss = self.config.beta1 * lmkbc_loss + self.config.beta2 * n_object_loss
                 loss = lmkbc_loss
-                # sum_loss += loss.item() * logits.shape[0]
-                # len_data += logits.shape[0]
+
                 lmkbc_sum_loss += lmkbc_loss.item() * logits.shape[0]
                 lmkbc_len_data += logits.shape[0]
 
-                # n_object_sum_loss += n_object_loss.item() * n_object_out.shape[0]
-                # n_object_len_data += n_object_out.shape[0]
             if train:
                 self.accelerator.backward(loss)
                 self.optimizer.step()
@@ -145,7 +140,7 @@ class LMKBCTrainer(Trainer):
                     if self.steps % self.logging_steps == 0:
                         log_message = []
                         loss_sg = lmkbc_sum_loss / lmkbc_len_data
-                        log_message.append(f"loss_sg : {loss_sg}")
+                        log_message.append(f"loss_lmkbc : {loss_sg}")
                         self.log(" | ".join(log_message))
             
             bar.update(1)
@@ -156,7 +151,6 @@ class LMKBCTrainer(Trainer):
         metrics = {
             f"{prefix}time" : end_time - start_time,
             f"{prefix}lmkbc_loss" : lmkbc_sum_loss / lmkbc_len_data,
-            # f"{prefix}n_object_loss" : n_object_sum_loss / n_object_len_data
         }
 
         return metrics, None
