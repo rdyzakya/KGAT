@@ -134,10 +134,6 @@ class LMKBCCollator:
                 weights.append(1/len(sro_texts[i]))
         weights = torch.tensor(weights).repeat(lmkbc_input_ids.size(1),1).transpose(0,1) # .reshape(-1)
 
-        #  shift_logits = lm_logits[..., :-1, :].contiguous()
-        # shift_labels = labels[..., 1:].contiguous()
-        # n_object = torch.tensor([len(o) if o != [NULL_SYM] else 0 for o in objects])
-
         return {
             "graph_query_input_ids" : graph_query["input_ids"], # N_query, length
             "graph_query_attention_mask" : graph_query["attention_mask"], # N_query, length

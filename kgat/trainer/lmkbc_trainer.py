@@ -239,8 +239,8 @@ class LMKBCTrainer(Trainer):
                 # generate_lmkbc(self, input_ids, attention_mask, graph_embeddings, batch=None, **kwargs)
 
                 generation_result = self.pipeline.lmkbc_model.generate_lmkbc(
-                                        batch["graph_query_input_ids"],
-                                        batch["graph_query_attention_mask"],
+                                        batch["lmkbc_input_ids"],
+                                        batch["lmkbc_attention_mask"],
                                         vt_out,
                                         batch=batch["entities_batch"],
                                         num_beams=self.config.beam_size,

@@ -44,6 +44,16 @@ train_ds = LMKBCDataset(os.path.join(args.data, "train.json"),
                         n_virtual_token=args.nvt,
                         n_data=args.n_data_train,
                         start_index=args.start_index_train)
+
+augment_ds = LMKBCDataset(os.path.join(args.data, "train.json"), 
+                        id2entity, 
+                        id2rel, 
+                        triples, 
+                        n_virtual_token=args.nvt,
+                        n_data=args.n_data_train,
+                        start_index=args.start_index_train,
+                        test=True)
+
 val_ds = LMKBCDataset(os.path.join(args.data, "val.json"), 
                         id2entity, 
                         id2rel, 
@@ -61,8 +71,8 @@ test_ds = LMKBCDataset(os.path.join(args.data, "test.json"),
                         # graph_query_template=args.gqt,
                         n_virtual_token=args.nvt,
                         n_data=args.n_data_test,
-                        test=True,
-                        start_index=args.start_index_test)
+                        start_index=args.start_index_test,
+                        test=True)
 
 ### PREPARE MODEL AND TOKENIZER
 model_config = load_json(args.model)
@@ -97,7 +107,7 @@ trainer1 = LMKBCTrainer(
     tokenizer=tokenizer,
     train_ds=train_ds,
     val_ds=val_ds,
-    test_ds=None,
+    test_ds=augment_ds,
     epoch=args.epoch1,
     learning_rate=args.lr,
     batch_size=args.bsize,
@@ -114,7 +124,7 @@ trainer1 = LMKBCTrainer(
 
 train_history1 = trainer1.train()
 
-test_metrics1, prediction_result1 = trainer1.predict(test_dataloader=trainer1.train_dataloader)
+test_metrics1, prediction_result1 = trainer1.predict()
 
 trainer1.save()
 
