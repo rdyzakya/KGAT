@@ -28,6 +28,7 @@ class LMKBCTrainer(Trainer):
                  optimizer="sgd",
                  optimizer_kwargs={},
                  logging_steps=None,
+                 beam_size=6,
                  beta1=1.0,
                  beta2=1.0):
         self.collate_fn = LMKBCCollator(tokenizer=tokenizer, 
@@ -50,7 +51,8 @@ class LMKBCTrainer(Trainer):
                          optimizer_kwargs=optimizer_kwargs,
                          beta1=beta1,
                          beta2=beta2,
-                         logging_steps=logging_steps)
+                         logging_steps=logging_steps,
+                         beam_size=beam_size)
     
     def criterion(self, preds, labels, lmkbc=True):
         if lmkbc:
@@ -196,8 +198,8 @@ class LMKBCTrainer(Trainer):
         all_lmkbc_preds = []
         all_lmkbc_labels = []
 
-        all_n_predictor_preds = []
-        all_n_predictor_labels = []
+        # all_n_predictor_preds = []
+        # all_n_predictor_labels = []
         for batch in self.test_dataloader:
             with torch.no_grad():
                 queries = self.pipeline.lmkbc_model.batch_last_hidden_state(
@@ -222,36 +224,46 @@ class LMKBCTrainer(Trainer):
                 entities = entities.to(self.model_device)
                 relations = relations.to(self.model_device)
 
-                vt_out, n_object_out = self.pipeline.model(
+                vt_out = self.pipeline.model(
                         queries=queries,
                         entities=entities,
                         relations=relations,
                         x_coo=batch["x_coo"],
                         batch=batch["entities_batch"]
                     )
-                n_object_out = n_object_out.round().int()
+                # n_object_out = n_object_out.round().int()
 
-                all_n_predictor_preds.extend(n_object_out.tolist())
-                all_n_predictor_labels.extend(batch["n_object"].float().tolist())
+                # all_n_predictor_preds.extend(n_object_out.tolist())
+                # all_n_predictor_labels.extend(batch["n_object"].float().tolist())
 
                 # generate_lmkbc(self, input_ids, attention_mask, graph_embeddings, batch=None, **kwargs)
-                generation_result = []
-                for gqii, am, vo, no in zip(batch["graph_query_input_ids"], batch["graph_query_attention_mask"], vt_out, n_object_out):
-                    if no > 0:
-                        gr = self.pipeline.lmkbc_model.generate_lmkbc(
-                            gqii.unsqueeze(0),
-                            am.unsqueeze(0),
-                            vo.unsqueeze(0),
-                            batch=None,
-                            num_beams=no.item(),
-                            num_return_sequences=no.item()
-                        )
 
-                        gr = self.tokenizer.batch_decode(gr, skip_special_tokens=True)
+                generation_result = self.pipeline.lmkbc_model.generate_lmkbc(
+                                        batch["graph_query_input_ids"],
+                                        batch["graph_query_attention_mask"],
+                                        vt_out,
+                                        batch=batch["entities_batch"],
+                                        num_beams=self.config.beam_size,
+                                        num_return_sequences=self.config.beam_size
+                                    )
+                
+                # generation_result = []
+                # for gqii, am, vo, no in zip(batch["graph_query_input_ids"], batch["graph_query_attention_mask"], vt_out, n_object_out):
+                #     if no > 0:
+                #         gr = self.pipeline.lmkbc_model.generate_lmkbc(
+                #             gqii.unsqueeze(0),
+                #             am.unsqueeze(0),
+                #             vo.unsqueeze(0),
+                #             batch=None,
+                #             num_beams=no.item(),
+                #             num_return_sequences=no.item()
+                #         )
 
-                        generation_result.append(gr)
-                    else:
-                        generation_result.append([]) # empty
+                #         gr = self.tokenizer.batch_decode(gr, skip_special_tokens=True)
+
+                #         generation_result.append(gr)
+                #     else:
+                #         generation_result.append([]) # empty
             all_lmkbc_preds.extend(generation_result)
             all_lmkbc_labels.extend(batch["objects"])
             test_bar.update(1)

@@ -38,6 +38,7 @@ class Trainer(ABC):
                  optimizer="sgd",
                  optimizer_kwargs={},
                  logging_steps=None,
+                 beam_size=6,
                  **kwargs):
         
         self.pipeline = pipeline
@@ -57,6 +58,7 @@ class Trainer(ABC):
                              best_metrics=best_metrics,
                              load_best_model_at_end=load_best_model_at_end,
                              optimizer=optimizer,
+                             beam_size=beam_size,
                              **config_kwargs)
         self.history = []
         self.test_metrics = {}

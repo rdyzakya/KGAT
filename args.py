@@ -9,7 +9,7 @@ def sg_train():
     parser.add_argument("--model", type=str, help="Model config path", default="./config/model/default.json")
     parser.add_argument("--ckpt", type=str, help="Model checkpoint")
     parser.add_argument("--epoch", type=int, help="Number of epoch", default=10)
-    parser.add_argument("--lr", type=float, help="Learning rate", default=1e-3)
+    parser.add_argument("--lr", type=float, help="Learning rate", default=1e-5)
     parser.add_argument("--bsize", type=int, help="Batch size", default=8)
     parser.add_argument("--hsbsize", type=int, help="Hidden state batch size", default=32)
     parser.add_argument("--out", type=str, help="Output directory", default="./out")
@@ -49,8 +49,9 @@ def lmkbc_train():
     parser.add_argument("--n_data_test", type=int, help="First n data in testing data (for debug)")
     parser.add_argument("--model", type=str, help="Model config path", default="./config/model/default.json")
     parser.add_argument("--from_sg", type=str, help="SG Model Path (pth)")
-    parser.add_argument("--epoch", type=int, help="Number of epoch", default=10)
-    parser.add_argument("--lr", type=float, help="Learning rate", default=1e-3)
+    parser.add_argument("--epoch1", type=int, help="Number of epoch phase 1", default=5)
+    parser.add_argument("--epoch2", type=int, help="Number of epoch phase 2", default=20)
+    parser.add_argument("--lr", type=float, help="Learning rate", default=1e-5)
     parser.add_argument("--bsize", type=int, help="Batch size", default=8)
     parser.add_argument("--hsbsize", type=int, help="Hidden state batch size", default=32)
     parser.add_argument("--out", type=str, help="Output directory", default="./out")
@@ -63,6 +64,7 @@ def lmkbc_train():
     parser.add_argument("--start_index_val", type=int, default=0)
     parser.add_argument("--start_index_test", type=int, default=0)
     parser.add_argument("--logging_steps", type=int)
+    parser.add_argument("--beam", type=int, default=6)
 
     args = parser.parse_args()
     return args

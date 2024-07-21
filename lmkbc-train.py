@@ -108,6 +108,7 @@ trainer = LMKBCTrainer(
     load_best_model_at_end=args.load_best,
     optimizer=args.optim,
     logging_steps=args.logging_steps,
+    beam_size=args.beam,
     optimizer_kwargs={},
 )
 
