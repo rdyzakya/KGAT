@@ -83,21 +83,18 @@ lmkbc_model = load_model_lmkbc(model_name_or_path, checkpoint=None, device_map="
 tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
 tokenizer = lmkbc_model.prepare_tokenizer(tokenizer)
 
+
+# LOAD MODEL
 subgraphgenerator = SubgraphGenerator(
     n_features=lmkbc_model.embed_dim,
     **model_config
-)
+) if not args.from_sg else SubgraphGenerator.load(args.from_sg)
 
-# LOAD MODEL
-if args.from_sg:
-    subgraphgenerator.load_state_dict(
-        torch.load(args.from_sg)["state_dict"]
-    )
 
 vt_generator = VirtualTokenGenerator.from_subgraph_generator(
     subgraphgenerator,
     n_virtual_token=args.nvt
-)
+) if not args.ckpt else VirtualTokenGenerator.load(args.ckpt)
 
 pipeline = Pipeline(model=vt_generator, lmkbc_model=lmkbc_model)
 
@@ -105,9 +102,9 @@ pipeline = Pipeline(model=vt_generator, lmkbc_model=lmkbc_model)
 trainer1 = LMKBCTrainer(
     pipeline=pipeline,
     tokenizer=tokenizer,
-    train_ds=train_ds,
-    val_ds=val_ds,
-    test_ds=augment_ds,
+    train_ds=train_ds if not args.no_train1 else None,
+    val_ds=val_ds if not args.no_val1 else None,
+    test_ds=augment_ds if not args.no_augment else None,
     epoch=args.epoch1,
     learning_rate=args.lr,
     batch_size=args.bsize,
@@ -122,20 +119,23 @@ trainer1 = LMKBCTrainer(
     optimizer_kwargs={},
 )
 
-train_history1 = trainer1.train()
+if not args.no_train1:
+    train_history1 = trainer1.train()
 
-test_metrics1, prediction_result1 = trainer1.predict()
+if not args.no_augment:
+    test_metrics1, prediction_result1 = trainer1.predict()
 
-trainer1.save()
+if not args.dont_save1:
+    trainer1.save()
 
 ### AUGMENTTTT
 
 trainer2 = LMKBCTrainer(
     pipeline=pipeline,
     tokenizer=tokenizer,
-    train_ds=train_ds,
-    val_ds=val_ds,
-    test_ds=test_ds,
+    train_ds=train_ds if not args.no_train2 else None,
+    val_ds=val_ds if not args.no_val2 else None,
+    test_ds=test_ds if not args.no_test else None,
     epoch=args.epoch2,
     learning_rate=args.lr,
     batch_size=args.bsize,
@@ -150,9 +150,12 @@ trainer2 = LMKBCTrainer(
     optimizer_kwargs={},
 )
 
-train_history2 = trainer2.train()
+if not args.no_train2:
+    train_history2 = trainer2.train()
 
-test_metrics2, prediction_result2 = trainer2.predict()
+if not args.no_val2:
+    test_metrics2, prediction_result2 = trainer2.predict()
 
 ### SAVE MODEL, HISTORY, AND EVALUATION RESULT
-trainer2.save()
+if not args.dont_save2:
+    trainer2.save()

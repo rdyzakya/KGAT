@@ -65,6 +65,15 @@ def lmkbc_train():
     parser.add_argument("--start_index_test", type=int, default=0)
     parser.add_argument("--logging_steps", type=int)
     parser.add_argument("--beam", type=int, default=6)
+    parser.add_argument("--ckpt", type=str, help="Model checkpoint")
+    parser.add_argument("--no_train_1", action="store_true")
+    parser.add_argument("--no_val_1", action="store_true")
+    parser.add_argument("--no_augment", action="store_true")
+    parser.add_argument("--no_train_2", action="store_true")
+    parser.add_argument("--no_val_2", action="store_true")
+    parser.add_argument("--no_test", action="store_true")
+    parser.add_argument("--dont_save1", action="store_true")
+    parser.add_argument("--dont_save2", action="store_true")
 
     args = parser.parse_args()
     return args

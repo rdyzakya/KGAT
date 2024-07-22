@@ -119,10 +119,11 @@ class LMKBCWrapper(ABC):
         graph_embeddings = graph_embeddings[batch]
         result_embeds, result_attention_mask = self.prepare_lmkbc(input_ids, attention_mask, graph_embeddings)
 
-        stopping_criteria = StoppingCriteriaList([
-            EosTokenCriteria(self.config.eos_token_id)
-        ])
-        return self.generate(inputs_embeds=result_embeds, attention_mask=result_attention_mask, stopping_criteria=stopping_criteria, **kwargs)
+        # stopping_criteria = StoppingCriteriaList([
+        #     EosTokenCriteria(self.config.eos_token_id)
+        # ])
+        # return self.generate(inputs_embeds=result_embeds, attention_mask=result_attention_mask, stopping_criteria=stopping_criteria, **kwargs)
+        return self.generate(inputs_embeds=result_embeds, attention_mask=result_attention_mask, **kwargs)
     
     def freeze(self):
         # Freeze
