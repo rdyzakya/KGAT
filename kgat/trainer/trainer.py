@@ -45,7 +45,7 @@ class Trainer(ABC):
         self.tokenizer = tokenizer
         self.train_dataloader = DataLoader(train_ds, batch_size=batch_size, shuffle=False, collate_fn=self.collate_fn)
         self.val_dataloader = DataLoader(val_ds, batch_size=batch_size, shuffle=False, collate_fn=self.collate_fn) if val_ds else None
-        self.test_dataloader = DataLoader(test_ds, batch_size=batch_size, shuffle=False, collate_fn=self.collate_fn) if test_ds else None
+        self.test_dataloader = DataLoader(test_ds, batch_size=batch_size, shuffle=False, collate_fn=self.test_collate_fn) if test_ds else None
         self.accelerator = Accelerator()
 
         config_kwargs = {k : v for k, v in kwargs.items() if self.__is_config_args(v)}

@@ -34,6 +34,10 @@ class LMKBCTrainer(Trainer):
         self.collate_fn = LMKBCCollator(tokenizer=tokenizer, 
                                         n_process=torch.cuda.device_count(),
                                         left=True)
+        self.test_collate_fn = LMKBCCollator(tokenizer=tokenizer, 
+                                        n_process=torch.cuda.device_count(),
+                                        left=True,
+                                        test=True)
         super().__init__(pipeline=pipeline,
                          tokenizer=tokenizer,
                          train_ds=train_ds,

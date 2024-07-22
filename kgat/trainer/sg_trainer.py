@@ -33,6 +33,9 @@ class SubgraphGenerationTrainer(Trainer):
         self.collate_fn = SubgraphGenerationCollator(tokenizer=tokenizer, 
                                                      n_process=torch.cuda.device_count(), 
                                                      left=True)
+        self.test_collate_fn = SubgraphGenerationCollator(tokenizer=tokenizer, 
+                                                     n_process=torch.cuda.device_count(), 
+                                                     left=True)
         super().__init__(pipeline=pipeline,
                          tokenizer=tokenizer,
                          train_ds=train_ds,
