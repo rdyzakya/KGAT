@@ -233,7 +233,7 @@ class LMKBCTrainer(Trainer):
                         entities=entities,
                         relations=relations,
                         x_coo=batch["x_coo"],
-                        batch=batch["entities_batch"]
+                        batch=batch["graph_emb_batch"]
                     )
                 # n_object_out = n_object_out.round().int()
 
