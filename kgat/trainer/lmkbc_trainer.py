@@ -233,7 +233,7 @@ class LMKBCTrainer(Trainer):
                         entities=entities,
                         relations=relations,
                         x_coo=batch["x_coo"],
-                        batch=batch["graph_emb_batch"]
+                        batch=batch["entities_batch"]
                     )
                 # n_object_out = n_object_out.round().int()
 
@@ -246,7 +246,7 @@ class LMKBCTrainer(Trainer):
                                         batch["lmkbc_input_ids"],
                                         batch["lmkbc_attention_mask"],
                                         vt_out,
-                                        batch=batch["entities_batch"],
+                                        batch=batch["graph_emb_batch"],
                                         num_beams=self.config.beam_size,
                                         num_return_sequences=self.config.beam_size
                                     )
