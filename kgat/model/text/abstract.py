@@ -70,41 +70,12 @@ class LMKBCWrapper(ABC):
         return tokenizer
     
     def prepare_lmkbc(self, input_ids, attention_mask, graph_embeddings):
-        # n_virtual_token = graph_embeddings.shape[1]
-
         mask = input_ids == self.config.kg_token_id
-
-        assert (mask.sum(-1) == 1).all(), f"all input ids should contain only 1 KG token , {mask.sum(-1).unique()}"
 
         input_ids[mask] = 0 # change to 0, because we don't resize the params
 
         embeds = self.embeddings(input_ids)
         embeds[mask] = graph_embeddings.view(-1, graph_embeddings.shape[-1])
-
-        # kg_token_idx = mask.nonzero(as_tuple=True)[1]
-
-        # result_embeds = []
-        # result_attention_mask = []
-
-        # for kti, emb, ge, am in zip(kg_token_idx, embeds, graph_embeddings, attention_mask):
-        #     left_embeds = emb[:kti.item()]
-        #     mid_embeds = ge
-        #     right_embeds = emb[kti.item()+1:]
-
-        #     combined_embeds = torch.vstack([left_embeds, mid_embeds, right_embeds])
-
-        #     result_embeds.append(combined_embeds.unsqueeze(0))
-
-        #     left_attention_mask = am[:kti.item()]
-        #     mid_attention_mask = torch.ones(n_virtual_token, dtype=am.dtype)
-        #     right_attention_mask = am[kti.item()+1:]
-
-        #     combined_attention_mask = torch.cat([left_attention_mask, mid_attention_mask, right_attention_mask])
-
-        #     result_attention_mask.append(combined_attention_mask)
-        
-        # result_embeds = torch.vstack(result_embeds)
-        # result_attention_mask = torch.vstack(result_attention_mask)
 
         return embeds, attention_mask
     
@@ -119,10 +90,6 @@ class LMKBCWrapper(ABC):
         graph_embeddings = graph_embeddings[batch]
         result_embeds, result_attention_mask = self.prepare_lmkbc(input_ids, attention_mask, graph_embeddings)
 
-        # stopping_criteria = StoppingCriteriaList([
-        #     EosTokenCriteria(self.config.eos_token_id)
-        # ])
-        # return self.generate(inputs_embeds=result_embeds, attention_mask=result_attention_mask, stopping_criteria=stopping_criteria, **kwargs)
         return self.generate(inputs_embeds=result_embeds, attention_mask=result_attention_mask, **kwargs)
     
     def freeze(self):
