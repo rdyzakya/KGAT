@@ -38,7 +38,6 @@ class Trainer(ABC):
                  optimizer="sgd",
                  optimizer_kwargs={},
                  logging_steps=None,
-                 beam_size=6,
                  **kwargs):
         
         self.pipeline = pipeline

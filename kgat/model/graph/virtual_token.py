@@ -45,6 +45,37 @@ class VirtualToken(torch.nn.Module):
 
         return x
 
+# class ToSequence(torch.nn.Module):
+#     def __init__(self, n_features, gate_nn, n_virtual_token=1):
+#         super().__init__()
+#         self.aggr = torch.nn.ModuleList([
+#             AttentionalAggregation(gate_nn=gate_nn, nn=torch.nn.Linear(n_features, n_features, bias=True)) for _ in range(n_virtual_token)
+#         ])
+    
+#     def forward(self, x, batch_index=None):
+#         result = []
+#         for aggr in self.aggr:
+#             o = aggr(x, index=batch_index) # N * Hin
+#             result.append(o.unsqueeze(1))
+#         result = torch.hstack(result) # N * L * Hin
+#         return result
+
+# class VirtualToken(torch.nn.Module):
+#     def __init__(self, n_features, n_virtual_token=1, gate_nn=None):
+#         super().__init__()
+#         gate_nn = gate_nn or torch.nn.Linear(n_features, n_features, bias=True)
+#         # nn = torch.nn.Linear(n_features, n_features, bias=True)
+#         # self.aggregation = AttentionalAggregation(gate_nn=gate_nn, nn=nn)
+#         self.to_sequence = ToSequence(n_features, gate_nn, n_virtual_token)
+
+#         self.n_virtual_token = n_virtual_token
+    
+#     def forward(self, x, batch_index=None):
+#         # x = self.aggregation(x, index=batch_index) # N * Hin
+#         x = self.to_sequence(x, batch_index) # N * L * Hin
+
+#         return x
+
 if __name__ == "__main__":
     n_virtual_token = 3
     n_features = 768

@@ -74,6 +74,7 @@ def lmkbc_train():
     parser.add_argument("--no_test", action="store_true")
     parser.add_argument("--dont_save1", action="store_true")
     parser.add_argument("--dont_save2", action="store_true")
+    parser.add_argument("--max_length", type=int, default=32)
 
     args = parser.parse_args()
     return args

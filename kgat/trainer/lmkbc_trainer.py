@@ -33,6 +33,7 @@ class LMKBCTrainer(Trainer):
                  optimizer_kwargs={},
                  logging_steps=None,
                  beam_size=6,
+                 max_length=32,
                  beta1=1.0,
                  beta2=1.0):
         self.collate_fn = LMKBCCollator(tokenizer=tokenizer, 
@@ -60,7 +61,8 @@ class LMKBCTrainer(Trainer):
                          beta1=beta1,
                          beta2=beta2,
                          logging_steps=logging_steps,
-                         beam_size=beam_size)
+                         beam_size=beam_size,
+                         max_length=max_length,)
     
     def criterion(self, preds, labels, lmkbc=True):
         if lmkbc:

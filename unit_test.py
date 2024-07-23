@@ -165,12 +165,11 @@ class ModelModule(unittest.TestCase):
 
         print("VT Generator params :", sum(p.numel() for p in vt_generator.parameters()))
 
-        vt_out, n_object_out = vt_generator(queries, entities, relations, x_coo, batch)
+        vt_out = vt_generator(queries, entities, relations, x_coo, batch)
 
         self.assertEqual(vt_out.shape[0], queries.shape[0])
         self.assertEqual(vt_out.shape[1], n_virtual_token)
         self.assertEqual(vt_out.shape[2], queries.shape[1])
-        self.assertEqual(n_object_out.shape[0], queries.shape[0])
 
         print(f"TEST SG --> {count_parameters(subgenerator)}")
         print(f"TEST VTGEN --> {count_parameters(vt_generator)}")

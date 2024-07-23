@@ -116,6 +116,7 @@ trainer1 = LMKBCTrainer(
     optimizer=args.optim,
     logging_steps=args.logging_steps,
     beam_size=args.beam,
+    max_length=args.max_length,
     optimizer_kwargs={},
 )
 
@@ -147,6 +148,7 @@ trainer2 = LMKBCTrainer(
     optimizer=args.optim,
     logging_steps=args.logging_steps,
     beam_size=args.beam,
+    max_length=args.max_length,
     optimizer_kwargs={},
 )
 
