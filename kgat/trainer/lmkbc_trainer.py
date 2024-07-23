@@ -10,6 +10,10 @@ from .trainer import Trainer
 import math
 from tqdm import tqdm
 
+import re
+
+pattern = r"(.+)\|\s*(true|false)"
+
 class LMKBCTrainer(Trainer):
     def __init__(self, 
                  pipeline,
@@ -198,12 +202,8 @@ class LMKBCTrainer(Trainer):
         
         test_steps = math.ceil(len(self.test_dataloader.dataset) / self.config.batch_size)
         test_bar = tqdm(total=test_steps, desc="Test")
-        # test_metrics = self.run_epoch(self.test_dataloader, test_bar, train=False)
         all_lmkbc_preds = []
         all_lmkbc_labels = []
-
-        # all_n_predictor_preds = []
-        # all_n_predictor_labels = []
         for batch in self.test_dataloader:
             with torch.no_grad():
                 queries = self.pipeline.lmkbc_model.batch_last_hidden_state(
@@ -235,12 +235,6 @@ class LMKBCTrainer(Trainer):
                         x_coo=batch["x_coo"],
                         batch=batch["entities_batch"]
                     )
-                # n_object_out = n_object_out.round().int()
-
-                # all_n_predictor_preds.extend(n_object_out.tolist())
-                # all_n_predictor_labels.extend(batch["n_object"].float().tolist())
-
-                # generate_lmkbc(self, input_ids, attention_mask, graph_embeddings, batch=None, **kwargs)
 
                 generation_result = self.pipeline.lmkbc_model.generate_lmkbc(
                                         batch["lmkbc_input_ids"],
@@ -251,43 +245,21 @@ class LMKBCTrainer(Trainer):
                                         num_return_sequences=self.config.beam_size
                                     )
                 
-                # generation_result = []
-                # for gqii, am, vo, no in zip(batch["graph_query_input_ids"], batch["graph_query_attention_mask"], vt_out, n_object_out):
-                #     if no > 0:
-                #         gr = self.pipeline.lmkbc_model.generate_lmkbc(
-                #             gqii.unsqueeze(0),
-                #             am.unsqueeze(0),
-                #             vo.unsqueeze(0),
-                #             batch=None,
-                #             num_beams=no.item(),
-                #             num_return_sequences=no.item()
-                #         )
+                generation_result = self.tokenizer.batch_decode(generation_result, skip_special_tokens=True)
 
-                #         gr = self.tokenizer.batch_decode(gr, skip_special_tokens=True)
-
-                #         generation_result.append(gr)
-                #     else:
-                #         generation_result.append([]) # empty
+                for i in range(len(generation_result)):
+                    m = re.match(pattern, generation_result[i])
+                    generation_result[i] = (m.group(1), m.group(2))
+                
+                generation_result = [generation_result[i:i+self.config.beam_size] for i in range(0,len(generation_result),self.config.beam_size)]
+                
             all_lmkbc_preds.extend(generation_result)
             all_lmkbc_labels.extend(batch["objects"])
             test_bar.update(1)
 
-        # RuntimeError: dictionary keys changed during iteration
-        # new_metrics = {}
-        # for k in test_metrics.keys():
-        #     new_metrics[k.replace("val", "test")] = test_metrics[k]
         self.test_metrics = self.compute_metrics(all_lmkbc_preds, all_lmkbc_labels)
-        # self.preds = {
-        #     "lmkbc_preds" : all_lmkbc_preds,
-        #     "n_predictor_preds" : all_n_predictor_preds
-        # }
-        # self.labels = {
-        #     "lmkbc_labels" : all_lmkbc_labels,
-        #     "n_predictor_labels" : all_n_predictor_labels
-        # }
         self.prediction_result = {
-            "lmkbc" : self.construct_preds_labels(all_lmkbc_preds, all_lmkbc_labels),
-            "n_predictor" : self.construct_preds_labels(all_n_predictor_preds, all_n_predictor_labels)
+            "lmkbc" : self.construct_preds_labels(all_lmkbc_preds, all_lmkbc_labels)
         }
         return self.test_metrics, self.prediction_result
     
