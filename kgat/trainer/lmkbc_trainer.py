@@ -246,7 +246,8 @@ class LMKBCTrainer(Trainer):
                                         vt_out,
                                         batch=batch["graph_emb_batch"],
                                         num_beams=self.config.beam_size,
-                                        num_return_sequences=self.config.beam_size
+                                        num_return_sequences=self.config.beam_size,
+                                        max_length=self.config.max_length
                                     )
                 
                 generation_result = self.tokenizer.batch_decode(generation_result, skip_special_tokens=True)
