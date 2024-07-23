@@ -170,6 +170,8 @@ class LMKBCTrainer(Trainer):
         fp = 0
         fn = 0
 
+        preds = [el[0] for el in preds if el[1] == "true"]
+
         preds = [list(set(el)) for el in preds]
         labels = [list(set(el)) for el in labels]
 
@@ -249,7 +251,7 @@ class LMKBCTrainer(Trainer):
 
                 for i in range(len(generation_result)):
                     m = re.match(pattern, generation_result[i])
-                    generation_result[i] = (m.group(1), m.group(2))
+                    generation_result[i] = (m.group(1).strip(), m.group(2).strip())
                 
                 generation_result = [generation_result[i:i+self.config.beam_size] for i in range(0,len(generation_result),self.config.beam_size)]
                 
