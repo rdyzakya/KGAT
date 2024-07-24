@@ -224,4 +224,5 @@ class LMKBCDataset(Dataset):
     
     def augment(self, preds):
         for i in range(len(preds)):
-            self.data[i]["negative_objects"] = list(OrderedSet([post_process(el[0]) for el in preds[i]["preds"]]))
+            lower_objects = [el.lower() for el in self.data[i]["objects"]]
+            self.data[i]["negative_objects"] = [el for el in list(OrderedSet([post_process(el[0]) for el in preds[i]["preds"]])) if el.lower() not in lower_objects]
