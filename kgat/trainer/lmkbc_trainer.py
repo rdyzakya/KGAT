@@ -14,6 +14,11 @@ import re
 
 pattern = r"(.+)\|\s*(true|false)"
 
+def post_process(text):
+    text = text.split('|')[0]
+    text = text.strip()
+    return text
+
 class LMKBCTrainer(Trainer):
     def __init__(self, 
                  pipeline,
@@ -172,7 +177,8 @@ class LMKBCTrainer(Trainer):
         fp = 0
         fn = 0
 
-        preds = [el[0] for el in preds if el[1] == "true"]
+        preds = [[post_process(el2[0].lower()) for el2 in el1 if el2[1] == "true"] for el1 in preds]
+        labels = [[el2.lower() for el2 in el1] for el1 in preds]
 
         preds = [list(set(el)) for el in preds]
         labels = [list(set(el)) for el in labels]
