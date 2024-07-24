@@ -30,6 +30,14 @@ from seed import seed_everything
 ### RANDOM SEED
 seed_everything(args.seed)
 
+### PREPARE MODEL AND TOKENIZER
+model_config = load_json(args.model)
+model_name_or_path = model_config.pop("model_name_or_path")
+
+lmkbc_model = load_model_lmkbc(model_name_or_path, checkpoint=None, device_map="auto", no_split_module_classes=['Block'])
+tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
+tokenizer = lmkbc_model.prepare_tokenizer(tokenizer)
+
 ### PREPARE DATASET
 id2entity = load_id2map(os.path.join(args.data, "entities.txt"))
 id2rel = load_id2map(os.path.join(args.data, "relations.txt"))
@@ -39,11 +47,10 @@ train_ds = LMKBCDataset(os.path.join(args.data, "train.json"),
                         id2entity, 
                         id2rel, 
                         triples, 
-                        # prompt_template=args.pt,
-                        # graph_query_template=args.gqt,
                         n_virtual_token=args.nvt,
                         n_data=args.n_data_train,
-                        start_index=args.start_index_train)
+                        start_index=args.start_index_train,
+                        eos_token=tokenizer.eos_token)
 
 augment_ds = LMKBCDataset(os.path.join(args.data, "train.json"), 
                         id2entity, 
@@ -52,36 +59,27 @@ augment_ds = LMKBCDataset(os.path.join(args.data, "train.json"),
                         n_virtual_token=args.nvt,
                         n_data=args.n_data_train,
                         start_index=args.start_index_train,
-                        test=True)
+                        test=True,
+                        eos_token=tokenizer.eos_token)
 
 val_ds = LMKBCDataset(os.path.join(args.data, "val.json"), 
                         id2entity, 
                         id2rel, 
                         triples, 
-                        # prompt_template=args.pt,
-                        # graph_query_template=args.gqt,
                         n_virtual_token=args.nvt,
                         n_data=args.n_data_val,
-                        start_index=args.start_index_val)
+                        start_index=args.start_index_val,
+                        eos_token=tokenizer.eos_token)
 test_ds = LMKBCDataset(os.path.join(args.data, "test.json"), 
                         id2entity, 
                         id2rel, 
                         triples, 
-                        # prompt_template=args.pt,
-                        # graph_query_template=args.gqt,
                         n_virtual_token=args.nvt,
                         n_data=args.n_data_test,
                         start_index=args.start_index_test,
-                        test=True)
+                        test=True,
+                        eos_token=tokenizer.eos_token)
 
-### PREPARE MODEL AND TOKENIZER
-model_config = load_json(args.model)
-model_name_or_path = model_config.pop("model_name_or_path")
-# checkpoint = model_config.pop("checkpoint")
-
-lmkbc_model = load_model_lmkbc(model_name_or_path, checkpoint=None, device_map="auto", no_split_module_classes=['Block'])
-tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
-tokenizer = lmkbc_model.prepare_tokenizer(tokenizer)
 
 
 # LOAD MODEL
@@ -125,6 +123,9 @@ if not args.no_train1:
 
 if not args.no_augment:
     test_metrics1, prediction_result1 = trainer1.predict()
+    prediction_result1 = prediction_result1["lmkbc"]
+    train_ds.augment(prediction_result1)
+
 
 if not args.dont_save1:
     trainer1.save()

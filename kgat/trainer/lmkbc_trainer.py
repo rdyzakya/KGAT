@@ -2,7 +2,7 @@ from torch.nn import CrossEntropyLoss, MSELoss
 from ..data import LMKBCCollator
 import torch
 from .utils import context_manager
-from ..utils import NULL_SYM
+from ..utils import NULL_SYM, post_process
 import time
 
 from .trainer import Trainer
@@ -13,11 +13,6 @@ from tqdm import tqdm
 import re
 
 pattern = r"(.+)\|\s*(true|false)"
-
-def post_process(text):
-    text = text.split('|')[0]
-    text = text.strip()
-    return text
 
 class LMKBCTrainer(Trainer):
     def __init__(self, 

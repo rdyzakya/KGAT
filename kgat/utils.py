@@ -5,3 +5,8 @@ class Mask:
     OBJECT_MASK = "<OBJECT>"
 
 NULL_SYM = "NONE" # empty
+
+def post_process(text):
+    text = text.split('|')[0]
+    text = text.strip()
+    return text

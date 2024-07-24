@@ -1,5 +1,5 @@
 from torch.utils.data import Dataset
-from ..utils import Mask, NULL_SYM
+from ..utils import Mask, NULL_SYM, post_process
 import torch
 import json
 import re
@@ -7,12 +7,6 @@ import warnings
 import random
 from tqdm import tqdm
 from ordered_set import OrderedSet
-
-# def apply_template(text, subject, relation, objects=None):
-#     text = text.replace(Mask.SUBJECT_MASK, subject).replace(Mask.RELATION_MASK, relation)
-#     if objects is None:
-#         return text
-#     return text.replace(Mask.OBJECT_MASK, str(objects))
 
 def load_json(path):
     with open(path, 'r', encoding="utf-8") as fp:
@@ -99,7 +93,6 @@ class SubgraphGenerationDataset(Dataset):
         result_x_coo = [x_coo[i] for i in chunk]
         result_y_coo_cls = [y_coo_cls[i] for i in chunk]
 
-        # entity_idx = 0
         entity_map = {}
         relation_map = {}
 
@@ -148,7 +141,8 @@ class LMKBCDataset(Dataset):
                  n_virtual_token=1,
                  test=False,
                  n_data=None,
-                 start_index=0):
+                 start_index=0,
+                 eos_token=None):
         self.data = load_json(path)
         end_index = start_index + n_data if n_data else -1
         self.data = self.data[start_index:end_index]
@@ -159,20 +153,14 @@ class LMKBCDataset(Dataset):
         self.triples = triples
         self.n_virtual_token = n_virtual_token
         self.test = test
-
-        self.prompt_template = f"Based on the following knowledge graph {Mask.KG_MASK*n_virtual_token} we can infer that -> subject : {Mask.SUBJECT_MASK} | relation : {Mask.RELATION_MASK} | object : {Mask.OBJECT_MASK}"
+        self.eos_token = "<eos>" or eos_token
+        self.prompt_template = f"Answer using the format `subject : S | relation : R | object : O{eos_token}`!\nBased on the following knowledge graph {Mask.KG_MASK*n_virtual_token} we can infer that -> subject : {Mask.SUBJECT_MASK} | relation : {Mask.RELATION_MASK} | object : {Mask.OBJECT_MASK}"
         self.graph_query_template = f"subject : {Mask.SUBJECT_MASK} | relation : {Mask.RELATION_MASK}"
 
-        # if len(re.findall(Mask.KG_MASK, self.prompt_template)) != n_virtual_token:
-        #     new_prompt_template = self.prompt_template.replace(Mask.KG_MASK, ''.join([Mask.KG_MASK for _ in range(n_virtual_token)]))
-        #     warnings.warn(f"Number of knowledge graph mask in your template is not the same with `n_virtual_token`, we transform it from {self.prompt_template} to {new_prompt_template}")
-        #     assert len(re.findall(Mask.KG_MASK, new_prompt_template)) == n_virtual_token, f"Please make the knowledge graph mask in a contiguous manner like `{Mask.KG_MASK}{Mask.KG_MASK} <- 2 masks`"
-    
     def __len__(self):
         return len(self.data)
     
     def __getitem__(self, i):
-        # text_in, entities, relations, x_coo, text_out
         subject_id = self.data[i]["subject"]
         relation_id = self.data[i]["relation"]
         object_ids = self.data[i]["objects"]
@@ -233,3 +221,7 @@ class LMKBCDataset(Dataset):
         x_coo = x_coo.T
 
         return sr_graph_query, entities, relations, x_coo, sro_texts, objects, is_negative
+    
+    def augment(self, preds):
+        for i in range(len(preds)):
+            self.data[i]["negative_objects"] = list(OrderedSet([post_process(el[0]) for el in preds[i]["preds"]]))
