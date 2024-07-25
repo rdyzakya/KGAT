@@ -173,7 +173,7 @@ class LMKBCTrainer(Trainer):
         fn = 0
 
         preds = [[post_process(el2[0].lower()) for el2 in el1 if el2[1] == "true"] for el1 in preds]
-        labels = [[el2.lower() for el2 in el1] for el1 in preds]
+        labels = [[el2.lower() for el2 in el1] for el1 in labels]
 
         preds = [list(set(el)) for el in preds]
         labels = [list(set(el)) for el in labels]
