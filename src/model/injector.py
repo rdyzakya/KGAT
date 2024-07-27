@@ -1,8 +1,10 @@
 import torch
+from .base import BaseModel
 
-class Injector(torch.nn.Module):
-    def __init__(self, edge_dim):
-        super().__init__()
+class Injector(BaseModel):
+    def __init__(self, 
+                 edge_dim):
+        super().__init__(edge_dim=edge_dim)
         self.edge_attr = torch.nn.parameter.Parameter(torch.randn(edge_dim))
     
     def forward(self, x, edge_index, relations, injection_node, node_batch=None, injection_node_batch=None):
@@ -26,7 +28,7 @@ class Injector(torch.nn.Module):
 
         return x_out, edge_index_out, relations_out, x_is_injected, edge_is_injected, relations_is_injected
 
-class Detach(torch.nn.Module):
+class Detach(BaseModel):
     def forward(self, x, edge_index, relations, x_is_injected, edge_is_injected, relations_is_injected):
         x_not_injected = x_is_injected.logical_not()
         edge_not_injected = edge_is_injected.logical_not()

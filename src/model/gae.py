@@ -1,5 +1,6 @@
 from torch_geometric.nn import GATv2Conv
 import torch
+from .base_model import BaseModel
 
 class GATv2Sequential(torch.nn.Sequential):
     def forward(self, x, edge_index, edge_attr, return_attention_weights=None):
@@ -19,7 +20,7 @@ class GATv2Sequential(torch.nn.Sequential):
             return x, (all_adj, all_alpha)
         return x
 
-class GATv2Encoder(torch.nn.Module): # using this, because models.GAT don't provide forward method using attention weights
+class GATv2Encoder(BaseModel): # using this, because models.GAT don't provide forward method using attention weights
     def __init__(self, 
                  in_channels, 
                  hidden_channels, 
@@ -31,21 +32,21 @@ class GATv2Encoder(torch.nn.Module): # using this, because models.GAT don't prov
                  add_self_loops=True, 
                  bias=True, 
                  share_weights=False,
+                 fill_value="mean",
                  **kwargs):
-        super().__init__()
         out_channels = out_channels or in_channels
-
-        self.in_channels = in_channels
-        self.hidden_channels = hidden_channels
-        self.num_layers = num_layers
-        self.heads = heads
-        self.out_channels = out_channels
-        self.negative_slope = negative_slope
-        self.dropout = dropout
-        self.add_self_loops = add_self_loops
-        self.bias = bias
-        self.share_weights = share_weights
-        self.fill_value = 0.0
+        super().__init__(in_channels=in_channels, 
+                 hidden_channels=hidden_channels, 
+                 num_layers=num_layers, 
+                 heads=heads, 
+                 out_channels=out_channels, 
+                 negative_slope=negative_slope, 
+                 dropout=dropout, 
+                 add_self_loops=add_self_loops, 
+                 bias=bias, 
+                 share_weights=share_weights,
+                 fill_value=fill_value,
+                 **kwargs)
 
         module = [GATv2Conv(in_channels, 
                     hidden_channels, 
@@ -101,10 +102,9 @@ class GATv2Encoder(torch.nn.Module): # using this, because models.GAT don't prov
         edge_attr = relations[edge_index[1]]
         return self.gnn(x, edge_index[[0,2]], edge_attr)
 
-class InnerOuterProductDecoder(torch.nn.Module):
+class InnerOuterProductDecoder(BaseModel):
     def __init__(self, num_features):
-        super().__init__()
-        self.num_features = num_features
+        super().__init__(num_features=num_features)
         self.outer_weight = torch.nn.parameter.Parameter(torch.randn(num_features))
     
     def forward(self, x, edge_index, relations, sigmoid=True):
