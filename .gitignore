@@ -159,12 +159,5 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-data/lm-kbc/statistics.json
-data/lm-kbc/*/proc
-data/lm-kbc/*/raw
-
-data/subgraph-gen/statistics.json
-data/subgraph-gen/*/proc
-data/subgraph-gen/*/raw
-
-sg-paramtuning-temp/
+v0/
+v1/
