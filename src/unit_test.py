@@ -4,10 +4,13 @@ from model import (
     Detach,
     GATv2Encoder,
     InnerOuterProductDecoder,
+    AttentionalAggregation,
+    SoftmaxAggregation,
     AutoModelForLMKBC
 )
 from transformers import AutoTokenizer
 import torch
+from torch_geometric.nn.dense.linear import Linear
 import random
 
 class ModelTestCase(unittest.TestCase):
@@ -88,6 +91,38 @@ class ModelTestCase(unittest.TestCase):
         self.assertEqual(adj.shape[2], x.shape[0])
 
         self.assertEqual(adj_not_all.shape[0], edge_index.shape[1])
+    
+    def test_aggr(self):
+        N_BATCH = random.randint(1,5)
+        N_NODE = random.randint(5,20)
+        DIM = 768
+        OUT_DIM = 512
+
+        node_batch = torch.randint(0, N_BATCH, (N_NODE,))
+
+        x = torch.randn(N_NODE, DIM)
+
+        gate_nn = Linear(in_channels=DIM, out_channels=OUT_DIM, bias=False, weight_initializer="glorot")
+        nn = Linear(in_channels=DIM, out_channels=OUT_DIM, bias=False, weight_initializer="glorot")
+
+        attentional_aggr = AttentionalAggregation(gate_nn=gate_nn, nn=nn)
+        softmax_aggr = SoftmaxAggregation(learn=True, channels=1)
+
+        out_attention, gate = attentional_aggr(x, index=node_batch, return_gate=True)
+        out_softmax, alpha = softmax_aggr(x, index=node_batch, return_alpha=True)
+
+        self.assertEqual(out_attention.shape[0], N_BATCH)
+        self.assertEqual(out_softmax.shape[0], N_BATCH)
+
+        self.assertEqual(out_attention.shape[1], OUT_DIM)
+        self.assertEqual(out_softmax.shape[1], x.shape[1])
+
+        self.assertEqual(gate.shape[0], N_NODE)
+        self.assertEqual(alpha.shape[0], N_NODE)
+
+        self.assertEqual(gate.shape[1], OUT_DIM)
+        self.assertEqual(alpha.shape[1], DIM)
+
     
     def test_lm(self):
         model_name_or_path = "openai-community/gpt2"

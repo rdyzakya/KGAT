@@ -7,7 +7,7 @@ class Injector(torch.nn.Module):
     
     def forward(self, x, edge_index, relations, injection_node, node_batch=None, injection_node_batch=None):
         # node batch : [0,0,0,0,1,1,1]
-        # injection node : [0,1] atau [0,0] atau [1,1] ,dst
+        # injection node : [0,1] or [0,0] or [1,1] ,... , usually use batch_index
         node_batch = torch.zeros(x.shape[0]) if node_batch is None else node_batch
         injection_node_batch = torch.arange(0, injection_node.shape[0]) if injection_node_batch is None else injection_node_batch
         
