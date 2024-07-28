@@ -4,6 +4,7 @@ from model import (
     Detach,
     GATv2Encoder,
     InnerOuterProductDecoder,
+    NodeClassifierDecoder,
     AttentionalAggregation,
     SoftmaxAggregation,
     AutoModelForLMKBC
@@ -77,11 +78,13 @@ class ModelTestCase(unittest.TestCase):
         ])
 
         encoder = GATv2Encoder(in_channels=DIM, hidden_channels=H_DIM, num_layers=N_LAYERS, heads=N_HEAD)
-        decoder = InnerOuterProductDecoder(num_features=DIM)
+        link_decoder = InnerOuterProductDecoder(num_features=DIM)
+        node_decoder = NodeClassifierDecoder(num_features=DIM)
 
         z = encoder(x, edge_index, relations)
-        adj = decoder.forward_all(z, relations, sigmoid=False)
-        adj_not_all = decoder(z, edge_index, relations, sigmoid=False)
+        adj = link_decoder.forward_all(z, relations, sigmoid=False)
+        adj_not_all = link_decoder(z, edge_index, relations, sigmoid=False)
+        out_node = node_decoder(z, sigmoid=True)
 
         self.assertEqual(z.shape[0], x.shape[0])
         self.assertEqual(z.shape[1], x.shape[1])
@@ -91,19 +94,21 @@ class ModelTestCase(unittest.TestCase):
         self.assertEqual(adj.shape[2], x.shape[0])
 
         self.assertEqual(adj_not_all.shape[0], edge_index.shape[1])
+
+        self.assertEqual(out_node.shape[0], x.shape[0])
+        self.assertEqual(out_node.shape[1], 1)
     
     def test_aggr(self):
         N_BATCH = random.randint(1,5)
         N_NODE = random.randint(5,20)
         DIM = 768
-        OUT_DIM = 512
+        OUT_DIM = DIM
 
         node_batch = torch.randint(0, N_BATCH, (N_NODE,))
 
         x = torch.randn(N_NODE, DIM)
 
-        gate_nn = Linear(in_channels=DIM, out_channels=OUT_DIM, bias=False, weight_initializer="glorot")
-        # nn = Linear(in_channels=DIM, out_channels=OUT_DIM, bias=False, weight_initializer="glorot")
+        gate_nn = Linear(in_channels=DIM, out_channels=OUT_DIM, bias=False, weight_initializer="glorot") # untuk ngeliat importance, nanti direduce aja dim = 1 (sum)
         nn = torch.nn.Identity()
 
         attentional_aggr = AttentionalAggregation(gate_nn=gate_nn, nn=nn)

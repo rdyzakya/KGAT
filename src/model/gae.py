@@ -1,4 +1,5 @@
 from torch_geometric.nn import GATv2Conv
+from torch_geometric.nn.dense import Linear
 import torch
 from .base_model import BaseModel
 
@@ -107,7 +108,7 @@ class InnerOuterProductDecoder(BaseModel):
         super().__init__(num_features=num_features)
         self.outer_weight = torch.nn.parameter.Parameter(torch.randn(num_features))
     
-    def forward(self, x, edge_index, relations, sigmoid=True):
+    def forward(self, x, edge_index, relations, sigmoid=False):
         """
         R = torch.stack([
             el.outer(self.outer_weight) for el in relations
@@ -130,7 +131,7 @@ class InnerOuterProductDecoder(BaseModel):
         out_all = self.forward_all(x, relations, sigmoid)
         return out_all[edge_index[1], edge_index[0], edge_index[2]] # n_edge
     
-    def forward_all(self, x, relations, sigmoid=True):
+    def forward_all(self, x, relations, sigmoid=False):
         R = torch.stack([
             el.outer(self.outer_weight) for el in relations
         ])
@@ -141,3 +142,15 @@ class InnerOuterProductDecoder(BaseModel):
         ) # n_relation * n_node * n_node
 
         return torch.sigmoid(adj) if sigmoid else adj
+
+class NodeClassifierDecoder(BaseModel):
+    def __init__(self, num_features):
+        super().__init__(num_features=num_features)
+        # catch multi nuance importance, not only 1 domain, let say a graph with multi domain, this will not only consider 1 domain as the imoprtant one
+        self.gate_nn = Linear(in_channels=num_features, out_channels=num_features, bias=False, weight_initializer="glorot")
+    
+    def forward(self, x, sigmoid=False):
+        x = self.gate_nn(x)
+        x = x.sum(dim=1)
+        x = x.unsqueeze(-1)
+        return torch.sigmoid(x) if sigmoid else x
