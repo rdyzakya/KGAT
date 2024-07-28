@@ -86,3 +86,9 @@ with open("triples.json", 'w') as fp:
 pd.DataFrame(train_pair).to_json("train.jsonl", index=False, orient="records", lines=True)
 pd.DataFrame(dev_pair).to_json("dev.jsonl", index=False, orient="records", lines=True)
 pd.DataFrame(test_pair).to_json("test.jsonl", index=False, orient="records", lines=True)
+
+# create alias mapping
+# since it is not provided by webnlg then,
+
+alias = [{"id" : i , "alias_idx" : [i]} for i in range(len(all_entities))]
+pd.DataFrame(alias).to_json("entities_alias.jsonl", index=False, orient="records", lines=True)
