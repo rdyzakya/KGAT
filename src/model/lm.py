@@ -27,19 +27,20 @@ class LanguageModelForLMKBC(ABC):
         for param in self.parameters():
             param.requires_grad = False
     
-    def text_embedding(self, input_ids, attention_mask, index=-1):
+    def text_embedding(self, input_ids, attention_mask, index=None):
         out = self.backbone(input_ids=input_ids, attention_mask=attention_mask, output_hidden_states=True)
-        hidden_states = out.hidden_states[index] # len(hidden_states) == self.config.n_layer + 1
+        # hidden_states = out.hidden_states[index] # len(hidden_states) == self.config.n_layer + 1
 
         # get last token hidden state, as how any left-to-right model with seq-cls head do
         sequence_lengths = torch.eq(input_ids, self.config.pad_token_id).int().argmax(-1) - 1
         sequence_lengths = sequence_lengths % input_ids.shape[-1]
-        sequence_lengths = sequence_lengths.to(hidden_states.device)
+        # sequence_lengths = sequence_lengths.to(hidden_states.device)
 
         batch_size = input_ids.shape[0]
-        pooled_hidden_states = hidden_states[torch.arange(batch_size, device=hidden_states.device), sequence_lengths]
+        # pooled_hidden_states = hidden_states[torch.arange(batch_size, device=hidden_states.device), sequence_lengths]
+        pooled_hidden_states = (hidden_states[torch.arange(batch_size), sequence_lengths] for hidden_states in out.hidden_states)
 
-        return pooled_hidden_states
+        return pooled_hidden_states if index is None else pooled_hidden_states[index]
     
     def prepare_tokenizer(self, tokenizer):
         # Add padding

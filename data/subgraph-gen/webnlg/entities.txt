@@ -1,0 +1,3634 @@
+Aarhus_Airport
+"Aarhus, Denmark"
+Aarhus
+25.0
+Tirstrup
+"Aarhus Lufthavn A/S"
+Aktieselskab
+2776.0
+2777.0
+"10L/28R"
+"10R/28L"
+Abilene,_Texas
+United_States
+Jones_County,_Texas
+Taylor_County,_Texas
+Texas
+Abilene_Regional_Airport
+3678
+Asphalt
+7202
+"KABI"
+546
+"ABI"
+1121.0
+2194.0
+2195.0
+"17L/35R"
+"17R/35L"
+Adirondack_Regional_Airport
+6573
+Lake_Placid,_New_York
+Saranac_Lake,_New_York
+"SLK"
+1219.0
+2003.0
+Adolfo_Suárez_Madrid–Barajas_Airport
+610.0
+Alcobendas
+Madrid
+Paracuellos_de_Jarama
+ENAIRE
+3500.0
+4100.0
+4349.0
+"18R/36L"
+Afonso_Pena_International_Airport
+2988
+911.0
+São_José_dos_Pinhais
+1800.0
+2215.0
+"11/29"
+"15/33"
+Agra_Airport
+"AGR"
+"VIAG"
+167.94
+India
+Uttar_Pradesh
+"Kheria Air Force Station"
+Airports_Authority_of_India
+Indian_Air_Force
+1818.0
+2743.0
+Al-Taqaddum_Air_Base
+Habbaniyah
+"MAT"
+4019.0
+Al_Asad_Airbase
+"ORAA"
+618
+"Al Anbar Province, Iraq"
+Iraq
+United_States_Air_Force
+3078.48
+3090.0
+3990.0
+3992.88
+"08/26"
+"09L/27R"
+"09R/27L"
+Spain
+Community_of_Madrid
+People's_Party_(Spain)
+Alderney
+Saint_Anne,_Alderney
+English_language
+Elizabeth_II
+Alderney_Airport
+Poaceae
+88.0
+497.0
+733.0
+877.0
+"03/21"
+Allama_Iqbal_International_Airport
+Lahore
+Pakistan
+Punjab,_Pakistan
+Pakistan_Civil_Aviation_Authority
+2900.0
+3310.0
+"18L/36R"
+Alpena,_Michigan
+Alpena_County_Regional_Airport
+9001
+210
+Maple_Ridge_Township,_Alpena_County,_Michigan
+Wilson_Township,_Alpena_County,_Michigan
+"APN"
+Alpena_County,_Michigan
+2744.0
+"7/25"
+Amsterdam
+Eberhard_van_der_Laan
+Amsterdam_Airport_Schiphol
+3800
+"Asphalt"
+18
+-3.3528
+Haarlemmermeer
+Schiphol_Group
+2014.0
+3300.0
+3400.0
+3453.0
+3800.0
+"04/22 'Oostbaan'"
+"09/27 'Buitenveldertbaan'"
+"18C/36C 'Zwanenburgbaan'"
+"18L/36R 'Aalsmeerbaan'"
+"18R/36L 'Polderbaan'"
+Andrews_County,_Texas
+Andrews,_Texas
+Andrews_County_Airport
+2939
+25
+"E11"
+1773.0
+8.0
+929.0
+"16/34"
+"2/20"
+Angola_International_Airport
+13123
+5
+159
+Ícolo_e_Bengo
+4000.0
+"05L/23R"
+"South Runway"
+Antwerp
+Arrondissement_of_Antwerp
+Belgium
+Bart_De_Wever
+Antwerp_International_Airport
+"Flemish department of Mobility and Public Works"
+Flemish_Region
+1510.0
+600.0
+Appleton,_Wisconsin
+Grand_Chute,_Wisconsin
+Kimberly,_Wisconsin
+Little_Chute,_Wisconsin
+Appleton_International_Airport
+8002
+280
+Greenville,_Wisconsin
+"ATW"
+Outagamie_County,_Wisconsin
+1982.0
+"12/30"
+"3/21"
+Ardmore_Airport_(New_Zealand)
+1960
+34.0
+Civil_Aviation_Authority_of_New_Zealand
+1411.0
+597.0
+"03L/21R"
+"03R/21L"
+"07/25"
+Ashgabat_International_Airport
+12467
+2953
+"ASB"
+211
+Ashgabat
+Turkmenistan_Airlines
+2989.0
+900.0
+"12L/30R"
+"12R/30L"
+Athens
+Greece
+Athens_International_Airport
+94
+Atlantic_City,_New_Jersey
+New_Jersey
+Don_Guardian
+Atlantic_City_International_Airport
+"KACY"
+75
+23.0
+Egg_Harbor_Township,_New_Jersey
+Port_Authority_of_New_York_and_New_Jersey
+1873.0
+3048.0
+"4/22"
+"Asphalt/Concrete"
+City_of_Brussels
+French_language
+Charles_Michel
+German_language
+Wellington
+Curitiba
+Brazil
+Paraná_(state)
+Democratic_Labour_Party_(Brazil)
+Denmark
+Danish_language
+Faroese_language
+Greenlandic_language
+Margrethe_II_of_Denmark
+Atlantic_County,_New_Jersey
+Flemish_Government
+Flanders
+Greeks
+Alexis_Tsipras
+Prokopis_Pavlopoulos
+Clayton,_Winnebago_County,_Wisconsin
+Dale,_Wisconsin
+Ellington,_Wisconsin
+Menasha_(town),_Wisconsin
+Harrietstown,_New_York
+New_York
+Narendra_Modi
+T._S._Thakur
+HAL_Light_Combat_Helicopter
+Boeing_C-17_Globemaster_III
+Infraero
+Brasília
+Iraqi_dinar
+Kurdish_languages
+Fuad_Masum
+Haider_al-Abadi
+Arabic
+Essex_County,_New_York
+Luanda
+Angola
+Ahora_Madrid
+Mamnoon_Hussain
+Nawaz_Sharif
+Jinnah_International_Airport
+Monocotyledon
+Flowering_plant
+Commelinids
+Poales
+Malik_Muhammad_Rafique_Rajwana
+Shehbaz_Sharif
+Provincial_Assembly_of_the_Punjab
+San_Sebastián_de_los_Reyes
+South_Jersey_Transportation_Authority
+Stephen_Dilts
+South_Region,_Brazil
+Austin,_Texas
+Tejano
+Texan
+Spanish_language
+Central_Denmark_Region
+Turkmenistan
+Turkmenabat_Airport
+Turkmenbashi_International_Airport
+General_Dynamics_F-16_Fighting_Falcon
+McDonnell_Douglas_F-15_Eagle
+Lockheed_AC-130
+Invasion_of_Grenada
+Korean_War
+Operation_Enduring_Freedom
+United_States_invasion_of_Panama
+Lockheed_C-130_Hercules
+Awadh
+Bundelkhand
+Ram_Naik
+Luanda_Province
+Aaron_Bertram
+Kids_Imagine_Nation
+Suburban_Legends
+"non_vocal_instrumentalist"
+1981-04-03
+Ska_punk
+Aaron_Deer
+John_Wilkes_Booze
+Wee_Giant
+"solo_singer"
+Indie_rock
+Psychedelia
+Bass_guitar
+Guitar
+Keyboard_instrument
+Piano
+Singing
+Indiana
+Indianapolis
+Aaron_Turner
+1995
+Greymachine
+House_of_Low_Culture
+Isis_(band)
+Lotus_Eaters_(band)
+Mamiffer
+Old_Man_Gloom
+Sumac_(band)
+Twilight_(band)
+Ambient_music
+Doom_metal
+Drone_music
+Electroacoustic_music
+Post-metal
+Sludge_metal
+Electric_guitar
+Massachusetts
+Abradab
+1994
+Kaliber_44
+Katowice
+Poland
+Ace_Wilder
+Stockholm
+Sweden
+1982
+Electropop
+Hip_hop_music
+Songwriter
+Warner_Music_Group
+Agustín_Barboza
+1913-05-05
+Asunción
+Paraguay
+Ahmet_Ertegun
+"A. Nugetre"
+"non_performing_personnel"
+Istanbul
+1923
+New_York_City
+Blues
+Rhythm_and_blues
+Rock_and_roll
+Washington,_D.C.
+Al_Anderson_(NRBQ band)
+1966
+NRBQ
+The_Wildweeds
+1947-03-13
+"Windsor, Connecticut, United States"
+Windsor,_Connecticut
+Country_music
+Rock_music
+Alan_Frew
+1983
+Coatbridge
+Scotland
+United_Kingdom
+1956
+Alternative_rock
+Musician
+Public_speaking
+Canada
+Newmarket,_Ontario
+Albennie_Jones
+1950
+1930
+1914
+Jazz
+Aleksandra_Kovač
+1990
+Bebi_Dol
+K2_(Kovač_sisters_duo)
+Kristina_Kovač
+Belgrade
+Serbia
+Socialist_Republic_of_Serbia
+1972
+Funk
+Pop_music
+Alex_Day
+2006
+Chameleon_Circuit_(band)
+Charlie_McDonnell
+Hornchurch
+London_Borough_of_Havering
+Acoustic_music
+Electronic_music
+Folk_music
+Alfred_Garth_Jones
+England
+Manchester
+1872
+"c. 1944"
+Sidcup
+Illustration
+Alfredo_Zitarrosa
+Ciro_Pérez
+Yamandú_Palacios
+Uruguay
+Montevideo
+Candombe
+Taquirari
+Zamba_(artform)
+Odeon_Records
+Orfeo_(Uruguayan_record_label)
+Alison_O'Donnell
+Bajik
+Flibbertigibbet
+Head_South_By_Weaving
+Mellow_Candle
+Plastik_Mak
+The_Owl_Service_(band)
+United_Bible_Studies
+Folk_music_of_Ireland
+Folk_rock
+Psychedelic_folk
+Autoharp
+Bodhrán
+Deram_Records
+Floating_World_Records
+Fruits_de_Mer_Records
+Kissing_Spell_Records
+Osmosys_Records
+Stanyan_Records
+Static_Caravan_Recordings
+Allen_Forrest
+2005
+"Matchstik, Match, Allan, Forrester, Alan, Foster, Forest Matchstick, Matchstix, Allen Forrest"
+The_Black_Eyed_Peas
+"Fort Campbell, KY, raised in Dothan, AL"
+Dothan,_Alabama
+Fort_Campbell
+1981
+Alligator_Records
+Nu_metal
+Christian_alternative_rock
+New_wave_music
+Punk_rock
+Anders_Osborne
+1989
+Billy_Iuso
+Galactic
+Kirk_Joseph
+Phil_Lesh_and_Friends
+Tab_Benoit
+Theresa_Andersson
+Voice_of_the_Wetlands_All-Stars
+Guitarist
+Okeh_Records
+Rabadash_Records
+Andra_(singer)
+2000
+Andreea_Bălan
+CRBL
+Marius_Moga
+Puya_(singer)
+Câmpia_Turzii
+Romania
+1986
+Dance-pop
+"singer, Reality television judge"
+Andrew_Rayel
+"Armin Van Buuren, Bobina, Mark Sixma, Jonathan Mendelsohn, Christian Burns, Jwaydan, Alexander Popov, Jano, Alexandre Bergheau, Jonny Rose, Sylvia Tosun, Lira Yin, Alexandra Badoi"
+Armin_van_Buuren
+Bobina
+Jonathan_Mendelsohn
+Mark_Sixma
+Trance_music
+String_instrument
+Andrew_White_(musician)
+2003
+Kaiser_Chiefs
+Fiction
+Polydor_Records
+Universal_Records_(defunct_record_label)
+House_music
+Black_metal
+Death_metal
+Christian_Burns
+Banjo
+Disco
+Drum_and_bass
+Garage_rock
+Clarinet
+Afrobeat
+Jwaydan_Moyine
+John_Digweed
+Kill_Rock_Stars
+Portland,_Oregon
+London
+Greater_London_Authority
+Boris_Johnson
+European_Parliament
+Parliament_of_the_United_Kingdom
+Labour_Party_(UK)
+Daniel_Martínez_(politician)
+Mestizo
+Juan_Afara
+Philips_Records
+Universal_Music_Group
+Kashubians
+Cello
+Bhangra_(music)
+Ska
+Brian_Robertson_(trombonist)
+Synthpop
+African_Americans
+National_Anthem_of_Uruguay
+Uruguayan_peso
+Uruguayans
+Raúl_Fernando_Sendic_Rodríguez
+Tabaré_Vázquez
+Alan_Bean
+"UT Austin, B.S. 1955"
+"1932-03-15"
+"Alan LaVern Bean"
+Wheeler,_Texas
+"June 1981"
+Test_pilot
+"Retired"
+"100305.0"(minutes)
+Apollo_12
+1963
+Alan_Shepard
+"NWC, M.A. 1957"
+"1923-11-18"
+New_Hampshire
+"1974-08-01"
+"1998-07-21"
+"Deceased"
+"13017.0"(minutes)
+Chief_of_the_Astronaut_Office
+Apollo_14
+"American Defense Service ribbon.svg"
+1959
+Apollo_11
+NASA
+Alfred_Worden
+David_Scott
+Apollo_8
+Frank_Borman
+British_Hong_Kong
+Chris_Patten
+Buzz_Aldrin
+"Edwin E. Aldrin, Jr."
+20
+"1930-01-20"
+"Edwin Eugene Aldrin Jr."
+Glen_Ridge,_New_Jersey
+"1971-07-01"
+Fighter_pilot
+"52.0"(minutes)
+"Legion of Merit ribbon.svg"
+California
+Smilodon
+Dianne_Feinstein
+Dallas
+Collin_County,_Texas
+List_of_counties_in_Texas
+Distinguished_Service_Medal_(United_States_Navy)
+Department_of_Commerce_Gold_Medal
+Elliot_See
+University_of_Texas_at_Austin
+"1927-07-23"
+1962
+Essex_County,_New_Jersey
+Purple_finch
+St._Louis
+Kingdom_of_France
+Francis_G._Slay
+Joe_Biden
+University_of_Texas_System
+Big_12_Conference
+Gregory_L._Fenves
+William_Anders
+"AFIT, M.S. 1962"
+"1933-10-17"
+"1969-09-01"
+1976
+"8820.0"(minutes)
+United_States_Ambassador_to_Norway
+A.C._Milan
+Serie_A
+Siniša_Mihajlović
+A.S._Roma
+AZ_Alkmaar
+AFAS_Stadion
+Aaron_Boogaard
+1986-08-11
+Regina,_Saskatchewan
+Saskatchewan
+Wichita_Thunder
+Minnesota_Wild
+1.905
+Aaron_Hunt
+Goslar
+West_Germany
+Germany_national_under-21_football_team
+Germany_national_youth_football_team
+Goslarer_SC_08
+Hamburger_SV
+SV_Werder_Bremen_II
+VfL_Wolfsburg
+SV_Werder_Bremen
+Abel_Hernández
+Pando,_Uruguay
+Central_Español
+Hull_City_A.F.C.
+Peñarol
+U.S._Città_di_Palermo
+Uruguay_national_under-20_football_team
+Abner_(footballer)
+1996-05-30
+Londrina
+Brazil_national_under-17_football_team
+Brazil_national_under-20_football_team
+Coritiba_Foot_Ball_Club
+Real_Madrid_Castilla
+Accrington_Stanley_F.C.
+Accrington
+Adam_Maher
+PSV_Eindhoven
+Adam_McQuaid
+1986-10-12
+Prince_Edward_Island
+Boston_Bruins
+Columbus_Blue_Jackets
+1.9558
+94.8024 (kilograms)
+Ahmad_Kadhim_Assad
+1976-07-01
+Al-Jaish_SC_(Syria)
+Al-Naft
+Al-Quwa_Al-Jawiya
+Al-Talaba_SC
+Al-Zawra'a_SC
+Al_Shorta_SC
+Esteghlal_Ahvaz_F.C.
+Steel_Azin_F.C.
+Akeem_Adams
+"Point Fortin, Trinidad and Tobago"
+Central_F.C.
+Ferencvárosi_TC
+T&TEC_Sports_Club
+Trinidad_and_Tobago_national_football_team
+Trinidad_and_Tobago_national_under-17_football_team
+Trinidad_and_Tobago_national_under-20_football_team
+United_Petrotrin_F.C.
+W_Connection_F.C.
+Budapest
+Akeem_Ayers
+2011
+1989-07-10
+Raleigh,_North_Carolina
+"Los Angeles Rams"
+Tennessee_Titans
+"39"
+"2"
+Los_Angeles_Rams
+New_England_Patriots
+St._Louis_Rams
+Akeem_Dent
+1987-09-27
+"Atlanta, Georgia"
+Atlanta
+1987
+Houston_Texans
+Atlanta_Falcons
+"50"
+Linebacker
+Akeem_Priestley
+Jamaica
+Kingston,_Jamaica
+Antigua_GFC
+Dayton_Dutch_Lions
+Harbour_View_F.C.
+Jacksonville_Dolphins
+Jamaica_national_football_team
+Orange_County_Blues_FC
+RoPS
+Sheikh_Russel_KC
+Connecticut_Huskies
+Al-Khor_Sports_Club
+Al_Khor
+Qatar_Stars_League
+Al-Wakrah_Sport_Club
+Al_Kharaitiyat_SC
+Amar_Osim
+Alaa_Abdul-Zahra
+Al-Merrikh_SC
+Duhok_SC
+Iraq_national_under-20_football_team
+Iraq_national_under-23_football_team
+Shabab_Al-Ordon_Club
+Tractor_Sazi_F.C.
+Forward_(football)
+Alan_Martin_(footballer)
+1989-01-01
+Aldershot_Town_F.C.
+Ayr_United_F.C.
+Barrow_A.F.C.
+Clyde_F.C.
+Leeds_United_F.C.
+Motherwell_F.C.
+Scotland_national_under-21_football_team
+185.42 (centimetres)
+Aleksander_Barkov,_Jr.
+"Tampere, Finland"
+Tampere
+Florida_Panthers
+Tappara
+Centre_(ice_hockey)
+96.1632 (kilograms)
+Aleksandr_Chumakov
+Moscow
+Soviet_Union
+1948
+FC_Torpedo_Moscow
+Soviet_Union_national_football_team
+"Moscow, Russia"
+Russia
+Aleksandr_Prudnikov
+FC_Alania_Vladikavkaz
+FC_Anzhi_Makhachkala
+FC_Dynamo_Moscow
+FC_Kuban_Krasnodar
+FC_Rubin_Kazan
+FC_Spartak_Moscow
+FC_Terek_Grozny
+FC_Tom_Tomsk
+Russia_national_football_B_team
+Russia_national_under-21_football_team
+Sparta_Prague
+FC_Amkar_Perm
+185.0 (centimetres)
+Aleksandre_Guruli
+Georgian_Soviet_Socialist_Republic
+AS_Lyon-Duchère
+AZAL_PFK
+FC_Dila_Gori
+FC_Dinamo_Batumi
+FC_Karpaty_Lviv
+FC_Zestafoni
+Georgia_national_football_team
+Olympique_Lyonnais
+US_Boulogne
+US_Lesquin
+178.0 (centimetres)
+Alessio_Romagnoli
+Anzio
+Italy
+Italy_national_under-16_football_team
+Italy_national_under-17_football_team
+Italy_national_under-19_football_team
+U.C._Sampdoria
+Defender_(football)
+Alex_Plante
+1989-05-09
+Brandon,_Manitoba
+Anyang_Halla
+Alex_Tyus
+1988-01-08
+Anadolu_Efes_S.K.
+Maccabi_Ashdod_B.C.
+Maccabi_Tel_Aviv_B.C.
+Pallacanestro_Cantù
+Florida_Gators_men's_basketball
+2.032
+Euroleague
+99.792 (kilograms)
+Dušan_Ivković
+Dan_Quinn_(American_football)
+Arthur_Blank
+Boston
+Conservative_Party_of_Canada
+Larry_Maguire
+C.D._FAS
+Salvadoran_Primera_División
+O_Canada
+Asian_Canadians
+Black_Canadians
+Uruguayan_Segunda_División
+Broadwood_Stadium
+Barry_Ferguson
+Jarmo_Kekäläinen
+Crewe_Alexandra_F.C.
+Steve_Davis_(footballer)
+Adnan_Hamad
+Gadzhi_Gadzhiyev
+Levan_Khomeriki
+FC_Samtredia
+Erosi_Manjgaladze_Stadium
+Sergey_Rodionov
+Otkrytiye_Arena
+Rashid_Rakhimov
+Aleksandr_Tukmanov
+2014–15_Russian_Premier_League
+Thomas_Doll
+Finland
+Euro
+Finns
+Sami_languages
+Sauli_Niinistö
+Finnish_language
+Bundesliga
+Hamilton_Academical_F.C.
+Hamilton,_South_Lanarkshire
+New_Douglas_Park
+Houston
+Bob_McNair
+Steve_Bruce
+Alessandro_Dal_Canto
+Jacksonville,_Florida
+John_Sessions_Stadium
+Jacksonville_University
+Patrick_Allen_(politician)
+Los_Angeles
+Los_Angeles_Memorial_Coliseum
+Jeff_Fisher
+Chuck_Fletcher
+Sergey_Sobyanin
+National_Hockey_League
+Montreal_Canadiens
+Jean-Michel_Aulas
+Oliver_Wyss
+Phillip_Cocu
+Lega_Basket_Serie_A
+Uruguayan_Primera_División
+Luis_Miguel_Ramis
+Legislative_Assembly_of_Saskatchewan
+Veikkausliiga
+Russian_language
+Sergey_Naryshkin
+Valentina_Matviyenko
+Vladimir_Putin
+Viktor_Skrypnyk
+3._Liga
+Alexander_Nouri
+Scotland_national_under-19_football_team
+Scot_Gemmill
+Ricky_Sbragia
+Jordan_Premier_League
+French_First_Republic
+Greater_St._Louis
+Joe_Vitt
+Steve_Spagnuolo
+Iran_Football's_3rd_Division
+Mike_Mularkey
+Giuseppe_Iachini
+Palo_Seco
+Palo_Seco_Velodrome
+Dieter_Hecking
+103_Colmore_Row
+Brutalist_architecture
+"1973"
+23
+"Colmore Row, Birmingham, England"
+Birmingham
+108_St_Georges_Terrace
+1988
+"120 million (Australian dollars)"
+39500.0 (square metres)
+50
+Perth
+11_Diagonal_Street
+Helmut_Jahn
+"1978"
+1200 (square metres)
+Johannesburg
+Redefine_Properties_Limited
+200_Public_Square
+HOK_(firm)
+111484 (square metres)
+45
+"Cleveland, Ohio 44114"
+"United States"
+Cleveland
+Public_Square,_Cleveland
+20_Fenchurch_Street
+Rafael_Viñoly
+"April 2014"
+62145.3 (square metres)
+34
+250_Delaware_Avenue
+"January, 2014"
+"110 million (dollars)"
+30843.8 (square metres)
+12
+Buffalo,_New_York
+300_North_LaSalle
+Pickard_Chilton
+2009
+120770.0 (square metres)
+Illinois
+320_South_Boston_Building
+1929
+22
+"Exchange National Bank Building"
+121.92 (metres)
+3Arena
+Populous_(company)
+"Concert and events venue"
+"December 2008"
+28.0 (metres)
+"North Wall Quay"
+Dublin
+North_Wall,_Dublin
+Live_Nation_Entertainment
+AC_Hotel_Bella_Sky_Copenhagen
+3XN
+Bella_Center
+Copenhagen
+Marriott_International
+Adare
+Munster
+Adare_Manor
+Augustus_Pugin
+George_Richard_Pain
+James_Pain
+Lewis_Nockalls_Cottingham
+Philip_Charles_Hardwick
+1862
+County_Limerick
+J._P._McManus
+Addis_Ababa
+Ethiopia
+Addis_Ababa_Stadium
+Addis_Ababa_City_Hall
+1961
+Seat_of_local_government
+1964
+"Government of Addis Ababa"
+140000.0 (square metres)
+"42 m"
+Adisham_Hall
+"St. Benedict's Monastery, Adisham, Haputhale, Sri Lanka"
+"Tudor and Jacabian"
+Tudor_Revival_architecture
+"1927"
+1931
+Sri_Lanka
+"Haputale, Sri Lanka"
+Ahmedabad
+Akita,_Akita
+Japan
+Akita_Prefecture
+Akita_Museum_of_Art
+"1-4-2 Nakadori"
+Tadao_Ando
+3746.66 (square metres)
+3
+Alan_B._Miller_Hall
+"101 Ukrop Way"
+Robert_A._M._Stern
+Georgian_architecture
+"30 March 2007"
+2009-06-01
+"75.0 million (dollars)"
+"2009-10-02"
+Virginia
+Williamsburg,_Virginia
+Mason_School_of_Business
+Alfred_Giles_(architect)
+Kendall_County,_Texas
+Amdavad_ni_Gufa
+Gujarat
+Ampara_Hospital
+476
+Ampara
+Ampara_District
+Eastern_Province,_Sri_Lanka
+<http://www.ghampara.gov.lk/>
+Asher_and_Mary_Isabelle_Richardson_House
+Asherton,_Texas
+U.S._Route_83
+1911
+Dimmit_County,_Texas
+Asilomar_Conference_Grounds
+"87000823"
+"1987-02-27"
+American_Craftsman
+Arts_and_Crafts_movement
+"Asilomar Blvd., Pacific Grove, California"
+Pacific_Grove,_California
+Asser_Levy_Public_Baths
+"80002709"
+"1980-04-23"
+Romanesque_Revival_architecture
+"Asser Levy Place and East 23rd Street"
+23rd_Street_(Manhattan)
+Avenue_A_(Manhattan)
+Manhattan
+Bloomsbury
+Palace_of_Westminster
+Birmingham_City_Council
+Andrew_Mitchell
+Conservative_Party_(UK)
+John_Clancy_(Labour_politician)
+Khalid_Mahmood_(British_politician)
+Liberal_Democrats
+Chicago
+Cook_County,_Illinois
+Rahm_Emanuel
+Susana_Mendoza
+Cleveland_City_Council
+Cuyahoga_County,_Ohio
+Ohio
+Frank_G._Jackson
+College_of_William_&_Mary
+Robert_Gates
+Limerick_City_and_County_Council
+Lars_Løkke_Rasmussen
+Republic_of_Ireland
+Dáil_Éireann
+Eastern_Provincial_Council
+Austin_Fernando
+Ethiopian_birr
+Amharic
+Hailemariam_Desalegn
+George_Winkler
+Anandiben_Patel
+Gujarat_Legislative_Assembly
+Springfield,_Illinois
+Chinese_people_in_Japan
+Filipinos_in_Japan
+Japanese_people
+Koreans_in_Japan
+Vietnamese_people_in_Japan
+Akihito
+Shinzō_Abe
+John_Madin
+Julia_Morgan
+San_Francisco
+Asilomar_State_Beach
+Chinatown,_San_Francisco
+Riverside_Art_Museum
+Hearst_Castle
+Cyrus_Vance,_Jr.
+Gale_Brewer
+Bethesda,_Maryland
+Brooklyn
+Australia
+Irish_people
+Irish_language
+Enda_Kenny
+South_Africa
+Asian_South_Africans
+Coloured
+Cyril_Ramaphosa
+Jacob_Zuma
+Sri_Jayawardenepura_Kotte
+Sri_Lankan_rupee
+Tamil_language
+Ranil_Wickremesinghe
+Pound_sterling
+British_people
+Asian_Americans
+White_Americans
+Barack_Obama
+John_Roberts
+President_of_the_United_States
+(15788)_1993_SB
+7715100000.0 (kilometres)
+Alan_Fitzsimmons
+Donal_O'Ceallaigh
+Iwan_P._Williams
+Roque_de_los_Muchachos_Observatory
+2006-03-06
+7729430000.0
+3997100000000.0
+(19255)_1994_VK8
+6603633000.0 (kilometres)
+4.56 (kilometrePerSeconds)
+2006-12-31
+0.0925 (kilometrePerSeconds)
+5.6 (kilograms)
+8788850000.0
+6155910000000.0
+43.0 (kelvins)
+(29075)_1950_DA
+3.5 (kilograms)
+2011-Aug-27
+4.0 (kilograms)
+69862200.0
+124950000000.0
+7637.76
+(410777)_2009_FD
+1890.0 (kilogramPerCubicMetres)
+Spacewatch
+2015-06-27
+8.3 (kilograms)
+362.0 (kelvins)
+258.0 (kelvins)
+211.0 (kelvins)
+39447000.0
+88234300000.0
+(66063)_1998_RO1
+Lincoln_Near-Earth_Asteroid_Research
+0.0999 (kilometrePerSeconds)
+"1999 SN5"
+500.0 (kelvins)
+265.0 (kelvins)
+-71.0 (degreeCelsius)
+360.29 (days)
+41498400000.0
+(66391)_1999_KW4
+162164091.8388 (kilometres)
+37.16 (kilometrePerSeconds)
+2.0 (gramPerCubicCentimetres)
+2004-07-14
+0
+16244700.0
+9953.28
+1000_Piazzia
+"1923 NZ1951 OB"
+"1967 ED"
+1.1 (kilograms)
+488160.0
+352497000000.0
+1001_Gaussia
+9.7
+Sergey_Belyavsky
+"A911 MD"
+154.0 (kelvins)
+5.75 (days)
+419113394.55312 (kilometres)
+33012.0
+101_Helena
+8.33
+18.44 (kilometrePerSeconds)
+1868-08-15
+James_Craig_Watson
+0.0348 (kilometrePerSeconds)
+331683000.0 (kilometres)
+173.0 (kelvins)
+1036_Ganymed
+611961000.0 (kilometres)
+Walter_Baade
+2004-10-22
+374976.0 (seconds)
+184434000000.0
+37116.0
+103_Hera
+437170000.0 (kilometres)
+18.09 (kilometrePerSeconds)
+1868-09-07
+2011-08-27
+0.0482 (kilometrePerSeconds)
+1622.213 (days)
+371240000.0 (kilometres)
+85466.9
+170.0 (kelvins)
+107_Camilla
+560937000.0 (kilometres)
+1868-11-17
+2001-03-01
+B._Zellner
+C._Woods
+E._Wells
+M._Gaffey
+2368.05 (days)
+479343000.0 (kilometres)
+1089_Tama
+373513000.0 (kilometres)
+19.94 (kilometrePerSeconds)
+2005-11-26
+"1930 ST; 1952 HE4"
+"A919 HA; 1927 WB;"
+288749000000.0
+17.28
+179.0 (kelvins)
+1097_Vicia
+511592000.0 (kilometres)
+0.0112 (kilometrePerSeconds)
+"1928 PC"
+9.8 (kilograms)
+135589000.0
+279142000000.0
+171.0 (kelvins)
+1099_Figneria
+605718000.0 (kilometres)
+16.37 (kilometrePerSeconds)
+"1928 RQ"
+179942000.0
+349206000000.0
+156.0 (kelvins)
+109_Felicitas
+523329000.0 (kilometres)
+17.73 (kilometrePerSeconds)
+0.0473 (kilometrePerSeconds)
+7.5 (kilograms)
+139705000.0
+47487.6
+10_Hygiea
+523951582.33968 (kilometres)
+Annibale_de_Gasparis
+0.21 (kilometrePerSeconds)
+"A900 GA"
+416136000000.0
+198803.0
+837080.744 (squareKilometres)
+164.0 (kelvins)
+1101_Clematis
+520906000.0 (kilometres)
+16.54 (kilometrePerSeconds)
+0.02 (kilometrePerSeconds)
+"1928 SJ"
+5.7 (kilograms)
+183309000.0
+155.0 (kelvins)
+110_Lydia
+440756000.0 (kilometres)
+17.99 (kilometrePerSeconds)
+Alphonse_Borrelly
+0.0455 (kilometrePerSeconds)
+6.7 (kilograms)
+142603000.0
+39332.9
+168.0 (kelvins)
+11264_Claudiomaccone
+475426000.0 (kilometres)
+18.29 (kilometrePerSeconds)
+Nikolai_Chernykh
+1513.722 (days)
+296521000.0 (kilometres)
+11473.9
+Peritonitis
+Madison,_Wisconsin
+N._R._Pogson
+Chennai
+University_of_Göttingen
+German_Empire
+Preußisch_Oldendorf
+Göttingen
+Allan_Sandage
+Halton_Arp
+Germany
+14.2 (square kilometres)
+286.5 (square kilometres)
+524.0
+429.9 (inhabitants per square kilometre)
+Adams_Township,_Madison_County,_Indiana
+Akron,_Ohio
+234, 330
+0.88 (square kilometres)
+161.54 (square kilometres)
+306.0
+Summit_County,_Ohio
+Mayor
+1239.3 (inhabitants per square kilometre)
+Alabama
+Albany,_Georgia
+144.7 (square kilometres)
+62.0
+Dougherty_County,_Georgia
+Georgia_(U.S._state)
+535.0 (inhabitants per square kilometre)
+Albany,_Oregon
+541, 458
+0.54 (square kilometres)
+64.008
+Benton_County,_Oregon
+Linn_County,_Oregon
+Oregon
+1104.1 (inhabitants per square kilometre)
+Albuquerque,_New_Mexico
+505, 575
+486.2 (square kilometres)
+490.9 (square kilometres)
+Bernalillo_County,_New_Mexico
+New_Mexico
+Richard_J._Berry
+Mayor_of_Albuquerque
+United_States_House_of_Representatives
+1142.3 (inhabitants per square kilometre)
+Albuquerque_City_Council
+Alexandria,_Indiana
+765
+6.81 (square kilometres)
+265.0
+Madison_County,_Indiana
+Monroe_Township,_Madison_County,_Indiana
+755.3 (inhabitants per square kilometre)
+Alpharetta,_Georgia
+770, 404, 678
+1.0 (square kilometres)
+55.4 (square kilometres)
+346.0
+Fulton_County,_Georgia
+992.6 (inhabitants per square kilometre)
+Amarillo,_Texas
+806
+1099.0
+746.0 (inhabitants per square kilometre)
+Anaheim,_California
+"-7"
+"-8"
+657, 714
+25.2 (square kilometres)
+131.6 (square kilometres)
+48.0
+Orange_County,_California
+Tom_Tait
+California_State_Assembly
+California_State_Senate
+336265
+Anderson,_Indiana
+107.43 (square kilometres)
+268.0
+Anderson_Township,_Madison_County,_Indiana
+Fall_Creek_Township,_Madison_County,_Indiana
+Lafayette_Township,_Madison_County,_Indiana
+Union_Township,_Madison_County,_Indiana
+Democratic_Party_(United_States)
+523.9 (inhabitants per square kilometre)
+Angola,_Indiana
+16.55 (square kilometres)
+Steuben_County,_Indiana
+524.5 (inhabitants per square kilometre)
+Ann_Arbor,_Michigan
+734
+74.33 (square kilometres)
+Michigan
+Washtenaw_County,_Michigan
+Christopher_Taylor_(politician)
+City_Manager
+Antioch,_California
+75.324 (square kilometres)
+102372
+94509, 94531
+Arlington,_Texas
+682, 817, 214, 469, 972
+82.8 (square kilometres)
+258.2 (square kilometres)
+Tarrant_County,_Texas
+404
+404, 678, 470
+344.9 (square kilometres)
+347.1 (square kilometres)
+"Georgia"
+DeKalb_County,_Georgia
+Atlanta_City_Council
+1299.0 (inhabitants per square kilometre)
+609
+Clerk_(municipal_official)
+Mayors_of_Atlantic_City,_New_Jersey
+1421.2 (inhabitants per square kilometre)
+Attica,_Indiana
+4.14 (square kilometres)
+Logan_Township,_Fountain_County,_Indiana
+783.1 (inhabitants per square kilometre)
+Auburn,_Alabama
+334
+1.7 (square kilometres)
+140.8 (square kilometres)
+214.0
+368.65 (inhabitants per square kilometre)
+Auburn,_Washington
+King_County,_Washington
+Pierce_County,_Washington
+Washington_(state)
+914.8 (inhabitants per square kilometre)
+512
+512, 737
+686.0 (square kilometres)
+703.95 (square kilometres)
+Hays_County,_Texas
+Travis_County,_Texas
+Williamson_County,_Texas
+1296.65 (inhabitants per square kilometre)
+Corvallis,_Oregon
+Chinese_language
+Vietnamese_language
+California_State_Legislature
+California_State_Capitol
+Contra_Costa_County,_California
+San_Francisco_Bay_Area
+Debbie_Wasserman_Schultz
+South_Capitol_Street
+Fountain_County,_Indiana
+Covington,_Indiana
+San_Marcos,_Texas
+English_Americans
+Seattle
+Lee_County,_Alabama
+Opelika,_Alabama
+Lansing,_Michigan
+Newark,_New_Jersey
+Navajo_language
+New_Mexico_House_of_Representatives
+Don_Tripp
+New_Mexico_Senate
+John_Sánchez
+Greater_Los_Angeles_Area
+Salem,_Oregon
+Tacoma,_Washington
+Potter_County,_Texas
+Randall_County,_Texas
+Canyon,_Texas
+Richland_Township,_Madison_County,_Indiana
+Fort_Worth,_Texas
+Americans
+Native_Americans_in_the_United_States
+United_States_Congress
+Olympia,_Washington
+Georgetown,_Texas
+Round_Rock,_Texas
+Airman_(comicsCharacter)
+"Drake Stevens"
+George_Kapitan
+Harry_Sahle
+Amazing-Man_(comicsCharacter)
+"John Aman"
+Bill_Everett
+April_O'Neil
+Peter_Laird
+Arion_(comicsCharacter)
+"Ahri'ahn"
+Jan_Duursema
+Paul_Kupperberg
+Asterix_(comicsCharacter)
+"Astérix"
+Albert_Uderzo
+Aurakles
+"Aurakles"
+Dick_Dillin
+Len_Wein
+Auron_(comicsCharacter)
+Karl_Kesel
+Walt_Simonson
+"Lambien"
+BBC
+John_Reith,_1st_Baron_Reith
+Rona_Fairhead
+Tony_Hall,_Baron_Hall_of_Birkenhead
+Broadcasting_House
+BBC_Radio
+Balder_(comicsCharacter)
+"Balder Odinson"
+Stan_Lee
+Ballistic_(comicsCharacter)
+"Kelvin Mao"
+"Michael Manley"
+Doug_Moench
+Bananaman
+John_Geering
+Steve_Bright
+"1986-04-15"
+Graeme_Garden
+Jill_Shilling
+Tim_Brooke-Taylor
+Baymax
+Duncan_Rouleau
+Steven_T._Seagle
+Big_Hero_6_(film)
+Scott_Adsit
+Ben_Urich
+Gene_Colan
+Roger_McKenzie_(comic_book_writer)
+Bianca_Castafiore
+Hergé
+Bibbo_Bibbowski
+Marv_Wolfman
+Walt_Disney_Studios_Motion_Pictures
+Alan_Tudyk
+Damon_Wayans,_Jr.
+Jamie_Chung
+Maya_Rudolph
+Ryan_Potter
+Bill_Oddie
+Rochdale
+Black_Pirate
+Sheldon_Moldoff
+Blockbuster_(comicsCharacter)
+"Mark Desmond"
+"Roland Desmond"
+Carmine_Infantino
+Gardner_Fox
+Roger_Stern
+Tom_Lyle
+Bolt_(comicsCharacter)
+"Larry Bolatinsky"
+Ernie_Colón
+Gary_Cohn_(comics)
+Paris_Cullins
+Bozo_the_Iron_Man
+George_Brenner
+Dane_Whitman_Black_Knight_(comicsCharacter)
+"Dane Whitman"
+John_Buscema
+Roy_Thomas
+Eagle_Award_(comics)
+Inkpot_Award
+Puerto_Ricans
+Eisner_Award
+Aberdeen
+Jack_Kirby
+Jerry_Ordway
+Academy_of_Comic_Book_Arts
+Alley_Award
+René_Goscinny
+French_people
+The_Arrow_(comicsCharacter)
+"Ralph Payne"
+"Rick Parker"
+Paul_Gustavson
+Buxton
+Derbyshire
+AmeriGas
+1959-01-01
+Energy_industry
+King_of_Prussia,_Pennsylvania
+211200000
+380700000
+8514837.14  (square kilometres)
+Michel_Temer
+"President of the Supreme Federal Court"
+23.8
+Chinabank
+Insular_Government_of_the_Philippine_Islands
+Manila
+1920-08-16
+5594
+295
+Banking
+Public_company
+Felipe_Gozon
+"Atty. Felipe L. Gozon, FLG"
+1939-12-08
+GMA_Network_(company)
+Diliman
+GMA_Network_Center
+46000000
+GMA_New_Media
+2000-01-01
+Entertainment
+Mass_Media
+Philippines
+Quezon_City
+Mobile_Applications
+Digify,_Inc.
+Philippine_Entertainment_Portal
+Hypermarcas
+2001-01-01
+Pharmaceuticals
+São_Paulo
+108600000
+Cosmetics
+Healthcare
+Mantecorp
+S.A._(corporation)
+1901-07-01
+Ireland
+Europe
+North_American_Eastern_Time_Zone
+Census-designated_place
+La_Crosse,_Wisconsin
+Wisconsin
+"City Council"
+Capital_city
+Summit_Media
+1898-06-12
+Aquilino_Pimentel_III
+Maria_Lourdes_Sereno
+Pantaleon_Alvarez
+President
+"Maka-Diyos, Maka-Tao, Makakalikasan at Makabansa"
+Filipino_language
+Philippine_English
+Philippine_Standard_Time
+165.33
+Liberal_Party_(Philippines)
+Cities_of_the_Philippines
+Swords,_Dublin
+11.35
+Leinster
+Donabate
+Kinsealy
+Trane
+1913-01-01
+Building_materials
+556300000
+29000
+Building_Management_System
+HVAC
+10264000000
+Subsidiary
+9833516.63  (square kilometres)
+African-American
+Native_American
+White_American
+1776-07-04
+Federalism
+Paul_Ryan
+"Vice President"
+6.97
+Ajoblanco
+Almond
+Bread
+Garlic
+Olive_oil
+Water
+Andalusia
+Rosaceae
+Rosales
+Rosids
+Amatriciana_sauce
+Italian_meal_structure
+"Onion, garlic, black pepper, chili"
+Onion
+Guanciale
+Tomato
+"Tomatoes, guanciale, cheese, olive oil"
+Lazio
+Susana_Díaz
+Antioquia_Department
+Colombia
+Arem-arem
+Indonesia
+"Main course"
+Lemper
+Banana_leaf
+"compressed rice cooked in banana leaf with vegetables or minced meat fillings"
+Javanese_cuisine
+Arrabbiata_sauce
+Basil
+Oregano
+Rome
+Arròs_negre
+Cephalopod_ink
+Cubanelle
+"White rice, cuttlefish or squid, cephalopod ink, cubanelle peppers"
+Asam_pedas
+"Asam padeh"
+"Indonesia and Malaysia"
+Malay_cuisine
+Padang_cuisine
+"Fish cooked in sour and hot sauce"
+"Sumatra and Malay Peninsula"
+Malay_Peninsula
+Sumatra
+Avocado
+Lauraceae
+Laurales
+Ayam_penyet
+Java
+Fried_chicken
+"Squeezed" or "smashed" fried chicken served with sambal
+"Nationwide, also can be found in Malaysia and Singapore"
+Malaysia
+BLT
+Club_sandwich
+Lettuce
+Bacon_Explosion
+Bacon
+Sausage
+"Bacon,sausage"
+Kansas_City_metropolitan_area
+Bacon_sandwich
+"Bacon butty, bacon sarnie, rasher sandwich, bacon sanger, piece 'n bacon, bacon cob, bacon barm, bacon muffin"
+Brown_sauce
+Condiment
+Ketchup
+"Bread and bacon, with a condiment, often ketchup or brown sauce"
+Baked_Alaska
+"France, United States or China"
+China
+France
+Christmas_pudding
+Ice_cream
+Meringue
+Sponge_cake
+"Meringue, ice cream, sponge cake or Christmas pudding"
+"Paris, New York or Hong Kong"
+Bakewell_pudding
+"Dessert"
+"Rutland Arms, Bakewell, in 1820"
+Bakewell_tart
+"Ground almond, jam, butter, eggs"
+Derbyshire_Dales
+"Warm (freshly baked) or cold"
+Fruit_preserves
+Shortcrust_pastry
+Bakso
+Chinese_cuisine
+Beef
+Celery
+Ground_beef
+Tapioca
+"Ground beef, tapioca, noodle, rice vermicelli, beef broth, kailan, celery, salted vegetables, fried shallots"
+"Nationwide in Indonesia, also popular in neighboring Southeast Asian countries"
+Bandeja_paisa
+Arepa
+Black_pudding
+Cooking_plantain
+Fried_egg
+Ground_meat
+Hogao
+Kidney_bean
+Lemon
+Pork_belly
+Rice
+"red beans, pork belly, white rice, ground meat, chicharon, fried egg, plantain (patacones), chorizo, arepa, hogao sauce, black pudding (morcilla), avocado and lemon"
+Barny_Cakes
+18.0 g
+Apple
+Milk
+Strawberry
+4.8 g
+1999
+Batagor
+Siomay
+Peanut_sauce
+"hot"
+Batchoy
+Soup
+Noodle
+Pork
+"noodles, pork organs, vegetables, chicken, shrimp, beef"
+La_Paz,_Iloilo_City
+Beef_kway_teow
+"Singapore and Indonesia"
+Singapore
+Oyster_sauce
+Palm_sugar
+Sesame_oil
+"Kway teow, beef tender loin, gula Melaka, sliced, dried black beans, garlic, dark soy sauce, lengkuas, oyster sauce, soya sauce, chilli and sesame oil"
+"Nationwide in Singapore and Indonesia"
+Bhajji
+Gram_flour
+Vegetable
+"Gram flour, vegetables"
+Karnataka
+Pakora
+"Pakora and other fritters made from wheat or corn flour"
+Binignit
+Dessert
+Banana
+Coconut_milk
+Sago
+Sweet_potato
+Taro
+Mindanao
+Bionico
+Mexico
+Honey
+Condensed_milk
+Granola
+Raisin
+Sour_cream
+"Chopped Fruits, Sour Cream, Condensed Milk, Granola, Shredded Coconut, Raisins"
+Guadalajara
+Catalonia
+Carles_Puigdemont
+Parliament_of_Catalonia
+Apiaceae
+Apium
+Chicharrón
+Standard_Chinese
+Cookie
+Sandesh_(confectionery)
+Claude_Bartolone
+François_Hollande
+Gérard_Larcher
+Manuel_Valls
+Chicken
+Hong_Kong
+Carrie_Lam_(politician)
+Indian_people
+Jakarta
+Indonesian_rupiah
+Joko_Widodo
+Italian_language
+Laura_Boldrini
+Matteo_Renzi
+Pietro_Grasso
+Sergio_Mattarella
+Jalisco
+Jesús_Casillas_Romero
+Javanese_people
+Vajubhai_Vala
+Rutaceae
+Citrus
+Sapindales
+Kuala_Lumpur
+Putrajaya
+Malaysian_Chinese
+Malaysian_Indian
+Abdul_Halim_of_Kedah
+Abu_Zahar_Ujang
+Arifin_Zakaria
+Najib_Razak
+Mexican_peso
+Mexican_Spanish
+Enrique_Peña_Nieto
+Mondelez_International
+Cauliflower
+Paneer
+Chinese_Filipino
+Igorot_people
+Ilocano_people
+Moro_people
+Zamboangans
+Philippine_Spanish
+Shumai
+Shiitake
+Singapore_dollar
+Halimah_Yacob
+Tony_Tan
+Spaniards
+Felipe_VI_of_Spain
+Acehnese_people
+Batak
+Minangkabau_people
+Solanales
+Solanaceae
+Solanum
+Valencian_Community
+Ximo_Puig
+1955_Dodge
+"Dodge Custom Royal"
+"Dodge Suburban"
+Convertible
+Hardtop
+Sedan_(automobile)
+Station_wagon
+AMC_V8_engine
+Straight-six_engine
+V8_engine
+Dodge
+DeSoto_Custom
+Plymouth_Plaza
+"3-speed automatic"
+120.0 (inches)
+A-Rosa_Luna
+"Neptun Werft, Warnemünde,"
+Neptun_Werft
+Rostock
+2005-04-06
+125800.0 (millimetres)
+MTU_Friedrichshafen
+Cruise_ship
+1850.0 (tonnes)
+2004-12-16
+2004-01-22
+"2 × MTU 16V 2000 M60 engine"
+24.0
+AIDA_Cruises
+AIDAluna
+Meyer_Werft
+2009-04-04
+252000.0 (millimetres)
+2009-03-22
+Caterpillar_Inc.
+32.2
+"In service"
+40.744
+AIDAstella
+2013-03-17
+253260.0 (millimetres)
+Costa_Crociere
+"Sphinx-class cruise ship"
+2008-12-17
+38.892
+ALCO_RS-3
+"May 1950 - August 1956"
+American_Locomotive_Company
+Montreal_Locomotive_Works
+V12_engine
+17068.8 (millimetres)
+Diesel-electric_transmission
+1418
+ALV_X-1
+1.524 (metres)
+1
+2
+AMC_Matador
+"Rambler Matador"
+"VAM Classic"
+"Australia"
+"Mexico"
+"USA"
+Australian_Motor_Industries
+Kenosha,_Wisconsin
+Mexico_City
+Port_Melbourne,_Victoria
+Thames,_New_Zealand
+Coupé
+Full-size_car
+Mid-size_car
+Richard_A._Teague
+AMC_straight-6_engine
+American_Motors
+1971
+1974
+ARA_Veinticinco_de_Mayo_(V-2)
+Cammell_Laird
+Argentina
+192000.0 (millimetres)
+24.4
+"Provided spare parts for NAeL Minas Geraisand and remainder was scrapped in 2000"
+"Sold to Argentina 15 October 1968"
+Abarth
+Bologna
+Carlo_Abarth
+Abarth_1000_GT_Coupé
+"Two door coupé"
+Gruppo_Bertone
+1958
+2160.0 (millimetres)
+1.55
+Acura_TLX
+Marysville,_Ohio
+Marysville_Auto_Plant
+Luxury_vehicle
+2.4 (litres)
+Honda_J_engine
+Inline-four_engine
+V6_engine
+"front-wheel drive / all-wheel drive"
+Front-engine_design
+Front-wheel_drive
+Honda
+Airbus_Defence_and_Space
+Airbus_Group
+Aleksey_Chirikov_(icebreaker)
+Arctech_Helsinki_Shipyard
+Helsinki
+99.83
+Sovcomflot
+Wärtsilä
+21.2
+Alfa_Romeo_164
+"Alfa Romeo 168"
+Milan
+"Mid-size luxury / Executive car"
+2.5 (litres)
+Straight-four_engine
+Saab_9000
+"4-speed automatic (ZF 4HP18Q)"
+"5-speed manual"
+"6-speed manual (Getrag)"
+Alhambra
+63800.0 (millimetres)
+P&O_(company)
+Humphrys,_Tennant_and_Dykes
+1855-05-31
+"Geared steam engine Humphrys, Tennant and Dykes 140hp"
+Alliant_Techsystems
+AGM-88_HARM
+XM25_CDTE
+Alvis_Car_and_Engineering_Company
+Coventry
+Rover_Company
+Alvis_Speed_25
+"Full-size luxury car"
+"Petrol"
+31.48 tax horsepower
+4387.0 (cubicCentimetres)
+"single plate clutch, separate 4-speed gearbox all-silent and all-syncromesh, centre change lever, open tubular propellor shaft with metal joints , spiral bevel fully floating back axle"
+127.0 (inches)
+Schenectady,_New_York
+Chrysler
+Eagle_(automobile)
+Roy_D._Chapin,_Jr.
+Wheel_Horse
+American_submarine_NR-1
+General_Dynamics_Electric_Boat
+45000.0 (millimetres)
+3.8 m
+1969-01-25
+8.334
+Antares_(rocket)
+Delta_II
+3.9 (metres)
+2013-09-18
+2014-07-13
+"Medium expendable launch system"
+Mid-Atlantic_Regional_Spaceport
+2013-04-21
+2014-01-09
+2014-10-28
+Orbital_ATK
+Yuzhnoye_Design_Office
+Buenos_Aires
+Argentines
+Mauricio_Macri
+Ariane_5
+5.4 (metres)
+2003-09-27
+2004-12-18
+2009-12-18
+ELA-3
+1996-06-04
+2002-12-11
+2004-03-02
+2008-03-09
+"ESA and Arianespace"
+Arianespace
+European_Space_Agency
+Courcouronnes
+Aston_Martin_DBS
+Aston_Martin
+Aston_Martin_V8
+Aston_Martin_Vantage
+"Newport Pagnell, Buckinghamshire, England, United Kingdom"
+Newport_Pagnell
+5.3 (litres)
+Aston_Martin_RHAM/1
+Aston_Martin_Virage
+Atlas_II
+3.04 m
+2002-12-05
+2004-08-31
+Cape_Canaveral_Air_Force_Station
+Spaceport_Florida_Launch_Complex_36
+Vandenberg_AFB_Space_Launch_Complex_3
+Lockheed_Martin
+Audi
+Ducati
+Lamborghini
+Quattro_GmbH
+Audi_A1
+"Brussels, Belgium"
+Hatchback
+Supermini
+1.2 (litres)
+Front-engine,_front-wheel-drive_layout
+Volkswagen_Polo
+"6-speed manual"
+Carnival_Corporation_&_plc
+DeSoto_(automobile)
+Dodge_Coronet
+DeSoto_Firedome
+Cape_Canaveral_Air_Force_Station_Space_Launch_Complex_17
+Vandenberg_AFB_Space_Launch_Complex_2
+Vandenberg_Air_Force_Base
+United_Launch_Alliance
+Sergio_Marchionne
+Guiana_Space_Centre
+Fiat_Croma
+Opel_Vectra
+Juha_Sipilä
+Groton,_Connecticut
+General_Dynamics
+Berlin
+Andreas_Voßkuhle
+Angela_Merkel
+Joachim_Gauck
+Turin
+French_Guiana
+Kourou,_French_Guiana
+Honda_Accord
+Deptford
+Lancia_Thema
+Friedrichshafen
+Rolls-Royce_Holdings
+Rolls-Royce_Power_Systems
+Mid-Atlantic_Regional_Spaceport_Launch_Pad_0
+Minotaur_IV
+Minotaur_V
+Ambrose
+Plymouth_(automobile)
+Plymouth_Satellite
+General_Motors
+SEAT_Ibiza
+Volkswagen_Polo_Mk3
+Lompoc,_California
+Dnipropetrovsk
+Ukraine
+11th_Mississippi_Infantry_Monument
+Contributing_property
+Adams_County,_Pennsylvania
+Seminary_Ridge
+Gettysburg,_Pennsylvania
+"Pennsylvania"
+14th_New_Jersey_Volunteer_Infantry_Monument
+Historic_districts_in_the_United_States
+Monocacy_National_Battlefield
+"1907-07-11"
+1907-07-11
+National_Park_Service
+"Maryland"
+Cumberland_County,_Pennsylvania
+Frederick_County,_Maryland
+Franklin_County,_Pennsylvania
+Atatürk_Monument_(İzmir)
+"1932-07-27"
+Turkey
+Azerbaijan
+Baku
+National_Assembly_(Azerbaijan)
+Baku_Turkish_Martyrs'_Memorial
+"Ottoman Army soldiers killed in the Battle of Baku"
+"Hüseyin Bütüner and Hilmi Güner"
+Dead_Man's_Plack
+Æthelwald,_Ealdorman_of_East_Anglia
+Rock_(geology)
+British_Arabs
+Cornish_language
+Church_of_England
+Frederick,_Maryland
+Ankara
+Turkish_lira
+Ahmet_Davutoğlu
+President_of_Turkey
+Aaron_S._Daggett
+American_Civil_War
+Battle_of_Antietam
+Battle_of_Cold_Harbor
+Battle_of_Fredericksburg
+Battle_of_Garnett's_&_Golding's_Farm
+Battle_of_Gettysburg
+Battle_of_Salem_Church
+Battle_of_South_Mountain
+Battle_of_White_Oak_Swamp
+Battle_of_the_Wilderness
+Second_Battle_of_Rappahannock_Station
+Greene,_Maine
+Maine
+West_Roxbury
+Ab_Klink
+Erasmus_University_Rotterdam
+Leiden_University
+1958-11-02
+Netherlands
+Stellendam
+"Member of the House of Representatives"
+"Member of the Senate"
+House_of_Representatives_(Netherlands)
+Ministry_of_Health,_Welfare_and_Sport_(Netherlands)
+Senate_(Netherlands)
+Christian_Democratic_Appeal
+Abdul_Rahman_Ya'kub
+Stephen_Yong_Kuet_Tze
+Abdul_Taib_Mahmud
+1936-05-21
+Kingdom_of_Sarawak
+Miri,_Malaysia
+"Barisan Ra'ayat Jati Sarawak"
+Parti_Pesaka_Bumiputera_Bersatu
+Asajaya
+Balingian
+"Demak Jaya, Jalan Bako, Kuching, Sarawak"
+Kuching
+Sarawak
+Abdulsalami_Abubakar
+Technical_Institute,_Kaduna
+Nigeria
+Mike_Akhigbe
+Nigerian_Air_Force
+Chief_of_the_Defence_Staff_(Nigeria)
+Al-Amin_Daggash
+Olusegun_Obasanjo
+Abel_Caballero
+University_of_Santiago_de_Compostela
+Galicia_(Spain)
+Ponteareas
+Felipe_González
+"Mayor of Vigo"
+"Member of the Congress of Deputies"
+"Minister of Transport"
+Ministry_of_Public_Works_and_Transport_(Spain)
+Spanish_Socialist_Workers'_Party
+Abner_W._Sibal
+1921-04-11
+Ridgewood,_Queens
+United_States_Army
+"Member of the Connecticut Senate from the 26th District"
+Republican_Party_(United_States)
+Connecticut's_4th_congressional_district
+Donald_J._Irwin
+Marjorie_Farmer
+Abraham_A._Ribicoff
+Connecticut
+New_Britain,_Connecticut
+"New York City, New York, U.S."
+John_F._Kennedy
+American
+"Governor of Connecticut"
+"United States Secretary of Health, Education, and Welfare"
+"Ruth Ribicoff"
+Casey_Ribicoff
+John_N._Dempsey
+Adam_Holloway
+2005-05-05
+Magdalene_College,_Cambridge
+Gulf_War
+"Faversham, Kent, England"
+Faversham
+Grenadier_Guards
+9312
+Member_of_Parliament_for_Gravesham
+Member_of_parliament
+Adam_Koc
+Cross_of_Independence
+Legion_of_Honour
+Officer's_Star_"Parasol"
+Order_of_Polonia_Restituta
+Virtuti_Militari
+Polish–Soviet_War
+World_War_I
+Congress_Poland
+Suwałki
+Adenan_Satem
+Japanese_occupation_of_British_Borneo
+Adolf_Schärf
+Austria-Hungary
+Adonis_Georgiadis
+National_and_Kapodistrian_University_of_Athens
+"Deputy Parliamentary Spokesman of Popular Orthodox Rally"
+"Minister for Health"
+"Spokesman of Popular Orthodox Rally"
+"Vice-President of New Democracy"
+"Member of the Hellenic Parliament"
+Ministry_of_Economy,_Development_and_Tourism_(Greece)
+Ministry_of_Health_(Greece)
+New_Democracy_(Greece)
+Makis_Voridis
+Agnes_Kant
+Radboud_University_Nijmegen
+Parliamentary_group_leader
+Socialist_Party_(Netherlands)
+Doesburg
+Agnes_Ward_White
+Parkersburg,_West_Virginia
+Airey_Neave
+1979-03-30
+1974-03-04
+Distinguished_Service_Order
+Order_of_the_British_Empire
+Battle_of_France
+World_War_II
+Knightsbridge
+"Westminster Hospital, London"
+Royal_Artillery
+Albert_B._White
+1905-03-04
+1901-03-04
+1856-09-22
+1856
+1941-07-03
+1941
+"Governor of West Virginia"
+Politician
+William_M._O._Dawson
+Albert_Jennings_Fountain
+American_Indian_Wars
+Staten_Island
+1896-02-01
+Doña_Ana_County,_New_Mexico
+New_Mexico_Territory
+Edmund_J._Davis
+1st_Regiment_New_Mexico_Volunteer_Cavalry
+President_pro_tempore_of_the_Texas_Senate
+Alberto_Teisaire
+1891-05-20
+Mendoza,_Argentina
+Juan_Perón
+"Provisional President of the Argentine Senate"
+Justicialist_Party
+Rear_admiral
+Isaac_Rojas
+Alfons_Gorbach
+Austria
+County_of_Tyrol
+Imst
+Tyrol_(state)
+Graz
+Styria
+Austrian_People's_Party
+Josef_Klaus
+Alfred_Moore_Scales
+1857-03-04
+1885-01-21
+University_of_North_Carolina_at_Chapel_Hill
+Peninsula_Campaign
+Siege_of_Petersburg
+Reidsville,_North_Carolina
+"Governor of North Carolina"
+Daniel_Gould_Fowle
+James_Madison_Leach
+James_W._Reid_(politician)
+Alfred_N._Phillips
+1939-01-03
+"Member of the U.S. House of Representatives from Connecticut's 4th district"
+Albert_E._Austin
+Allan_Shivers
+1949-07-11
+Lufkin,_Texas
+"Governor of Texas"
+"Lieutenant Governor of Texas"
+"Member of the Texas State Senate from District 4 (Port Arthur)"
+Ben_Ramsey
+Wilfred_R._Cousins,_Jr.
+Alvah_Sabin
+1793-10-23
+Georgia,_Vermont
+Sycamore,_Illinois
+Secretary_of_State_of_Vermont
+Vermont's_3rd_congressional_district
+Baptists
+Homer_Elihu_Royce
+Abraham_Lincoln
+Jefferson_Davis
+Antonis_Samaras
+Evangelos_Venizelos
+Konstantinos_Mitsotakis
+Doris_Bures
+Battle_of_Chancellorsville
+Robert_E._Lee
+Gerd_von_Rundstedt
+Hugo_Sperrle
+Buenos_Aires_City_Legislature
+Diego_Santilli
+Horacio_Rodríguez_Larreta
+Princeton_University
+Emile_Roemer
+Association_of_MBAs
+Rodolfo_Llopis
+Battle_of_Waterloo
+George_H._W._Bush
+John_Major
+Khadija_Arib
+Juan_Carlos_I_of_Spain
+Alfonso_XIII_of_Spain
+Queen_Sofía_of_Spain
+Hortensio_Quijano
+Eva_Perón
+Nigerian_Navy
+Atiku_Abubakar
+Blue
+Yemi_Osinbajo
+Aermacchi_MB-339
+Polish_language
+Joseph_Stalin
+Leon_Trotsky
+Russian_Civil_War
+Hohne
+Red
+DeKalb_County,_Illinois
+American_Revolutionary_War
+Whiskey_Rebellion
+Vermont
+Burlington,_Vermont
+Whig_Party_(United_States)
+Daniel_Webster
+Henry_Clay
+Charleston,_West_Virginia
+Benito_Mussolini
+Chiang_Kai-shek
+Franklin_D._Roosevelt
+East_African_Campaign_(World_War_II)
+South-East_Asian_theatre_of_World_War_II
+1._FC_Köln
+50000
+2014
+2014–15_Bundesliga
+1._FC_Magdeburg
+Jens_Härtel
+27250
+2014–15_Regionalliga
+A.C._Cesena
+Cesena
+Stadio_Dino_Manuzzi
+Serie_B
+Massimo_Drago
+23900
+A.C._Chievo_Verona
+"Associazione Calcio ChievoVerona S.r.l."
+"Verona, Italy"
+Stadio_Marc'Antonio_Bentegodi
+Verona
+39371
+2014–15_Serie_A
+A.C._Lumezzane
+"Associazione Calcio Lumezzane SpA"
+"Lega Pro/A"
+Lega_Pro
+Michele_Marcolini
+4150
+A.D._Isidro_Metapán
+"Isidro Metapán"
+"Metapán, El Salvador"
+Estadio_Jorge_Calero_Suárez
+Metapán
+Jorge_Humberto_Rodríguez
+10000
+A.E_Dimitra_Efxeinoupolis
+Antonis_Milionis
+Efxeinoupoli
+A_EPSTH_2nd_GROUP
+1500
+A.F.C._Blackpool
+"Jepson Way,"
+English_football_league_system
+North_West_Counties_Football_League
+Stuart_Parker_(footballer)
+2014–15_North_West_Counties_Football_League
+A.F.C._Fylde
+"Association Football Club Fylde"
+"Bryning Lane"
+"Kellamergh Park"
+"Warton, Fylde, Lancashire"
+Lancashire
+Warton,_Fylde
+National_League_North
+Dave_Challinor
+3180
+2014–15_Football_Conference
+A.S._Gubbio_1910
+"Associazione Sportiva Gubbio 1910 Srl"
+Stadio_Pietro_Barbetti
+Serie_D
+2014–15_Lega_Pro
+A.S._Livorno_Calcio
+"Associazione Sportiva"
+"Livorno Calcio S.p.A."
+"Livorno, Italy"
+Livorno
+Stadio_Armando_Picchi
+Christian_Panucci
+2014–15_Serie_B
+James_Pallotta
+"Associazione Sportiva Roma S.p.A."
+"Rome, Italy"
+Stadio_Olimpico
+Luciano_Spalletti
+70634
+ACF_Fiorentina
+"ACF Fiorentina S.p.A."
+Paulo_Sousa
+47290
+AEK_Athens_F.C.
+Olympic_Stadium_(Athens)
+Superleague_Greece
+Gus_Poyet
+69618
+AFC_Ajax
+"Amsterdamsche Football Club Ajax"
+53502
+AFC_Ajax_N.V.
+2014–15_Eredivisie
+AFC_Ajax_(amateurs)
+"Amsterdamsche Football Club Ajax Amateurs"
+Sportpark_De_Toekomst
+Hoofdklasse
+"Lucky Ajax"
+2014–15_Topklasse
+AZAL_Arena
+Shuvalan
+"AZAL Peşəkar Futbol Klubu"
+3500
+2014–15_Azerbaijan_Premier_League
+"Alkmaar Zaanstreek"
+John_van_den_Brom
+Max_Huiberts
+Robert_Eenhoorn
+Agremiação_Sportiva_Arapiraquense
+"President"
+"Agremiação Sportiva Arapiraquense"
+Estádio_Municipal_Coaracy_da_Mata_Fonseca
+Campeonato_Brasileiro_Série_C
+"''Alvinegro"
+"Asa Gigante ''"
+17000
+2015
+Dan_Horrigan
+Akron_Summit_Assault
+Dave_Laughlin
+Premier_Development_League
+Denzil_Antonio
+2011_PDL_season
+Amsterdam-Noord
+Giorgos_Kaminis
+Azerbaijan_Premier_League
+Qarabağ_FK
+Blackpool
+Gordon_Marsden
+Vila_Nova_Futebol_Clube
+Genoa_C.F.C.
+Italy_national_football_team
+Real_Madrid_C.F.
+Bury_F.C.
+Colwyn_Bay_F.C.
+Stockport_County_F.C.
+Tranmere_Rovers_F.C.
+Alagoas
+Arapiraca
+Frank_de_Boer
+Ajax_Youth_Academy
+Al-Shamal_Sports_Club
+Netherlands_national_football_team
+Greek_language
+Gubbio
+Left_Ecology_Freedom
+Chelsea_F.C.
+Real_Zaragoza
+Italians
+1._FC_Lokomotive_Leipzig
+1._FC_Union_Berlin
+Berliner_AK_07
+FSV_Zwickau
+RB_Leipzig
+SV_Babelsberg_03
+ADO_Den_Haag
+De_Graafschap
+Jong_Ajax
+R.S.C._Anderlecht
+Vitesse_Arnhem
+İstanbulspor_A.Ş.
+Alianza_F.C.
+C.D._Águila
+El_Salvador_national_football_team
+Empoli_F.C.
+Virtus_Entella
+A.S.D._Licata_1931
+Calcio_Catania
+S.S.D._Potenza_Calcio
+U.S._Castrovillari_Calcio
+Vigor_Lamezia
+F.C._Bari_1908
+Torino_F.C.
+Inter_Milan
+Juventus_F.C.
+Maccabi_Tel_Aviv_F.C.
+Portugal_national_football_team
+Peter_Stöger
+Austria_national_football_team
+FC_Admira_Wacker_Mödling
+FK_Austria_Wien
+Favoritner_AC
+First_Vienna_FC
+LASK_Linz
+SC_Wiener_Neustadt
+SK_Rapid_Wien
+SK_Vorwärts_Steyr
+Rolando_Maran
+Carrarese_Calcio
+Unione_Triestina_2012_S.S.D.
+Varese_Calcio_S.S.D.
+Vicenza_Calcio
+Carpi_F.C._1909
+S.S._Robur_Siena
+St._Vincent–St._Mary_High_School
+Blackburn_Rovers_F.C.
+Blackpool_F.C.
+Chesterfield_F.C.
+Drogheda_United_F.C.
+Irlam_Town_F.C.
+KV_Mechelen
+Runcorn_F.C._Halton
+Sparta_Rotterdam
+Olympiacos_F.C.
+1_Decembrie_1918_University
+Alba_Iulia
+"Universitas Apulensis"
+Uab
+"Breaz Valer Daniel"
+AWH_Engineering_College
+250
+"Kuttikkattoor"
+2001
+Kerala
+Magistrate
+Mols
+Accademia_di_Architettura_di_Mendrisio
+Mendrisio
+Switzerland
+Mario_Botta
+1996
+Ticino
+600
+Acharya_Institute_of_Technology
+"~500"
+Visvesvaraya_Technological_University
+Bangalore
+"India"
+"Dr. G. P. Prabhukumar"
+"Nurturing Excellence"
+"AIT"
+700
+"Blue, White and Orange"
+63
+Tennis
+All_India_Council_for_Technical_Education
+Mumbai
+Kempe_Gowda_I
+Monarchy_of_Denmark
+Church_of_Denmark
+European_University_Association
+Brussels
+Ganges
+Telangana
+Arabian_Sea
+Kochi
+Deșteaptă-te,_române!
+Germans_of_Romania
+Klaus_Iohannis
+Prime_Minister_of_Romania
+School of Business and Social Sciences at the Aarhus University
+1928
+"Universitas Aarhusiensis"
+Swiss_Psalm
+Johann_Schneider-Ammann
+Federal_Chancellor_of_Switzerland
+Federal_Assembly_(Switzerland)
+International_Tennis_Federation
+Belgaum
+1634:_The_Baltic_War
+David_Weber
+1634:_The_Bavarian_Crisis
+"978-1-4165-4253-7"
+"Virginia DeMarce and Eric Flint"
+Virginia_DeMarce
+Ring_of_Fire_II
+"Print"
+Hardcover
+"448"
+"DeMarce short stories in the The Grantville Gazettes"
+1634:_The_Ram_Rebellion
+Grantville_Gazette_II
+Grantville_Gazette_III
+1634:_The_Galileo_Affair
+"Eric Flint, Virginia DeMarce, et al."
+E-book
+Paperback
+"512"
+A.T._Charlie_Johnson
+Harvard_University
+Stanford_University
+Michael_Tinkham
+ACM_Transactions_on_Information_Systems
+"ATISET"
+"1046-8188"
+"1558-2868"
+89646863
+"ACM Trans. Inf. Syst."
+Computer_science
+Association_for_Computing_Machinery
+AIDS_(journal)
+"0269-9370"
+"1473-5571"
+"90640840"
+HIV
+HIV/AIDS
+Lippincott_Williams_&_Wilkins
+AIP_Advances
+"AAIDBI"
+"2158-3226"
+"AIP Adv."
+Physics
+"Vincent H. Crespi, Bernard S. Gerstman, A.T. Charlie Johnson,  Masaaki Tanaka, Enge G. Wang"
+"1.524"
+American_Institute_of_Physics
+A_Fortress_of_Grey_Ice
+"0-7653-0633-6"
+51969173
+J._V._Jones
+"672"
+Tor_Books
+A_Glastonbury_Romance
+"0-7156-3648-0"
+"PR6031.O867"
+John_Cowper_Powys
+Weymouth_Sands
+"1174"
+Wolf_Solent
+Simon_&_Schuster
+The_Bodley_Head
+A_Long_Long_Way
+57392246
+The_Secret_Scripture
+"Print  & Paperback"
+"292"
+Annie_Dunne
+Viking_Press
+A_Loyal_Character_Dancer
+49805501
+Qiu_Xiaolong
+"360"
+Soho_Press
+A_Severed_Wasp
+"0-374-26131-8"
+"PS3523.E55 S4 1982"
+8805735
+"388"
+Farrar,_Straus_and_Giroux
+A_Wizard_of_Mars
+"978-0-15-204770-2"
+318875313
+"560"
+Wizards_at_War
+Harcourt_(publisher)
+Abhandlungen_aus_dem_Mathematischen_Seminar_der_Universität_Hamburg
+"AMHAAJ"
+"1865-8784"
+"Abh. Math. Semin. Univ. Hambg."
+Pure_mathematics
+Springer_Science+Business_Media
+Above_the_Veil
+"0-439-17685-9"
+46451790
+Australians
+Into_Battle_(novel)
+"248"
+Aenir
+Acta_Mathematica_Hungarica
+"AMAHE9"
+"0236-5294"
+"1588-2632"
+83646315
+Acta_Palaeontologica_Polonica
+"1732-2421"
+60040714
+"Acta Palaeontol. Pol."
+Paleobiology
+Paleontology
+"Institute of Paleobiology, Polish Academy of Sciences"
+Polish_Academy_of_Sciences
+Addiction_(journal)
+"ADICE5"
+"0965-2140"
+"1360-0443"
+"Addiction"
+"Wiley-Blackwell on behalf of the Society for the Study of Addiction"
+Administrative_Science_Quarterly
+"ASCQAG"
+"0001-8392"
+1461102
+"Admin. Sci. Q."
+Management
+"SAGE Publications for the Samuel Curtis Johnson Graduate School of Management, Cornell University"
+Cornell_University
+SAGE_Publications
+"0-439-17684-0"
+Garth_Nix
+"233"
+Castle_(novel)
+Alcatraz_Versus_the_Evil_Librarians
+"0-439-92550-9"
+Brandon_Sanderson
+Fantasy_literature
+"320"
+Alcatraz_Versus_the_Scrivener's_Bones
+American_Journal_of_Mathematics
+1080
+"0002-9327"
+"1080-6377"
+1480153
+"Am. J. Math."
+1878
+"Bimonthly"
+Johns_Hopkins_University_Press
+Alexander_L._Wolf
+Lincoln,_Nebraska
+Association_of_American_Universities
+Association_of_Public_and_Land-grant_Universities
+Ithaca,_New_York
+Elizabeth_Garrett
+Great_Britain
+Eric_Flint
+Robert_A._Heinlein
+The_Grantville_Gazette
+Orthoretrovirinae
+Retrovirus
+The_Violet_Keystone
+White_people
+Shirley,_Derbyshire
+Blaenau_Ffestiniog
+Owen_Glendower_(novel)
+Porius:_A_Romance_of_the_Dark_Ages
+Johns_Hopkins_University
+Wolters_Kluwer
+Madeleine_L'Engle
+George_MacDonald
+Warsaw
+Sara_Miller_McCune
+Julius_Springer
+Charles_Elkin_Mathews
+Macmillan_Publishers
+David_Cameron
+Penguin_Random_House
+Maiden_Castle_(novel)
+Wiley-Blackwell
+John_Wiley_&_Sons
+Jacob_Bundsgaard
+2702.0
+507
+"Madrid, Paracuellos de Jarama, San Sebastián de los Reyes and Alcobendas"
+Agra
+Fallujah
+84.0
+3684.0
+1986_United_States_bombing_of_Libya
+3360.12
+Sardar_Ayaz_Sadiq
+973.0
+12.0
+518.0
+Auckland
+"UTAA"
+Spata
+"13/31"
+Four_World_Trade_Center
+Avant-garde_metal
+Progressive_metal
+1978-11-12
+Gangsta_rap
+EMI_Records
+Guarania_(music)
+Gran_Asunción
+Errata,_Mississippi
+Soul_music
+RCA_Records
+Legacy_Recordings
+Sony_Music_Entertainment
+"Voice, bodhrán, percussion, autoharp"
+Shanachie_Records
+Marry_Banilow
+"Massachusetts Institute of Technology, Sc.D. 1963"
+Benitoite
+"1966-02-28"
+Inuktitut
+Uruguay_national_football_team
+Charlottetown
+Columbus,_Ohio
+Basim_Qasim
+PAS_Tehran_F.C.
+Gábor_Kubatov
+FK_Mughan
+1995-09-02
+Dale_Tallon
+Parc_Olympique_Lyonnais
+Daniele_Zoratto
+Manitoba
+Turkish_Basketball_Super_League
+Drew_Caldwell
+Hungary
+Slavey_language
+Oleh_Luzhny
+Grozny
+Fir_Park
+Nashville,_Tennessee
+Colmore_Row
+Cape_Town
+White_South_African
+1985
+"January 2009"
+Postmodern_architecture
+Erie_County,_New_York
+Byron_Brown
+60
+DuPage_County,_Illinois
+"HOK SVE"
+"East Link Bridge"
+814
+Bill_Marriott
+"James Pain and George Richard Pain,"
+Haputale
+"Lalbhai Dalpatbhai Campus, near CEPT University, opp. Gujarat University, University Road"
+Sumitra_Mahajan
+"88002539"
+"1988-11-22"
+Los_Angeles_Herald-Examiner
+1913
+1904
+New_Netherland
+Mulatu_Teshome
+22.1
+259776702.47055 (kilometres)
+2013-11-04
+254989570.60815 (kilometres)
+29919600000.0
+"1923 OAA907 XC"
+165.0 (kelvins)
+441092000.0 (kilometres)
+University_of_Michigan
+3.0 (kilograms)
+1516.6700000000003 (days)
+160.0 (kelvins)
+7.9 (kilograms)
+A._Storrs
+"A894 VA; A904 VD;"
+1202.846 (days)
+0.0068 (kilometrePerSeconds)
+17.92 (kilometrePerSeconds)
+95040.0
+2.7 (kilograms)
+0.0155 (kilometrePerSeconds)
+16.76 (kilometrePerSeconds)
+5.57 (days)
+377016000000.0
+45.97 (square kilometres)
+233.9 (square kilometres)
+657
+1472.0 (inhabitants per square kilometre)
+77.41 (square kilometres)
+Dunwoody,_Georgia
+Detroit
+Kevin_Eastman
+"STV"
+"1983-10-03"
+Northbrook,_Illinois
+"Benjamin Urich"
+"Bo Bibbowski"
+Dan_Mishkin
+"Hugh Hazzard"
+8500
+15100000000
+Media_company
+World_Wide_Web
+CEO
+10252
+1800000000
+Drugs
+58.38
+Pecorino_Romano
+Indonesian_language
+"Nationwide in Indonesia, but more specific to Java"
+Chili_pepper
+Cuttlefish
+White_rice
+Squid
+Malaysian_Malay
+Frangipane
+Patrick_McLoughlin
+"Warm  or cold"
+Colombian_cuisine
+Paisa_Region
+Persea
+Chorizo
+1.8 g
+"fried fish dumpling with tofu and vegetables in peanut sauce"
+Bird
+"Bhaji, bajji"
+Silvano_Aureoles_Conejo
+Cottage_cheese
+Jusuf_Kalla
+Baduy
+Banyumasan_people
+230 (cubic inches)
+"Dodge Coronet"
+Chrysler_Newport
+"Sphinx class cruise ship"
+Papenburg
+2013-03-11
+Four-stroke_engine
+The_Star-Spangled_Banner
+Honda_K_engine
+3.5 (litres)
+Acura
+Arese
+1855-07-07
+Samuda_Brothers
+8.3 m
+"Wrecked"
+18.52
+4.6 m
+Audi_Brussels
+August_Horch
+Peoria,_Illinois
+Genoa
+Carroll_County,_Maryland
+"Bronze"
+Pietro_Canonica
+Prime_Minister_of_Azerbaijan
+"Red granite and white marble"
+"Türk Şehitleri Anıtı"
+Purple_Heart
+"Stellendam, Netherlands"
+Mark_Rutte
+Tuanku_Bujang_Tuanku_Othman
+"Parti Bumiputera Sarawak"
+Sulaiman_Abdul_Rahman_Taib
+Niger_State
+Oladipo_Diya
+1999-05-29
+Francisco_Franco
+Spanish–American_War
+Dwight_D._Eisenhower
+Colin_Powell
+Gravesend
+Cross_of_Valour_(Poland)
+Mikulov
+Hessisch_Oldendorf
+1953-06-30
+"Knightsbridge, London"
+Lieutenant_colonel
+1935
+Territorial_Decoration
+Bloomington,_Maryland
+Gabriela_Michetti
+University_of_Vienna
+Mayor_of_Stamford,_Connecticut
+Darien,_Connecticut
+Price_Daniel
+1857-03-03
+Austrian_German
+Labour_Party_(Argentina)
+Sadique_Abubakar
+Romani_people
+Kashubian_language
+FC_Sachsen_Leipzig
+A.S.D._S.S._Nola_1925
+Delfino_Pescara_1936
+Atalanta_B.C.
+Nikos_Voutsis
+"The Mechanics,"
+5300
+19238
+FC_Barcelona
+Amsterdam-Centrum
+5000
+17023
+Vica
+2015_Campeonato_Brasileiro_Série_C
+3000
+K-W_United_FC
+Udinese_Calcio
+Marousi
+Alba
+100
+Alba_County
+Meride
+Bucharest
+Andrew_the_Apostle
+737
+"Thomas Pallesen"
+16000
+The_Grantville_Gazettes
+"1-4165-2060-0"
+Burbank,_California
+1635:_The_Cannon_Law
+76798317
+"0-670-03380-4"
+"1-56947-301-3"
+Diane_Duane
+"0025-5858"
+32024459
+"Acta Math. Hungar."
+Mathematics
+"APGPAC"
+93645978
+Addiction
+57059226
+Cornell_Big_Red
+45644811
+78771100
+"1.337"
+Faber_and_Faber
+"14L/32R"
+1533.0
+Dutch_language
+2439.0
+1998
+Magik_(rapper)
+"Istanbul, Turkey"
+Glass_Tiger
+Sammy_Price
+Kornelije_Kovač
+Milonga_(music)
+Johnny_Sansone
+B-Unique_Records
+Hook_'em_(mascot)
+Jorge_Orosmán_da_Silva
+Uruguay_Olympic_football_team
+Netherlands_national_under-17_football_team
+Diemen
+Sanat_Mes_Kerman_F.C.
+Valery_Petrakov
+1989-02-24
+1.9304
+Žan_Tabak
+1910
+Críona_Ní_Dhálaigh
+"1700"
+"Arts and Crafts Movement and American craftsman Bungalows"
+Nottingham
+283326000000.0
+445895000000.0
+United_States_Capitol
+"Adams, Fall Creek, Lafayette, Richland, Union"
+324.0
+Pleasant_Township,_Steuben_County,_Indiana
+"City Administrator"
+1580.7 (inhabitants per square kilometre)
+925
+44.125 (square kilometres)
+Trenton,_New_Jersey
+Kate_Hardie
+"Jon Valor"
+United States of America
+324720797
+Metro_Manila
+Online_Game
+Pangasinense_people
+875400000
+"Ajo blanco"
+Vermicelli
+Shrimp
+Indian_rupee
+Mexicans
+Cake
+2005-04-07
+2013-03-16
+"American Motors Matador"
+AMC_Ambassador
+Giovanni_Bertone
+Executive_car
+Audi_e-tron
+Douglas_R._Oberhelman
+Artur_Rasizade
+Minna
+Nigerian_Army
+Alexandria,_Virginia
+Anthony_J._Celebrezze
+Kent
+"Deputy Minister for Development, Competitiveness and Shipping"
+Marietta,_Ohio
+Union_Army
+SV_Germania_Schöneiche
+"Asociación Deportiva"
+FC_Dallas
+2014–15_A_EPSTH,_Greece
+"Association Football Club Blackpool"
+The_Fylde
+S.S._Chieti_Calcio
+Mahé,_India
+"In Soldevanahalli, Acharya Dr. Sarvapalli Radhakrishnan Road, Hessarghatta Main Road, Bangalore – 560090."
+"B.M. Reddy"
+"0567-7920"
+27367194
+Danes
+"14R/32L"
+Anwar_Zaheer_Jamali
+"06/24 'Kaagbaan'"
+896.0
+Philippe_of_Belgium
+Yugoslavia
+Movieplay
+Don_Sweeney
+Batumi
+Silvio_Berlusconi
+"2013-09-28"
+B._V._Doshi
+B_postcode_area
+Brazilians_in_Japan
+Carl_A._Wirtanen
+F._Vilas
+7.08
+325
+184.0
+"Republic of the Philippines"
+Leni_Robredo
+Rodrigo_Duterte
+La_Crosse_County,_Wisconsin
+"County Manager"
+"Bread, almonds, garlic, water, olive oil"
+"Tomatoes, red chili, garlic, olive oil"
+Malays_(ethnic_group)
+Chocolate
+Visayas
+"Sold to the Netherlands 1 April 1948"
+AWD_(vehicle)
+"4-speed automatic (ZF 4HP18QE)"
+2005-08-11
+1998-03-16
+Germans
+Norbert_Lammert
+Kota_Samarahan
+1965-01-03
+"Rear Admiral in the Argentine Navy"
+1853-03-04
+1875-03-04
+"A.E Dimitra Efxeinoupolis"
+2014–15_Football_League_(Greece)
+"Shuvalan, Baku, Azerbaijan"
+"Akron Metro Futbol Club Summit Assault"
+Lentivirus
+"SBCT"
+"14/32"
+"1/19"
+"Helipad"
+The_Horns_of_Happiness
+1982-07-23
+Héctor_Numa_Moraes
+Hilario_Pérez
+"Chișinău, Moldova"
+Tarō_Asō
+0.0252 (kilometrePerSeconds)
+7.66
+Christian_Heinrich_Friedrich_Peters
+229
+166.0
+Asian_American
+Dublin_(European_Parliament_constituency)
+"Hot"
+30.0 g
+Aristóteles_Sandoval
+"9-speed ZF 9HP automatic (V6)"
+1937
+Stanislaw_Tillich
+University_of_Adelaide
+"Ait Ikkou, Morocco"
+Baghdad
+Russian_Football_National_League
+Point_Fortin
+Trinidad
+16.86 (kilometrePerSeconds)
+"State Senate"
+13.0
+California's_11th_State_Assembly_district
+Cármen_Lúcia
+Battle_of_Mine_Run
+Overland_Campaign
+"Joden , Godenzonen"
+2158
+Beverly_Hills,_California
+Iraq_national_football_team
+Zvi_Sherf
+Military_Cross
+Greater_Manchester
+1981-02-04
+Nie_Haisheng
+1964-10-13
+MotorSport_Vision
+Fawkham
+Ciudad_Ayala
+1777539
+"City Manager"
+City
+1604.0
+Council-manager_government
+Bootleg_Series_Volume_1:_The_Quine_Tapes
+Squeeze_(The_Velvet_Underground_album)
+1969:_The_Velvet_Underground_Live
+Governator
+1147.0
+Pacific_Daylight_Time
+Olga_Bondareva
+1991-12-09
+Saint_Petersburg
+1703-05-27
+1439.0
+Piotr_Hallmann
+1987-08-25
+Darlington
+01325
+Israel
+Modern_Hebrew
+Andy_Warhol's_Velvet_Underground_Featuring_Nico
+The_Velvet_Underground
+230.05
+St._Louis,_Missouri
+The_Fellowship_of_the_Ring
+George_Allen_&_Unwin
+Fantasy_(genre)
+Mermaid_(Train_song)
+Imagine_(John_Lennon_song)
+Espionage_(production_team)
+California_37_(Train_album)
+The_Two_Towers
+J._R._R._Tolkien
+1954-07-29
+English_Without_Tears
+Bernard_Knowles
+Terence_Rattigan
+89.0
+Lady_Anne_Monson
+George_Monson
+1776-02-18
+Botany
+Liselotte_Grschebina
+Karlsruhe
+School_of_Applied_Arts_in_Stuttgart
+Columbia_Records
+3.16
+Espen_Lind
+Reggae
+Amund_Bjørklund
+It's_Great_to_Be_Young_(1956_film)
+Louis_Levy
+Cecil_Parker
+Ted_Willis
+Nord_(Year_of_No_Light_album)
+Year_of_No_Light
+Crucial_Blast
+2006-09-06
+−6
+Super_Capers
+Michael_Rooker
+Tom_Sizemore
+2000000.0
+Ray_Griggs_(director)
+98.0
+Darinka_Dentcheva
+Andrzej_Piotr_Ruszczyński
+McVeagh_of_the_South_Seas
+Harry_Carey_(actor_born_1878)
+1147_Stavropolis
+260855000000.0
+31 July 2016 (JD2457600.5)
+Live_at_Roadburn_2008_(Year_of_No_Light_album)
+1937-04-27
+Bondareva–Shapley_theorem
+"Olga Nikolaevna Bondareva"
+The_Hobbit
+Stargate_(production_team)
+58.41
+Demo_2004_(Year_of_No_Light_album)
+1994-06-14
+418476000000.0
+1249.6
+Grigory_Neujmin
+1929-06-11
+Morelos
+Gdynia,_Poland
++2
+Monarch_(band)
+Zaoyang
+Shenzhou_6
+Hubei
+Pontiac_Rageous
+1997
+370.03
+Nicholas_Brodszky
+1944-07-28
+Harold_French
+Economics
+FIMI
+John_Lennon
+Expect_a_Miracle
+Easy_listening
+Arab_citizens_of_Israel
+Central_European_Summer_Time
+Roadside_Attractions
+Lionsgate
+Nurhan_Atasoy
+Turkish_people
+2012-12-27
+This'll_Be_My_Year
+Graco_Ramírez
+Brandon_Carter
+General_relativity
+University_of_Burgundy
+Leningrad_State_University
+Mathematical_optimization
+Humboldt_University
+Anatole_de_Grunwald
+Southern_sludge
+Leningrad,_USSR
+John_Mills
+282838.0
+1977-01-01
+1920-01-01
+"DL1, DL2, DL3"
+People's_Republic_of_China
+Turk
+Danielle_Harris
+1977-11-30
+1897
+Gilbert_Taylor
+The_Progressive_Motion_Picture_Company
+94.0
+Cyril_Frankel
+387.63
+Death_on_a_Factory_Farm
+Tom_Simon
+HBO
+Jamie_Lawrence
+Bedford_Aerodrome
+2900
+1299
+Dijon
+27400
+9400
+Kingdom_of_England
+Unitary_state
+Pranab_Mukherjee
+1908-05-02
+Proto-punk
+Alan_Jaggs
+Geof_Bartz
+83.0
+Sarah_Teale
+0004319
+Cyril_Bruce
+Turn_Me_On_(album)
+Noise_rock
+Noise_pop
+1972550.0
+States_of_Mexico
+Pop_rock
+1950-01-26
+Take_It_Off!
+The_Honeymoon_Killers_(American_band)
+Petah_Tikva
+"Opening of hope"
+"State of Israel"
+Photographer
+Adam_West
+Compilation_Album
+Afterplay_(Brian_Kelly_album)
+54.56
+Instrumental_music
+Bedford_Autodrome
+Pontiac
+Rhythm_and_Blues
+3544040000.0
+"In God we trust"
+"Prime Minister"
+Peter_Ogden
+Cinemax
+1946-12-17
+250493000000.0
+Lucian_Grainge
+State_Award_for_Superior_Achievement
+Let_It_Breed
+35.1
+1958-01-01
+Stochastic_programming
+Stacy_Katzman
+Reuven_Rivlin
+Alliance_Films_Corporation
+Gregory_Allen
+Pools_of_Light_(Brian_Kelly_album)
+175.26
+70.308
+Brian_Kelly_(composer_&_pianist)
+20378.5
+Itzik_Braverman
+Punk_blues
+Drum_kit
+Modern_Standard_Arabic
+Oberbürgermeister
+Jasper,_Alabama
+11.5
+2001-10-16
+5343000000.0
+Reşadiye
+Eastern_European_Summer_Time
+Recep_Tayyip_Erdoğan
+Binali_Yıldırım
+Wharton_Tiers
+Baroque_pop
+Coupe
+Max_Benedict
+Brentford_F.C.
+Tom_Lister,_Jr.
+30955.0
+The Green Channel
+EGBF
+61.0
+Pacific_Standard_Time_Zone
+16800
+1726-01-01
+Justin_Whalin
+Xiangyang
+Shenzhou_10
+2013-029A
+Ed_Lee_(politician)
+2005-040A
+Carter_constant
+No-hair_theorem
+Dennis_William_Sciama
+German_Papiermark
+HBO East, HBO West
+1955-04-06
+Thurleigh
+MK44
+173.46
+The_Silmarillion
+1095.0
+Theatre_of_Eternal_Music
+Juan_Nolasco
+Noise_music
+Wayne_County,_Michigan
+Governor
+Ashford_Town_(Middlesex)_F.C.
+1892-01-03
+0927
+Synthesizer
+3287590000000.0
+Chief Justice
+1934-01-01
+Train_(band)
+New_York_City,_New_York
+Time_Warner
+22591.38
+Santa_Monica,_California
+83.2104
+E-Vinyl
+01234
+Concrete
+Eastern_European_Time
+The_Lord_of_the_Rings
+South_German_gulden
+Central_European_Time
+Tokat_Province
+783356.0
+1871-01-01
+Happy_Xmas_(War_Is_Over)
+&minus;7
+9833520000000.0
+Stoner_sludge
+1911-01-01
+Sony_Corporation
+Anthropic_principle
+0711905
+Pat_Monahan
+Music_download
+Juvenile_fantasy
+1947-01-01
+'Til_Death_Do_Us_Part_(EP)
+North_East_England
+NZ289147
+University_of_Cambridge
+Maeve_Quinlan
+115.0
+Adrián_Rivera_Pérez
+Tokat
+"+90 356"
+1707
+1942-01-01
+Buick
+2003-01-01
++8
+4879.0
+Indian
+Cuernavaca
+North_Elmham
+Love_American_Style_(album)
+Irreligion
+1955-01-01
+106000
+Turkish_language
+1970-03-08
+Michael_R._Burns
+1.3
+1953-01-01
+1293057000
+Pussy_Galore_(band)
+20769100000.0
+Interscope_Geffen_A&M
+1910-12-25
+Denham,_Buckinghamshire
+135000000.0
+1926-02-10
+The_Return_of_the_King
+Benny_Blanco
+Michael_Jackson
+1937-09-21
+1886-01-01
+Imagine_(John_Lennon_album)
+en
+Indie_pop
+"President of the Senate"
+245.0
+"Republic of Turkey"
+Winchester
+Film_director
+1894-11-20
+Penrose_diagram
+Johnny_Colt
+Charlie_Colin
+Altar_of_Plagues
+David_Sainsbury,_Baron_Sainsbury_of_Turville
+Karysun_/_Year_of_No_Light
+Post-hardcore
+Jonathan_Palmer
+2004
+1954-01-01
+204.0
+non_performing_personnel
+Georgy_Poltavchenko
+Longfield
+Pacific_Time_Zone
+76131–76229
+League_of_European_Research_Universities
+Lou_Reed
+Roadburn_Festival
+21000
+Television_director
+Teşvikiye
+Aileen_Raymond
+"French Republic"
+Doomsday_argument
+Digital_distribution
+2010-10-31
+Roberto_Gil_Zuarth
+Tbilisi
+Power_to_the_People_(song)
+628
+Hardcore_punk
+Leszek_Borysiewicz
+Juliet_Mills
+Phil_Spector
+Das_Lied_der_Deutschen
+Die_Wacht_am_Rhein
+Bedfordshire
+Broadcast_programming
+Jon_Feltheimer
+Vivendi
+High_fantasy
+"Republic of India"
+Mary_Hayley_Bell
+"President of the Chamber of Deputies"
+Presenter
+UK
+2691.0
+Automobile
+Actor
+Cecil Schwabe
+Hayley_Mills
+eng
+Research_university
+Frank_Giustra
+Hamilton,_Bermuda
+1908-01-01
+City_(Michigan)
+Industrial_rock
+Israeli_Jews
+1964-01-01
+Dub_music
+119530753
+6645
+2008-04-19

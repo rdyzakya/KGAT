@@ -1,5 +1,5 @@
 import torch
-from .base import BaseModel
+from .base_model import BaseModel
 
 class Injector(BaseModel):
     def __init__(self, 
