@@ -1,0 +1,12 @@
+ChemicalCompoundElement
+CompanyParentOrganization
+CountryBordersWithCountry
+CountryOfficialLanguage
+PersonCauseOfDeath
+PersonEmployer
+PersonInstrument
+PersonLanguage
+PersonPlaceOfDeath
+PersonProfession
+RiverBasinsCountry
+StateSharesBorderState

@@ -29,17 +29,17 @@ import pandas as pd
 from itertools import combinations
 import json
 
-
+# sentence -> quoted string for universality
 def eol_template(text):
-    template = f'This sentence : "{text}" means in one word:'
+    template = f'This quoted string : "{text}" means in one word:'
     return template
 
 def pretended_cot_template(text):
-    template = f'After thinking step by step , this sentence : "{text}" means in one word:'
+    template = f'After thinking step by step , this quoted string : "{text}" means in one word:'
     return template
 
 def knowledge_enhancement_template(text):
-    template = f'The essence of a sentence is often captured by its main subjects and actions, while descriptive terms provide additional but less central details. With this in mind , this sentence : "{text}" means in one word:'
+    template = f'The essence of a sentence is often captured by its main subjects and actions, while descriptive terms provide additional but less central details. With this in mind , this quoted string : "{text}" means in one word:'
     return template
 
 if __name__ == "__main__":

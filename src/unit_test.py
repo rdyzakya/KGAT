@@ -103,7 +103,8 @@ class ModelTestCase(unittest.TestCase):
         x = torch.randn(N_NODE, DIM)
 
         gate_nn = Linear(in_channels=DIM, out_channels=OUT_DIM, bias=False, weight_initializer="glorot")
-        nn = Linear(in_channels=DIM, out_channels=OUT_DIM, bias=False, weight_initializer="glorot")
+        # nn = Linear(in_channels=DIM, out_channels=OUT_DIM, bias=False, weight_initializer="glorot")
+        nn = torch.nn.Identity()
 
         attentional_aggr = AttentionalAggregation(gate_nn=gate_nn, nn=nn)
         softmax_aggr = SoftmaxAggregation(learn=True, channels=1)

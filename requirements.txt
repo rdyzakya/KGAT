@@ -1,7 +1,7 @@
 ordered_set
 datasets
 torch_geometric
-transformers
+transformers==4.43.3
 numpy
 tqdm
 accelerate

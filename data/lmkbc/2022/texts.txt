@@ -1,0 +1,20 @@
+subject : Bavaria | relation : StateSharesBorderState
+subject : Coumarin | relation : ChemicalCompoundElement
+subject : Iceland | relation : CountryOfficialLanguage
+subject : Maritsa | relation : RiverBasinsCountry
+subject : Panama | relation : CountryOfficialLanguage
+subject : Somalia | relation : CountryBordersWithCountry
+subject : Nicaragua | relation : CountryOfficialLanguage
+subject : Aretha Franklin | relation : PersonCauseOfDeath
+subject : Ural river | relation : RiverBasinsCountry
+subject : People's Republic of China | relation : CountryOfficialLanguage
+subject : Roy Orbison | relation : PersonCauseOfDeath
+subject : NSU | relation : CompanyParentOrganization
+subject : Obwalden | relation : StateSharesBorderState
+subject : Alfredo González Flores | relation : PersonPlaceOfDeath
+subject : Japan | relation : CountryBordersWithCountry
+subject : Uganda | relation : CountryBordersWithCountry
+subject : Alex von Falkenhausen Motorenbau | relation : CompanyParentOrganization
+subject : Heroin | relation : ChemicalCompoundElement
+subject : Kaipan | relation : CompanyParentOrganization
+subject : Myanmar | relation : CountryBordersWithCountry
