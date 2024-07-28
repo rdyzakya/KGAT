@@ -1,0 +1,5 @@
+awardWonBy
+companyTradesAtStockExchange
+countryLandBordersCountry
+personHasCityOfDeath
+seriesHasNumberOfEpisodes

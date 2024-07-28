@@ -1,20 +1,2393 @@
-subject : Bavaria | relation : StateSharesBorderState
+subject : Acetaldehyde | relation : ChemicalCompoundElement
+subject : Amitriptyline | relation : ChemicalCompoundElement
+subject : Ammonium Nitrate | relation : ChemicalCompoundElement
+subject : Arsenic Trioxide | relation : ChemicalCompoundElement
+subject : Aspartame | relation : ChemicalCompoundElement
+subject : Aspirin | relation : ChemicalCompoundElement
+subject : Benzyl Alcohol | relation : ChemicalCompoundElement
+subject : Biguanide | relation : ChemicalCompoundElement
+subject : Biotin | relation : ChemicalCompoundElement
+subject : Bismuth Subsalicylate | relation : ChemicalCompoundElement
+subject : Borax | relation : ChemicalCompoundElement
+subject : Budipine | relation : ChemicalCompoundElement
+subject : Calcium Carbonate | relation : ChemicalCompoundElement
+subject : Calcium Peroxide | relation : ChemicalCompoundElement
+subject : Calomel | relation : ChemicalCompoundElement
+subject : Cesium Fluoride | relation : ChemicalCompoundElement
+subject : Cesium Iodide | relation : ChemicalCompoundElement
+subject : Chloric acid | relation : ChemicalCompoundElement
+subject : Chlorophyll D | relation : ChemicalCompoundElement
+subject : Codeine | relation : ChemicalCompoundElement
+subject : Copper Hydride | relation : ChemicalCompoundElement
+subject : Cupric Sulfate | relation : ChemicalCompoundElement
+subject : Cyclobutane | relation : ChemicalCompoundElement
+subject : Decene | relation : ChemicalCompoundElement
+subject : Disilane | relation : ChemicalCompoundElement
+subject : Docosane | relation : ChemicalCompoundElement
+subject : Dodecane | relation : ChemicalCompoundElement
+subject : Droperidol | relation : ChemicalCompoundElement
+subject : Ethane | relation : ChemicalCompoundElement
+subject : Ethylidene Chloride | relation : ChemicalCompoundElement
+subject : Eucalyptol | relation : ChemicalCompoundElement
+subject : Formic acid | relation : ChemicalCompoundElement
+subject : Gallium Trichloride | relation : ChemicalCompoundElement
+subject : Gluconolactone | relation : ChemicalCompoundElement
+subject : Glycerol | relation : ChemicalCompoundElement
+subject : Guanine | relation : ChemicalCompoundElement
+subject : Harmaline | relation : ChemicalCompoundElement
+subject : Hexane | relation : ChemicalCompoundElement
+subject : Hydrogen Bromide | relation : ChemicalCompoundElement
+subject : Hydrogen Fluoride | relation : ChemicalCompoundElement
+subject : Hydrogen Iodide | relation : ChemicalCompoundElement
+subject : Hydrogen Peroxide | relation : ChemicalCompoundElement
+subject : Hydrogen Sulfide | relation : ChemicalCompoundElement
+subject : Ibandronic acid | relation : ChemicalCompoundElement
+subject : Inositol Trisphosphate | relation : ChemicalCompoundElement
+subject : Isocyanic acid | relation : ChemicalCompoundElement
+subject : Lead Azide | relation : ChemicalCompoundElement
+subject : Levomenol | relation : ChemicalCompoundElement
+subject : Manganese Acetate | relation : ChemicalCompoundElement
+subject : Melatonin | relation : ChemicalCompoundElement
+subject : Mercuric Chloride | relation : ChemicalCompoundElement
+subject : Mercurous Bromide | relation : ChemicalCompoundElement
+subject : Methane | relation : ChemicalCompoundElement
+subject : Methanol | relation : ChemicalCompoundElement
+subject : Methenamine | relation : ChemicalCompoundElement
+subject : Methylacetylene | relation : ChemicalCompoundElement
+subject : Morphine | relation : ChemicalCompoundElement
+subject : Niacin | relation : ChemicalCompoundElement
+subject : Nifedipine | relation : ChemicalCompoundElement
+subject : Nitric acid | relation : ChemicalCompoundElement
+subject : Nitroglycerin | relation : ChemicalCompoundElement
+subject : Octadecane | relation : ChemicalCompoundElement
+subject : Oleamide | relation : ChemicalCompoundElement
+subject : Oxepin | relation : ChemicalCompoundElement
+subject : Oxytocin | relation : ChemicalCompoundElement
+subject : Phytane | relation : ChemicalCompoundElement
+subject : Pimozide | relation : ChemicalCompoundElement
+subject : Potassium Bitartrate | relation : ChemicalCompoundElement
+subject : Potassium Bromide | relation : ChemicalCompoundElement
+subject : Potassium Hydride | relation : ChemicalCompoundElement
+subject : Potassium Hydroxide | relation : ChemicalCompoundElement
+subject : Potassium Iodide | relation : ChemicalCompoundElement
+subject : Potassium Nitrate | relation : ChemicalCompoundElement
+subject : Progesterone | relation : ChemicalCompoundElement
+subject : Propylene | relation : ChemicalCompoundElement
+subject : Selenium Trioxide | relation : ChemicalCompoundElement
+subject : Serotonin | relation : ChemicalCompoundElement
+subject : Sirolimus | relation : ChemicalCompoundElement
+subject : Sodium Bicarbonate | relation : ChemicalCompoundElement
+subject : Sodium Chloride | relation : ChemicalCompoundElement
+subject : Strontium Hydroxide | relation : ChemicalCompoundElement
+subject : Tetrasulfur Tetranitride | relation : ChemicalCompoundElement
+subject : Thiocyanic acid | relation : ChemicalCompoundElement
+subject : Thioridazine | relation : ChemicalCompoundElement
+subject : Thymine | relation : ChemicalCompoundElement
+subject : Titanium Tetrafluoride | relation : ChemicalCompoundElement
+subject : Triacetin | relation : ChemicalCompoundElement
+subject : Tridecane | relation : ChemicalCompoundElement
+subject : Trimethyl Phosphite | relation : ChemicalCompoundElement
+subject : Tropisetron | relation : ChemicalCompoundElement
+subject : Tyramine | relation : ChemicalCompoundElement
+subject : Undecane | relation : ChemicalCompoundElement
+subject : Urea | relation : ChemicalCompoundElement
+subject : Valsartan | relation : ChemicalCompoundElement
+subject : Vanillin | relation : ChemicalCompoundElement
+subject : Water | relation : ChemicalCompoundElement
+subject : Xanthine | relation : ChemicalCompoundElement
+subject : Zanamivir | relation : ChemicalCompoundElement
+subject : Zinc Phosphate | relation : ChemicalCompoundElement
+subject : Zirconyl Chloride | relation : ChemicalCompoundElement
+subject : AC Cars | relation : CompanyParentOrganization
+subject : ALDI | relation : CompanyParentOrganization
+subject : ARO | relation : CompanyParentOrganization
+subject : ASUS | relation : CompanyParentOrganization
+subject : AT&T | relation : CompanyParentOrganization
+subject : Abarth | relation : CompanyParentOrganization
+subject : Abbott-Detroit | relation : CompanyParentOrganization
+subject : Adler | relation : CompanyParentOrganization
+subject : Aero | relation : CompanyParentOrganization
+subject : Aichi | relation : CompanyParentOrganization
+subject : Alcoa | relation : CompanyParentOrganization
+subject : Alfa Romeo | relation : CompanyParentOrganization
+subject : Alphi | relation : CompanyParentOrganization
+subject : Alpine | relation : CompanyParentOrganization
+subject : Apple Inc. | relation : CompanyParentOrganization
+subject : Ariès | relation : CompanyParentOrganization
+subject : Audi | relation : CompanyParentOrganization
+subject : Auto Union | relation : CompanyParentOrganization
+subject : Autobianchi | relation : CompanyParentOrganization
+subject : Automobiles Gonfaronnaises Sportives | relation : CompanyParentOrganization
+subject : Automobili Turismo e Sport | relation : CompanyParentOrganization
+subject : Avia | relation : CompanyParentOrganization
+subject : BMW M | relation : CompanyParentOrganization
+subject : BYD Auto | relation : CompanyParentOrganization
+subject : Barkas | relation : CompanyParentOrganization
+subject : Bentley | relation : CompanyParentOrganization
+subject : Bitter Automobile | relation : CompanyParentOrganization
+subject : Blu | relation : CompanyParentOrganization
+subject : Borgward | relation : CompanyParentOrganization
+subject : Bristol Cars | relation : CompanyParentOrganization
+subject : Chrysler | relation : CompanyParentOrganization
+subject : DAF | relation : CompanyParentOrganization
+subject : Dacia | relation : CompanyParentOrganization
+subject : Daewoo | relation : CompanyParentOrganization
+subject : Daihatsu | relation : CompanyParentOrganization
+subject : Daimler Company | relation : CompanyParentOrganization
+subject : De Tomaso | relation : CompanyParentOrganization
+subject : Dodge | relation : CompanyParentOrganization
+subject : English Racing Automobiles | relation : CompanyParentOrganization
+subject : ErAZ | relation : CompanyParentOrganization
+subject : Ericsson | relation : CompanyParentOrganization
+subject : Fabryka SamochodóW Małolitrażowych | relation : CompanyParentOrganization
+subject : Facebook | relation : CompanyParentOrganization
+subject : Ferrari S.p.A. | relation : CompanyParentOrganization
+subject : Fiat | relation : CompanyParentOrganization
+subject : Ford Motor Company | relation : CompanyParentOrganization
+subject : Ginetta Cars | relation : CompanyParentOrganization
+subject : Gordini | relation : CompanyParentOrganization
+subject : Hexe | relation : CompanyParentOrganization
+subject : Hitachi | relation : CompanyParentOrganization
+subject : Holden | relation : CompanyParentOrganization
+subject : Huawei | relation : CompanyParentOrganization
+subject : Hyundai Motor Group | relation : CompanyParentOrganization
+subject : IBM | relation : CompanyParentOrganization
+subject : Isuzu | relation : CompanyParentOrganization
+subject : Koenigsegg | relation : CompanyParentOrganization
+subject : Lamborghini | relation : CompanyParentOrganization
+subject : Lancia | relation : CompanyParentOrganization
+subject : Land Rover | relation : CompanyParentOrganization
+subject : Lea-Francis | relation : CompanyParentOrganization
+subject : LinkedIn | relation : CompanyParentOrganization
+subject : Louis Vuitton | relation : CompanyParentOrganization
+subject : MTX | relation : CompanyParentOrganization
+subject : Max Motors | relation : CompanyParentOrganization
+subject : Mercedes-AMG | relation : CompanyParentOrganization
+subject : Mercedes-Benz Group | relation : CompanyParentOrganization
+subject : Messerschmitt | relation : CompanyParentOrganization
+subject : Microsoft | relation : CompanyParentOrganization
+subject : Mitsubishi Motors | relation : CompanyParentOrganization
+subject : NedCar | relation : CompanyParentOrganization
+subject : Oltcit | relation : CompanyParentOrganization
+subject : Oracle | relation : CompanyParentOrganization
+subject : Osella | relation : CompanyParentOrganization
+subject : Pope-Toledo | relation : CompanyParentOrganization
+subject : Porsche | relation : CompanyParentOrganization
+subject : Prada | relation : CompanyParentOrganization
+subject : Praga | relation : CompanyParentOrganization
+subject : Rayton Fissore | relation : CompanyParentOrganization
+subject : Ruxton | relation : CompanyParentOrganization
+subject : SEAT | relation : CompanyParentOrganization
+subject : Saab | relation : CompanyParentOrganization
+subject : Sony | relation : CompanyParentOrganization
+subject : Stellantis North America | relation : CompanyParentOrganization
+subject : Subaru | relation : CompanyParentOrganization
+subject : Suzuki | relation : CompanyParentOrganization
+subject : TVR | relation : CompanyParentOrganization
+subject : Tata Motors Ltd | relation : CompanyParentOrganization
+subject : Texas Instruments | relation : CompanyParentOrganization
+subject : UMM | relation : CompanyParentOrganization
+subject : Unic | relation : CompanyParentOrganization
+subject : Velie | relation : CompanyParentOrganization
+subject : Vignale | relation : CompanyParentOrganization
+subject : Waymo | relation : CompanyParentOrganization
+subject : ZAZ | relation : CompanyParentOrganization
+subject : Zato vehicles | relation : CompanyParentOrganization
+subject : Zeddeco | relation : CompanyParentOrganization
+subject : Zeiller & Fournier | relation : CompanyParentOrganization
+subject : Zeno Galassi | relation : CompanyParentOrganization
+subject : Zentralmobil | relation : CompanyParentOrganization
+subject : Zetgelette | relation : CompanyParentOrganization
+subject : Afghanistan | relation : CountryBordersWithCountry
+subject : Albania | relation : CountryBordersWithCountry
+subject : Argentina | relation : CountryBordersWithCountry
+subject : Armenia | relation : CountryBordersWithCountry
+subject : Austria | relation : CountryBordersWithCountry
+subject : Azerbaijan | relation : CountryBordersWithCountry
+subject : Bangladesh | relation : CountryBordersWithCountry
+subject : Belarus | relation : CountryBordersWithCountry
+subject : Benin | relation : CountryBordersWithCountry
+subject : Bhutan | relation : CountryBordersWithCountry
+subject : Brazil | relation : CountryBordersWithCountry
+subject : Burundi | relation : CountryBordersWithCountry
+subject : Cambodia | relation : CountryBordersWithCountry
+subject : Cameroon | relation : CountryBordersWithCountry
+subject : Canada | relation : CountryBordersWithCountry
+subject : Cape Verde | relation : CountryBordersWithCountry
+subject : Chad | relation : CountryBordersWithCountry
+subject : Chile | relation : CountryBordersWithCountry
+subject : Colombia | relation : CountryBordersWithCountry
+subject : Croatia | relation : CountryBordersWithCountry
+subject : Cyprus | relation : CountryBordersWithCountry
+subject : Democratic Republic of the Congo | relation : CountryBordersWithCountry
+subject : Dominica | relation : CountryBordersWithCountry
+subject : East Timor | relation : CountryBordersWithCountry
+subject : Ecuador | relation : CountryBordersWithCountry
+subject : Egypt | relation : CountryBordersWithCountry
+subject : El Salvador | relation : CountryBordersWithCountry
+subject : Equatorial Guinea | relation : CountryBordersWithCountry
+subject : Ethiopia | relation : CountryBordersWithCountry
+subject : Fiji | relation : CountryBordersWithCountry
+subject : Finland | relation : CountryBordersWithCountry
+subject : France | relation : CountryBordersWithCountry
+subject : Gabon | relation : CountryBordersWithCountry
+subject : Greece | relation : CountryBordersWithCountry
+subject : Guinea | relation : CountryBordersWithCountry
+subject : Honduras | relation : CountryBordersWithCountry
+subject : Iceland | relation : CountryBordersWithCountry
+subject : India | relation : CountryBordersWithCountry
+subject : Indonesia | relation : CountryBordersWithCountry
+subject : Iran | relation : CountryBordersWithCountry
+subject : Iraq | relation : CountryBordersWithCountry
+subject : Israel | relation : CountryBordersWithCountry
+subject : Italy | relation : CountryBordersWithCountry
+subject : Jamaica | relation : CountryBordersWithCountry
+subject : Jordan | relation : CountryBordersWithCountry
+subject : Kenya | relation : CountryBordersWithCountry
+subject : Kingdom of Africa | relation : CountryBordersWithCountry
+subject : Kyrgyzstan | relation : CountryBordersWithCountry
+subject : Lebanon | relation : CountryBordersWithCountry
+subject : Lesotho | relation : CountryBordersWithCountry
+subject : Libya | relation : CountryBordersWithCountry
+subject : Liechtenstein | relation : CountryBordersWithCountry
+subject : Luxembourg | relation : CountryBordersWithCountry
+subject : Madagascar | relation : CountryBordersWithCountry
+subject : Malawi | relation : CountryBordersWithCountry
+subject : Malaysia | relation : CountryBordersWithCountry
+subject : Mali | relation : CountryBordersWithCountry
+subject : Marshall Islands | relation : CountryBordersWithCountry
+subject : Mauritius | relation : CountryBordersWithCountry
+subject : Moldova | relation : CountryBordersWithCountry
+subject : Monaco | relation : CountryBordersWithCountry
+subject : Mongolia | relation : CountryBordersWithCountry
+subject : Montenegro | relation : CountryBordersWithCountry
+subject : Namibia | relation : CountryBordersWithCountry
+subject : Nauru | relation : CountryBordersWithCountry
+subject : Nepal | relation : CountryBordersWithCountry
+subject : Nicaragua | relation : CountryBordersWithCountry
+subject : Niger | relation : CountryBordersWithCountry
+subject : North Korea | relation : CountryBordersWithCountry
+subject : North Macedonia | relation : CountryBordersWithCountry
+subject : Norway | relation : CountryBordersWithCountry
+subject : Oman | relation : CountryBordersWithCountry
+subject : Palau | relation : CountryBordersWithCountry
+subject : Papua New Guinea | relation : CountryBordersWithCountry
+subject : People's Republic of China | relation : CountryBordersWithCountry
+subject : Philippines | relation : CountryBordersWithCountry
+subject : Qatar | relation : CountryBordersWithCountry
+subject : Republic of Ireland | relation : CountryBordersWithCountry
+subject : Romania | relation : CountryBordersWithCountry
+subject : Russia | relation : CountryBordersWithCountry
+subject : Saint Lucia | relation : CountryBordersWithCountry
+subject : Senegal | relation : CountryBordersWithCountry
+subject : Serbia | relation : CountryBordersWithCountry
+subject : Seychelles | relation : CountryBordersWithCountry
+subject : Sierra Leone | relation : CountryBordersWithCountry
+subject : Singapore | relation : CountryBordersWithCountry
+subject : South Sudan | relation : CountryBordersWithCountry
+subject : Sri Lanka | relation : CountryBordersWithCountry
+subject : State of Palestine | relation : CountryBordersWithCountry
+subject : Suriname | relation : CountryBordersWithCountry
+subject : Switzerland | relation : CountryBordersWithCountry
+subject : São Tomé and Príncipe | relation : CountryBordersWithCountry
+subject : Taiwan | relation : CountryBordersWithCountry
+subject : Tonga | relation : CountryBordersWithCountry
+subject : Tuvalu | relation : CountryBordersWithCountry
+subject : Ukraine | relation : CountryBordersWithCountry
+subject : United Arab Emirates | relation : CountryBordersWithCountry
+subject : United States of America | relation : CountryBordersWithCountry
+subject : Vietnam | relation : CountryBordersWithCountry
+subject : Zambia | relation : CountryBordersWithCountry
+subject : Albania | relation : CountryOfficialLanguage
+subject : Andorra | relation : CountryOfficialLanguage
+subject : Angola | relation : CountryOfficialLanguage
+subject : Antigua and Barbuda | relation : CountryOfficialLanguage
+subject : Armenia | relation : CountryOfficialLanguage
+subject : Azerbaijan | relation : CountryOfficialLanguage
+subject : Bahrain | relation : CountryOfficialLanguage
+subject : Bangladesh | relation : CountryOfficialLanguage
+subject : Belarus | relation : CountryOfficialLanguage
+subject : Benin | relation : CountryOfficialLanguage
+subject : Bhutan | relation : CountryOfficialLanguage
+subject : Bosnia and Herzegovina | relation : CountryOfficialLanguage
+subject : Bulgaria | relation : CountryOfficialLanguage
+subject : Cambodia | relation : CountryOfficialLanguage
+subject : Canada | relation : CountryOfficialLanguage
+subject : Chile | relation : CountryOfficialLanguage
+subject : Comoros | relation : CountryOfficialLanguage
+subject : Cuba | relation : CountryOfficialLanguage
+subject : Cyprus | relation : CountryOfficialLanguage
+subject : Czech Republic | relation : CountryOfficialLanguage
+subject : Democratic Republic of the Congo | relation : CountryOfficialLanguage
+subject : Djibouti | relation : CountryOfficialLanguage
+subject : Dominica | relation : CountryOfficialLanguage
+subject : Dominican Republic | relation : CountryOfficialLanguage
+subject : Egypt | relation : CountryOfficialLanguage
+subject : El Salvador | relation : CountryOfficialLanguage
+subject : Equatorial Guinea | relation : CountryOfficialLanguage
+subject : Eritrea | relation : CountryOfficialLanguage
+subject : Estonia | relation : CountryOfficialLanguage
+subject : Eswatini | relation : CountryOfficialLanguage
+subject : Ethiopia | relation : CountryOfficialLanguage
+subject : Fiji | relation : CountryOfficialLanguage
+subject : Georgia | relation : CountryOfficialLanguage
+subject : Ghana | relation : CountryOfficialLanguage
+subject : Greece | relation : CountryOfficialLanguage
+subject : Guinea | relation : CountryOfficialLanguage
+subject : Guinea-Bissau | relation : CountryOfficialLanguage
+subject : Honduras | relation : CountryOfficialLanguage
+subject : Indonesia | relation : CountryOfficialLanguage
+subject : Iraq | relation : CountryOfficialLanguage
+subject : Italy | relation : CountryOfficialLanguage
+subject : Kingdom of Denmark | relation : CountryOfficialLanguage
+subject : Kingdom of the Netherlands | relation : CountryOfficialLanguage
+subject : Kiribati | relation : CountryOfficialLanguage
+subject : Lesotho | relation : CountryOfficialLanguage
+subject : Libya | relation : CountryOfficialLanguage
+subject : Madagascar | relation : CountryOfficialLanguage
+subject : Malaysia | relation : CountryOfficialLanguage
+subject : Mali | relation : CountryOfficialLanguage
+subject : Malta | relation : CountryOfficialLanguage
+subject : Mauritania | relation : CountryOfficialLanguage
+subject : Mexico | relation : CountryOfficialLanguage
+subject : Moldova | relation : CountryOfficialLanguage
+subject : Mongolia | relation : CountryOfficialLanguage
+subject : Myanmar | relation : CountryOfficialLanguage
+subject : Namibia | relation : CountryOfficialLanguage
+subject : Nauru | relation : CountryOfficialLanguage
+subject : Nepal | relation : CountryOfficialLanguage
+subject : New Zealand | relation : CountryOfficialLanguage
+subject : North Korea | relation : CountryOfficialLanguage
+subject : Palau | relation : CountryOfficialLanguage
+subject : Papua New Guinea | relation : CountryOfficialLanguage
+subject : Paraguay | relation : CountryOfficialLanguage
+subject : Peru | relation : CountryOfficialLanguage
+subject : Poland | relation : CountryOfficialLanguage
+subject : Portugal | relation : CountryOfficialLanguage
+subject : Republic of Ireland | relation : CountryOfficialLanguage
+subject : Romania | relation : CountryOfficialLanguage
+subject : Russia | relation : CountryOfficialLanguage
+subject : Saint Kitts and Nevis | relation : CountryOfficialLanguage
+subject : Saint Lucia | relation : CountryOfficialLanguage
+subject : Saint Vincent and the Grenadines | relation : CountryOfficialLanguage
+subject : Saudi Arabia | relation : CountryOfficialLanguage
+subject : Senegal | relation : CountryOfficialLanguage
+subject : Serbia | relation : CountryOfficialLanguage
+subject : Seychelles | relation : CountryOfficialLanguage
+subject : Singapore | relation : CountryOfficialLanguage
+subject : Slovakia | relation : CountryOfficialLanguage
+subject : Slovenia | relation : CountryOfficialLanguage
+subject : South Korea | relation : CountryOfficialLanguage
+subject : South Sudan | relation : CountryOfficialLanguage
+subject : Sri Lanka | relation : CountryOfficialLanguage
+subject : State of Palestine | relation : CountryOfficialLanguage
+subject : Suriname | relation : CountryOfficialLanguage
+subject : Tanzania | relation : CountryOfficialLanguage
+subject : Thailand | relation : CountryOfficialLanguage
+subject : Togo | relation : CountryOfficialLanguage
+subject : Trinidad and Tobago | relation : CountryOfficialLanguage
+subject : Tunisia | relation : CountryOfficialLanguage
+subject : Turkmenistan | relation : CountryOfficialLanguage
+subject : Tuvalu | relation : CountryOfficialLanguage
+subject : Uganda | relation : CountryOfficialLanguage
+subject : Ukraine | relation : CountryOfficialLanguage
+subject : United Arab Emirates | relation : CountryOfficialLanguage
+subject : United Kingdom | relation : CountryOfficialLanguage
+subject : United States of America | relation : CountryOfficialLanguage
+subject : Uzbekistan | relation : CountryOfficialLanguage
+subject : Vanuatu | relation : CountryOfficialLanguage
+subject : Venezuela | relation : CountryOfficialLanguage
+subject : Zambia | relation : CountryOfficialLanguage
+subject : Adam Levine | relation : PersonCauseOfDeath
+subject : Adam West | relation : PersonCauseOfDeath
+subject : André Leon Talley | relation : PersonCauseOfDeath
+subject : Angela Merkel | relation : PersonCauseOfDeath
+subject : Angelina Jolie | relation : PersonCauseOfDeath
+subject : Antoine Griezmann | relation : PersonCauseOfDeath
+subject : António Guterres | relation : PersonCauseOfDeath
+subject : Ban Ki-moon | relation : PersonCauseOfDeath
+subject : Barack Obama | relation : PersonCauseOfDeath
+subject : Bob Marley | relation : PersonCauseOfDeath
+subject : Bob Saget | relation : PersonCauseOfDeath
+subject : Brad Pitt | relation : PersonCauseOfDeath
+subject : Bruce Willis | relation : PersonCauseOfDeath
+subject : Cameron Boyce | relation : PersonCauseOfDeath
+subject : Camila Cabello | relation : PersonCauseOfDeath
+subject : Chadwick Boseman | relation : PersonCauseOfDeath
+subject : Charlie Daniels | relation : PersonCauseOfDeath
+subject : Dan Kaminsky | relation : PersonCauseOfDeath
+subject : David Beckham | relation : PersonCauseOfDeath
+subject : David Cameron | relation : PersonCauseOfDeath
+subject : David Graeber | relation : PersonCauseOfDeath
+subject : Elizabeth Warren | relation : PersonCauseOfDeath
+subject : Elon Musk | relation : PersonCauseOfDeath
+subject : Elton John | relation : PersonCauseOfDeath
+subject : Fred Willard | relation : PersonCauseOfDeath
+subject : George Michael | relation : PersonCauseOfDeath
+subject : Gilbert Gottfried | relation : PersonCauseOfDeath
+subject : Glenn Fredly | relation : PersonCauseOfDeath
+subject : Grant Imahara | relation : PersonCauseOfDeath
+subject : Irrfan Khan | relation : PersonCauseOfDeath
+subject : Jamal Khashoggi | relation : PersonCauseOfDeath
+subject : Jane Goodall | relation : PersonCauseOfDeath
+subject : Jeff Bezos | relation : PersonCauseOfDeath
+subject : Jenni Rivera | relation : PersonCauseOfDeath
+subject : Jennifer Aniston | relation : PersonCauseOfDeath
+subject : Jennifer Lopez | relation : PersonCauseOfDeath
+subject : Jimi Hendrix | relation : PersonCauseOfDeath
+subject : Joaquin Phoenix | relation : PersonCauseOfDeath
+subject : Joe Biden | relation : PersonCauseOfDeath
+subject : John Grisham | relation : PersonCauseOfDeath
+subject : John McAfee | relation : PersonCauseOfDeath
+subject : John McCain | relation : PersonCauseOfDeath
+subject : Johnny Depp | relation : PersonCauseOfDeath
+subject : Jonah Lomu | relation : PersonCauseOfDeath
+subject : Jules Bianchi | relation : PersonCauseOfDeath
+subject : Julia Roberts | relation : PersonCauseOfDeath
+subject : Kylie Jenner | relation : PersonCauseOfDeath
+subject : Leon Allen White | relation : PersonCauseOfDeath
+subject : Lina Ben Mhenni | relation : PersonCauseOfDeath
+subject : Lorin Maazel | relation : PersonCauseOfDeath
+subject : Mac Miller | relation : PersonCauseOfDeath
+subject : Martin McGuinness | relation : PersonCauseOfDeath
+subject : Marília Mendonça | relation : PersonCauseOfDeath
+subject : Merle Haggard | relation : PersonCauseOfDeath
+subject : Michael Jackson | relation : PersonCauseOfDeath
+subject : Michael Lee Aday | relation : PersonCauseOfDeath
+subject : Mike Fitzpatrick | relation : PersonCauseOfDeath
+subject : Miley Cyrus | relation : PersonCauseOfDeath
+subject : Muhammad Ali | relation : PersonCauseOfDeath
+subject : Natalie Portman | relation : PersonCauseOfDeath
+subject : Naya Rivera | relation : PersonCauseOfDeath
+subject : Neil Young | relation : PersonCauseOfDeath
+subject : Neil deGrasse Tyson | relation : PersonCauseOfDeath
+subject : Neymar | relation : PersonCauseOfDeath
+subject : Nipsey Hussle | relation : PersonCauseOfDeath
+subject : Norm Macdonald | relation : PersonCauseOfDeath
+subject : Paul G. Allen | relation : PersonCauseOfDeath
+subject : Philipp Mißfelder | relation : PersonCauseOfDeath
+subject : Pierre Nkurunziza | relation : PersonCauseOfDeath
+subject : Prince | relation : PersonCauseOfDeath
+subject : Raffaella Carrà | relation : PersonCauseOfDeath
+subject : Roger Ebert | relation : PersonCauseOfDeath
+subject : Roh Hoe-chan | relation : PersonCauseOfDeath
+subject : Satya Nadella | relation : PersonCauseOfDeath
+subject : Sayaka Kanda | relation : PersonCauseOfDeath
+subject : Selena Gomez | relation : PersonCauseOfDeath
+subject : Sergio Agüero | relation : PersonCauseOfDeath
+subject : Shakira | relation : PersonCauseOfDeath
+subject : Shawn Mendes | relation : PersonCauseOfDeath
+subject : Sheryl Sandberg | relation : PersonCauseOfDeath
+subject : Shintarō ishihara | relation : PersonCauseOfDeath
+subject : Shinzo Abe | relation : PersonCauseOfDeath
+subject : Stan Lee | relation : PersonCauseOfDeath
+subject : Stephen King | relation : PersonCauseOfDeath
+subject : Sundar Pichai | relation : PersonCauseOfDeath
+subject : Susan Wojcicki | relation : PersonCauseOfDeath
+subject : Sushant Singh Rajput | relation : PersonCauseOfDeath
+subject : Sushma Swaraj | relation : PersonCauseOfDeath
+subject : Tabaré Vázquez | relation : PersonCauseOfDeath
+subject : Taylor Swift | relation : PersonCauseOfDeath
+subject : Terry Jones | relation : PersonCauseOfDeath
+subject : Tim Cook | relation : PersonCauseOfDeath
+subject : Tim-Berners Lee | relation : PersonCauseOfDeath
+subject : Tom Hanks | relation : PersonCauseOfDeath
+subject : Tupac Shakur | relation : PersonCauseOfDeath
+subject : Warren Buffett | relation : PersonCauseOfDeath
+subject : Wes Craven | relation : PersonCauseOfDeath
+subject : Will Smith | relation : PersonCauseOfDeath
+subject : Xi Jinping | relation : PersonCauseOfDeath
+subject : Zayn Malik | relation : PersonCauseOfDeath
+subject : Adam Back | relation : PersonEmployer
+subject : Ahn Cheol-soo | relation : PersonEmployer
+subject : Al Gore | relation : PersonEmployer
+subject : Alan Sugar | relation : PersonEmployer
+subject : Aliko Dangote | relation : PersonEmployer
+subject : Alki David | relation : PersonEmployer
+subject : Anand Mahindra | relation : PersonEmployer
+subject : Andrew Y. Ng | relation : PersonEmployer
+subject : Andrey Vorobyov | relation : PersonEmployer
+subject : Andy Cohen | relation : PersonEmployer
+subject : Anthony Scaramucci | relation : PersonEmployer
+subject : Anwar Mohammed Gargash | relation : PersonEmployer
+subject : Benjamín Vicuña | relation : PersonEmployer
+subject : Bill Gates | relation : PersonEmployer
+subject : Bill Nye | relation : PersonEmployer
+subject : Brian Chesky | relation : PersonEmployer
+subject : Chad Hurley | relation : PersonEmployer
+subject : Chamath Palihapitiya | relation : PersonEmployer
+subject : Danny Sullivan | relation : PersonEmployer
+subject : Dara Khosrowshahi | relation : PersonEmployer
+subject : David Heinemeier Hansson | relation : PersonEmployer
+subject : David O. Sacks | relation : PersonEmployer
+subject : Daymond John | relation : PersonEmployer
+subject : Demis Hassabis | relation : PersonEmployer
+subject : Don Tapscott | relation : PersonEmployer
+subject : Dr. Dre | relation : PersonEmployer
+subject : George H. W. Bush | relation : PersonEmployer
+subject : George Soros | relation : PersonEmployer
+subject : Gisele Bündchen | relation : PersonEmployer
+subject : Gregory Reid Wiseman | relation : PersonEmployer
+subject : Grigoriy Nikolayevich Bakunov | relation : PersonEmployer
+subject : Gugu Liberato | relation : PersonEmployer
+subject : Guillermo Lasso | relation : PersonEmployer
+subject : Guy Oseary | relation : PersonEmployer
+subject : Iman | relation : PersonEmployer
+subject : Ivanka Trump | relation : PersonEmployer
+subject : Jacqueline Novogratz | relation : PersonEmployer
+subject : Jacques Attali | relation : PersonEmployer
+subject : Jeff Bezos | relation : PersonEmployer
+subject : Jelena Jensen | relation : PersonEmployer
+subject : Jerzy Buzek | relation : PersonEmployer
+subject : Jim Cramer | relation : PersonEmployer
+subject : Jimmy Wales | relation : PersonEmployer
+subject : John Carmack | relation : PersonEmployer
+subject : John Green | relation : PersonEmployer
+subject : John Kasich | relation : PersonEmployer
+subject : Jose M. Hernandez | relation : PersonEmployer
+subject : José Alberto Ciurana | relation : PersonEmployer
+subject : Kai-Fu Lee | relation : PersonEmployer
+subject : Katy Perry | relation : PersonEmployer
+subject : Kiran Mazumdar-Shaw | relation : PersonEmployer
+subject : Larry Hryb | relation : PersonEmployer
+subject : Larry Kudlow | relation : PersonEmployer
+subject : Leland D. Melvin | relation : PersonEmployer
+subject : Lenín Moreno | relation : PersonEmployer
+subject : Mahmoud Ahmadinejad | relation : PersonEmployer
+subject : Malcolm Turnbull | relation : PersonEmployer
+subject : Marc Benioff | relation : PersonEmployer
+subject : Marina Ruy Barbosa | relation : PersonEmployer
+subject : Mark Hurd | relation : PersonEmployer
+subject : Melinda Gates | relation : PersonEmployer
+subject : Mikhail Zadornov | relation : PersonEmployer
+subject : Miquel Calçada | relation : PersonEmployer
+subject : Mitt Romney | relation : PersonEmployer
+subject : Miuccia Prada | relation : PersonEmployer
+subject : Mohamed Morsi | relation : PersonEmployer
+subject : Naoko Yamazaki | relation : PersonEmployer
+subject : Padmasree Warrior | relation : PersonEmployer
+subject : Paul G. Allen | relation : PersonEmployer
+subject : Peter Diamandis | relation : PersonEmployer
+subject : Peter Thiel | relation : PersonEmployer
+subject : Pierre Omidyar | relation : PersonEmployer
+subject : Randall Munroe | relation : PersonEmployer
+subject : Randy Pitchford | relation : PersonEmployer
+subject : Reggie Fils-Aimé | relation : PersonEmployer
+subject : Ricardo Salinas Pliego | relation : PersonEmployer
+subject : Ronald J. Garan | relation : PersonEmployer
+subject : Sam Altman | relation : PersonEmployer
+subject : Sam Pitroda | relation : PersonEmployer
+subject : Satya Nadella | relation : PersonEmployer
+subject : Sebastián Piñera | relation : PersonEmployer
+subject : Shane McMahon | relation : PersonEmployer
+subject : Sheryl Sandberg | relation : PersonEmployer
+subject : Silvio Berlusconi | relation : PersonEmployer
+subject : Stephen Covey | relation : PersonEmployer
+subject : Steve Wozniak | relation : PersonEmployer
+subject : Steven Sinofsky | relation : PersonEmployer
+subject : Stewart Butterfield | relation : PersonEmployer
+subject : Sundar Pichai | relation : PersonEmployer
+subject : Susan Wojcicki | relation : PersonEmployer
+subject : Thaksin Shinawatra | relation : PersonEmployer
+subject : Tim Cook | relation : PersonEmployer
+subject : Tom Steyer | relation : PersonEmployer
+subject : Tzipi Livni | relation : PersonEmployer
+subject : Vicente Fox Quesada | relation : PersonEmployer
+subject : Vince McMahon | relation : PersonEmployer
+subject : Vivienne Westwood | relation : PersonEmployer
+subject : Winnie Byanyima | relation : PersonEmployer
+subject : Yahtzee Croshaw | relation : PersonEmployer
+subject : Yukio Hatoyama | relation : PersonEmployer
+subject : Alice Cooper | relation : PersonInstrument
+subject : Amber Liu | relation : PersonInstrument
+subject : Amy Lee | relation : PersonInstrument
+subject : Anna Iriyama | relation : PersonInstrument
+subject : Annie Lennox | relation : PersonInstrument
+subject : Axl Rose | relation : PersonInstrument
+subject : Billy Idol | relation : PersonInstrument
+subject : Brian May | relation : PersonInstrument
+subject : Bruce Springsteen | relation : PersonInstrument
+subject : Carlos PenaVega | relation : PersonInstrument
+subject : Choi Siwon | relation : PersonInstrument
+subject : Chris Cornell | relation : PersonInstrument
+subject : Dave Mustaine | relation : PersonInstrument
+subject : David Bowie | relation : PersonInstrument
+subject : David Coverdale | relation : PersonInstrument
+subject : David Crosby | relation : PersonInstrument
+subject : David Gilmour | relation : PersonInstrument
+subject : Debbie Harry | relation : PersonInstrument
+subject : Dominic Howard | relation : PersonInstrument
+subject : Dougie Poynter | relation : PersonInstrument
+subject : Emma Bunton | relation : PersonInstrument
+subject : Eric Clapton | relation : PersonInstrument
+subject : Flea | relation : PersonInstrument
+subject : Florence Welch | relation : PersonInstrument
+subject : Geezer Butler | relation : PersonInstrument
+subject : Gene Simmons | relation : PersonInstrument
+subject : Glenn Hughes | relation : PersonInstrument
+subject : Harry Styles | relation : PersonInstrument
+subject : Haruna Kojima | relation : PersonInstrument
+subject : Hayley Williams | relation : PersonInstrument
+subject : Henry Lau | relation : PersonInstrument
+subject : Jack White | relation : PersonInstrument
+subject : James Maslow | relation : PersonInstrument
+subject : Jamie | relation : PersonInstrument
+subject : Jay Park | relation : PersonInstrument
+subject : Jen Ledger | relation : PersonInstrument
+subject : Jo Kwon | relation : PersonInstrument
+subject : Johnny Marr | relation : PersonInstrument
+subject : Jung Jin-woon | relation : PersonInstrument
+subject : Jung Yong-hwa | relation : PersonInstrument
+subject : Justin Timberlake | relation : PersonInstrument
+subject : Kang Min-hyuk | relation : PersonInstrument
+subject : Keith Richards | relation : PersonInstrument
+subject : Kendall Schmidt | relation : PersonInstrument
+subject : Kevin Richardson | relation : PersonInstrument
+subject : Kim Kibum | relation : PersonInstrument
+subject : Lance Bass | relation : PersonInstrument
+subject : Lars Ulrich | relation : PersonInstrument
+subject : Lee Dong-hae | relation : PersonInstrument
+subject : Lee Hi | relation : PersonInstrument
+subject : Lee Hong-gi | relation : PersonInstrument
+subject : Lee Hyun | relation : PersonInstrument
+subject : Leeteuk | relation : PersonInstrument
+subject : Liam Gallagher | relation : PersonInstrument
+subject : Liam Payne | relation : PersonInstrument
+subject : Marilyn Manson | relation : PersonInstrument
+subject : Marisa Monte | relation : PersonInstrument
+subject : Matt Bellamy | relation : PersonInstrument
+subject : Melanie C | relation : PersonInstrument
+subject : Mick Jagger | relation : PersonInstrument
+subject : Mike Portnoy | relation : PersonInstrument
+subject : Mikey Way | relation : PersonInstrument
+subject : Minami Takahashi | relation : PersonInstrument
+subject : Mithra Jin | relation : PersonInstrument
+subject : Neil Young | relation : PersonInstrument
+subject : Niall Horan | relation : PersonInstrument
+subject : Ok Taec-yeon | relation : PersonInstrument
+subject : Onew | relation : PersonInstrument
+subject : Ozzy Osbourne | relation : PersonInstrument
+subject : Park Gyu-ri | relation : PersonInstrument
+subject : Paul Stanley | relation : PersonInstrument
+subject : Paul Weller | relation : PersonInstrument
+subject : Phil Collins | relation : PersonInstrument
+subject : Randy Jackson | relation : PersonInstrument
+subject : Ray Toro | relation : PersonInstrument
+subject : Ricky Martin | relation : PersonInstrument
+subject : Ringo Starr | relation : PersonInstrument
+subject : Ronnie James Dio | relation : PersonInstrument
+subject : Sammy Hagar | relation : PersonInstrument
+subject : Sandara Park | relation : PersonInstrument
+subject : Sarah Harding | relation : PersonInstrument
+subject : Sayaka Yamamoto | relation : PersonInstrument
+subject : Seungri | relation : PersonInstrument
+subject : Son Dong-woon | relation : PersonInstrument
+subject : Song Jieun | relation : PersonInstrument
+subject : Soprano | relation : PersonInstrument
+subject : Steven Tyler | relation : PersonInstrument
+subject : Tablo | relation : PersonInstrument
+subject : Tom Petty | relation : PersonInstrument
+subject : Vince Neil | relation : PersonInstrument
+subject : Willie Nelson | relation : PersonInstrument
+subject : Yesung | relation : PersonInstrument
+subject : Yim Si-wan | relation : PersonInstrument
+subject : Yong Jun-hyung | relation : PersonInstrument
+subject : Yoon Doo-joon | relation : PersonInstrument
+subject : Yui Yokoyama | relation : PersonInstrument
+subject : Yuki Kashiwagi | relation : PersonInstrument
+subject : Yūko Ōshima | relation : PersonInstrument
+subject : Zakk Wylde | relation : PersonInstrument
+subject : Zhou Mi | relation : PersonInstrument
+subject : Aamir Khan | relation : PersonLanguage
+subject : Ahmet Davutoğlu | relation : PersonLanguage
+subject : Alejandro Sanz | relation : PersonLanguage
+subject : Alessandro Del Piero | relation : PersonLanguage
+subject : Alicia Keys | relation : PersonLanguage
+subject : André-Pierre Gignac | relation : PersonLanguage
+subject : Andrés Iniesta | relation : PersonLanguage
+subject : Andy Murray | relation : PersonLanguage
+subject : Ariana Grande | relation : PersonLanguage
+subject : Arnold Schwarzenegger | relation : PersonLanguage
+subject : Arvind Kejriwal | relation : PersonLanguage
+subject : Ashley Young | relation : PersonLanguage
+subject : Barbara Palvin | relation : PersonLanguage
+subject : Bastian Schweinsteiger | relation : PersonLanguage
+subject : Bill Maher | relation : PersonLanguage
+subject : Bob Marley | relation : PersonLanguage
+subject : Brie Larson | relation : PersonLanguage
+subject : Britney Spears | relation : PersonLanguage
+subject : Bruce Springsteen | relation : PersonLanguage
+subject : Bruno Mars | relation : PersonLanguage
+subject : Caroline Wozniacki | relation : PersonLanguage
+subject : CeeLo Green | relation : PersonLanguage
+subject : Cher | relation : PersonLanguage
+subject : Chetan Bhagat | relation : PersonLanguage
+subject : Chloë Grace Moretz | relation : PersonLanguage
+subject : Chris Brown | relation : PersonLanguage
+subject : Christina Aguilera | relation : PersonLanguage
+subject : Claire Holt | relation : PersonLanguage
+subject : David Cameron | relation : PersonLanguage
+subject : David De Gea | relation : PersonLanguage
+subject : Drake | relation : PersonLanguage
+subject : Dwight Howard | relation : PersonLanguage
+subject : Ed Sheeran | relation : PersonLanguage
+subject : Elizabeth II | relation : PersonLanguage
+subject : Elton John | relation : PersonLanguage
+subject : Enrique Iglesias | relation : PersonLanguage
+subject : Ezra Klein | relation : PersonLanguage
+subject : Fernando Alonso | relation : PersonLanguage
+subject : François Hollande | relation : PersonLanguage
+subject : Gerard Piqué | relation : PersonLanguage
+subject : Gordon Ramsay | relation : PersonLanguage
+subject : Hillary Clinton | relation : PersonLanguage
+subject : Iker Casillas | relation : PersonLanguage
+subject : Jean-Luc Mélenchon | relation : PersonLanguage
+subject : Jennette McCurdy | relation : PersonLanguage
+subject : Jessica Alba | relation : PersonLanguage
+subject : Jessica B. Hill | relation : PersonLanguage
+subject : John Kerry | relation : PersonLanguage
+subject : Kanye West | relation : PersonLanguage
+subject : Karim Benzema | relation : PersonLanguage
+subject : Katy Perry | relation : PersonLanguage
+subject : Kemal Kılıçdaroğlu | relation : PersonLanguage
+subject : Kim Kardashian | relation : PersonLanguage
+subject : Kylie Minogue | relation : PersonLanguage
+subject : Lady Gaga | relation : PersonLanguage
+subject : Lana Del Rey | relation : PersonLanguage
+subject : Lance Armstrong | relation : PersonLanguage
+subject : Leonardo DiCaprio | relation : PersonLanguage
+subject : Lewis Hamilton | relation : PersonLanguage
+subject : Lil Wayne | relation : PersonLanguage
+subject : Lindsay Lohan | relation : PersonLanguage
+subject : Luis Suárez | relation : PersonLanguage
+subject : Madonna | relation : PersonLanguage
+subject : Marc Márquez | relation : PersonLanguage
+subject : Marcelo | relation : PersonLanguage
+subject : Marine Le Pen | relation : PersonLanguage
+subject : Mark Hoppus | relation : PersonLanguage
+subject : Mark Ruffalo | relation : PersonLanguage
+subject : Memphis Depay | relation : PersonLanguage
+subject : Mitt Romney | relation : PersonLanguage
+subject : Mohamed Morsi | relation : PersonLanguage
+subject : Narendra Modi | relation : PersonLanguage
+subject : Nelson Mandela | relation : PersonLanguage
+subject : Nicolas Sarkozy | relation : PersonLanguage
+subject : Olivier Giroud | relation : PersonLanguage
+subject : Paul McCartney | relation : PersonLanguage
+subject : Pelé | relation : PersonLanguage
+subject : Pervez Musharraf | relation : PersonLanguage
+subject : Pharrell Williams | relation : PersonLanguage
+subject : Pink | relation : PersonLanguage
+subject : Priyanka Chopra | relation : PersonLanguage
+subject : Rafael Correa Delgado | relation : PersonLanguage
+subject : Rahul Gandhi | relation : PersonLanguage
+subject : Ringo Starr | relation : PersonLanguage
+subject : Robin van Persie | relation : PersonLanguage
+subject : Ronaldinho | relation : PersonLanguage
+subject : Sebastián Piñera | relation : PersonLanguage
+subject : Seth Meyers | relation : PersonLanguage
+subject : Shakira | relation : PersonLanguage
+subject : Snoop Dogg | relation : PersonLanguage
+subject : Stephen Harper | relation : PersonLanguage
+subject : Taylor Swift | relation : PersonLanguage
+subject : Tiger Woods | relation : PersonLanguage
+subject : Tom Cruise | relation : PersonLanguage
+subject : Tom Hanks | relation : PersonLanguage
+subject : Troian Bellisario | relation : PersonLanguage
+subject : Weird Al Yankovic | relation : PersonLanguage
+subject : William Bonner | relation : PersonLanguage
+subject : Xabi Alonso | relation : PersonLanguage
+subject : Zedd | relation : PersonLanguage
+subject : Adam Levine | relation : PersonPlaceOfDeath
+subject : Angela Merkel | relation : PersonPlaceOfDeath
+subject : Angelina Jolie | relation : PersonPlaceOfDeath
+subject : Antoine Griezmann | relation : PersonPlaceOfDeath
+subject : António Guterres | relation : PersonPlaceOfDeath
+subject : Ban Ki-moon | relation : PersonPlaceOfDeath
+subject : Barack Obama | relation : PersonPlaceOfDeath
+subject : Bell Hooks | relation : PersonPlaceOfDeath
+subject : Bettie Page | relation : PersonPlaceOfDeath
+subject : Bob Saget | relation : PersonPlaceOfDeath
+subject : Brad Pitt | relation : PersonPlaceOfDeath
+subject : Brodie Lee | relation : PersonPlaceOfDeath
+subject : Bruce Willis | relation : PersonPlaceOfDeath
+subject : Camila Cabello | relation : PersonPlaceOfDeath
+subject : Carrie Fisher | relation : PersonPlaceOfDeath
+subject : Chadwick Boseman | relation : PersonPlaceOfDeath
+subject : Chester Bennington | relation : PersonPlaceOfDeath
+subject : Chuck Yeager | relation : PersonPlaceOfDeath
+subject : Cory Monteith | relation : PersonPlaceOfDeath
+subject : Dan Kaminsky | relation : PersonPlaceOfDeath
+subject : David Beckham | relation : PersonPlaceOfDeath
+subject : David Cameron | relation : PersonPlaceOfDeath
+subject : Dusty Rhodes | relation : PersonPlaceOfDeath
+subject : Eduard Punset | relation : PersonPlaceOfDeath
+subject : Elizabeth Warren | relation : PersonPlaceOfDeath
+subject : Elon Musk | relation : PersonPlaceOfDeath
+subject : Elton John | relation : PersonPlaceOfDeath
+subject : Elvis Presley | relation : PersonPlaceOfDeath
+subject : Ennio Morricone | relation : PersonPlaceOfDeath
+subject : Garry Shandling | relation : PersonPlaceOfDeath
+subject : Gilbert Gottfried | relation : PersonPlaceOfDeath
+subject : Herman Cain | relation : PersonPlaceOfDeath
+subject : Irrfan Khan | relation : PersonPlaceOfDeath
+subject : Jane Goodall | relation : PersonPlaceOfDeath
+subject : Jeff Bezos | relation : PersonPlaceOfDeath
+subject : Jenni Rivera | relation : PersonPlaceOfDeath
+subject : Jennifer Aniston | relation : PersonPlaceOfDeath
+subject : Jennifer Lopez | relation : PersonPlaceOfDeath
+subject : Joaquin Phoenix | relation : PersonPlaceOfDeath
+subject : Joe Biden | relation : PersonPlaceOfDeath
+subject : John Grisham | relation : PersonPlaceOfDeath
+subject : John McCain | relation : PersonPlaceOfDeath
+subject : Johnny Depp | relation : PersonPlaceOfDeath
+subject : Julia Roberts | relation : PersonPlaceOfDeath
+subject : Kazuo Koike | relation : PersonPlaceOfDeath
+subject : Kofi Annan | relation : PersonPlaceOfDeath
+subject : Kylie Jenner | relation : PersonPlaceOfDeath
+subject : Lata Mangeshkar | relation : PersonPlaceOfDeath
+subject : Leo Burnett | relation : PersonPlaceOfDeath
+subject : Leon Allen White | relation : PersonPlaceOfDeath
+subject : Louis Armstrong | relation : PersonPlaceOfDeath
+subject : MF DOOM | relation : PersonPlaceOfDeath
+subject : Michael Lee Aday | relation : PersonPlaceOfDeath
+subject : Mikhail Zadornov | relation : PersonPlaceOfDeath
+subject : Miley Cyrus | relation : PersonPlaceOfDeath
+subject : Mourid Barghouti | relation : PersonPlaceOfDeath
+subject : Natalie Portman | relation : PersonPlaceOfDeath
+subject : Nawal El Saadawi | relation : PersonPlaceOfDeath
+subject : Neil Young | relation : PersonPlaceOfDeath
+subject : Neil deGrasse Tyson | relation : PersonPlaceOfDeath
+subject : Neymar | relation : PersonPlaceOfDeath
+subject : Paul Walker | relation : PersonPlaceOfDeath
+subject : Peaches Geldof | relation : PersonPlaceOfDeath
+subject : Pierre Nkurunziza | relation : PersonPlaceOfDeath
+subject : Prince | relation : PersonPlaceOfDeath
+subject : Prodigy | relation : PersonPlaceOfDeath
+subject : Ram Dass | relation : PersonPlaceOfDeath
+subject : Roger Ebert | relation : PersonPlaceOfDeath
+subject : Roh Hoe-chan | relation : PersonPlaceOfDeath
+subject : Ronnie James Dio | relation : PersonPlaceOfDeath
+subject : Satya Nadella | relation : PersonPlaceOfDeath
+subject : Selena Gomez | relation : PersonPlaceOfDeath
+subject : Sergio Agüero | relation : PersonPlaceOfDeath
+subject : Shakira | relation : PersonPlaceOfDeath
+subject : Shane Warne | relation : PersonPlaceOfDeath
+subject : Shawn Mendes | relation : PersonPlaceOfDeath
+subject : Sheryl Sandberg | relation : PersonPlaceOfDeath
+subject : Shinzo Abe | relation : PersonPlaceOfDeath
+subject : Shyla Stylez | relation : PersonPlaceOfDeath
+subject : Stephen King | relation : PersonPlaceOfDeath
+subject : Sundar Pichai | relation : PersonPlaceOfDeath
+subject : Susan Wojcicki | relation : PersonPlaceOfDeath
+subject : Sushma Swaraj | relation : PersonPlaceOfDeath
+subject : Taylor Swift | relation : PersonPlaceOfDeath
+subject : Terry Jones | relation : PersonPlaceOfDeath
+subject : Terry Pratchett | relation : PersonPlaceOfDeath
+subject : Thomas S. Monson | relation : PersonPlaceOfDeath
+subject : Tim Cook | relation : PersonPlaceOfDeath
+subject : Tim-Berners Lee | relation : PersonPlaceOfDeath
+subject : Tom Hanks | relation : PersonPlaceOfDeath
+subject : Tupac Shakur | relation : PersonPlaceOfDeath
+subject : Vicente Fernández | relation : PersonPlaceOfDeath
+subject : Vivek | relation : PersonPlaceOfDeath
+subject : Vladimir Zhirinovsky | relation : PersonPlaceOfDeath
+subject : Warren Buffett | relation : PersonPlaceOfDeath
+subject : Wes Craven | relation : PersonPlaceOfDeath
+subject : Will Smith | relation : PersonPlaceOfDeath
+subject : Xi Jinping | relation : PersonPlaceOfDeath
+subject : Zayn Malik | relation : PersonPlaceOfDeath
+subject : Zindzi Mandela | relation : PersonPlaceOfDeath
+subject : "Weird Al" Yankovic | relation : PersonProfession
+subject : Aamir Khan | relation : PersonProfession
+subject : Alessandro Del Piero | relation : PersonProfession
+subject : Alicia Keys | relation : PersonProfession
+subject : Amitabh Bachchan | relation : PersonProfession
+subject : Ariana Grande | relation : PersonProfession
+subject : Arnold Schwarzenegger | relation : PersonProfession
+subject : Arvind Kejriwal | relation : PersonProfession
+subject : Ben Stiller | relation : PersonProfession
+subject : Beyoncé | relation : PersonProfession
+subject : Bill Clinton | relation : PersonProfession
+subject : Bill Maher | relation : PersonProfession
+subject : Blaise Matuidi | relation : PersonProfession
+subject : Bob Marley | relation : PersonProfession
+subject : Brian May | relation : PersonProfession
+subject : Brie Larson | relation : PersonProfession
+subject : Bruce Springsteen | relation : PersonProfession
+subject : Bruno Mars | relation : PersonProfession
+subject : Buzz Aldrin | relation : PersonProfession
+subject : Carlos PenaVega | relation : PersonProfession
+subject : Christina Aguilera | relation : PersonProfession
+subject : Danny DeVito | relation : PersonProfession
+subject : David Guetta | relation : PersonProfession
+subject : Demi Lovato | relation : PersonProfession
+subject : Donald Trump | relation : PersonProfession
+subject : Donald Tusk | relation : PersonProfession
+subject : Dwayne Johnson | relation : PersonProfession
+subject : Ed Sheeran | relation : PersonProfession
+subject : Ellen DeGeneres | relation : PersonProfession
+subject : Eminem | relation : PersonProfession
+subject : Emma Watson | relation : PersonProfession
+subject : François Hollande | relation : PersonProfession
+subject : Gary Lineker | relation : PersonProfession
+subject : Gerard Piqué | relation : PersonProfession
+subject : Gwyneth Paltrow | relation : PersonProfession
+subject : Henrique Capriles Radonski | relation : PersonProfession
+subject : Hilary Duff | relation : PersonProfession
+subject : Hillary Clinton | relation : PersonProfession
+subject : Hugo Chávez | relation : PersonProfession
+subject : James Maslow | relation : PersonProfession
+subject : Jean-Luc Mélenchon | relation : PersonProfession
+subject : Jennifer Lopez | relation : PersonProfession
+subject : Jeremy Renner | relation : PersonProfession
+subject : Jessica Alba | relation : PersonProfession
+subject : Jimmy Fallon | relation : PersonProfession
+subject : Jimmy Kimmel | relation : PersonProfession
+subject : John Cena | relation : PersonProfession
+subject : John Kerry | relation : PersonProfession
+subject : John Legend | relation : PersonProfession
+subject : John McCain | relation : PersonProfession
+subject : Jonathan Ross | relation : PersonProfession
+subject : Justin Bieber | relation : PersonProfession
+subject : Kanye West | relation : PersonProfession
+subject : Karim Benzema | relation : PersonProfession
+subject : Kevin Spacey | relation : PersonProfession
+subject : Kim Kardashian | relation : PersonProfession
+subject : Kobe Bryant | relation : PersonProfession
+subject : Lana Del Rey | relation : PersonProfession
+subject : LeBron James | relation : PersonProfession
+subject : Leonard Nimoy | relation : PersonProfession
+subject : Lil Wayne | relation : PersonProfession
+subject : Lindsay Lohan | relation : PersonProfession
+subject : Logan Henderson | relation : PersonProfession
+subject : Madonna | relation : PersonProfession
+subject : Mariah Carey | relation : PersonProfession
+subject : Michael Bloomberg | relation : PersonProfession
+subject : Mick Foley | relation : PersonProfession
+subject : Miley Cyrus | relation : PersonProfession
+subject : Miranda Cosgrove | relation : PersonProfession
+subject : Neil Patrick Harris | relation : PersonProfession
+subject : Nicolas Sarkozy | relation : PersonProfession
+subject : Novak Djokovic | relation : PersonProfession
+subject : Olivier Giroud | relation : PersonProfession
+subject : Pelé | relation : PersonProfession
+subject : Pharrell Williams | relation : PersonProfession
+subject : Pitbull | relation : PersonProfession
+subject : Rafael Nadal | relation : PersonProfession
+subject : Rahul Gandhi | relation : PersonProfession
+subject : Ricky Gervais | relation : PersonProfession
+subject : Rihanna | relation : PersonProfession
+subject : Ringo Starr | relation : PersonProfession
+subject : Roger Federer | relation : PersonProfession
+subject : Russell Brand | relation : PersonProfession
+subject : Sachin | relation : PersonProfession
+subject : Salman Khan | relation : PersonProfession
+subject : Sasha Grey | relation : PersonProfession
+subject : Sebastián Piñera | relation : PersonProfession
+subject : Selena Gomez | relation : PersonProfession
+subject : Shakira | relation : PersonProfession
+subject : Skrillex | relation : PersonProfession
+subject : Snoop Dogg | relation : PersonProfession
+subject : Stephen Harper | relation : PersonProfession
+subject : Tablo | relation : PersonProfession
+subject : Tanayo | relation : PersonProfession
+subject : Taylor Swift | relation : PersonProfession
+subject : Tyra Banks | relation : PersonProfession
+subject : Usain Bolt | relation : PersonProfession
+subject : Victoria Beckham | relation : PersonProfession
+subject : William Bonner | relation : PersonProfession
+subject : Zedd | relation : PersonProfession
+subject : Abakan | relation : RiverBasinsCountry
+subject : Adige | relation : RiverBasinsCountry
+subject : Alazani | relation : RiverBasinsCountry
+subject : Amu Darya | relation : RiverBasinsCountry
+subject : Amur | relation : RiverBasinsCountry
+subject : Angara | relation : RiverBasinsCountry
+subject : Araguaia river | relation : RiverBasinsCountry
+subject : Arghandab river | relation : RiverBasinsCountry
+subject : Arkansas river | relation : RiverBasinsCountry
+subject : Athabasca river | relation : RiverBasinsCountry
+subject : Berezina river | relation : RiverBasinsCountry
+subject : Brahmaputra river | relation : RiverBasinsCountry
+subject : Bío Bío river | relation : RiverBasinsCountry
+subject : Chao Phraya | relation : RiverBasinsCountry
+subject : Chari river | relation : RiverBasinsCountry
+subject : Colorado river | relation : RiverBasinsCountry
+subject : Columbia river | relation : RiverBasinsCountry
+subject : Congo | relation : RiverBasinsCountry
+subject : Darling river | relation : RiverBasinsCountry
+subject : Dnieper river | relation : RiverBasinsCountry
+subject : Drava | relation : RiverBasinsCountry
+subject : Drin | relation : RiverBasinsCountry
+subject : Elbe | relation : RiverBasinsCountry
+subject : Fulda | relation : RiverBasinsCountry
+subject : Ganges | relation : RiverBasinsCountry
+subject : Gauja | relation : RiverBasinsCountry
+subject : Great whale river | relation : RiverBasinsCountry
+subject : Grijalva river | relation : RiverBasinsCountry
+subject : Hari river | relation : RiverBasinsCountry
+subject : Hrazdan river | relation : RiverBasinsCountry
+subject : Hron | relation : RiverBasinsCountry
+subject : Huai river | relation : RiverBasinsCountry
+subject : Hudson river | relation : RiverBasinsCountry
+subject : Ili river | relation : RiverBasinsCountry
+subject : Illinois river | relation : RiverBasinsCountry
+subject : Indus river | relation : RiverBasinsCountry
+subject : Iori river | relation : RiverBasinsCountry
+subject : Jordan river | relation : RiverBasinsCountry
+subject : Jurua river | relation : RiverBasinsCountry
+subject : Kama | relation : RiverBasinsCountry
+subject : Kamchatka river | relation : RiverBasinsCountry
+subject : Liffey | relation : RiverBasinsCountry
+subject : Lusatian Neisse | relation : RiverBasinsCountry
+subject : Madeira rivel | relation : RiverBasinsCountry
+subject : Main | relation : RiverBasinsCountry
+subject : Mamoré river | relation : RiverBasinsCountry
+subject : Marañón river | relation : RiverBasinsCountry
+subject : Marne | relation : RiverBasinsCountry
+subject : Mekong river | relation : RiverBasinsCountry
+subject : Moselle | relation : RiverBasinsCountry
+subject : Mur | relation : RiverBasinsCountry
+subject : Mureș river | relation : RiverBasinsCountry
+subject : Murray river | relation : RiverBasinsCountry
+subject : Niagara river | relation : RiverBasinsCountry
+subject : Ohio river | relation : RiverBasinsCountry
+subject : Oise | relation : RiverBasinsCountry
+subject : Orange river | relation : RiverBasinsCountry
+subject : Orkhon river | relation : RiverBasinsCountry
+subject : Orontes river | relation : RiverBasinsCountry
+subject : Paraná river | relation : RiverBasinsCountry
+subject : Pearl river | relation : RiverBasinsCountry
+subject : Pilcomayo | relation : RiverBasinsCountry
+subject : Po | relation : RiverBasinsCountry
+subject : Posof Çayı | relation : RiverBasinsCountry
+subject : Potomac river | relation : RiverBasinsCountry
+subject : Pregolya | relation : RiverBasinsCountry
+subject : Prypiat river | relation : RiverBasinsCountry
+subject : Purus river | relation : RiverBasinsCountry
+subject : Red river | relation : RiverBasinsCountry
+subject : Rio Negro | relation : RiverBasinsCountry
+subject : Rio grande | relation : RiverBasinsCountry
+subject : River Shannon | relation : RiverBasinsCountry
+subject : Rubicon | relation : RiverBasinsCountry
+subject : Río de la Plata | relation : RiverBasinsCountry
+subject : Saar | relation : RiverBasinsCountry
+subject : Salzach | relation : RiverBasinsCountry
+subject : Saône | relation : RiverBasinsCountry
+subject : Senegal river | relation : RiverBasinsCountry
+subject : Snake river | relation : RiverBasinsCountry
+subject : São francisco river | relation : RiverBasinsCountry
+subject : Tagus river | relation : RiverBasinsCountry
+subject : Tennessee river | relation : RiverBasinsCountry
+subject : Tigris | relation : RiverBasinsCountry
+subject : Ucayali river | relation : RiverBasinsCountry
+subject : Urubamba river | relation : RiverBasinsCountry
+subject : Velikaya | relation : RiverBasinsCountry
+subject : Vilyuy | relation : RiverBasinsCountry
+subject : Vistula | relation : RiverBasinsCountry
+subject : Vltava | relation : RiverBasinsCountry
+subject : Vyatka | relation : RiverBasinsCountry
+subject : Váh | relation : RiverBasinsCountry
+subject : Wabash river | relation : RiverBasinsCountry
+subject : Western Bug | relation : RiverBasinsCountry
+subject : Willamette river | relation : RiverBasinsCountry
+subject : Yalu river | relation : RiverBasinsCountry
+subject : Zangmar river | relation : RiverBasinsCountry
+subject : Zilupe | relation : RiverBasinsCountry
+subject : Zrmanja | relation : RiverBasinsCountry
+subject : Çoruh river | relation : RiverBasinsCountry
+subject : Þjórsá | relation : RiverBasinsCountry
+subject : Alaska | relation : StateSharesBorderState
+subject : Antofagasta Region | relation : StateSharesBorderState
+subject : Appenzell Ausserrhoden | relation : StateSharesBorderState
+subject : Appenzell Innerrhoden | relation : StateSharesBorderState
+subject : Apulia | relation : StateSharesBorderState
+subject : Aragon | relation : StateSharesBorderState
+subject : Araucanía Region | relation : StateSharesBorderState
+subject : Arica y Parinacota Region | relation : StateSharesBorderState
+subject : Arkansas | relation : StateSharesBorderState
+subject : Asturias | relation : StateSharesBorderState
+subject : Atacama Region | relation : StateSharesBorderState
+subject : Baden-Württemberg | relation : StateSharesBorderState
+subject : Basel-Landschaft | relation : StateSharesBorderState
+subject : Berlin | relation : StateSharesBorderState
+subject : California | relation : StateSharesBorderState
+subject : Campania | relation : StateSharesBorderState
+subject : Canelones Department | relation : StateSharesBorderState
+subject : Cantabria | relation : StateSharesBorderState
+subject : Canton Aargau | relation : StateSharesBorderState
+subject : Canton of Fribourg | relation : StateSharesBorderState
+subject : Canton of Geneva | relation : StateSharesBorderState
+subject : Canton of St. Gallen | relation : StateSharesBorderState
+subject : Canton of Ticino | relation : StateSharesBorderState
+subject : Castile and León | relation : StateSharesBorderState
+subject : Castile-La Mancha | relation : StateSharesBorderState
+subject : Catalonia | relation : StateSharesBorderState
+subject : Colorado | relation : StateSharesBorderState
+subject : Coquimbo Region | relation : StateSharesBorderState
+subject : Dakahlia Governorate | relation : StateSharesBorderState
+subject : Durazno Department | relation : StateSharesBorderState
+subject : Emirate of Dubai | relation : StateSharesBorderState
+subject : England | relation : StateSharesBorderState
+subject : Extremadura | relation : StateSharesBorderState
+subject : Florida | relation : StateSharesBorderState
+subject : Florida Department | relation : StateSharesBorderState
+subject : Gelderland | relation : StateSharesBorderState
+subject : Georgia | relation : StateSharesBorderState
+subject : Gibraltar | relation : StateSharesBorderState
+subject : Greater Poland Voivodeship | relation : StateSharesBorderState
+subject : Grisons | relation : StateSharesBorderState
+subject : Guam | relation : StateSharesBorderState
+subject : Hamburg | relation : StateSharesBorderState
+subject : Iwate Prefecture | relation : StateSharesBorderState
+subject : Kagoshima Prefecture | relation : StateSharesBorderState
+subject : Kainuu | relation : StateSharesBorderState
+subject : Kansas | relation : StateSharesBorderState
+subject : La Rioja | relation : StateSharesBorderState
+subject : Lapland | relation : StateSharesBorderState
+subject : Lazio | relation : StateSharesBorderState
+subject : Liguria | relation : StateSharesBorderState
+subject : Los Ríos Region | relation : StateSharesBorderState
+subject : Louisiana | relation : StateSharesBorderState
+subject : Magellan and the Chilean Antarctic Region | relation : StateSharesBorderState
+subject : Maine | relation : StateSharesBorderState
+subject : Marche | relation : StateSharesBorderState
+subject : Mecklenburg-Western Pomerania | relation : StateSharesBorderState
+subject : Mexico city | relation : StateSharesBorderState
+subject : Michigan | relation : StateSharesBorderState
+subject : Minnesota | relation : StateSharesBorderState
+subject : Miyagi Prefecture | relation : StateSharesBorderState
+subject : Molise | relation : StateSharesBorderState
+subject : Montana | relation : StateSharesBorderState
+subject : Møre og Romsdal | relation : StateSharesBorderState
+subject : Navarre | relation : StateSharesBorderState
+subject : Nevada | relation : StateSharesBorderState
+subject : New York | relation : StateSharesBorderState
+subject : Nordland | relation : StateSharesBorderState
+subject : Oklahoma | relation : StateSharesBorderState
+subject : Oregon | relation : StateSharesBorderState
+subject : Ostrobothnia | relation : StateSharesBorderState
+subject : Pennsylvania | relation : StateSharesBorderState
+subject : Pirkanmaa | relation : StateSharesBorderState
+subject : Pécs | relation : StateSharesBorderState
+subject : Region of Murcia | relation : StateSharesBorderState
+subject : Rogaland | relation : StateSharesBorderState
+subject : Saarland | relation : StateSharesBorderState
+subject : Saint Petersburg | relation : StateSharesBorderState
+subject : Salzburg | relation : StateSharesBorderState
+subject : San Marino | relation : StateSharesBorderState
+subject : Satakunta | relation : StateSharesBorderState
+subject : Saxony-Anhalt | relation : StateSharesBorderState
+subject : Schwyz | relation : StateSharesBorderState
+subject : Tarapacá Region | relation : StateSharesBorderState
+subject : Tennessee | relation : StateSharesBorderState
+subject : Texas | relation : StateSharesBorderState
+subject : Thurgau | relation : StateSharesBorderState
+subject : Tochigi Prefecture | relation : StateSharesBorderState
+subject : Tuscany | relation : StateSharesBorderState
+subject : Tyrol | relation : StateSharesBorderState
+subject : Umbria | relation : StateSharesBorderState
+subject : United States Virgin Islands | relation : StateSharesBorderState
+subject : Uusimaa | relation : StateSharesBorderState
+subject : Vaduz | relation : StateSharesBorderState
+subject : Veneto | relation : StateSharesBorderState
+subject : Vienna | relation : StateSharesBorderState
+subject : Vorarlberg | relation : StateSharesBorderState
+subject : Wales | relation : StateSharesBorderState
+subject : Washington | relation : StateSharesBorderState
+subject : Wyoming | relation : StateSharesBorderState
+subject : Åland | relation : StateSharesBorderState
+subject : Acetone | relation : ChemicalCompoundElement
+subject : Adenosine Diphosphate Ribose | relation : ChemicalCompoundElement
+subject : Aluminium Chlorohydrate | relation : ChemicalCompoundElement
+subject : Aluminum Iodide | relation : ChemicalCompoundElement
+subject : Aminomethylpropanol | relation : ChemicalCompoundElement
+subject : Ammonia | relation : ChemicalCompoundElement
+subject : Atracurium Besylate | relation : ChemicalCompoundElement
+subject : Azathioprine | relation : ChemicalCompoundElement
+subject : Azulene | relation : ChemicalCompoundElement
+subject : Carbonic Acid | relation : ChemicalCompoundElement
+subject : Cetyl Alcohol | relation : ChemicalCompoundElement
+subject : Chlorophyll F | relation : ChemicalCompoundElement
 subject : Coumarin | relation : ChemicalCompoundElement
-subject : Iceland | relation : CountryOfficialLanguage
-subject : Maritsa | relation : RiverBasinsCountry
-subject : Panama | relation : CountryOfficialLanguage
-subject : Somalia | relation : CountryBordersWithCountry
-subject : Nicaragua | relation : CountryOfficialLanguage
-subject : Aretha Franklin | relation : PersonCauseOfDeath
-subject : Ural river | relation : RiverBasinsCountry
-subject : People's Republic of China | relation : CountryOfficialLanguage
-subject : Roy Orbison | relation : PersonCauseOfDeath
-subject : NSU | relation : CompanyParentOrganization
-subject : Obwalden | relation : StateSharesBorderState
-subject : Alfredo González Flores | relation : PersonPlaceOfDeath
-subject : Japan | relation : CountryBordersWithCountry
-subject : Uganda | relation : CountryBordersWithCountry
-subject : Alex von Falkenhausen Motorenbau | relation : CompanyParentOrganization
+subject : Cupric Phosphate | relation : ChemicalCompoundElement
+subject : Cyclopropane | relation : ChemicalCompoundElement
+subject : Ecdysone | relation : ChemicalCompoundElement
+subject : Ethyl Acetoacetate | relation : ChemicalCompoundElement
+subject : Flavin Adenine Dinucleotide | relation : ChemicalCompoundElement
+subject : Glucagon | relation : ChemicalCompoundElement
+subject : Glutathione | relation : ChemicalCompoundElement
+subject : Gold Trichloride | relation : ChemicalCompoundElement
+subject : Heptadecane | relation : ChemicalCompoundElement
 subject : Heroin | relation : ChemicalCompoundElement
+subject : Hexadecane | relation : ChemicalCompoundElement
+subject : Hydrazine | relation : ChemicalCompoundElement
+subject : Hydroxocobalamin | relation : ChemicalCompoundElement
+subject : Hyponitrous Acid | relation : ChemicalCompoundElement
+subject : Icosane | relation : ChemicalCompoundElement
+subject : Imatinib | relation : ChemicalCompoundElement
+subject : Lysergic Acid Diethylamide | relation : ChemicalCompoundElement
+subject : Maleic Acid | relation : ChemicalCompoundElement
+subject : Mercuric Fluoride | relation : ChemicalCompoundElement
+subject : Mercurous Fluoride | relation : ChemicalCompoundElement
+subject : Metformin | relation : ChemicalCompoundElement
+subject : Methacrylic Acid | relation : ChemicalCompoundElement
+subject : Motilin | relation : ChemicalCompoundElement
+subject : Mustard Gas | relation : ChemicalCompoundElement
+subject : Nonadecane | relation : ChemicalCompoundElement
+subject : Pethidine | relation : ChemicalCompoundElement
+subject : Rubidium Hydroxide | relation : ChemicalCompoundElement
+subject : Sodium Hydroxide | relation : ChemicalCompoundElement
+subject : Sodium Tripolyphosphate | relation : ChemicalCompoundElement
+subject : Sulfuric Acid | relation : ChemicalCompoundElement
+subject : TNT | relation : ChemicalCompoundElement
+subject : Tabun | relation : ChemicalCompoundElement
+subject : Tenoxicam | relation : ChemicalCompoundElement
+subject : Triethylamine | relation : ChemicalCompoundElement
+subject : Triphenylphosphine | relation : ChemicalCompoundElement
+subject : Vinylidene Fluoride | relation : ChemicalCompoundElement
+subject : Zeaxanthin | relation : ChemicalCompoundElement
+subject : Abadal | relation : CompanyParentOrganization
+subject : Aixam | relation : CompanyParentOrganization
+subject : Alex von Falkenhausen Motorenbau | relation : CompanyParentOrganization
+subject : Alvis Car and Engineering Company Ltd | relation : CompanyParentOrganization
+subject : Amphicar | relation : CompanyParentOrganization
+subject : Artés de Arcos | relation : CompanyParentOrganization
+subject : Aston Martin lagonda | relation : CompanyParentOrganization
+subject : Austro-Daimler | relation : CompanyParentOrganization
+subject : Automobilwerk Eisenach | relation : CompanyParentOrganization
+subject : Bell | relation : CompanyParentOrganization
+subject : Bertone | relation : CompanyParentOrganization
+subject : Cadillac | relation : CompanyParentOrganization
+subject : Central Motors | relation : CompanyParentOrganization
+subject : Changan Automobile | relation : CompanyParentOrganization
+subject : Delage | relation : CompanyParentOrganization
+subject : Duesenberg | relation : CompanyParentOrganization
+subject : Fábrica Nacional de Motores | relation : CompanyParentOrganization
+subject : Gaz | relation : CompanyParentOrganization
+subject : Gucci | relation : CompanyParentOrganization
+subject : Guerry et Bourguignon | relation : CompanyParentOrganization
+subject : Hanomag | relation : CompanyParentOrganization
+subject : Hyundai Motor Company | relation : CompanyParentOrganization
+subject : Industrieverband Fahrzeugbau | relation : CompanyParentOrganization
+subject : Industrija Motornih Vozil | relation : CompanyParentOrganization
+subject : Itala | relation : CompanyParentOrganization
+subject : Jensen Motors | relation : CompanyParentOrganization
 subject : Kaipan | relation : CompanyParentOrganization
+subject : Kia | relation : CompanyParentOrganization
+subject : Kojima Engineering | relation : CompanyParentOrganization
+subject : La Ponette | relation : CompanyParentOrganization
+subject : Lada Zapad Tolyatti | relation : CompanyParentOrganization
+subject : Lagonda | relation : CompanyParentOrganization
+subject : Locomobile Company of America | relation : CompanyParentOrganization
+subject : Lotus Cars | relation : CompanyParentOrganization
+subject : MG Car Company Limited | relation : CompanyParentOrganization
+subject : Moskvitch | relation : CompanyParentOrganization
+subject : NSU | relation : CompanyParentOrganization
+subject : Nardi | relation : CompanyParentOrganization
+subject : Peugeot | relation : CompanyParentOrganization
+subject : Saipa | relation : CompanyParentOrganization
+subject : Scripps-Booth | relation : CompanyParentOrganization
+subject : Simca | relation : CompanyParentOrganization
+subject : Società Torinese Automobili Elettrici | relation : CompanyParentOrganization
+subject : Towarzystwo Budowy Samochodów AS | relation : CompanyParentOrganization
+subject : Valmet Automotive | relation : CompanyParentOrganization
+subject : Velorex | relation : CompanyParentOrganization
+subject : Volkswagen | relation : CompanyParentOrganization
+subject : Yamaha Motor Company | relation : CompanyParentOrganization
+subject : Zanella Fratelli | relation : CompanyParentOrganization
+subject : Élan Motorsport Technologies | relation : CompanyParentOrganization
+subject : Andorra | relation : CountryBordersWithCountry
+subject : Angola | relation : CountryBordersWithCountry
+subject : Australia | relation : CountryBordersWithCountry
+subject : Bahrain | relation : CountryBordersWithCountry
+subject : Barbados | relation : CountryBordersWithCountry
+subject : Belize | relation : CountryBordersWithCountry
+subject : Bolivia | relation : CountryBordersWithCountry
+subject : Bosnia and Herzegovina | relation : CountryBordersWithCountry
+subject : Bulgaria | relation : CountryBordersWithCountry
+subject : Central African Republic | relation : CountryBordersWithCountry
+subject : Comoros | relation : CountryBordersWithCountry
+subject : Costa Rica | relation : CountryBordersWithCountry
+subject : Cuba | relation : CountryBordersWithCountry
+subject : Djibouti | relation : CountryBordersWithCountry
+subject : Dominican Republic | relation : CountryBordersWithCountry
+subject : Eritrea | relation : CountryBordersWithCountry
+subject : Estonia | relation : CountryBordersWithCountry
+subject : Gambia | relation : CountryBordersWithCountry
+subject : Georgia | relation : CountryBordersWithCountry
+subject : Germany | relation : CountryBordersWithCountry
+subject : Ghana | relation : CountryBordersWithCountry
+subject : Grenada | relation : CountryBordersWithCountry
+subject : Guyana | relation : CountryBordersWithCountry
+subject : Ivory Coast | relation : CountryBordersWithCountry
+subject : Japan | relation : CountryBordersWithCountry
+subject : Kingdom of Denmark | relation : CountryBordersWithCountry
+subject : Kingdom of the Netherlands | relation : CountryBordersWithCountry
+subject : Morocco | relation : CountryBordersWithCountry
+subject : Mozambique | relation : CountryBordersWithCountry
 subject : Myanmar | relation : CountryBordersWithCountry
+subject : Pakistan | relation : CountryBordersWithCountry
+subject : Poland | relation : CountryBordersWithCountry
+subject : Portugal | relation : CountryBordersWithCountry
+subject : Rwanda | relation : CountryBordersWithCountry
+subject : Saint Vincent and the Grenadines | relation : CountryBordersWithCountry
+subject : Samoa | relation : CountryBordersWithCountry
+subject : San Marino | relation : CountryBordersWithCountry
+subject : Saudi Arabia | relation : CountryBordersWithCountry
+subject : Somalia | relation : CountryBordersWithCountry
+subject : Thailand | relation : CountryBordersWithCountry
+subject : Togo | relation : CountryBordersWithCountry
+subject : Turkey | relation : CountryBordersWithCountry
+subject : Uganda | relation : CountryBordersWithCountry
+subject : United kingdom | relation : CountryBordersWithCountry
+subject : Uzbekistan | relation : CountryBordersWithCountry
+subject : Venezuela | relation : CountryBordersWithCountry
+subject : Zimbabwe | relation : CountryBordersWithCountry
+subject : Afghanistan | relation : CountryOfficialLanguage
+subject : Argentina | relation : CountryOfficialLanguage
+subject : Australia | relation : CountryOfficialLanguage
+subject : Austria | relation : CountryOfficialLanguage
+subject : Bahamas | relation : CountryOfficialLanguage
+subject : Botswana | relation : CountryOfficialLanguage
+subject : Brunei | relation : CountryOfficialLanguage
+subject : Burkina Faso | relation : CountryOfficialLanguage
+subject : Burundi | relation : CountryOfficialLanguage
+subject : Cameroon | relation : CountryOfficialLanguage
+subject : Central African Republic | relation : CountryOfficialLanguage
+subject : Colombia | relation : CountryOfficialLanguage
+subject : Costa Rica | relation : CountryOfficialLanguage
+subject : Croatia | relation : CountryOfficialLanguage
+subject : East Timor | relation : CountryOfficialLanguage
+subject : Finland | relation : CountryOfficialLanguage
+subject : France | relation : CountryOfficialLanguage
+subject : Gambia | relation : CountryOfficialLanguage
+subject : Grenada | relation : CountryOfficialLanguage
+subject : Guyana | relation : CountryOfficialLanguage
+subject : Iceland | relation : CountryOfficialLanguage
+subject : India | relation : CountryOfficialLanguage
+subject : Israel | relation : CountryOfficialLanguage
+subject : Jamaica | relation : CountryOfficialLanguage
+subject : Jordan | relation : CountryOfficialLanguage
+subject : Kazakhstan | relation : CountryOfficialLanguage
+subject : Latvia | relation : CountryOfficialLanguage
+subject : Liechtenstein | relation : CountryOfficialLanguage
+subject : Maldives | relation : CountryOfficialLanguage
+subject : Mozambique | relation : CountryOfficialLanguage
+subject : Nicaragua | relation : CountryOfficialLanguage
+subject : Niger | relation : CountryOfficialLanguage
+subject : North Macedonia | relation : CountryOfficialLanguage
+subject : Norway | relation : CountryOfficialLanguage
+subject : Pakistan | relation : CountryOfficialLanguage
+subject : Panama | relation : CountryOfficialLanguage
+subject : People's Republic of China | relation : CountryOfficialLanguage
+subject : Philippines | relation : CountryOfficialLanguage
+subject : Qatar | relation : CountryOfficialLanguage
+subject : Rwanda | relation : CountryOfficialLanguage
+subject : San Marino | relation : CountryOfficialLanguage
+subject : Sierra Leone | relation : CountryOfficialLanguage
+subject : São Tomé and Príncipe | relation : CountryOfficialLanguage
+subject : Taiwan | relation : CountryOfficialLanguage
+subject : Tajikistan | relation : CountryOfficialLanguage
+subject : Yemen | relation : CountryOfficialLanguage
+subject : Zimbabwe | relation : CountryOfficialLanguage
+subject : Adele | relation : PersonCauseOfDeath
+subject : Ahmed Zewail | relation : PersonCauseOfDeath
+subject : Aretha Franklin | relation : PersonCauseOfDeath
+subject : Avicii | relation : PersonCauseOfDeath
+subject : Benjamin Netanyahu | relation : PersonCauseOfDeath
+subject : Bill Gates | relation : PersonCauseOfDeath
+subject : Boris Johnson | relation : PersonCauseOfDeath
+subject : Christina Grimmie | relation : PersonCauseOfDeath
+subject : Christine Lagarde | relation : PersonCauseOfDeath
+subject : Cory Monteith | relation : PersonCauseOfDeath
+subject : Dilip Kumar | relation : PersonCauseOfDeath
+subject : Donald Knuth | relation : PersonCauseOfDeath
+subject : Emmanuel Macron | relation : PersonCauseOfDeath
+subject : Ennio Morricone | relation : PersonCauseOfDeath
+subject : Francois Hollande | relation : PersonCauseOfDeath
+subject : Frank Sinatra | relation : PersonCauseOfDeath
+subject : George H. W. Bush | relation : PersonCauseOfDeath
+subject : George Harrison | relation : PersonCauseOfDeath
+subject : Ginni Rometty | relation : PersonCauseOfDeath
+subject : Haruma Miura | relation : PersonCauseOfDeath
+subject : Hu Jintao | relation : PersonCauseOfDeath
+subject : Hugh Hefner | relation : PersonCauseOfDeath
+subject : Idriss Déby | relation : PersonCauseOfDeath
+subject : Indra Nooyi | relation : PersonCauseOfDeath
+subject : Jim Rohn | relation : PersonCauseOfDeath
+subject : John Magufuli | relation : PersonCauseOfDeath
+subject : Johnny Cash | relation : PersonCauseOfDeath
+subject : Larry King | relation : PersonCauseOfDeath
+subject : Larry Page | relation : PersonCauseOfDeath
+subject : Maurane | relation : PersonCauseOfDeath
+subject : Maya Angelou | relation : PersonCauseOfDeath
+subject : Melinda Gates | relation : PersonCauseOfDeath
+subject : Michelle Obama | relation : PersonCauseOfDeath
+subject : Mikhail Zadornov | relation : PersonCauseOfDeath
+subject : Miles Davis | relation : PersonCauseOfDeath
+subject : Nelson Mandela | relation : PersonCauseOfDeath
+subject : Paul Pogba | relation : PersonCauseOfDeath
+subject : Pitbull | relation : PersonCauseOfDeath
+subject : Richard Dawkins | relation : PersonCauseOfDeath
+subject : Rihanna | relation : PersonCauseOfDeath
+subject : Rishi Kapoor | relation : PersonCauseOfDeath
+subject : Robert Downey Jr. | relation : PersonCauseOfDeath
+subject : Robert Lewandowsk | relation : PersonCauseOfDeath
+subject : Roddy Piper | relation : PersonCauseOfDeath
+subject : Ronaldinho | relation : PersonCauseOfDeath
+subject : Roy Orbison | relation : PersonCauseOfDeath
+subject : Russell Crowe | relation : PersonCauseOfDeath
+subject : Sandra Bullock | relation : PersonCauseOfDeath
+subject : Ursula von der Leyen | relation : PersonCauseOfDeath
+subject : Victoria Beckham | relation : PersonCauseOfDeath
+subject : Adam Savage | relation : PersonEmployer
+subject : Alexis Ohanian | relation : PersonEmployer
+subject : Amber Rudd | relation : PersonEmployer
+subject : Aylin Nazlıaka | relation : PersonEmployer
+subject : Bill Browder | relation : PersonEmployer
+subject : Bob Iger | relation : PersonEmployer
+subject : Chelsea Clinton | relation : PersonEmployer
+subject : Chris Anderson | relation : PersonEmployer
+subject : Chris Sacca | relation : PersonEmployer
+subject : Cindy McCain | relation : PersonEmployer
+subject : Dana White | relation : PersonEmployer
+subject : Devin Nunes | relation : PersonEmployer
+subject : Dick Costolo | relation : PersonEmployer
+subject : Donny Deutsch | relation : PersonEmployer
+subject : Doug Ducey | relation : PersonEmployer
+subject : Douglas G. Hurley | relation : PersonEmployer
+subject : Edd China | relation : PersonEmployer
+subject : François Legault | relation : PersonEmployer
+subject : Guido van Rossum | relation : PersonEmployer
+subject : Harsh Goenka | relation : PersonEmployer
+subject : Heizō Takenaka | relation : PersonEmployer
+subject : Joel Spolsky | relation : PersonEmployer
+subject : John Doerr | relation : PersonEmployer
+subject : John McAfee | relation : PersonEmployer
+subject : John Romero | relation : PersonEmployer
+subject : Kanye West | relation : PersonEmployer
+subject : Karen L. Nyberg | relation : PersonEmployer
+subject : Kent Beck | relation : PersonEmployer
+subject : Kristalina Georgieva | relation : PersonEmployer
+subject : L. Brent Bozell III | relation : PersonEmployer
+subject : Lana Rhoades | relation : PersonEmployer
+subject : Marcos Pontes | relation : PersonEmployer
+subject : Michael Bloomberg | relation : PersonEmployer
+subject : Michael J. Massimino | relation : PersonEmployer
+subject : Mike Pompeo | relation : PersonEmployer
+subject : Muhammad Yunus | relation : PersonEmployer
+subject : Naftali Bennett | relation : PersonEmployer
+subject : Nandan Nilekani | relation : PersonEmployer
+subject : Nicole Stott | relation : PersonEmployer
+subject : Oleksandr Turchynov | relation : PersonEmployer
+subject : Oprah Winfrey | relation : PersonEmployer
+subject : Pedro Duque | relation : PersonEmployer
+subject : Reid Hoffman | relation : PersonEmployer
+subject : Serena Williams | relation : PersonEmployer
+subject : Sergio Melnick | relation : PersonEmployer
+subject : Shane Kimbrough | relation : PersonEmployer
+subject : Steve Forbes | relation : PersonEmployer
+subject : Turki Al-Sheikh | relation : PersonEmployer
+subject : Wendell Pierce | relation : PersonEmployer
+subject : Wishnutama | relation : PersonEmployer
+subject : A. J. McLean | relation : PersonInstrument
+subject : Arnel Pineda | relation : PersonInstrument
+subject : Bang Yong-guk | relation : PersonInstrument
+subject : Billie Joe Armstrong | relation : PersonInstrument
+subject : Billy Corgan | relation : PersonInstrument
+subject : Björk | relation : PersonInstrument
+subject : Byun Baek-hyun | relation : PersonInstrument
+subject : Chester Bennington | relation : PersonInstrument
+subject : China Anne McClain | relation : PersonInstrument
+subject : Cho Kyuhyun | relation : PersonInstrument
+subject : Chris Daughtry | relation : PersonInstrument
+subject : Corey Taylor | relation : PersonInstrument
+subject : Courtney Love | relation : PersonInstrument
+subject : Duff McKagan | relation : PersonInstrument
+subject : Gary Barlow | relation : PersonInstrument
+subject : Gerard Way | relation : PersonInstrument
+subject : Heo Young-saeng | relation : PersonInstrument
+subject : Hisashi | relation : PersonInstrument
+subject : Hwang Chansung | relation : PersonInstrument
+subject : Hyomin | relation : PersonInstrument
+subject : JAY B | relation : PersonInstrument
+subject : Joe Perry | relation : PersonInstrument
+subject : John Lennon | relation : PersonInstrument
+subject : Joseph Hahn | relation : PersonInstrument
+subject : Jun. K | relation : PersonInstrument
+subject : Kangin | relation : PersonInstrument
+subject : Kim Junsu | relation : PersonInstrument
+subject : Lay | relation : PersonInstrument
+subject : Lee Jung-shin | relation : PersonInstrument
+subject : Logan Henderson | relation : PersonInstrument
+subject : Morrissey | relation : PersonInstrument
+subject : Nichkhun | relation : PersonInstrument
+subject : Nicole Jung | relation : PersonInstrument
+subject : Noel Gallagher | relation : PersonInstrument
+subject : Park Bom | relation : PersonInstrument
+subject : Paul McCartney | relation : PersonInstrument
+subject : Rea Garvey | relation : PersonInstrument
+subject : Robert Plant | relation : PersonInstrument
+subject : Roger Taylor | relation : PersonInstrument
+subject : Ronan Keating | relation : PersonInstrument
+subject : Sakura Miyawaki | relation : PersonInstrument
+subject : Shindong | relation : PersonInstrument
+subject : Slash | relation : PersonInstrument
+subject : Sting | relation : PersonInstrument
+subject : Taeyang | relation : PersonInstrument
+subject : Tom Morello | relation : PersonInstrument
+subject : Tony Iommi | relation : PersonInstrument
+subject : Victoria Beckham | relation : PersonInstrument
+subject : Yoshiki | relation : PersonInstrument
+subject : Zayn Malik | relation : PersonInstrument
+subject : A. R. Rahman | relation : PersonLanguage
+subject : Abdullah Gül | relation : PersonLanguage
+subject : Adele | relation : PersonLanguage
+subject : Akon | relation : PersonLanguage
+subject : Akshay Kumar | relation : PersonLanguage
+subject : Avril Lavigne | relation : PersonLanguage
+subject : Barack Obama | relation : PersonLanguage
+subject : Beyoncé | relation : PersonLanguage
+subject : Bill Clinton | relation : PersonLanguage
+subject : Blaise Matuidi | relation : PersonLanguage
+subject : Buzz Aldrin | relation : PersonLanguage
+subject : Donald Trump | relation : PersonLanguage
+subject : Donald Tusk | relation : PersonLanguage
+subject : Eminem | relation : PersonLanguage
+subject : Emma Watson | relation : PersonLanguage
+subject : Genelia D'Souza | relation : PersonLanguage
+subject : George Harrison | relation : PersonLanguage
+subject : Henrique Capriles Radonski | relation : PersonLanguage
+subject : Hugo Chávez | relation : PersonLanguage
+subject : Jeremy Renner | relation : PersonLanguage
+subject : Jessie J | relation : PersonLanguage
+subject : Jim Carrey | relation : PersonLanguage
+subject : Joe Biden | relation : PersonLanguage
+subject : John Cena | relation : PersonLanguage
+subject : Jose Michimani | relation : PersonLanguage
+subject : Kobe Bryant | relation : PersonLanguage
+subject : Maria Sharapova | relation : PersonLanguage
+subject : Mariah Carey | relation : PersonLanguage
+subject : Mick Foley | relation : PersonLanguage
+subject : Miranda Cosgrove | relation : PersonLanguage
+subject : Mohammed bin Rashid Al Maktoum | relation : PersonLanguage
+subject : Novak Djokovic | relation : PersonLanguage
+subject : Oscar dos Santos Emboaba Júnior | relation : PersonLanguage
+subject : Paris Hilton | relation : PersonLanguage
+subject : Patrick Stewart | relation : PersonLanguage
+subject : Pau Gasol | relation : PersonLanguage
+subject : Paulo Coelho | relation : PersonLanguage
+subject : Rafael Nadal | relation : PersonLanguage
+subject : Ricky Gervais | relation : PersonLanguage
+subject : Rihanna | relation : PersonLanguage
+subject : Sachin | relation : PersonLanguage
+subject : Salman Khan | relation : PersonLanguage
+subject : Samir Nasri | relation : PersonLanguage
+subject : Selena Gomez | relation : PersonLanguage
+subject : Skrillex | relation : PersonLanguage
+subject : Thiago Alcântara | relation : PersonLanguage
+subject : Vladimir Putin | relation : PersonLanguage
+subject : Wiz Khalifa | relation : PersonLanguage
+subject : Zac Efron | relation : PersonLanguage
+subject : Zlatan Ibrahimović | relation : PersonLanguage
+subject : Abdul Rehman Malik | relation : PersonPlaceOfDeath
+subject : Adam West | relation : PersonPlaceOfDeath
+subject : Adele | relation : PersonPlaceOfDeath
+subject : Alan García | relation : PersonPlaceOfDeath
+subject : Alfredo González Flores | relation : PersonPlaceOfDeath
+subject : Almudena Grandes | relation : PersonPlaceOfDeath
+subject : Anne Rice | relation : PersonPlaceOfDeath
+subject : Aretha Franklin | relation : PersonPlaceOfDeath
+subject : Avicii | relation : PersonPlaceOfDeath
+subject : Benjamin Netanyahu | relation : PersonPlaceOfDeath
+subject : Bill Gates | relation : PersonPlaceOfDeath
+subject : Boris Johnson | relation : PersonPlaceOfDeath
+subject : Cameron Boyce | relation : PersonPlaceOfDeath
+subject : Chespirito | relation : PersonPlaceOfDeath
+subject : Chick Corea | relation : PersonPlaceOfDeath
+subject : Chris Cornell | relation : PersonPlaceOfDeath
+subject : Christine Lagarde | relation : PersonPlaceOfDeath
+subject : Donald Knuth | relation : PersonPlaceOfDeath
+subject : Elijah Cummings | relation : PersonPlaceOfDeath
+subject : Emmanuel Macron | relation : PersonPlaceOfDeath
+subject : Francois Hollande | relation : PersonPlaceOfDeath
+subject : George H. W. Bush | relation : PersonPlaceOfDeath
+subject : Ginni Rometty | relation : PersonPlaceOfDeath
+subject : Glenn Fredly | relation : PersonPlaceOfDeath
+subject : Hu Jintao | relation : PersonPlaceOfDeath
+subject : Hugo Chávez | relation : PersonPlaceOfDeath
+subject : Indra Nooyi | relation : PersonPlaceOfDeath
+subject : John Coltrane | relation : PersonPlaceOfDeath
+subject : John Lennon | relation : PersonPlaceOfDeath
+subject : Ken Robinson | relation : PersonPlaceOfDeath
+subject : Kurt Vonnegut | relation : PersonPlaceOfDeath
+subject : Larry Page | relation : PersonPlaceOfDeath
+subject : Melinda Gates | relation : PersonPlaceOfDeath
+subject : Michael Collins | relation : PersonPlaceOfDeath
+subject : Michael Jackson | relation : PersonPlaceOfDeath
+subject : Michelle Obama | relation : PersonPlaceOfDeath
+subject : Paul G. Allen | relation : PersonPlaceOfDeath
+subject : Paul Pogba | relation : PersonPlaceOfDeath
+subject : Pitbull | relation : PersonPlaceOfDeath
+subject : Rachel Caine | relation : PersonPlaceOfDeath
+subject : Richard Dawkins | relation : PersonPlaceOfDeath
+subject : Rihanna | relation : PersonPlaceOfDeath
+subject : Roald Dahl | relation : PersonPlaceOfDeath
+subject : Robert Downey Jr. | relation : PersonPlaceOfDeath
+subject : Robert Lewandowsk | relation : PersonPlaceOfDeath
+subject : Ronaldinho | relation : PersonPlaceOfDeath
+subject : Russell Crowe | relation : PersonPlaceOfDeath
+subject : Sandra Bullock | relation : PersonPlaceOfDeath
+subject : Ursula von der Leyen | relation : PersonPlaceOfDeath
+subject : Victoria Beckham | relation : PersonPlaceOfDeath
+subject : Akon | relation : PersonProfession
+subject : Akshay Kumar | relation : PersonProfession
+subject : Al Gore | relation : PersonProfession
+subject : André-Pierre Gignac | relation : PersonProfession
+subject : Ashley Tisdale | relation : PersonProfession
+subject : Bryan Cranston | relation : PersonProfession
+subject : Calvin Harris | relation : PersonProfession
+subject : Chris Brown | relation : PersonProfession
+subject : Coco Austin | relation : PersonProfession
+subject : Daniel Tosh | relation : PersonProfession
+subject : Drake | relation : PersonProfession
+subject : Elon Musk | relation : PersonProfession
+subject : Enrique Iglesias | relation : PersonProfession
+subject : Ezra Klein | relation : PersonProfession
+subject : George Harrison | relation : PersonProfession
+subject : Harbhajan Singh | relation : PersonProfession
+subject : J. K. Rowling | relation : PersonProfession
+subject : Jay-Z | relation : PersonProfession
+subject : Jim Carrey | relation : PersonProfession
+subject : Jose Michimani | relation : PersonProfession
+subject : Khloé Kardashian | relation : PersonProfession
+subject : Lady Gaga | relation : PersonProfession
+subject : Lewis Hamilton | relation : PersonProfession
+subject : Ludacris | relation : PersonProfession
+subject : Mark Hoppus | relation : PersonProfession
+subject : Mark Ruffalo | relation : PersonProfession
+subject : Memphis Depay | relation : PersonProfession
+subject : Michael Jackson | relation : PersonProfession
+subject : Mohamed Morsi | relation : PersonProfession
+subject : Narendra Modi | relation : PersonProfession
+subject : Nick Jonas | relation : PersonProfession
+subject : Patrick Stewart | relation : PersonProfession
+subject : Paul McCartney | relation : PersonProfession
+subject : Paulo Coelho | relation : PersonProfession
+subject : Psy | relation : PersonProfession
+subject : Rachel Maddow | relation : PersonProfession
+subject : Ricky Martin | relation : PersonProfession
+subject : Rob Kardashian | relation : PersonProfession
+subject : Robert Downey Jr. | relation : PersonProfession
+subject : Robin van Persie | relation : PersonProfession
+subject : Ronaldinho | relation : PersonProfession
+subject : Serena Williams | relation : PersonProfession
+subject : Stephen Fry | relation : PersonProfession
+subject : Stephen King | relation : PersonProfession
+subject : Tiger Woods | relation : PersonProfession
+subject : Triple H | relation : PersonProfession
+subject : V. V. S. Laxman | relation : PersonProfession
+subject : Vladimir Putin | relation : PersonProfession
+subject : Zac Efron | relation : PersonProfession
+subject : will.i.am | relation : PersonProfession
+subject : Alagón river | relation : RiverBasinsCountry
+subject : Apurímac river | relation : RiverBasinsCountry
+subject : Brenta | relation : RiverBasinsCountry
+subject : Büyük Menderes river | relation : RiverBasinsCountry
+subject : Dahme | relation : RiverBasinsCountry
+subject : Danube | relation : RiverBasinsCountry
+subject : Didi Liakhvi river | relation : RiverBasinsCountry
+subject : Dniester | relation : RiverBasinsCountry
+subject : Donets | relation : RiverBasinsCountry
+subject : Dordogne | relation : RiverBasinsCountry
+subject : Gadar river | relation : RiverBasinsCountry
+subject : Gambia river | relation : RiverBasinsCountry
+subject : Han river | relation : RiverBasinsCountry
+subject : Iguazu river | relation : RiverBasinsCountry
+subject : Inn | relation : RiverBasinsCountry
+subject : Japurá river | relation : RiverBasinsCountry
+subject : Kura river | relation : RiverBasinsCountry
+subject : Lielupe | relation : RiverBasinsCountry
+subject : Limpopo river | relation : RiverBasinsCountry
+subject : Loire | relation : RiverBasinsCountry
+subject : Maritsa | relation : RiverBasinsCountry
+subject : Morava | relation : RiverBasinsCountry
+subject : Narew | relation : RiverBasinsCountry
+subject : Narva river | relation : RiverBasinsCountry
+subject : Neckar | relation : RiverBasinsCountry
+subject : Neman | relation : RiverBasinsCountry
+subject : Neris | relation : RiverBasinsCountry
+subject : Niger river | relation : RiverBasinsCountry
+subject : Nizhnyaya Tunguska | relation : RiverBasinsCountry
+subject : Oder | relation : RiverBasinsCountry
+subject : Ottawa river | relation : RiverBasinsCountry
+subject : Paraguay river | relation : RiverBasinsCountry
+subject : Pechora | relation : RiverBasinsCountry
+subject : Red river of the south | relation : RiverBasinsCountry
+subject : Sakarya river | relation : RiverBasinsCountry
+subject : San | relation : RiverBasinsCountry
+subject : Shatt al-Arab | relation : RiverBasinsCountry
+subject : Siret river | relation : RiverBasinsCountry
+subject : Someș river | relation : RiverBasinsCountry
+subject : Tiber | relation : RiverBasinsCountry
+subject : Ticino | relation : RiverBasinsCountry
+subject : Tisza | relation : RiverBasinsCountry
+subject : Torne river | relation : RiverBasinsCountry
+subject : Ural river | relation : RiverBasinsCountry
+subject : Uruguay river | relation : RiverBasinsCountry
+subject : Ussuri | relation : RiverBasinsCountry
+subject : Vézère | relation : RiverBasinsCountry
+subject : Yangtze | relation : RiverBasinsCountry
+subject : Yantra | relation : RiverBasinsCountry
+subject : Yellow river | relation : RiverBasinsCountry
+subject : Andalusia | relation : StateSharesBorderState
+subject : Auvergne | relation : StateSharesBorderState
+subject : Basel-Stadt | relation : StateSharesBorderState
+subject : Basilicata | relation : StateSharesBorderState
+subject : Basque Autonomous Community | relation : StateSharesBorderState
+subject : Bavaria | relation : StateSharesBorderState
+subject : Biobío Region | relation : StateSharesBorderState
+subject : Brandenburg | relation : StateSharesBorderState
+subject : Canton of Glarus | relation : StateSharesBorderState
+subject : Canton of Neuchâtel | relation : StateSharesBorderState
+subject : Canton of Schaffhausen | relation : StateSharesBorderState
+subject : Canton of Vaud | relation : StateSharesBorderState
+subject : Canton of Zug | relation : StateSharesBorderState
+subject : Canton of Zürich | relation : StateSharesBorderState
+subject : Connecticut | relation : StateSharesBorderState
+subject : Drenthe | relation : StateSharesBorderState
+subject : Flores Department | relation : StateSharesBorderState
+subject : Free Hanseatic City of Bremen | relation : StateSharesBorderState
+subject : French Guiana | relation : StateSharesBorderState
+subject : Fukushima Prefecture | relation : StateSharesBorderState
+subject : Galicia | relation : StateSharesBorderState
+subject : Giza Governorate | relation : StateSharesBorderState
+subject : Győr | relation : StateSharesBorderState
+subject : Hanoi | relation : StateSharesBorderState
+subject : Hesse | relation : StateSharesBorderState
+subject : Iowa | relation : StateSharesBorderState
+subject : Land of Valencia | relation : StateSharesBorderState
+subject : Lombardy | relation : StateSharesBorderState
+subject : Los Lagos Region | relation : StateSharesBorderState
+subject : Luxembourg District | relation : StateSharesBorderState
+subject : Massachusetts | relation : StateSharesBorderState
+subject : Nebraska | relation : StateSharesBorderState
+subject : New Hampshire | relation : StateSharesBorderState
+subject : New Jersey | relation : StateSharesBorderState
+subject : O'Higgins Region | relation : StateSharesBorderState
+subject : Obwalden | relation : StateSharesBorderState
+subject : Ohio | relation : StateSharesBorderState
+subject : Päijänne Tavastia | relation : StateSharesBorderState
+subject : Rhineland-Palatinate | relation : StateSharesBorderState
+subject : Río Negro Department | relation : StateSharesBorderState
+subject : Salto Department | relation : StateSharesBorderState
+subject : San José Department | relation : StateSharesBorderState
+subject : Santiago Metropolitan Region | relation : StateSharesBorderState
+subject : Scotland | relation : StateSharesBorderState
+subject : Soriano Department | relation : StateSharesBorderState
+subject : Tacuarembó Department | relation : StateSharesBorderState
+subject : Tavastia Proper | relation : StateSharesBorderState
+subject : Tokyo | relation : StateSharesBorderState
+subject : Virginia | relation : StateSharesBorderState
+subject : Zagreb | relation : StateSharesBorderState
+subject : Adenine | relation : ChemicalCompoundElement
+subject : Adiponitrile | relation : ChemicalCompoundElement
+subject : Alfacalcidol | relation : ChemicalCompoundElement
+subject : Benzene | relation : ChemicalCompoundElement
+subject : Benzylpiperazine | relation : ChemicalCompoundElement
+subject : Bilirubin | relation : ChemicalCompoundElement
+subject : Butyrolactone | relation : ChemicalCompoundElement
+subject : Cadaverine | relation : ChemicalCompoundElement
+subject : Cadmium sulfide | relation : ChemicalCompoundElement
+subject : Caffeine | relation : ChemicalCompoundElement
+subject : Calcitriol | relation : ChemicalCompoundElement
+subject : Cholesterol | relation : ChemicalCompoundElement
+subject : Citric acid | relation : ChemicalCompoundElement
+subject : Cocaine | relation : ChemicalCompoundElement
+subject : Corrin | relation : ChemicalCompoundElement
+subject : Cyclopentane | relation : ChemicalCompoundElement
+subject : Cytosine | relation : ChemicalCompoundElement
+subject : DDT | relation : ChemicalCompoundElement
+subject : Decane | relation : ChemicalCompoundElement
+subject : Dopamine | relation : ChemicalCompoundElement
+subject : Epinephrine | relation : ChemicalCompoundElement
+subject : Fluphenazine | relation : ChemicalCompoundElement
+subject : Formaldehyde | relation : ChemicalCompoundElement
+subject : Fucoxanthin | relation : ChemicalCompoundElement
+subject : Fulminic acid | relation : ChemicalCompoundElement
+subject : Fumaric acid | relation : ChemicalCompoundElement
+subject : Halothane | relation : ChemicalCompoundElement
+subject : Harmine | relation : ChemicalCompoundElement
+subject : Histamine | relation : ChemicalCompoundElement
+subject : Hydrogen cyanide | relation : ChemicalCompoundElement
+subject : Lauryl alcohol | relation : ChemicalCompoundElement
+subject : Lithium hydride | relation : ChemicalCompoundElement
+subject : Lithium iodide | relation : ChemicalCompoundElement
+subject : Magnesium citrate | relation : ChemicalCompoundElement
+subject : Nonane | relation : ChemicalCompoundElement
+subject : Octane | relation : ChemicalCompoundElement
+subject : Phenol | relation : ChemicalCompoundElement
+subject : Propyl alcohol | relation : ChemicalCompoundElement
+subject : Riboflavin | relation : ChemicalCompoundElement
+subject : Silver iodide | relation : ChemicalCompoundElement
+subject : Sodium bromide | relation : ChemicalCompoundElement
+subject : Sphingosine | relation : ChemicalCompoundElement
+subject : Stibine | relation : ChemicalCompoundElement
+subject : Styphnic acid | relation : ChemicalCompoundElement
+subject : Styrene | relation : ChemicalCompoundElement
+subject : Sulfur dioxide | relation : ChemicalCompoundElement
+subject : Tetradecane | relation : ChemicalCompoundElement
+subject : Toluene | relation : ChemicalCompoundElement
+subject : Uric acid | relation : ChemicalCompoundElement
+subject : Zirconium dioxide | relation : ChemicalCompoundElement
+subject : Adamson | relation : CompanyParentOrganization
+subject : Arduino | relation : CompanyParentOrganization
+subject : Avtovaz | relation : CompanyParentOrganization
+subject : Brasier | relation : CompanyParentOrganization
+subject : Briggs Automotive Company | relation : CompanyParentOrganization
+subject : Bugatti | relation : CompanyParentOrganization
+subject : Carbodies | relation : CompanyParentOrganization
+subject : Citroën | relation : CompanyParentOrganization
+subject : Danvignes | relation : CompanyParentOrganization
+subject : Donkervoort | relation : CompanyParentOrganization
+subject : Espenlaub | relation : CompanyParentOrganization
+subject : Fabryka Samochodów Ciężarowych | relation : CompanyParentOrganization
+subject : Fabryka Samochodów Osobowych | relation : CompanyParentOrganization
+subject : General Motors | relation : CompanyParentOrganization
+subject : Google | relation : CompanyParentOrganization
+subject : Hermes-Simplex | relation : CompanyParentOrganization
+subject : Honda | relation : CompanyParentOrganization
+subject : Horch | relation : CompanyParentOrganization
+subject : Hyundai | relation : CompanyParentOrganization
+subject : Intermeccanica | relation : CompanyParentOrganization
+subject : Jaguar Cars | relation : CompanyParentOrganization
+subject : LG Corporation | relation : CompanyParentOrganization
+subject : Laurin & Klement | relation : CompanyParentOrganization
+subject : Ligier | relation : CompanyParentOrganization
+subject : March Engineering | relation : CompanyParentOrganization
+subject : Maserati | relation : CompanyParentOrganization
+subject : Mathis | relation : CompanyParentOrganization
+subject : Matra | relation : CompanyParentOrganization
+subject : Mazda | relation : CompanyParentOrganization
+subject : Mitsubishi Group | relation : CompanyParentOrganization
+subject : Opel | relation : CompanyParentOrganization
+subject : Packard | relation : CompanyParentOrganization
+subject : Pierce-Arrow | relation : CompanyParentOrganization
+subject : Renault | relation : CompanyParentOrganization
+subject : Richard-Brasier | relation : CompanyParentOrganization
+subject : Riga Autobus Factory | relation : CompanyParentOrganization
+subject : Thyssenkrupp AG | relation : CompanyParentOrganization
+subject : Tim Group | relation : CompanyParentOrganization
+subject : Toyota | relation : CompanyParentOrganization
+subject : Toyota Group | relation : CompanyParentOrganization
+subject : Vauxhall | relation : CompanyParentOrganization
+subject : Vodafone | relation : CompanyParentOrganization
+subject : Volkswagen Group | relation : CompanyParentOrganization
+subject : Wanderer | relation : CompanyParentOrganization
+subject : Wikov | relation : CompanyParentOrganization
+subject : Yahoo | relation : CompanyParentOrganization
+subject : ZSD nysa | relation : CompanyParentOrganization
+subject : Zastava Automobiles | relation : CompanyParentOrganization
+subject : Zena Fabbrica Automobili | relation : CompanyParentOrganization
+subject : Škoda Auto | relation : CompanyParentOrganization
+subject : Algeria | relation : CountryBordersWithCountry
+subject : Antigua and Barbuda | relation : CountryBordersWithCountry
+subject : Bahamas | relation : CountryBordersWithCountry
+subject : Belgium | relation : CountryBordersWithCountry
+subject : Botswana | relation : CountryBordersWithCountry
+subject : Brunei | relation : CountryBordersWithCountry
+subject : Burkina Faso | relation : CountryBordersWithCountry
+subject : Czech Republic | relation : CountryBordersWithCountry
+subject : Eswatini | relation : CountryBordersWithCountry
+subject : Federated States of Micronesia | relation : CountryBordersWithCountry
+subject : Guatemala | relation : CountryBordersWithCountry
+subject : Guinea-Bissau | relation : CountryBordersWithCountry
+subject : Haiti | relation : CountryBordersWithCountry
+subject : Hungary | relation : CountryBordersWithCountry
+subject : Kazakhstan | relation : CountryBordersWithCountry
+subject : Kiribati | relation : CountryBordersWithCountry
+subject : Kuwait | relation : CountryBordersWithCountry
+subject : Laos | relation : CountryBordersWithCountry
+subject : Latvia | relation : CountryBordersWithCountry
+subject : Liberia | relation : CountryBordersWithCountry
+subject : Lithuania | relation : CountryBordersWithCountry
+subject : Maldives | relation : CountryBordersWithCountry
+subject : Malta | relation : CountryBordersWithCountry
+subject : Mauritania | relation : CountryBordersWithCountry
+subject : Mexico | relation : CountryBordersWithCountry
+subject : New Zealand | relation : CountryBordersWithCountry
+subject : Nigeria | relation : CountryBordersWithCountry
+subject : Panama | relation : CountryBordersWithCountry
+subject : Paraguay | relation : CountryBordersWithCountry
+subject : Peru | relation : CountryBordersWithCountry
+subject : Republic of the Congo | relation : CountryBordersWithCountry
+subject : Saint Kitts and Nevis | relation : CountryBordersWithCountry
+subject : Slovakia | relation : CountryBordersWithCountry
+subject : Slovenia | relation : CountryBordersWithCountry
+subject : Solomon Islands | relation : CountryBordersWithCountry
+subject : South Africa | relation : CountryBordersWithCountry
+subject : South Korea | relation : CountryBordersWithCountry
+subject : Spain | relation : CountryBordersWithCountry
+subject : Sudan | relation : CountryBordersWithCountry
+subject : Sweden | relation : CountryBordersWithCountry
+subject : Syria | relation : CountryBordersWithCountry
+subject : Tajikistan | relation : CountryBordersWithCountry
+subject : Tanzania | relation : CountryBordersWithCountry
+subject : Trinidad and Tobago | relation : CountryBordersWithCountry
+subject : Tunisia | relation : CountryBordersWithCountry
+subject : Turkmenistan | relation : CountryBordersWithCountry
+subject : Uruguay | relation : CountryBordersWithCountry
+subject : Vanuatu | relation : CountryBordersWithCountry
+subject : Vatican City | relation : CountryBordersWithCountry
+subject : Yemen | relation : CountryBordersWithCountry
+subject : Algeria | relation : CountryOfficialLanguage
+subject : Barbados | relation : CountryOfficialLanguage
+subject : Belgium | relation : CountryOfficialLanguage
+subject : Belize | relation : CountryOfficialLanguage
+subject : Bolivia | relation : CountryOfficialLanguage
+subject : Brazil | relation : CountryOfficialLanguage
+subject : Cape Verde | relation : CountryOfficialLanguage
+subject : Chad | relation : CountryOfficialLanguage
+subject : Ecuador | relation : CountryOfficialLanguage
+subject : Federated States of Micronesia | relation : CountryOfficialLanguage
+subject : Gabon | relation : CountryOfficialLanguage
+subject : Germany | relation : CountryOfficialLanguage
+subject : Guatemala | relation : CountryOfficialLanguage
+subject : Haiti | relation : CountryOfficialLanguage
+subject : Hungary | relation : CountryOfficialLanguage
+subject : Iran | relation : CountryOfficialLanguage
+subject : Ivory Coast | relation : CountryOfficialLanguage
+subject : Japan | relation : CountryOfficialLanguage
+subject : Kenya | relation : CountryOfficialLanguage
+subject : Kingdom of Africa | relation : CountryOfficialLanguage
+subject : Kuwait | relation : CountryOfficialLanguage
+subject : Kyrgyzstan | relation : CountryOfficialLanguage
+subject : Laos | relation : CountryOfficialLanguage
+subject : Lebanon | relation : CountryOfficialLanguage
+subject : Liberia | relation : CountryOfficialLanguage
+subject : Lithuania | relation : CountryOfficialLanguage
+subject : Luxembourg | relation : CountryOfficialLanguage
+subject : Malawi | relation : CountryOfficialLanguage
+subject : Marshall Islands | relation : CountryOfficialLanguage
+subject : Mauritius | relation : CountryOfficialLanguage
+subject : Monaco | relation : CountryOfficialLanguage
+subject : Montenegro | relation : CountryOfficialLanguage
+subject : Morocco | relation : CountryOfficialLanguage
+subject : Nigeria | relation : CountryOfficialLanguage
+subject : Oman | relation : CountryOfficialLanguage
+subject : Republic of the Congo | relation : CountryOfficialLanguage
+subject : Samoa | relation : CountryOfficialLanguage
+subject : Solomon Islands | relation : CountryOfficialLanguage
+subject : Somalia | relation : CountryOfficialLanguage
+subject : South Africa | relation : CountryOfficialLanguage
+subject : Spain | relation : CountryOfficialLanguage
+subject : Sudan | relation : CountryOfficialLanguage
+subject : Sweden | relation : CountryOfficialLanguage
+subject : Switzerland | relation : CountryOfficialLanguage
+subject : Syria | relation : CountryOfficialLanguage
+subject : Tonga | relation : CountryOfficialLanguage
+subject : Turkey | relation : CountryOfficialLanguage
+subject : Uruguay | relation : CountryOfficialLanguage
+subject : Vatican City | relation : CountryOfficialLanguage
+subject : Vietnam | relation : CountryOfficialLanguage
+subject : Abdul Rehman Malik | relation : PersonCauseOfDeath
+subject : Alan García | relation : PersonCauseOfDeath
+subject : Alan Guth | relation : PersonCauseOfDeath
+subject : Amitabh Bachchan | relation : PersonCauseOfDeath
+subject : Anthony Bourdain | relation : PersonCauseOfDeath
+subject : Arun Jaitley | relation : PersonCauseOfDeath
+subject : Bernie Sanders | relation : PersonCauseOfDeath
+subject : Betty White | relation : PersonCauseOfDeath
+subject : Beyoncé | relation : PersonCauseOfDeath
+subject : Bill Clinton | relation : PersonCauseOfDeath
+subject : Carlos Ruiz Zafón | relation : PersonCauseOfDeath
+subject : Caroline Flack | relation : PersonCauseOfDeath
+subject : Cristiano Ronaldo | relation : PersonCauseOfDeath
+subject : Dean Martin | relation : PersonCauseOfDeath
+subject : Drake | relation : PersonCauseOfDeath
+subject : Dwayne Johnson | relation : PersonCauseOfDeath
+subject : Eddie van Halen | relation : PersonCauseOfDeath
+subject : Elvis Presley | relation : PersonCauseOfDeath
+subject : Enrique Peña Nieto | relation : PersonCauseOfDeath
+subject : Gustavo Cerati | relation : PersonCauseOfDeath
+subject : Joan Rivers | relation : PersonCauseOfDeath
+subject : John Coltrane | relation : PersonCauseOfDeath
+subject : Justin Bieber | relation : PersonCauseOfDeath
+subject : Justin Timberlake | relation : PersonCauseOfDeath
+subject : Justin Trudeau | relation : PersonCauseOfDeath
+subject : Katy Perry | relation : PersonCauseOfDeath
+subject : Kim Jong-un | relation : PersonCauseOfDeath
+subject : Kobe Bryant | relation : PersonCauseOfDeath
+subject : Kylian Mbappé | relation : PersonCauseOfDeath
+subject : LeBron James | relation : PersonCauseOfDeath
+subject : Leonardo DiCaprio | relation : PersonCauseOfDeath
+subject : Lionel Messi | relation : PersonCauseOfDeath
+subject : Madonna | relation : PersonCauseOfDeath
+subject : Mark Zuckerberg | relation : PersonCauseOfDeath
+subject : Mike Enzi | relation : PersonCauseOfDeath
+subject : Nicky Hayden | relation : PersonCauseOfDeath
+subject : Noam Chomsky | relation : PersonCauseOfDeath
+subject : Oprah Winfrey | relation : PersonCauseOfDeath
+subject : Pat Summitt | relation : PersonCauseOfDeath
+subject : Patrice O'Neal | relation : PersonCauseOfDeath
+subject : Paul Bocuse | relation : PersonCauseOfDeath
+subject : Peter R. de Vries | relation : PersonCauseOfDeath
+subject : Pope Francis | relation : PersonCauseOfDeath
+subject : Ravi Zacharias | relation : PersonCauseOfDeath
+subject : René Auberjonois | relation : PersonCauseOfDeath
+subject : Rituparno Ghosh | relation : PersonCauseOfDeath
+subject : Terry Pratchett | relation : PersonCauseOfDeath
+subject : Vladimir Putin | relation : PersonCauseOfDeath
+subject : Vladimir Zhirinovsky | relation : PersonCauseOfDeath
+subject : Volodymyr Zelenskyy | relation : PersonCauseOfDeath
+subject : Alexander Lebedev | relation : PersonEmployer
+subject : Anatoly Chubais | relation : PersonEmployer
+subject : Angela Ahrendts | relation : PersonEmployer
+subject : Bobak Ferdowsi | relation : PersonEmployer
+subject : Buzz Aldrin | relation : PersonEmployer
+subject : Caterina Fake | relation : PersonEmployer
+subject : Cory Barlog | relation : PersonEmployer
+subject : Donald Trump Jr. | relation : PersonEmployer
+subject : Eddy Cue | relation : PersonEmployer
+subject : Elon Musk | relation : PersonEmployer
+subject : Eric Cantor | relation : PersonEmployer
+subject : Eric Schmidt | relation : PersonEmployer
+subject : Eric Trump | relation : PersonEmployer
+subject : Guy Kawasaki | relation : PersonEmployer
+subject : Herbert Fisk Johnson III | relation : PersonEmployer
+subject : Herman Cain | relation : PersonEmployer
+subject : Hikakin | relation : PersonEmployer
+subject : Howard Stern | relation : PersonEmployer
+subject : Ian Bremmer | relation : PersonEmployer
+subject : Indra Nooyi | relation : PersonEmployer
+subject : Jack Welch | relation : PersonEmployer
+subject : Jens Bergensten | relation : PersonEmployer
+subject : Joan Laporta | relation : PersonEmployer
+subject : John Resig | relation : PersonEmployer
+subject : Joi Ito | relation : PersonEmployer
+subject : Josep Borrell | relation : PersonEmployer
+subject : Kailash Satyarthi | relation : PersonEmployer
+subject : Kazuyo Katsuma | relation : PersonEmployer
+subject : Larry Brilliant | relation : PersonEmployer
+subject : Madonna | relation : PersonEmployer
+subject : Marc Andreessen | relation : PersonEmployer
+subject : Margaret Atwood | relation : PersonEmployer
+subject : Marissa Mayer | relation : PersonEmployer
+subject : Mark Zuckerberg | relation : PersonEmployer
+subject : Martha Stewart | relation : PersonEmployer
+subject : Max Levchin | relation : PersonEmployer
+subject : Meg Whitman | relation : PersonEmployer
+subject : Michael Morhaime | relation : PersonEmployer
+subject : Omarosa Manigault Newman | relation : PersonEmployer
+subject : Pavel Durov | relation : PersonEmployer
+subject : Peter Schiff | relation : PersonEmployer
+subject : Rahm Emanuel | relation : PersonEmployer
+subject : Robert L. Behnken | relation : PersonEmployer
+subject : Scott Kelly | relation : PersonEmployer
+subject : Stephanie McMahon | relation : PersonEmployer
+subject : Suze Orman | relation : PersonEmployer
+subject : Thomas Pesquet | relation : PersonEmployer
+subject : Tim Berners-Lee | relation : PersonEmployer
+subject : Tyler, the Creator | relation : PersonEmployer
+subject : Atsuko Maeda | relation : PersonInstrument
+subject : Aviv Geffen | relation : PersonInstrument
+subject : Bae Suzy | relation : PersonInstrument
+subject : Billy Joel | relation : PersonInstrument
+subject : Brian Littrell | relation : PersonInstrument
+subject : CL | relation : PersonInstrument
+subject : Chad Smith | relation : PersonInstrument
+subject : Choi Jong-hoon | relation : PersonInstrument
+subject : Dave Farrell | relation : PersonInstrument
+subject : Eunhyuk | relation : PersonInstrument
+subject : Frank Iero | relation : PersonInstrument
+subject : G-Dragon | relation : PersonInstrument
+subject : G.NA | relation : PersonInstrument
+subject : George Harrison | relation : PersonInstrument
+subject : Geri Halliwell | relation : PersonInstrument
+subject : Goo Hara | relation : PersonInstrument
+subject : Gustavo Cerati | relation : PersonInstrument
+subject : Hahm Eun-jung | relation : PersonInstrument
+subject : Howard Donald | relation : PersonInstrument
+subject : Hyuna | relation : PersonInstrument
+subject : Jang Wooyoung | relation : PersonInstrument
+subject : Jimmy Page | relation : PersonInstrument
+subject : Julian Casablancas | relation : PersonInstrument
+subject : Kim Hyo-yeon | relation : PersonInstrument
+subject : Kim Jae-joong | relation : PersonInstrument
+subject : Kim Jong-hyun | relation : PersonInstrument
+subject : Lee Jong-hyun | relation : PersonInstrument
+subject : Lee Jun-ho | relation : PersonInstrument
+subject : Mayu Watanabe | relation : PersonInstrument
+subject : Melanie Brown | relation : PersonInstrument
+subject : Mike Shinoda | relation : PersonInstrument
+subject : Nadya Tolokonnikova | relation : PersonInstrument
+subject : Nick Carter | relation : PersonInstrument
+subject : Nikki Sixx | relation : PersonInstrument
+subject : Park Cho-rong | relation : PersonInstrument
+subject : Park Ji-yeon | relation : PersonInstrument
+subject : Peter Hook | relation : PersonInstrument
+subject : Rino Sashihara | relation : PersonInstrument
+subject : Rivers Cuomo | relation : PersonInstrument
+subject : Robbie Williams | relation : PersonInstrument
+subject : Roger Waters | relation : PersonInstrument
+subject : Ryo Nishikido | relation : PersonInstrument
+subject : Seo Joo-hyun | relation : PersonInstrument
+subject : Snoop Dogg | relation : PersonInstrument
+subject : Steven Van Zandt | relation : PersonInstrument
+subject : Stevie Nicks | relation : PersonInstrument
+subject : Tiffany Young | relation : PersonInstrument
+subject : Tionne Watkins | relation : PersonInstrument
+subject : Tommy Lee | relation : PersonInstrument
+subject : Tomomi Itano | relation : PersonInstrument
+subject : Amitabh Bachchan | relation : PersonLanguage
+subject : Ana Ivanovic | relation : PersonLanguage
+subject : Andrew Cuomo | relation : PersonLanguage
+subject : Bill Gates | relation : PersonLanguage
+subject : Carles Puyol | relation : PersonLanguage
+subject : Carly Rae Jepsen | relation : PersonLanguage
+subject : Cesc Fàbregas | relation : PersonLanguage
+subject : Chris Hemsworth | relation : PersonLanguage
+subject : Coco Austin | relation : PersonLanguage
+subject : Cristiano Ronaldo | relation : PersonLanguage
+subject : David Guetta | relation : PersonLanguage
+subject : David Villa | relation : PersonLanguage
+subject : Demi Lovato | relation : PersonLanguage
+subject : Dr. Dre | relation : PersonLanguage
+subject : Dwayne Johnson | relation : PersonLanguage
+subject : Ellie Goulding | relation : PersonLanguage
+subject : Elon Musk | relation : PersonLanguage
+subject : Franz Beckenbauer | relation : PersonLanguage
+subject : Harbhajan Singh | relation : PersonLanguage
+subject : Imran Khan | relation : PersonLanguage
+subject : J. K. Rowling | relation : PersonLanguage
+subject : Jennifer Lopez | relation : PersonLanguage
+subject : Jenson Button | relation : PersonLanguage
+subject : John Cleese | relation : PersonLanguage
+subject : John Legend | relation : PersonLanguage
+subject : John McCain | relation : PersonLanguage
+subject : Justin Bieber | relation : PersonLanguage
+subject : Justin Timberlake | relation : PersonLanguage
+subject : LeBron James | relation : PersonLanguage
+subject : Lindsey Vonn | relation : PersonLanguage
+subject : Malala Yousafzai | relation : PersonLanguage
+subject : Manuel Valls | relation : PersonLanguage
+subject : Mesut Özil | relation : PersonLanguage
+subject : Michael Bloomberg | relation : PersonLanguage
+subject : Michael Jackson | relation : PersonLanguage
+subject : Miley Cyrus | relation : PersonLanguage
+subject : Oprah Winfrey | relation : PersonLanguage
+subject : Psy | relation : PersonLanguage
+subject : Rachel Maddow | relation : PersonLanguage
+subject : Rajinikanth | relation : PersonLanguage
+subject : Recep Tayyip Erdoğan | relation : PersonLanguage
+subject : Ricky Martin | relation : PersonLanguage
+subject : Rob Kardashian | relation : PersonLanguage
+subject : Roger Federer | relation : PersonLanguage
+subject : Sasha Grey | relation : PersonLanguage
+subject : Serena Williams | relation : PersonLanguage
+subject : Usain Bolt | relation : PersonLanguage
+subject : V. V. S. Laxman | relation : PersonLanguage
+subject : Victoria Beckham | relation : PersonLanguage
+subject : tanayo | relation : PersonLanguage
+subject : Alan Guth | relation : PersonPlaceOfDeath
+subject : Amitabh Bachchan | relation : PersonPlaceOfDeath
+subject : Bernie Sanders | relation : PersonPlaceOfDeath
+subject : Beyoncé | relation : PersonPlaceOfDeath
+subject : Bill Clinton | relation : PersonPlaceOfDeath
+subject : Bruce Lee | relation : PersonPlaceOfDeath
+subject : Charles Robinson | relation : PersonPlaceOfDeath
+subject : Christina Grimmie | relation : PersonPlaceOfDeath
+subject : Cristiano Ronaldo | relation : PersonPlaceOfDeath
+subject : David Bowie | relation : PersonPlaceOfDeath
+subject : Drake | relation : PersonPlaceOfDeath
+subject : Dwayne Johnson | relation : PersonPlaceOfDeath
+subject : Elizabeth Taylor | relation : PersonPlaceOfDeath
+subject : Enrique Peña Nieto | relation : PersonPlaceOfDeath
+subject : Erick Morillo | relation : PersonPlaceOfDeath
+subject : Gustavo Cerati | relation : PersonPlaceOfDeath
+subject : Hank Aaron | relation : PersonPlaceOfDeath
+subject : Hans Rosling | relation : PersonPlaceOfDeath
+subject : Harry Reid | relation : PersonPlaceOfDeath
+subject : Jimi Hendrix | relation : PersonPlaceOfDeath
+subject : Jules Bianchi | relation : PersonPlaceOfDeath
+subject : Justin Bieber | relation : PersonPlaceOfDeath
+subject : Justin Timberlake | relation : PersonPlaceOfDeath
+subject : Justin Trudeau | relation : PersonPlaceOfDeath
+subject : Katy Perry | relation : PersonPlaceOfDeath
+subject : Kim Jong-un | relation : PersonPlaceOfDeath
+subject : Kobe Bryant | relation : PersonPlaceOfDeath
+subject : Kylian Mbappé | relation : PersonPlaceOfDeath
+subject : LeBron James | relation : PersonPlaceOfDeath
+subject : Leonardo DiCaprio | relation : PersonPlaceOfDeath
+subject : Lina Ben Mhenni | relation : PersonPlaceOfDeath
+subject : Lionel Messi | relation : PersonPlaceOfDeath
+subject : Louise hay | relation : PersonPlaceOfDeath
+subject : Madeleine Albright | relation : PersonPlaceOfDeath
+subject : Madonna | relation : PersonPlaceOfDeath
+subject : Manohar Parrikar | relation : PersonPlaceOfDeath
+subject : Mark Zuckerberg | relation : PersonPlaceOfDeath
+subject : Merle Haggard | relation : PersonPlaceOfDeath
+subject : Michael K. Williams | relation : PersonPlaceOfDeath
+subject : Muhammad Ali | relation : PersonPlaceOfDeath
+subject : Nelson Mandela | relation : PersonPlaceOfDeath
+subject : Noam Chomsky | relation : PersonPlaceOfDeath
+subject : Oprah Winfrey | relation : PersonPlaceOfDeath
+subject : Philipp Mißfelder | relation : PersonPlaceOfDeath
+subject : Pope Francis | relation : PersonPlaceOfDeath
+subject : Raffaella Carrà | relation : PersonPlaceOfDeath
+subject : Sayaka Kanda | relation : PersonPlaceOfDeath
+subject : Thomas Oppermann | relation : PersonPlaceOfDeath
+subject : Vladimir Putin | relation : PersonPlaceOfDeath
+subject : Volodymyr Zelenskyy | relation : PersonPlaceOfDeath
+subject : A. R. Rahman | relation : PersonProfession
+subject : Adele | relation : PersonProfession
+subject : Asha Bhosle | relation : PersonProfession
+subject : Ashton Kutcher | relation : PersonProfession
+subject : Avril Lavigne | relation : PersonProfession
+subject : Barack Obama | relation : PersonProfession
+subject : Bill Gates | relation : PersonProfession
+subject : Britney Spears | relation : PersonProfession
+subject : Carles Puyol | relation : PersonProfession
+subject : Carly Rae Jepsen | relation : PersonProfession
+subject : CeeLo Green | relation : PersonProfession
+subject : Cher | relation : PersonProfession
+subject : Chloë Grace Moretz | relation : PersonProfession
+subject : Chris Rock | relation : PersonProfession
+subject : Claire Holt | relation : PersonProfession
+subject : Cristiano Ronaldo | relation : PersonProfession
+subject : David Cameron | relation : PersonProfession
+subject : Demi Moore | relation : PersonProfession
+subject : Dr. Dre | relation : PersonProfession
+subject : Ellie Goulding | relation : PersonProfession
+subject : Elton John | relation : PersonProfession
+subject : Hugh Jackman | relation : PersonProfession
+subject : Iker Casillas | relation : PersonProfession
+subject : Jennette McCurdy | relation : PersonProfession
+subject : Jessie J | relation : PersonProfession
+subject : Joe Biden | relation : PersonProfession
+subject : John Cleese | relation : PersonProfession
+subject : Justin Timberlake | relation : PersonProfession
+subject : Katy Perry | relation : PersonProfession
+subject : Kylie Minogue | relation : PersonProfession
+subject : Lance Armstrong | relation : PersonProfession
+subject : Leonardo DiCaprio | relation : PersonProfession
+subject : Maria Sharapova | relation : PersonProfession
+subject : Mitt Romney | relation : PersonProfession
+subject : Nelson Mandela | relation : PersonProfession
+subject : Oprah Winfrey | relation : PersonProfession
+subject : Paris Hilton | relation : PersonProfession
+subject : Pink | relation : PersonProfession
+subject : Priyanka Chopra | relation : PersonProfession
+subject : Richard Dawkins | relation : PersonProfession
+subject : Samir Nasri | relation : PersonProfession
+subject : Sean Combs | relation : PersonProfession
+subject : Seth MacFarlane | relation : PersonProfession
+subject : Seth Meyers | relation : PersonProfession
+subject : Shah Rukh Khan | relation : PersonProfession
+subject : Shaquille O'Neal | relation : PersonProfession
+subject : Tom Hanks | relation : PersonProfession
+subject : Troian Bellisario | relation : PersonProfession
+subject : William Shatner | relation : PersonProfession
+subject : Wiz Khalifa | relation : PersonProfession
+subject : Aare | relation : RiverBasinsCountry
+subject : Amazon | relation : RiverBasinsCountry
+subject : Aras river | relation : RiverBasinsCountry
+subject : Argeș river | relation : RiverBasinsCountry
+subject : Beni river | relation : RiverBasinsCountry
+subject : Black Drin | relation : RiverBasinsCountry
+subject : Bosna | relation : RiverBasinsCountry
+subject : Chenab river | relation : RiverBasinsCountry
+subject : Daugava | relation : RiverBasinsCountry
+subject : Don | relation : RiverBasinsCountry
+subject : Dâmbovița river | relation : RiverBasinsCountry
+subject : Ems | relation : RiverBasinsCountry
+subject : Eurotas | relation : RiverBasinsCountry
+subject : Hakari river | relation : RiverBasinsCountry
+subject : Irtysh | relation : RiverBasinsCountry
+subject : Isère | relation : RiverBasinsCountry
+subject : Kara Darya | relation : RiverBasinsCountry
+subject : Kasai river | relation : RiverBasinsCountry
+subject : Kızılırmak river | relation : RiverBasinsCountry
+subject : Lech | relation : RiverBasinsCountry
+subject : Leie | relation : RiverBasinsCountry
+subject : Lena river | relation : RiverBasinsCountry
+subject : Limmat | relation : RiverBasinsCountry
+subject : Mississippi river | relation : RiverBasinsCountry
+subject : Missouri river | relation : RiverBasinsCountry
+subject : Mondego river | relation : RiverBasinsCountry
+subject : Neva | relation : RiverBasinsCountry
+subject : Nevėžis | relation : RiverBasinsCountry
+subject : Nile | relation : RiverBasinsCountry
+subject : Oka | relation : RiverBasinsCountry
+subject : Olt river | relation : RiverBasinsCountry
+subject : Orinoco river | relation : RiverBasinsCountry
+subject : Prut | relation : RiverBasinsCountry
+subject : Rhine | relation : RiverBasinsCountry
+subject : Rioni | relation : RiverBasinsCountry
+subject : River Thames | relation : RiverBasinsCountry
+subject : Sava | relation : RiverBasinsCountry
+subject : Segura | relation : RiverBasinsCountry
+subject : Seimare river | relation : RiverBasinsCountry
+subject : Spree | relation : RiverBasinsCountry
+subject : St. Lawrence river | relation : RiverBasinsCountry
+subject : Terek | relation : RiverBasinsCountry
+subject : Tocantins river | relation : RiverBasinsCountry
+subject : Tone river | relation : RiverBasinsCountry
+subject : Volga | relation : RiverBasinsCountry
+subject : Volta river | relation : RiverBasinsCountry
+subject : Yenisey | relation : RiverBasinsCountry
+subject : Zayandeh river | relation : RiverBasinsCountry
+subject : Zeya river | relation : RiverBasinsCountry
+subject : Ölfusá | relation : RiverBasinsCountry
+subject : Abruzzo | relation : StateSharesBorderState
+subject : Alabama | relation : StateSharesBorderState
+subject : Arizona | relation : StateSharesBorderState
+subject : Aysén Region | relation : StateSharesBorderState
+subject : Calabria | relation : StateSharesBorderState
+subject : Canton of Bern | relation : StateSharesBorderState
+subject : Canton of Jura | relation : StateSharesBorderState
+subject : Canton of Lucerne | relation : StateSharesBorderState
+subject : Canton of Solothurn | relation : StateSharesBorderState
+subject : Canton of Valais | relation : StateSharesBorderState
+subject : Carinthia | relation : StateSharesBorderState
+subject : Cerro Largo Department | relation : StateSharesBorderState
+subject : Colonia Department | relation : StateSharesBorderState
+subject : Community of Madrid | relation : StateSharesBorderState
+subject : Delaware | relation : StateSharesBorderState
+subject : Emilia-Romagna | relation : StateSharesBorderState
+subject : Eschen | relation : StateSharesBorderState
+subject : Finland Proper | relation : StateSharesBorderState
+subject : Flevoland | relation : StateSharesBorderState
+subject : Friesland | relation : StateSharesBorderState
+subject : Groningen | relation : StateSharesBorderState
+subject : Idaho | relation : StateSharesBorderState
+subject : Illinois | relation : StateSharesBorderState
+subject : Indiana | relation : StateSharesBorderState
+subject : Kentucky | relation : StateSharesBorderState
+subject : Kymenlaakso | relation : StateSharesBorderState
+subject : Limburg | relation : StateSharesBorderState
+subject : Lublin Voivodeship | relation : StateSharesBorderState
+subject : Maryland | relation : StateSharesBorderState
+subject : Maule Region | relation : StateSharesBorderState
+subject : Mississippi | relation : StateSharesBorderState
+subject : Missouri | relation : StateSharesBorderState
+subject : Nagano Prefecture | relation : StateSharesBorderState
+subject : New Mexico | relation : StateSharesBorderState
+subject : Nidwalden | relation : StateSharesBorderState
+subject : Overijssel | relation : StateSharesBorderState
+subject : Rhode Island | relation : StateSharesBorderState
+subject : Riga | relation : StateSharesBorderState
+subject : Rivera Department | relation : StateSharesBorderState
+subject : Saxony | relation : StateSharesBorderState
+subject : Schleswig-Holstein | relation : StateSharesBorderState
+subject : São Paulo | relation : StateSharesBorderState
+subject : Thuringia | relation : StateSharesBorderState
+subject : Treinta y Tres Department | relation : StateSharesBorderState
+subject : Uri | relation : StateSharesBorderState
+subject : Utah | relation : StateSharesBorderState
+subject : Utrecht | relation : StateSharesBorderState
+subject : Vermont | relation : StateSharesBorderState
+subject : Wisconsin | relation : StateSharesBorderState
+subject : Zeeland | relation : StateSharesBorderState
