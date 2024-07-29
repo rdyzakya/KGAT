@@ -1,1 +1,1 @@
-from .dataset import KGATDataset
+from .builder import DSBuilder
