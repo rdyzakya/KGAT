@@ -163,7 +163,7 @@ class DSBuilder:
                 "relation" : row["relation"],
                 "objects" : row["objects"],
                 "reference_triple" : reference_idx,
-                "reference_node" : node_idx,
+                "reference_node" : node_idx, # ini indeks ke alias
                 "reference_relation" : link_idx,
                 "link_cls_label" : link_cls_label,
                 "node_cls_label" : node_cls_label

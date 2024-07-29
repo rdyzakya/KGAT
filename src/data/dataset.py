@@ -10,34 +10,35 @@ from ._data_utils import (
 
 ALLOWED_SENTENCE_EMB = ["eol", "pcot", "ke"]
 
-class KGAT(Dataset):
+class KGATDataset(Dataset):
     def __init__(self,
+                builder,
                 texts_txt_path,
                 entities_txt_path,
                 relations_txt_path,
                 entities_alias_path,
-                # triples_path,
-                entities_tensor_path,
-                relations_tensor_path,
+                texts_tensor_path=None,
+                entities_tensor_path=None,
+                relations_tensor_path=None,
                 sentence_emb_mode="eol",
-                sentence_emb_index=None,
-                n_reference_min=30,
-                n_reference_max=50,
-                stay_ratio_min=1.0,
-                stay_ratio_max=1.0,
-                random_state=None,
-                n_pick=1,
-                items_path="./items.jsonl",
-                save_items=False):
-        # self.ds = pd.read_json(data_path, lines=True)
+                sentence_emb_index=None):
+        self.items = builder.items
+        self.triples = builder.triples
         self.texts = read_txt(texts_txt_path)
         self.entities = read_txt(entities_txt_path)
         self.relations = read_txt(relations_txt_path)
         self.entities_alias = pd.read_json(entities_alias_path, lines=True)
-        # self.triples = np.array(json.load(open(triples_path, 'r')))
 
         sentence_emb_index = sentence_emb_index or -1
         
+        if texts_tensor_path is None:
+            self.texts_attr = None
+        else:
+            texts_attr = torch.load(texts_tensor_path)[sentence_emb_mode]
+            texts_attr = texts_attr[sentence_emb_index] if texts_attr.dim() == 3 else texts_attr
+            assert texts_attr.dim() == 2
+            self.texts_attr = texts_attr
+
         if entities_tensor_path is None:
             self.entities_attr = None
         else:
@@ -56,17 +57,19 @@ class KGAT(Dataset):
 
         self.sentence_emb_mode = sentence_emb_mode
         self.sentence_emb_index = sentence_emb_index
+    
+    def lmkbc(self):
+        pass
 
-        if not os.path.exists(items_path):
-            items = self.build(n_reference_min=n_reference_max,
-                                    n_reference_max=n_reference_min,
-                                    stay_ratio_min=stay_ratio_min,
-                                    stay_ratio_max=stay_ratio_max,
-                                    random_state=random_state,
-                                    n_pick=n_pick)
-            items = pd.DataFrame(items)
-            self.items = items
-        else:
-            self.items = pd.read_json(items_path, orient="records", lines=True)
-        if save_items:
-            self.items.to_json(items_path, orient="records", lines=True)
+    def subgraph_gen(self):
+        result = []
+        for i, row in self.items.iterrows():
+            entry = (
+
+            )
+            # injector(x, 
+            # edge_index, 
+            # relations, 
+            # injection_node, 
+            # # node_batch, 
+            # # injection_node_batch)
