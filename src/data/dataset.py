@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import torch
 import json
+import os
 from ._data_utils import (
     read_txt,
     bounded_random
@@ -10,18 +11,26 @@ from ._data_utils import (
 
 ALLOWED_SENTENCE_EMB = ["eol", "pcot", "ke"]
 
-class LMKBCDataset(Dataset):
+class KGATDataset(Dataset):
     def __init__(self,
-                 data_path,
-                 texts_txt_path,
-                 entities_txt_path,
-                 relations_txt_path,
-                 entities_alias_path,
-                 triples_path,
-                 entities_tensor_path,
-                 relations_tensor_path,
-                 sentence_emb_mode="eol",
-                 sentence_emb_index=None):
+                data_path,
+                texts_txt_path,
+                entities_txt_path,
+                relations_txt_path,
+                entities_alias_path,
+                triples_path,
+                entities_tensor_path,
+                relations_tensor_path,
+                sentence_emb_mode="eol",
+                sentence_emb_index=None,
+                n_reference_min=30,
+                n_reference_max=50,
+                stay_ratio_min=1.0,
+                stay_ratio_max=1.0,
+                random_state=None,
+                n_pick=1,
+                items_path="./items.jsonl",
+                save_items=False):
         self.ds = pd.read_json(data_path, lines=True)
         self.texts = read_txt(texts_txt_path)
         self.entities = read_txt(entities_txt_path)
@@ -31,18 +40,38 @@ class LMKBCDataset(Dataset):
 
         sentence_emb_index = sentence_emb_index or -1
         
-        entities_attr = torch.load(entities_tensor_path)[sentence_emb_mode]
-        entities_attr = entities_attr[sentence_emb_index] if entities_attr.dim() == 3 else entities_attr
-        assert entities_attr.dim() == 2
-        self.entities_attr = entities_attr
-
-        relations_attr = torch.load(relations_tensor_path)[sentence_emb_mode]
-        relations_attr = relations_attr[sentence_emb_index] if relations_attr.dim() == 3 else relations_attr
-        assert relations_attr.dim() == 2
-        self.relations_attr = relations_attr
+        if entities_tensor_path is None:
+            self.entities_attr = None
+        else:
+            entities_attr = torch.load(entities_tensor_path)[sentence_emb_mode]
+            entities_attr = entities_attr[sentence_emb_index] if entities_attr.dim() == 3 else entities_attr
+            assert entities_attr.dim() == 2
+            self.entities_attr = entities_attr
+        
+        if relations_tensor_path is None:
+            self.relations_attr = None
+        else:
+            relations_attr = torch.load(relations_tensor_path)[sentence_emb_mode]
+            relations_attr = relations_attr[sentence_emb_index] if relations_attr.dim() == 3 else relations_attr
+            assert relations_attr.dim() == 2
+            self.relations_attr = relations_attr
 
         self.sentence_emb_mode = sentence_emb_mode
         self.sentence_emb_index = sentence_emb_index
+
+        if not os.path.exists(items_path):
+            items = self.build(n_reference_min=n_reference_max,
+                                    n_reference_max=n_reference_min,
+                                    stay_ratio_min=stay_ratio_min,
+                                    stay_ratio_max=stay_ratio_max,
+                                    random_state=random_state,
+                                    n_pick=n_pick)
+            items = pd.DataFrame(items)
+            self.items = items
+        else:
+            self.items = pd.read_json(items_path, orient="records", lines=True)
+        if save_items:
+            self.items.to_json(items_path, orient="records", lines=True)
     
     def _choice(self, a, size):
         if size > len(a):
@@ -104,24 +133,21 @@ class LMKBCDataset(Dataset):
             picked_idx = self._choice(unrelated_triple_idx, n_pick)
             return picked_idx
     
-    def build_reference(self,
-                        n_reference_min,
-                        n_reference_max,
-                        stay_ratio_min=1.0,
-                        stay_ratio_max=1.0,
-                        random_state=None,
-                        n_pick=1):
-        # 40% take from same relation, 40% take from related nodes, 20% random nodes
-
+    def build(self,
+            n_reference_min=30,
+            n_reference_max=50,
+            stay_ratio_min=1.0,
+            stay_ratio_max=1.0,
+            random_state=None,
+            n_pick=1):
         state = np.random.get_state()
         if random_state:
             np.random.seed(random_state)
 
         all_triple_idx = np.array([i for i in range(len(self.triples))])
 
-        reference = []
+        result = []
         for i, row in self.ds.iterrows():
-            entry = {}
             triple_idx = np.array(row["triple"])
 
             # remove arbitrary
@@ -146,8 +172,31 @@ class LMKBCDataset(Dataset):
                     reference_idx = np.concatenate((reference_idx, picked_idx))
             
             # create link classification label
-            link_cls_label = [1 if i < n_stay_triple else 0 in range(len(reference_idx))]
+            link_cls_label = [1 if i < n_stay_triple else 0 for i in range(len(reference_idx))]
             # create node classification label
-            
-        
+            reference_triple = self.triples[reference_idx]
+            node_idx = np.concatenate((reference_triple[:,0], reference_triple[:,2]))
+            node_idx = np.unique(node_idx)
+            node_idx.sort()
+            link_idx = np.unique(reference_triple[:,1])
+            link_idx.sort()
+
+            triple = self.triples[triple_idx]
+            triple_node_idx = np.concatenate((triple[:,0], triple[:,2]))
+
+            node_cls_label = np.isin(node_idx, triple_node_idx).astype(int).tolist()
+
+            entry = {
+                "text" : row["text"],
+                "subject" : row["subject"],
+                "relation" : row["relation"],
+                "objects" : row["objects"],
+                "reference_triple" : reference_idx,
+                "reference_node" : node_idx,
+                "reference_relation" : link_idx,
+                "link_cls_label" : link_cls_label,
+                "node_cls_label" : node_cls_label
+            }
+            result.append(entry)
         np.random.set_state(state)
+        return result
