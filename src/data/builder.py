@@ -25,7 +25,7 @@ class DSBuilder:
                 save_items=False):
         self.ds = pd.read_json(data_path, lines=True) if data_path is not None else None
         self.triples = np.array(json.load(open(triples_path, 'r')))
-        if not os.path.exists(items_path):
+        if not os.path.exists(items_path) and data_path is not None:
             items = self.build(n_reference_min=n_reference_max,
                                     n_reference_max=n_reference_min,
                                     stay_ratio_min=stay_ratio_min,
