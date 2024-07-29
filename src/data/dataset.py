@@ -10,16 +10,31 @@ from ._data_utils import (
 
 ALLOWED_SENTENCE_EMB = ["eol", "pcot", "ke"]
 
-class KGATDataset(Dataset):
+class KGAT(Dataset):
     def __init__(self,
-                triples_path,
-                ):
-        self.ds = pd.read_json(data_path, lines=True)
+                texts_txt_path,
+                entities_txt_path,
+                relations_txt_path,
+                entities_alias_path,
+                # triples_path,
+                entities_tensor_path,
+                relations_tensor_path,
+                sentence_emb_mode="eol",
+                sentence_emb_index=None,
+                n_reference_min=30,
+                n_reference_max=50,
+                stay_ratio_min=1.0,
+                stay_ratio_max=1.0,
+                random_state=None,
+                n_pick=1,
+                items_path="./items.jsonl",
+                save_items=False):
+        # self.ds = pd.read_json(data_path, lines=True)
         self.texts = read_txt(texts_txt_path)
         self.entities = read_txt(entities_txt_path)
         self.relations = read_txt(relations_txt_path)
         self.entities_alias = pd.read_json(entities_alias_path, lines=True)
-        self.triples = np.array(json.load(open(triples_path, 'r')))
+        # self.triples = np.array(json.load(open(triples_path, 'r')))
 
         sentence_emb_index = sentence_emb_index or -1
         
