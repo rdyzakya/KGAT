@@ -25,20 +25,17 @@ class DSBuilder:
                 save_items=False):
         self.ds = pd.read_json(data_path, lines=True) if data_path is not None else None
         self.triples = np.array(json.load(open(triples_path, 'r')))
-        if data_path is not None:
-            if not os.path.exists(items_path):
-                items = self.build(n_reference_min=n_reference_max,
-                                        n_reference_max=n_reference_min,
-                                        stay_ratio_min=stay_ratio_min,
-                                        stay_ratio_max=stay_ratio_max,
-                                        random_state=random_state,
-                                        n_pick=n_pick)
-                items = pd.DataFrame(items)
-                self.items = items
-            else:
-                self.items = pd.read_json(items_path, orient="records", lines=True)
+        if not os.path.exists(items_path):
+            items = self.build(n_reference_min=n_reference_max,
+                                    n_reference_max=n_reference_min,
+                                    stay_ratio_min=stay_ratio_min,
+                                    stay_ratio_max=stay_ratio_max,
+                                    random_state=random_state,
+                                    n_pick=n_pick)
+            items = pd.DataFrame(items)
+            self.items = items
         else:
-            self.items = None
+            self.items = pd.read_json(items_path, orient="records", lines=True)
         if save_items and self.items is not None:
             self.items.to_json(items_path, orient="records", lines=True)
     
