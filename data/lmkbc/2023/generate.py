@@ -91,7 +91,7 @@ for i, row in all_df.iterrows():
     text = f'subject : {row["SubjectEntity"]} | relation : {row["Relation"]}'
     if text not in all_texts:
         all_texts[text] = len(all_texts)
-    entry["text"] = all_texts[text]
+    entry["text"] = [all_texts[text]] # because subgraph gen is a list
 
     s = entities_to_qid_map[row["SubjectEntity"]]
     r = relations_map[row["Relation"]]
@@ -124,9 +124,9 @@ with open("entities.txt", 'w', encoding="utf-8") as fp:
 with open("relations.txt", 'w', encoding="utf-8") as fp:
     fp.write('\n'.join(relations))
 
-pd.DataFrame(train_dump).to_json("train.jsonl", index=False, orient="records", lines=True)
-pd.DataFrame(dev_dump).to_json("dev.jsonl", index=False, orient="records", lines=True)
-pd.DataFrame(test_dump).to_json("test.jsonl", index=False, orient="records", lines=True)
+pd.DataFrame(train_dump).to_json("train.jsonl", orient="records", lines=True)
+pd.DataFrame(dev_dump).to_json("dev.jsonl", orient="records", lines=True)
+pd.DataFrame(test_dump).to_json("test.jsonl", orient="records", lines=True)
 
 reverse_all_triples = {v : k for k, v in all_triples.items()}
 all_triples = [reverse_all_triples[i] for i in range(len(all_triples))]

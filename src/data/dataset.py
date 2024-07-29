@@ -1,11 +1,15 @@
 from torch.utils.data import Dataset
 import pandas as pd
-import numpy as np
 import torch
-import json
-import os
 from ._data_utils import (
     read_txt
+)
+from utils import (
+    KG_MASK,
+    SUBJECT_MASK,
+    RELATION_MASK,
+    OBJECT_MASK,
+    EMPTY_OBJECT
 )
 
 ALLOWED_SENTENCE_EMB = ["eol", "pcot", "ke"]
@@ -58,18 +62,98 @@ class KGATDataset(Dataset):
         self.sentence_emb_mode = sentence_emb_mode
         self.sentence_emb_index = sentence_emb_index
     
-    def lmkbc(self):
-        pass
-
-    def subgraph_gen(self):
+    def prepare_train(self):
+        raise NotImplementedError
+    
+    def prepare_eval(self):
+        raise NotImplementedError
+    
+    def __len__(self):
+        return len(self.data)
+    
+    def __getitem__(self, idx):
+        return self.data[idx]
+    
+    def collate_fn(self, batch):
+        raise NotImplementedError
+    
+class SubgraphGenDataset(KGATDataset):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+    
+    def prepare_train(self):
         result = []
         for i, row in self.items.iterrows():
-            entry = (
+            for text_idx in row["text"]:
+                text_idx = text_idx # injection_node
+                nodes_alias_idx = row["reference_node"] # x
+                triples_idx = row["reference_triple"] # edge_index
+                relations_idx = row["reference_relation"] # relations
+                link_cls_label = row["link_cls_label"]
+                node_cls_label = row["node_cls_label"]
+                result.append((
+                    # X
+                    text_idx,
+                    nodes_alias_idx,
+                    triples_idx,
+                    relations_idx,
+                    # Y
+                    link_cls_label,
+                    node_cls_label
+                ))
+        self.data = result
+        return result
+    
+    def prepare_eval(self):
+        return self.prepare_train()
 
-            )
-            # injector(x, 
-            # edge_index, 
-            # relations, 
-            # injection_node, 
-            # # node_batch, 
-            # # injection_node_batch)
+
+def default_lmkbc_prompt(subject, relation, object, eos_token, negative_sample=False, n_tokens=1, inference=False):
+    inference_template = f'Based on the knowledge graph "{KG_MASK*n_tokens}" complete the 
+    following triple with the format ( SUBJECT | RELATION | OBJECT | T/F ) and stop 
+    after close bracket, fill OBJECT with {EMPTY_OBJECT} if nothing satisfy, 
+    fill T/F with TRUE if you think the triple is true else fill with FALSE : ( {subject} | {relation} | '
+    if inference:
+        return inference
+    if negative_sample:
+        return f'{inference_template}{object} | FALSE ){eos_token}'
+    return f'{inference_template}{object} | TRUE ){eos_token}'
+
+class LMKBCDataset(KGATDataset):
+    def __init__(self, tokenizer, n_tokens=1, **kwargs):
+        super().__init__(**kwargs)
+        self.tokenizer = tokenizer
+        self.n_tokens = n_tokens
+        self.negative_objects = [list() for _ in range(self.items.shape[0])]
+    
+    def prepare_train(self):
+        result = []
+        for i, row in self.items.iterrows():
+            for text_idx in row["text"]:
+                text_idx = text_idx # injection_node
+                subject_ids = self.entities_alias.loc[row["subject"],"alias_idx"]
+                relation = self.relations[row["relation"]]
+
+                for sid in subject_ids:
+                    subject = self.entities[sid]
+
+                    batch_entry_per_subject_relation = []
+                    if len(row["objects"]) == 0:
+                        pass
+                    for obj_idx in row["objects"]:
+                        object_ids = self.entities_alias.loc[obj_idx, "alias_idx"]
+                        for oid in object_ids:
+                            nodes_alias_idx = row["reference_node"] # x
+                            triples_idx = row["reference_triple"] # edge_index
+                            relations_idx = row["reference_relation"] # relations
+
+                            batch_entry_per_subject_relation.append((
+                                # GRAPH
+                                text_idx,
+                                nodes_alias_idx,
+                                triples_idx,
+                                relations_idx,
+                                # TEXT
+                            ))
+        self.data = result
+        return result
