@@ -34,8 +34,10 @@ class DSBuilder:
                                     n_pick=n_pick)
             items = pd.DataFrame(items)
             self.items = items
-        else:
+        elif os.path.exists(items_path):
             self.items = pd.read_json(items_path, orient="records", lines=True)
+        else:
+            self.items = None
         if save_items and self.items is not None:
             self.items.to_json(items_path, orient="records", lines=True)
     
