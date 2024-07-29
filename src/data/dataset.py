@@ -3,7 +3,10 @@ import pandas as pd
 import numpy as np
 import torch
 import json
-from ._modeling_utils import read_txt
+from ._data_utils import (
+    read_txt,
+    bounded_random
+)
 
 ALLOWED_SENTENCE_EMB = ["eol", "pcot", "ke"]
 
@@ -41,13 +44,74 @@ class LMKBCDataset(Dataset):
         self.sentence_emb_mode = sentence_emb_mode
         self.sentence_emb_index = sentence_emb_index
     
+    def _choice(self, a, size):
+        if size > len(a):
+            return a
+        else:
+            return np.random.choice(a, size, replace=False)
+
+    def _pick_idx(self,
+                  all_triple_idx,
+                  triple_idx,
+                  stay_triple_idx,
+                  reference_idx,
+                  n_pick=1):
+        unrelated_triple_idx = all_triple_idx[~np.isin(all_triple_idx, triple_idx) & ~np.isin(all_triple_idx, reference_idx)]
+        prob = np.random.rand()
+        if prob <= 0.35: # 35% related node
+            reference_triple = self.triples[reference_idx]
+            reference_subject = reference_triple[:,0]
+            reference_object = reference_triple[:,2]
+            reference_entities = np.unique(np.concatenate((reference_subject, reference_object)))
+
+            unrelated_triple = self.triples[unrelated_triple_idx]
+            unrelated_subject = unrelated_triple[:,0]
+            unrelated_object = unrelated_triple[:,2]
+
+            isin_reference = np.isin(unrelated_subject, reference_entities) | np.isin(unrelated_object, reference_entities)
+
+            picked_idx = self._choice(unrelated_triple_idx[isin_reference], n_pick)
+
+            return picked_idx
+        elif prob <= 0.85: # 50% related relation
+            # 60% same relation with stay triple
+            # 40% with reference
+            relation_prob = np.random.rand()
+            if relation_prob <= 0.6:
+                stay_triple = self.triples[stay_triple_idx]
+                stay_relations = np.unique(stay_triple[:,1])
+
+                unrelated_triple = self.triples[unrelated_triple_idx]
+                unrelated_relations = unrelated_triple[:,1]
+
+                isin_reference = np.isin(unrelated_relations, stay_relations)
+
+                picked_idx = self._choice(unrelated_triple_idx[isin_reference], n_pick)
+
+                return picked_idx
+            else:
+                reference_triple = self.triples[reference_idx]
+                reference_relations = np.unique(reference_triple[:,1])
+
+                unrelated_triple = self.triples[unrelated_triple_idx]
+                unrelated_relations = unrelated_triple[:,1]
+
+                isin_reference = np.isin(unrelated_relations, reference_relations)
+
+                picked_idx = self._choice(unrelated_triple_idx[isin_reference], n_pick)
+                return picked_idx
+        else: # 15% random
+            picked_idx = self._choice(unrelated_triple_idx, n_pick)
+            return picked_idx
+    
     def build_reference(self,
                         n_reference_min,
                         n_reference_max,
-                        stay_ratio=1.0,
-                        random_state=None):
-        n_reference_low = n_reference_min
-        n_reference_high = n_reference_max + 1
+                        stay_ratio_min=1.0,
+                        stay_ratio_max=1.0,
+                        random_state=None,
+                        n_pick=1):
+        # 40% take from same relation, 40% take from related nodes, 20% random nodes
 
         state = np.random.get_state()
         if random_state:
@@ -58,26 +122,32 @@ class LMKBCDataset(Dataset):
         reference = []
         for i, row in self.ds.iterrows():
             entry = {}
-            triple = np.array(row["triple"])
+            triple_idx = np.array(row["triple"])
 
-            current_stay_ratio = np.random.rand() if stay_ratio == "random" else stay_ratio
-            n_stay_triple = int(np.ceil(current_stay_ratio * len(triple)))
+            # remove arbitrary
+            n_stay_min = int(np.ceil(stay_ratio_min * len(triple_idx)))
+            n_stay_max = int(np.ceil(stay_ratio_max * len(triple_idx)))
+            n_stay_triple = bounded_random(n_stay_min, n_stay_max)
+            stay_triple_idx = np.random.choice(triple_idx, n_stay_triple, replace=False)
 
-            stay_triple = np.random.choice(triple, n_stay_triple, replace=False)
+            reference_idx = stay_triple_idx.copy()
 
-            n_unrelated_triple = n_reference_min - n_stay_triple if n_reference_min == n_reference_max else np.random.randint(n_reference_low, n_reference_high) - n_stay_triple
-            unrelated_triple = np.random.choice(
-                all_triple_idx[~np.isin(all_triple_idx, triple)],
-                n_unrelated_triple,
-                replace=False
-            )
+            n_reference = bounded_random(n_reference_min, n_reference_max)
 
-            entry["triple_idx"] = np.concatenate((stay_triple, unrelated_triple)).tolist()
+            n_unrelated_triple = n_reference - n_stay_triple
 
-            link_cls_label = [1 for _ in range(len(stay_triple))] + [0 for _ in range(len(unrelated_triple))]
-
-            coo_transpose = self.triples[entry["triple_idx"]]
-            entities_index = np.concatenate((coo_transpose[:,0], coo_transpose[:,2]))
-            entities_index = np.unique(entities_index)
+            unrelated_triple_idx = all_triple_idx[~np.isin(all_triple_idx, triple_idx)]
+            # picking index with certain conditions
+            if len(unrelated_triple_idx) <= n_unrelated_triple:
+                reference_idx = np.concatenate((reference_idx, unrelated_triple_idx))
+            else:
+                while len(reference_idx) < n_reference:
+                    picked_idx = self._pick_idx(all_triple_idx, triple_idx, stay_triple_idx, reference_idx, n_pick=n_pick)
+                    reference_idx = np.concatenate((reference_idx, picked_idx))
+            
+            # create link classification label
+            link_cls_label = [1 if i < n_stay_triple else 0 in range(len(reference_idx))]
+            # create node classification label
+            
         
         np.random.set_state(state)
