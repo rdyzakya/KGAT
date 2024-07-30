@@ -2217,7 +2217,6 @@ wisconsin
 Zeeland
 hydrogen
 carbon
-c&a
 oxygen
 nitrogen
 arsenic
@@ -2526,6 +2525,7 @@ soros fund management
 kaupthing singer & friedlander
 chanel
 victoria's secret
+c&a
 pantene
 img models
 elite model brazil

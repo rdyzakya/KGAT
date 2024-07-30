@@ -6,20 +6,37 @@ from ordered_set import OrderedSet
 import json
 
 
-# Disambiguation baseline
-def disambiguation_baseline(item):
-    try:
-        # If item can be converted to an integer, return it directly
-        return int(item)
-    except ValueError:
-        # If not, proceed with the Wikidata search
-        try:
-            url = f"https://www.wikidata.org/w/api.php?action=wbsearchentities&search={item}&language=en&format=json"
-            data = requests.get(url).json()
-            # Return the first id (Could upgrade this in the future)
+def get_wikidata_id(query):
+    search_url = "https://www.wikidata.org/w/api.php"
+    params = {
+        "action": "wbsearchentities",
+        "language": "en",
+        "format": "json",
+        "search": query
+    }
+    
+    response = requests.get(search_url, params=params)
+    
+    if response.status_code == 200:
+        data = response.json()
+        if 'search' in data and len(data['search']) > 0:
             return data['search'][0]['id']
-        except:
-            return item
+    return None
+
+def my_disambiguation(input_str):
+    # Check if the string is an integer
+    try:
+        return int(input_str)
+    except ValueError:
+        pass
+
+    # If not an integer, try to get the Wikidata ID
+    wikidata_id = get_wikidata_id(input_str)
+    if wikidata_id:
+        return wikidata_id
+    
+    # If all else fails, return the original string
+    return input_str
 
 train = pd.read_json("./raw/train.jsonl", lines=True)
 dev = pd.read_json("./raw/dev.jsonl", lines=True)
@@ -48,7 +65,7 @@ for i, row in tqdm(all_df.iterrows()):
         entry_unk_entities = []
         all_qid = []
         for a in el:
-            qid = disambiguation_baseline(a)
+            qid = my_disambiguation(a)
             if qid in alias:
                 # if not isin_lower(a, alias[qid]):
                 if a not in alias[qid]:
@@ -76,7 +93,7 @@ for i, el in enumerate(unk_entities):
             qid = k
             break
     if qid is None:
-        qid = disambiguation_baseline(el)
+        qid = my_disambiguation(el)
     if not re.match(r"Q\d+", qid):
         alias[f"UNK{i}"] = [el]
 
@@ -112,8 +129,6 @@ for k, v in alias.items():
     for el in v:
         entities_to_qid_map[el] = qid_map[k]
 
-pd.DataFrame(alias_jsonl).to_json("entities_alias.jsonl", orient="records", lines=True)
-
 all_triples = {}
 all_texts = {}
 
@@ -138,6 +153,11 @@ for i, row in all_df.iterrows():
     
     for o1 in row["ObjectEntities"]:
         for o2 in o1:
+            # if len(train_dump) == 2:
+            #     print(entry["subject"])
+            #     print(entry["relation"])
+            #     print(o1, o2)
+            #     raise Exception
             o = entities_to_qid_map[o2]
             triple = (s, r, o)
             if triple not in all_triples:
@@ -159,6 +179,7 @@ all_triples = [reverse_all_triples[i] for i in range(len(all_triples))]
 reverse_all_texts = {v : k for k, v in all_texts.items()}
 all_texts = [reverse_all_texts[i] for i in range(len(all_texts))]
 
+pd.DataFrame(alias_jsonl).to_json("entities_alias.jsonl", orient="records", lines=True)
 pd.DataFrame(train_dump).to_json("train.jsonl", orient="records", lines=True)
 pd.DataFrame(dev_dump).to_json("dev.jsonl", orient="records", lines=True)
 pd.DataFrame(test_dump).to_json("test.jsonl", orient="records", lines=True)

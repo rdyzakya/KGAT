@@ -5,11 +5,10 @@ import torch
 import json
 import os
 from ._data_utils import (
-    read_txt,
     bounded_random
 )
 
-ALLOWED_SENTENCE_EMB = ["eol", "pcot", "ke"]
+ALLOWED_SENTENCE_EMB = ["baseline", "eol", "pcot", "ke"]
 
 class DSBuilder:
     def __init__(self,
@@ -121,7 +120,7 @@ class DSBuilder:
             # remove arbitrary
             n_stay_min = int(np.ceil(stay_ratio_min * len(triple_idx)))
             n_stay_max = int(np.ceil(stay_ratio_max * len(triple_idx)))
-            n_stay_triple = bounded_random(n_stay_min, n_stay_max)
+            n_stay_triple = int(np.ceil(bounded_random(n_stay_min, n_stay_max)))
             stay_triple_idx = np.random.choice(triple_idx, n_stay_triple, replace=False)
 
             reference_idx = stay_triple_idx.copy()
