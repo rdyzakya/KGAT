@@ -147,10 +147,10 @@ class NodeClassifierDecoder(BaseModel):
     def __init__(self, num_features):
         super().__init__(num_features=num_features)
         # catch multi nuance importance, not only 1 domain, let say a graph with multi domain, this will not only consider 1 domain as the imoprtant one
-        self.gate_nn = Linear(in_channels=num_features, out_channels=num_features, bias=False, weight_initializer="glorot")
+        self.cls = Linear(in_channels=num_features, out_channels=num_features, bias=False, weight_initializer="glorot")
     
     def forward(self, x, sigmoid=False):
-        x = self.gate_nn(x)
+        x = self.cls(x)
         x = x.sum(dim=1)
         x = x.unsqueeze(-1)
         return torch.sigmoid(x) if sigmoid else x

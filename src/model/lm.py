@@ -65,6 +65,29 @@ class LanguageModelForLMKBC(ABC):
 
         return tokenizer
 
+    def prepare_lmkbc(self, input_ids, attention_mask, graph_embeddings):
+        mask = input_ids == self.config.kg_token_id
+
+        input_ids[mask] = 0 # change to 0, because we don't resize the params
+
+        embeds = self.embeddings(input_ids)
+        embeds[mask] = graph_embeddings.view(-1, graph_embeddings.shape[-1])
+
+        return embeds, attention_mask
+    
+    def forward_lmkbc(self, input_ids, attention_mask, graph_embeddings, batch=None):
+        batch = torch.arange(0,input_ids.shape[0]) if batch is None else batch
+        graph_embeddings = graph_embeddings[batch]
+        result_embeds, result_attention_mask = self.prepare_lmkbc(input_ids, attention_mask, graph_embeddings)
+        return self.forward(inputs_embeds=result_embeds, attention_mask=result_attention_mask)
+    
+    def generate_lmkbc(self, input_ids, attention_mask, graph_embeddings, batch=None, **kwargs):
+        batch = torch.arange(0,input_ids.shape[0]) if batch is None else batch
+        graph_embeddings = graph_embeddings[batch]
+        result_embeds, result_attention_mask = self.prepare_lmkbc(input_ids, attention_mask, graph_embeddings)
+
+        return self.generate(inputs_embeds=result_embeds, attention_mask=result_attention_mask, **kwargs)
+
 ### GPT2
 class GPT2ForLMKBC(LanguageModelForLMKBC, GPT2LMHeadModel):
     @property
