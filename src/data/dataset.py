@@ -1,5 +1,6 @@
 from torch.utils.data import Dataset
 import pandas as pd
+import numpy as np
 import torch
 from .prompt import Prompt
 from ._data_utils import (
@@ -67,12 +68,17 @@ class KGATDataset(Dataset):
         raise NotImplementedError
     
     def __len__(self):
+        if "data" not in dir(self):
+            raise ValueError("Please run prepare_train or prepare_eval method")
         return len(self.data)
     
     def __getitem__(self, idx):
         if "data" not in dir(self):
             raise ValueError("Please run prepare_train or prepare_eval method")
         return self.data[idx]
+    
+    def get(self, idx):
+        raise NotImplementedError
     
     def collate_fn(self, batch):
         raise NotImplementedError
@@ -103,6 +109,45 @@ class SubgraphGenDataset(KGATDataset):
     
     def prepare_eval(self):
         return self.prepare_train()
+    
+    def get(self, idx, alias_idx=None):
+        ( # X
+        text_idx,
+        nodes_alias_idx,
+        triples_idx,
+        relations_idx,
+        # Y
+        link_cls_label,
+        node_cls_label) =  self.data[idx]
+        
+        nodes_idx = [np.random.choice(el) if alias_idx is None else el[alias_idx] for el in self.entities_alias.loc[nodes_alias_idx, "alias_idx"]]
+
+        triples = [self.triples[ti] for ti in triples_idx]
+
+        enttity_edge_idx_mapping = {
+            el : i for i, el in enumerate(nodes_alias_idx)
+        }
+        relation_edge_idx_mapping = {
+            el : i for i, el in enumerate(relations_idx)
+        }
+
+        triples = [
+            [enttity_edge_idx_mapping[el[0]], relation_edge_idx_mapping[el[1]], enttity_edge_idx_mapping[el[2]]] for el in triples
+        ]
+
+        edge_index = np.transpose(triples)
+        edge_index = torch.from_numpy(edge_index)
+
+        return {
+            "x" : self.entities_attr[nodes_idx],
+            "edge_index" : edge_index,
+            "relations" : self.relations_attr[relations_idx],
+            "injection_node" : self.texts_attr[text_idx].unsqueeze(0),
+            "node_batch" : torch.zeros(len(nodes_idx)).int(),
+            "injection_node_batch" : torch.zeros(1).int(),
+            "link_cls_label" : torch.tensor(link_cls_label),
+            "node_cls_label" : torch.tensor(node_cls_label)
+        }
 
 
 class LMKBCDataset(KGATDataset):
@@ -112,6 +157,7 @@ class LMKBCDataset(KGATDataset):
                 entities_txt_path,
                 relations_txt_path,
                 entities_alias_path,
+                tokenizer=None,
                 n_tokens=1, 
                 texts_tensor_path=None,
                 entities_tensor_path=None,
@@ -130,6 +176,7 @@ class LMKBCDataset(KGATDataset):
             sentence_emb_mode=sentence_emb_mode,
             sentence_emb_index=sentence_emb_index
         )
+        self.tokenizer = tokenizer
         self.n_tokens = n_tokens
         self.negative_objects = [list() for _ in range(self.items.shape[0])]
         self.prompt = Prompt()
@@ -272,3 +319,51 @@ class LMKBCDataset(KGATDataset):
                     entry.append(obj)
             self.negative_objects.append(entry)
         return self.negative_objects
+    
+    def get(self, idx, alias_idx=None, inference=False):
+        (
+            # x
+            ## GRAPH
+            text_idx,
+            nodes_alias_idx,
+            triples_idx,
+            relations_idx,
+            ## TEXT
+            prompt,
+        ) =  self.data[idx]
+        
+        nodes_idx = [np.random.choice(el) if alias_idx is None else el[alias_idx] for el in self.entities_alias.loc[nodes_alias_idx, "alias_idx"]]
+
+        triples = [self.triples[ti] for ti in triples_idx]
+
+        enttity_edge_idx_mapping = {
+            el : i for i, el in enumerate(nodes_alias_idx)
+        }
+        relation_edge_idx_mapping = {
+            el : i for i, el in enumerate(relations_idx)
+        }
+
+        triples = [
+            [enttity_edge_idx_mapping[el[0]], relation_edge_idx_mapping[el[1]], enttity_edge_idx_mapping[el[2]]] for el in triples
+        ]
+
+        edge_index = np.transpose(triples)
+        edge_index = torch.from_numpy(edge_index)
+
+        # return self.texts_attr[text_idx], self.entities_attr[nodes_idx], edge_index, self.relations_attr[relations_idx], link_cls_label, node_cls_label
+        tokenized = self.tokenizer(prompt, padding=True, return_tensors="pt")
+
+        if (tokenized["input_ids"][:,-1] == self.tokenizer.eos_token_id).all().logical_not():
+            tokenized["input_ids"] = torch.cat([tokenized["input_ids"], torch.full((1,1), self.tokenizer.eos_token_id)], dim=1)
+            tokenized["attention_mask"] = torch.cat([tokenized["attention_mask"], torch.ones(1,1, dtype=tokenized["attention_mask"].dtype)], dim=1)
+
+        return {
+            "x" : self.entities_attr[nodes_idx],
+            "edge_index" : edge_index,
+            "relations" : self.relations_attr[relations_idx],
+            "injection_node" : self.texts_attr[text_idx].unsqueeze(0),
+            "node_batch" : torch.zeros(len(nodes_idx)).int(),
+            "injection_node_batch" : torch.zeros(1).int(),
+            "input_ids" : tokenized["input_ids"],
+            "attention_mask" : tokenized["attention_mask"]
+        }
