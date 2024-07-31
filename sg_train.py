@@ -56,6 +56,9 @@ def create_adj_label(n_node, n_relation, edge_index, link_label):
     adj[true_edge_index[1], true_edge_index[0], true_edge_index[2]] = 1.0
     return adj
 
+def loop(val=False): # train/val loop
+    pass
+
 if __name__ == "__main__":
     seed_everything(args.seed)
     ## DATASET
