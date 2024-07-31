@@ -3,6 +3,7 @@ from .injector import Injector, Detach
 from .gae import GATv2Encoder, InnerOuterProductDecoder, NodeClassifierDecoder
 from .aggr import AttentionalAggregation, SoftmaxAggregation
 from .base_model import BaseModel
+from .graph_prefix import GraphPrefix
 
 class MultiheadGAE(BaseModel):
     def __init__(self, 
@@ -16,7 +17,6 @@ class MultiheadGAE(BaseModel):
                  add_self_loops=True, 
                  bias=True, 
                  share_weights=False,
-                 fill_value="mean",
                  subgraph=False,
                  **kwargs):
         super().__init__(in_channels=in_channels, 
@@ -29,7 +29,6 @@ class MultiheadGAE(BaseModel):
                  add_self_loops=add_self_loops, 
                  bias=bias, 
                  share_weights=share_weights,
-                 fill_value=fill_value,
                  subgraph=subgraph,
                  **kwargs)
         
@@ -46,7 +45,6 @@ class MultiheadGAE(BaseModel):
             add_self_loops=add_self_loops,
             bias=bias,
             share_weights=share_weights,
-            fill_value=fill_value,
             **kwargs
         )
 

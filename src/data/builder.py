@@ -1,7 +1,6 @@
 # from torch.utils.data import Dataset
 import pandas as pd
 import numpy as np
-import torch
 import json
 import os
 from ._data_utils import (
@@ -21,7 +20,8 @@ class DSBuilder:
                 random_state=None,
                 n_pick=1,
                 items_path="./items.jsonl",
-                save_items=False):
+                save_items=False,
+                load=False):
         self.ds = pd.read_json(data_path, lines=True) if data_path is not None else None
         self.triples = np.array(json.load(open(triples_path, 'r')))
         if not os.path.exists(items_path) and data_path is not None:
@@ -33,7 +33,7 @@ class DSBuilder:
                                     n_pick=n_pick)
             items = pd.DataFrame(items)
             self.items = items
-        elif os.path.exists(items_path):
+        elif os.path.exists(items_path) and load:
             self.items = pd.read_json(items_path, orient="records", lines=True)
         else:
             self.items = None

@@ -40,5 +40,5 @@ class GraphPrefix(BaseModel): # n layer dense (relu in the middle)
     
     def forward(self, x):
         out = self.nn(x)
-        out = out.view(x.shape[0], self.n_tokens, out.shape[1])
+        out = out.view(x.shape[0], self.n_tokens, x.shape[1])
         return out

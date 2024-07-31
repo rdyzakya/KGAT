@@ -33,7 +33,6 @@ class GATv2Encoder(BaseModel): # using this, because models.GAT don't provide fo
                  add_self_loops=True, 
                  bias=True, 
                  share_weights=False,
-                 fill_value="mean",
                  **kwargs):
         out_channels = out_channels or in_channels
         super().__init__(in_channels=in_channels, 
@@ -46,8 +45,11 @@ class GATv2Encoder(BaseModel): # using this, because models.GAT don't provide fo
                  add_self_loops=add_self_loops, 
                  bias=bias, 
                  share_weights=share_weights,
-                 fill_value=fill_value,
                  **kwargs)
+        
+        self.self_loop_edge_attr = torch.nn.parameter.Parameter(
+            torch.randn(in_channels)
+        )
 
         module = [GATv2Conv(in_channels, 
                     hidden_channels, 
@@ -57,7 +59,7 @@ class GATv2Encoder(BaseModel): # using this, because models.GAT don't provide fo
                     negative_slope=negative_slope,
                     dropout=dropout,
                     add_self_loops=add_self_loops,
-                    fill_value=self.fill_value,
+                    fill_value=self.self_loop_edge_attr,
                     bias=bias,
                     share_weights=share_weights,
                     **kwargs)] + \
@@ -69,7 +71,7 @@ class GATv2Encoder(BaseModel): # using this, because models.GAT don't provide fo
                     negative_slope=negative_slope,
                     dropout=dropout,
                     add_self_loops=add_self_loops,
-                    fill_value=self.fill_value,
+                    fill_value=self.self_loop_edge_attr,
                     bias=bias,
                     share_weights=share_weights,
                     **kwargs) for _ in range(num_layers-2)] + \
@@ -81,7 +83,7 @@ class GATv2Encoder(BaseModel): # using this, because models.GAT don't provide fo
                     negative_slope=negative_slope,
                     dropout=dropout,
                     add_self_loops=add_self_loops,
-                    fill_value=self.fill_value,
+                    fill_value=self.self_loop_edge_attr,
                     bias=bias,
                     share_weights=share_weights,
                     **kwargs)] if num_layers > 1 else [GATv2Conv(in_channels, 
@@ -92,7 +94,7 @@ class GATv2Encoder(BaseModel): # using this, because models.GAT don't provide fo
                     negative_slope=negative_slope,
                     dropout=dropout,
                     add_self_loops=add_self_loops,
-                    fill_value=self.fill_value,
+                    fill_value=self.self_loop_edge_attr,
                     bias=bias,
                     share_weights=share_weights,
                     **kwargs)]

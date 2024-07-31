@@ -5,8 +5,10 @@ from model import (
     GATv2Encoder,
     InnerOuterProductDecoder,
     NodeClassifierDecoder,
+    MultiheadGAE,
     AttentionalAggregation,
     SoftmaxAggregation,
+    GraphPrefix,
     AutoModelForLMKBC
 )
 from transformers import AutoTokenizer
@@ -150,9 +152,78 @@ class ModelTestCase(unittest.TestCase):
         text_emb = model.text_embedding(index=-1, **tokenized)
 
         self.assertEqual(text_emb.shape[0], len(text))
+    
+    def test_mhgae(self):
+        N_NODE = random.randint(5,20)
+        N_RELATION = random.randint(2,15)
+        N_EDGE = random.randint(10,100)
+        N_LAYERS = random.randint(1,5)
+        N_HEAD = random.randint(1,8)
+        DIM = 768
+        H_DIM = 128
+        N_BATCH = random.randint(1,5)
+        N_INJECTION_NODE = N_BATCH
 
+        x = torch.randn(N_NODE, DIM)
+        relations = torch.randn(N_RELATION, DIM)
+        edge_index = torch.stack([
+            torch.randint(0, N_NODE, (N_EDGE,)),
+            torch.randint(0, N_RELATION, (N_EDGE,)),
+            torch.randint(0, N_NODE, (N_EDGE,))
+        ])
 
+        injection_node = torch.randn(N_INJECTION_NODE, DIM)
+        node_batch = torch.randint(0, N_BATCH, (N_NODE,))
+        injection_node_batch = torch.arange(0,N_INJECTION_NODE)
+
+        mhgae = MultiheadGAE(in_channels=DIM, hidden_channels=H_DIM, num_layers=N_LAYERS, heads=N_HEAD, subgraph=True)
+
+        z, all_adj, all_alpha, out_link, out_node = mhgae.forward(x, 
+                                                        edge_index, 
+                                                        relations, 
+                                                        injection_node=injection_node, 
+                                                        node_batch=node_batch, 
+                                                        injection_node_batch=injection_node_batch, 
+                                                        return_attention_weights=True, 
+                                                        all=False, 
+                                                        sigmoid=False)
         
+        self.assertEqual(z.shape[0], x.shape[0])
+        self.assertEqual(z.shape[1], x.shape[1])
+
+        self.assertEqual(out_link.shape[0], edge_index.shape[1])
+
+        self.assertEqual(out_node.shape[0], z.shape[0])
+        self.assertEqual(out_node.shape[1], 1)
+        
+
+    def test_gprefix(self):
+        N_NODE = random.randint(5,20)
+        N_LAYERS = random.randint(1,5)
+        N_TOKENS = random.randint(1,5)
+        N_BATCH = random.randint(1,5)
+        DIM = 768
+        H_DIM = 512
+
+        node_batch = torch.randint(0, N_BATCH, (N_NODE,))
+
+        x = torch.randn(N_NODE, DIM)
+
+        node_decoder = NodeClassifierDecoder(num_features=DIM)
+
+        gprefix = GraphPrefix(num_features=DIM, hidden_channels=H_DIM, num_layers=N_LAYERS, n_tokens=N_TOKENS)
+
+        attentional_aggr = AttentionalAggregation(gate_nn=node_decoder, nn=gprefix.nn)
+
+        out_attention, gate = attentional_aggr(x, index=node_batch, return_gate=True)
+
+        self.assertEqual(out_attention.shape[0], N_BATCH)
+
+        self.assertEqual(out_attention.shape[1], N_TOKENS*DIM)
+
+        self.assertEqual(gate.shape[0], N_NODE)
+
+        self.assertEqual(gate.shape[1], 1)
 
 if __name__ == '__main__':
     unittest.main()
