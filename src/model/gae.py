@@ -99,9 +99,9 @@ class GATv2Encoder(BaseModel): # using this, because models.GAT don't provide fo
         
         self.gnn = GATv2Sequential(*module)
 
-    def forward(self, x, edge_index, relations):
+    def forward(self, x, edge_index, relations, return_attention_weights=None):
         edge_attr = relations[edge_index[1]]
-        return self.gnn(x, edge_index[[0,2]], edge_attr)
+        return self.gnn(x, edge_index[[0,2]], edge_attr, return_attention_weights=return_attention_weights)
 
 class InnerOuterProductDecoder(BaseModel):
     def __init__(self, num_features):

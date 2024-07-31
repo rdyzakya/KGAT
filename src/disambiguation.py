@@ -28,8 +28,9 @@ def get_wikidata_id(query):
     
     if response.status_code == 200:
         data = response.json()
-        if 'search' in data and len(data['search']) > 0:
-            return data['search'][0]['id']
+        if 'search' in data:
+            if len(data['search']) > 0:
+                return data['search'][0]['id']
     return None
 
 def my_disambiguation(input_str):
