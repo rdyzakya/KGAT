@@ -203,8 +203,8 @@ if __name__ == "__main__":
             optimizer.step()
             train_bar.update()
 
-            out_node.append(out_node.detach().cpu())
-            out_link.append(out_link.detach().cpu())
+            out_node.append(out_node.detach().cpu().sigmoid())
+            out_link.append(out_link.detach().cpu().sigmoid())
 
             label_node.append(node_cls_label.cpu())
             label_link.append(link_cls_label.cpu())
@@ -273,8 +273,8 @@ if __name__ == "__main__":
                 node_cls_label = node_cls_label.float().view(-1)
                 link_cls_label = create_adj_label(batch["x"].shape[0], batch["relations"].shape[0], batch["edge_index"], link_label=link_cls_label).view(-1) if args.all else link_cls_label.float().view(-1)
 
-                out_node.append(out_node.detach().cpu())
-                out_link.append(out_link.detach().cpu())
+                out_node.append(out_node.detach().cpu().sigmoid())
+                out_link.append(out_link.detach().cpu().sigmoid())
 
                 label_node.append(node_cls_label.cpu())
                 label_link.append(link_cls_label.cpu())
