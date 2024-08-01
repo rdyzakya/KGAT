@@ -1,5 +1,8 @@
 from argparse import ArgumentParser
 import os
+import sys
+sys.path.append("./src")
+
 def init_args():
     parser = ArgumentParser()
     # DATA RELATED
@@ -10,7 +13,7 @@ def init_args():
     parser.add_argument("--stay-ratio-min", type=float, help="Stay ratio min", default=1.0)
     parser.add_argument("--stay-ratio-max", type=float, help="Stay ratio max", default=1.0)
     parser.add_argument("--save-items", action="store_true", help="Save items (jsonl)")
-    parser.add_argument("--load_items", action="store_true", help="Load items")
+    parser.add_argument("--load-items", action="store_true", help="Load items")
     parser.add_argument("--sentence-emb-mode", type=str, help="Sentence embedding mode", default="baseline")
     parser.add_argument("--lm", type=str, help="HF lm model name or path", default="openai-community/gpt2")
     parser.add_argument("--sentence-emb-idx", type=int, help="Sentence embedding index (layer index)")
@@ -27,7 +30,17 @@ def init_args():
     parser.add_argument("--lr", type=float, help="Learning rate", default=1e-3) # based on default adam, also mentioned in gatv2 paper
     parser.add_argument("--decay", type=float, help="Weight decay", default=0.5) # based on gatv2 paper
     parser.add_argument("--all", action="store_true", help="Return all score in the adjacency matrix if set, else only the links from edge_index")
-    # parser.add_argument("--estop", action="store_true", help="Early stopping")
+    
+    parser.add_argument("--estop", action="store_true", help="Perform early stopping")
+    parser.add_argument("--estop-patience", type=int, help="Early stopping patience", default=3)
+    parser.add_argument("--estop-delta", type=float, help="Early stopping delta", default=0.05)
+    parser.add_argument("--best-metrics", type=str, help="Early stopping metrics", default="f1")
+
+    parser.add_argument("--load-best", action="store_true", help="Load best at end")
+    parser.add_argument("--max-ckpt", type=int, help="Max checkpoint", default=5)
+
+    parser.add_argument("--test", action="store_true", help="Perform final evaluation (test)")
+
     parser.add_argument("--out", type=str, help="Out dir", default="./out")
 
     parser.add_argument("--seed", type=int, help="Random seed", default=42)
@@ -49,6 +62,8 @@ import torch
 from tqdm import tqdm
 from sklearn.metrics import classification_report
 import time
+import utils
+import json
 
 def create_adj_label(n_node, n_relation, edge_index, link_label):
     adj = torch.zeros(n_relation, n_node, n_node).float()
@@ -56,8 +71,103 @@ def create_adj_label(n_node, n_relation, edge_index, link_label):
     adj[true_edge_index[1], true_edge_index[0], true_edge_index[2]] = 1.0
     return adj
 
-def loop(val=False): # train/val loop
-    pass
+def loop(model, dataloader, device, args, optimizer, criterion, pbar, val=False): # train/val loop
+    entry = {}
+    start_time = time.time()
+    if val:
+        model.eval()
+    else:
+        model.train()
+    
+    out_node = []
+    out_link = []
+
+    label_node = []
+    label_link = []
+    for batch in dataloader:
+        for k, v in batch.items():
+            batch[k] = v.to(device)
+        link_cls_label = batch.pop("link_cls_label")
+        node_cls_label = batch.pop("node_cls_label")
+
+        if val:
+            with torch.no_grad():
+                z, all_adj, all_alpha, out_link, out_node = model.forward(all=args.all, 
+                                                                            sigmoid=False, 
+                                                                            return_attention_weights=False, 
+                                                                            **batch)
+        else:
+            z, all_adj, all_alpha, out_link, out_node = model.forward(all=args.all, 
+                                                                        sigmoid=False, 
+                                                                        return_attention_weights=False, 
+                                                                        **batch)
+        
+        out_node = out_node.view(-1)
+        out_link = out_link.view(-1)
+
+        node_cls_label = node_cls_label.float().view(-1)
+        link_cls_label = create_adj_label(batch["x"].shape[0], batch["relations"].shape[0], batch["edge_index"], link_label=link_cls_label).view(-1) if args.all else link_cls_label.float().view(-1)
+
+        if not val:
+            loss_node = criterion(out_node, 
+                                    node_cls_label)
+            loss_link = criterion(
+                out_link,
+                link_cls_label
+            )
+
+            loss = loss_node + loss_link
+
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+        pbar.update()
+
+        out_node.append(out_node.detach().cpu().sigmoid())
+        out_link.append(out_link.detach().cpu().sigmoid())
+
+        label_node.append(node_cls_label.cpu())
+        label_link.append(link_cls_label.cpu())
+    
+    end_time = time.time()
+
+    entry["time"] = start_time - end_time
+
+    out_node = torch.cat(out_node)
+    out_link = torch.cat(out_link)
+
+    label_node = torch.cat(label_node)
+    label_link = torch.cat(label_link)
+
+    train_node_loss = criterion(out_node, label_node).item()
+    train_link_loss = criterion(out_link, label_link).item()
+
+    entry["node_loss"] = train_node_loss
+    entry["link_loss"] = train_link_loss
+
+    # compute metrics
+    report_train_node = classification_report(
+        y_pred=out_node.round(),
+        y_true=label_node.int(),
+        output_dict=True
+    )
+    report_train_link = classification_report(
+        y_pred=out_link.round(),
+        y_true=label_link.int(),
+        output_dict=True
+    )
+
+    entry["node_accuracy"] = report_train_node["accuracy"]
+    entry["node_precision"] = report_train_node["macro avg"]["precision"]
+    entry["node_recall"] = report_train_node["macro avg"]["recall"]
+    entry["node_f1"] = report_train_node["macro"]["f1-score"]
+
+    entry["link_accuracy"] = report_train_link["accuracy"]
+    entry["link_precision"] = report_train_link["macro avg"]["precision"]
+    entry["link_recall"] = report_train_link["macro avg"]["recall"]
+    entry["link_f1"] = report_train_link["macro"]["f1-score"]
+
+    return entry
 
 if __name__ == "__main__":
     seed_everything(args.seed)
@@ -81,8 +191,8 @@ if __name__ == "__main__":
         data_path=os.path.join("dev.jsonl"),
         n_reference_min=args.n_ref_min,
         n_reference_max=args.n_ref_max,
-        stay_ratio_min=args.stay_ratio_min,
-        stay_ratio_max=args.stay_ratio_max,
+        stay_ratio_min=1.0,
+        stay_ratio_max=1.0,
         random_state=args.seed,
         n_pick=1,
         items_path="./dev-items.jsonl",
@@ -118,12 +228,16 @@ if __name__ == "__main__":
         os.path.join(args.data_dir, "entities.txt"),
         os.path.join(args.data_dir, "relations.txt"),
         os.path.join(args.data_dir, "entitias_alias.jsonl"),
-        texts_tensor_path=texts_tensor_path,
-        entities_tensor_path=entities_tensor_path,
-        relations_tensor_path=relations_tensor_path,
+        texts_tensor_path=None,
+        entities_tensor_path=None,
+        relations_tensor_path=None,
         sentence_emb_mode=args.sentence_emb_mode,
         sentence_emb_index=args.sentence_emb_idx
     )
+
+    val_ds.texts_attr = train_ds.texts_attr
+    val_ds.entities_attr = train_ds.entities_attr
+    val_ds.relations_attr = train_ds.relations_attr
 
     train_ds.prepare_train()
     val_ds.prepare_eval()
@@ -160,162 +274,75 @@ if __name__ == "__main__":
     criterion = torch.nn.BCEWithLogitsLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
 
+    metrics_name = "val_" + args.best_metrics if not args.best_metrics.startswith("val_") else args.best_metrics
+    greater_is_better = False if "loss" in metrics_name else True
+    
+    early_stopper = utils.EarlyStopper(args.estop_patience, args.estop_delta, greater_is_better)
+    saveload = utils.SaveAndLoad(model, args.out, metrics_name, args.max_ckpt, greater_is_better)
+
     train_bar = tqdm(total=args.epoch*len(train_dataloader), desc="Training")
 
     history = []
     for e in range(args.epoch):
-        entry = {
-            "epoch" : e + 1
-        }
-        train_start_time = time.time()
-        model.train()
+        entry = {"epoch" : e+1}
         
-        out_node = []
-        out_link = []
-
-        label_node = []
-        label_link = []
-        for batch in train_dataloader:
-            for k, v in batch.items():
-                batch[k] = v.to(device)
-            link_cls_label = batch.pop("link_cls_label")
-            node_cls_label = batch.pop("node_cls_label")
-
-            z, all_adj, all_alpha, out_link, out_node = model.forward(all=args.all, 
-                                                                      sigmoid=False, 
-                                                                      return_attention_weights=False, 
-                                                                      **batch)
-            
-            out_node = out_node.view(-1)
-            out_link = out_link.view(-1)
-
-            node_cls_label = node_cls_label.float().view(-1)
-            link_cls_label = create_adj_label(batch["x"].shape[0], batch["relations"].shape[0], batch["edge_index"], link_label=link_cls_label).view(-1) if args.all else link_cls_label.float().view(-1)
-
-            loss_node = criterion(out_node, 
-                                  node_cls_label)
-            loss_link = criterion(
-                out_link,
-                link_cls_label
-            )
-
-            loss = loss_node + loss_link
-
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
-            train_bar.update()
-
-            out_node.append(out_node.detach().cpu().sigmoid())
-            out_link.append(out_link.detach().cpu().sigmoid())
-
-            label_node.append(node_cls_label.cpu())
-            label_link.append(link_cls_label.cpu())
+        train_entry = loop(model, train_dataloader, device, args, optimizer, criterion, train_bar, val=False)
+        for k, v in train_entry.items():
+            entry[f"train_{k}"] = v
         
-        train_end_time = time.time()
+        val_bar = tqdm(total=len(val_dataloader), desc="Val")
+        val_entry = loop(model, val_dataloader, device, args, None, criterion, val_bar, val=True)
+        for k, v in val_entry.items():
+            entry[f"val_{k}"] = v
+        
+        print(entry)
 
-        entry["train_time"] = train_end_time - train_start_time
-
-        out_node = torch.cat(out_node)
-        out_link = torch.cat(out_link)
-
-        label_node = torch.cat(label_node)
-        label_link = torch.cat(label_link)
-
-        train_node_loss = criterion(out_node, label_node).item()
-        train_link_loss = criterion(out_link, label_link).item()
-
-        entry["train_node_loss"] = train_node_loss
-        entry["train_link_loss"] = train_link_loss
-
-        # compute metrics
-        report_train_node = classification_report(
-            y_pred=out_node.round(),
-            y_true=label_node.int(),
-            output_dict=True
-        )
-        report_train_link = classification_report(
-            y_pred=out_link.round(),
-            y_true=label_link.int(),
-            output_dict=True
-        )
-
-        entry["train_node_accuracy"] = report_train_node["accuracy"]
-        entry["train_node_precision"] = report_train_node["macro avg"]["precision"]
-        entry["train_node_recall"] = report_train_node["macro avg"]["recall"]
-        entry["train_node_f1"] = report_train_node["macro"]["f1-score"]
-
-        entry["train_link_accuracy"] = report_train_link["accuracy"]
-        entry["train_link_precision"] = report_train_link["macro avg"]["precision"]
-        entry["train_link_recall"] = report_train_link["macro avg"]["recall"]
-        entry["train_link_f1"] = report_train_link["macro"]["f1-score"]
-
-        val_start_time = time.time()
-        model.eval()
-        val_bar = tqdm(total=len(val_dataloader), desc="Evaluation")
-        with torch.no_grad():
-            out_node = []
-            out_link = []
-
-            label_node = []
-            label_link = []
-            for batch in val_dataloader:
-                for k, v in batch.items():
-                    batch[k] = v.to(device)
-                link_cls_label = batch.pop("link_cls_label")
-                node_cls_label = batch.pop("node_cls_label")
-
-                z, all_adj, all_alpha, out_link, out_node = model.forward(all=args.all, 
-                                                                      sigmoid=False, 
-                                                                      return_attention_weights=False, 
-                                                                      **batch)
-            
-                out_node = out_node.view(-1)
-                out_link = out_link.view(-1)
-
-                node_cls_label = node_cls_label.float().view(-1)
-                link_cls_label = create_adj_label(batch["x"].shape[0], batch["relations"].shape[0], batch["edge_index"], link_label=link_cls_label).view(-1) if args.all else link_cls_label.float().view(-1)
-
-                out_node.append(out_node.detach().cpu().sigmoid())
-                out_link.append(out_link.detach().cpu().sigmoid())
-
-                label_node.append(node_cls_label.cpu())
-                label_link.append(link_cls_label.cpu())
-
-                val_bar.update()
-        val_end_time = time.time()
-
-        out_node = torch.cat(out_node)
-        out_link = torch.cat(out_link)
-
-        label_node = torch.cat(label_node)
-        label_link = torch.cat(label_link)
-
-        val_node_loss = criterion(out_node, label_node).item()
-        val_link_loss = criterion(out_link, label_link).item()
-
-        entry["val_node_loss"] = val_node_loss
-        entry["val_link_loss"] = val_link_loss
-
-        # compute metrics
-        report_val_node = classification_report(
-            y_pred=out_node.round(),
-            y_true=label_node.int(),
-            output_dict=True
-        )
-        report_val_link = classification_report(
-            y_pred=out_link.round(),
-            y_true=label_link.int(),
-            output_dict=True
-        )
-
-        entry["val_node_accuracy"] = report_val_node["accuracy"]
-        entry["val_node_precision"] = report_val_node["macro avg"]["precision"]
-        entry["val_node_recall"] = report_val_node["macro avg"]["recall"]
-        entry["val_node_f1"] = report_val_node["macro"]["f1-score"]
-
-        entry["val_link_accuracy"] = report_val_link["accuracy"]
-        entry["val_link_precision"] = report_val_link["macro avg"]["precision"]
-        entry["val_link_recall"] = report_val_link["macro avg"]["recall"]
-        entry["val_link_f1"] = report_val_link["macro"]["f1-score"]
         history.append(entry)
+        saveload.save(history, is_ckpt=True)
+
+    saveload.load_best(history)
+    saveload.save(history, is_ckpt=False)
+
+    ## EVALUATION
+    if args.test:
+        test_builder = DSBuilder(
+            triples_path=os.path.join(args.data_dir, "triples.json"),
+            data_path=os.path.join("test.jsonl"),
+            n_reference_min=args.n_ref_min,
+            n_reference_max=args.n_ref_max,
+            stay_ratio_min=1.0,
+            stay_ratio_max=1.0,
+            random_state=args.seed,
+            n_pick=1,
+            items_path="./test-items.jsonl",
+            save_items=bool(args.save_items),
+            load=bool(args.load_items)
+        )
+
+        test_ds = SubgraphGenDataset(
+            test_builder,
+            os.path.join(args.data_dir, "texts.txt"),
+            os.path.join(args.data_dir, "entities.txt"),
+            os.path.join(args.data_dir, "relations.txt"),
+            os.path.join(args.data_dir, "entitias_alias.jsonl"),
+            texts_tensor_path=None,
+            entities_tensor_path=None,
+            relations_tensor_path=None,
+            sentence_emb_mode=args.sentence_emb_mode,
+            sentence_emb_index=args.sentence_emb_idx
+        )
+
+        test_ds.texts_attr = train_ds.texts_attr
+        test_ds.entities_attr = train_ds.entities_attr
+        test_ds.relations_attr = train_ds.relations_attr
+
+        test_ds.prepare_eval()
+
+        test_collator = SubgraphGenCollator(test_ds, alias_idx=args.alias_idx)
+        test_dataloader = DataLoader(test_ds, batch_size=args.bsize, shuffle=False, collate_fn=test_collator)
+
+        test_bar = tqdm(total=len(test_dataloader), desc="Test")
+        test_result = loop(model, test_dataloader, device, args, None, criterion, test_bar, val=True)
+
+        with open(os.path.join(args.out, "test_metrics.json"), 'w') as fp:
+            json.dump(test_result, fp)
