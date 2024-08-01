@@ -79,8 +79,8 @@ def loop(model, dataloader, device, args, optimizer, criterion, pbar, val=False)
     else:
         model.train()
     
-    out_node = []
-    out_link = []
+    all_out_node = []
+    all_out_link = []
 
     label_node = []
     label_link = []
@@ -116,43 +116,43 @@ def loop(model, dataloader, device, args, optimizer, criterion, pbar, val=False)
                 link_cls_label
             )
 
-            loss = loss_node + loss_link
+            loss = loss_node + loss_link # because link cls is using a multiplication of 3 elements, N * R * N^T
 
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
         pbar.update()
 
-        out_node.append(out_node.detach().cpu().sigmoid())
-        out_link.append(out_link.detach().cpu().sigmoid())
+        all_out_node.append(out_node.detach().cpu())
+        all_out_link.append(out_link.detach().cpu())
 
         label_node.append(node_cls_label.cpu())
         label_link.append(link_cls_label.cpu())
     
     end_time = time.time()
 
-    entry["time"] = start_time - end_time
+    entry["time"] = end_time - start_time
 
-    out_node = torch.cat(out_node)
-    out_link = torch.cat(out_link)
+    all_out_node = torch.cat(all_out_node)
+    all_out_link = torch.cat(all_out_link)
 
     label_node = torch.cat(label_node)
     label_link = torch.cat(label_link)
 
-    train_node_loss = criterion(out_node, label_node).item()
-    train_link_loss = criterion(out_link, label_link).item()
+    node_loss = criterion(all_out_node, label_node).item()
+    link_loss = criterion(all_out_link, label_link).item()
 
-    entry["node_loss"] = train_node_loss
-    entry["link_loss"] = train_link_loss
+    entry["node_loss"] = node_loss
+    entry["link_loss"] = link_loss
 
     # compute metrics
     report_train_node = classification_report(
-        y_pred=out_node.round(),
+        y_pred=all_out_node.sigmoid().round(),
         y_true=label_node.int(),
         output_dict=True
     )
     report_train_link = classification_report(
-        y_pred=out_link.round(),
+        y_pred=all_out_link.sigmoid().round(),
         y_true=label_link.int(),
         output_dict=True
     )
@@ -160,12 +160,12 @@ def loop(model, dataloader, device, args, optimizer, criterion, pbar, val=False)
     entry["node_accuracy"] = report_train_node["accuracy"]
     entry["node_precision"] = report_train_node["macro avg"]["precision"]
     entry["node_recall"] = report_train_node["macro avg"]["recall"]
-    entry["node_f1"] = report_train_node["macro"]["f1-score"]
+    entry["node_f1"] = report_train_node["macro avg"]["f1-score"]
 
     entry["link_accuracy"] = report_train_link["accuracy"]
     entry["link_precision"] = report_train_link["macro avg"]["precision"]
     entry["link_recall"] = report_train_link["macro avg"]["recall"]
-    entry["link_f1"] = report_train_link["macro"]["f1-score"]
+    entry["link_f1"] = report_train_link["macro avg"]["f1-score"]
 
     return entry
 
@@ -188,7 +188,7 @@ if __name__ == "__main__":
 
     val_builder = DSBuilder(
         triples_path=os.path.join(args.data_dir, "triples.json"),
-        data_path=os.path.join("dev.jsonl"),
+        data_path=os.path.join(args.data_dir, "dev.jsonl"),
         n_reference_min=args.n_ref_min,
         n_reference_max=args.n_ref_max,
         stay_ratio_min=1.0,
@@ -214,7 +214,7 @@ if __name__ == "__main__":
         os.path.join(args.data_dir, "texts.txt"),
         os.path.join(args.data_dir, "entities.txt"),
         os.path.join(args.data_dir, "relations.txt"),
-        os.path.join(args.data_dir, "entitias_alias.jsonl"),
+        os.path.join(args.data_dir, "entities_alias.jsonl"),
         texts_tensor_path=texts_tensor_path,
         entities_tensor_path=entities_tensor_path,
         relations_tensor_path=relations_tensor_path,
@@ -227,7 +227,7 @@ if __name__ == "__main__":
         os.path.join(args.data_dir, "texts.txt"),
         os.path.join(args.data_dir, "entities.txt"),
         os.path.join(args.data_dir, "relations.txt"),
-        os.path.join(args.data_dir, "entitias_alias.jsonl"),
+        os.path.join(args.data_dir, "entities_alias.jsonl"),
         texts_tensor_path=None,
         entities_tensor_path=None,
         relations_tensor_path=None,
@@ -307,7 +307,7 @@ if __name__ == "__main__":
     if args.test:
         test_builder = DSBuilder(
             triples_path=os.path.join(args.data_dir, "triples.json"),
-            data_path=os.path.join("test.jsonl"),
+            data_path=os.path.join(args.data_dir, "test.jsonl"),
             n_reference_min=args.n_ref_min,
             n_reference_max=args.n_ref_max,
             stay_ratio_min=1.0,
@@ -324,7 +324,7 @@ if __name__ == "__main__":
             os.path.join(args.data_dir, "texts.txt"),
             os.path.join(args.data_dir, "entities.txt"),
             os.path.join(args.data_dir, "relations.txt"),
-            os.path.join(args.data_dir, "entitias_alias.jsonl"),
+            os.path.join(args.data_dir, "entities_alias.jsonl"),
             texts_tensor_path=None,
             entities_tensor_path=None,
             relations_tensor_path=None,

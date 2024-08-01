@@ -16,15 +16,16 @@ class Injector(BaseModel):
         x_out = torch.cat([x, injection_node], dim=0)
         relations_out = torch.cat([relations, self.edge_attr.unsqueeze(0)], dim=0)
         
-        src_index = injection_node_batch[node_batch] + x.shape[0]
-        rel_index = torch.full((x.shape[0],), fill_value=relations.shape[0], dtype=edge_index.dtype)
-        tgt_index = torch.arange(0, x.shape[0])
+        src_index = (injection_node_batch[node_batch] + x.shape[0]).to(edge_index.device)
+        rel_index = torch.full((x.shape[0],), fill_value=relations.shape[0], dtype=edge_index.dtype, device=edge_index.device)
+        tgt_index = torch.arange(0, x.shape[0], device=edge_index.device)
 
-        edge_index_out = torch.cat([edge_index, torch.stack([src_index, rel_index, tgt_index])], dim=1)
+        added_index = torch.stack([src_index, rel_index, tgt_index])
+        edge_index_out = torch.cat([edge_index, added_index], dim=1)
 
-        x_is_injected = torch.cat([torch.zeros(x.shape[0]), torch.ones(injection_node.shape[0])], dim=0).int()
-        edge_is_injected = torch.cat([torch.zeros(edge_index.shape[1]), torch.ones(x.shape[0])], dim=0).int()
-        relations_is_injected = torch.cat([torch.zeros(relations.shape[0]), torch.ones(1)], dim=0).int() # only add 1 relation
+        x_is_injected = torch.cat([torch.zeros(x.shape[0], device=x.device), torch.ones(injection_node.shape[0], device=injection_node.device)], dim=0).int()
+        edge_is_injected = torch.cat([torch.zeros(edge_index.shape[1], device=edge_index.device), torch.ones(x.shape[0], device=x.device)], dim=0).int()
+        relations_is_injected = torch.cat([torch.zeros(relations.shape[0], device=relations.device), torch.ones(1, device=relations.device)], dim=0).int() # only add 1 relation
 
         return x_out, edge_index_out, relations_out, x_is_injected, edge_is_injected, relations_is_injected
 

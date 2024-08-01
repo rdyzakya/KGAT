@@ -11,14 +11,14 @@ python sg_train.py --data-dir ./data/subgraph-gen/webnlg \
                     --hidden 1536 \
                     --layer 2 \
                     --head 1 \
-                    --epoch 10 \
+                    --epoch 5 \
                     --bsize 8 \
                     --lr 0.001 \
                     --decay 0.5 \
                     --estop \
                     --estop-patience 3 \
                     --estop-delta 0.05 \
-                    --best-metrics f1 \
+                    --best-metrics link_f1 \
                     --load-best \
                     --max-ckpt 3 \
                     --test \

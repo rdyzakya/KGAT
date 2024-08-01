@@ -135,7 +135,7 @@ class InnerOuterProductDecoder(BaseModel):
     
     def forward_all(self, x, relations, sigmoid=False):
         R = torch.stack([
-            el.outer(self.outer_weight) for el in relations
+            el.outer(self.outer_weight) / self.num_features for el in relations # normalization using dimension
         ])
         
         adj = torch.matmul(
