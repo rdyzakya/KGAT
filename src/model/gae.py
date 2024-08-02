@@ -109,6 +109,7 @@ class GATv2Encoder(BaseModel): # using this, because models.GAT don't provide fo
 class InnerOuterProductDecoder(BaseModel):
     def __init__(self, num_features):
         super().__init__(num_features=num_features)
+        self.lin_edge = Linear(in_channels=num_features, out_channels=num_features, bias=False, weight_initializer="glorot")
         self.outer_weight = torch.nn.parameter.Parameter(torch.randn(num_features))
     
     def forward(self, x, edge_index, relations, sigmoid=False):
@@ -135,8 +136,9 @@ class InnerOuterProductDecoder(BaseModel):
         return out_all[edge_index[1], edge_index[0], edge_index[2]] # n_edge
     
     def forward_all(self, x, relations, sigmoid=False):
+        R = self.lin_edge(relations)
         R = torch.stack([
-            el.outer(self.outer_weight) / self.num_features for el in relations # normalization using dimension
+            el.outer(self.outer_weight) / self.num_features**0.5 for el in R # normalization using dimension
         ])
         
         adj = torch.matmul(

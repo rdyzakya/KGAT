@@ -1,7 +1,7 @@
 python sg_train.py --data-dir ./data/subgraph-gen/webnlg \
                     --n-ref-min 10 \
                     --n-ref-max 50 \
-                    --stay-ratio-min 0.0 \
+                    --stay-ratio-min 1.0 \
                     --stay-ratio-max 1.0 \
                     --save-items \
                     --sentence-emb-mode baseline \
@@ -13,7 +13,7 @@ python sg_train.py --data-dir ./data/subgraph-gen/webnlg \
                     --head 1 \
                     --epoch 5 \
                     --bsize 8 \
-                    --lr 0.001 \
+                    --lr 0.0001 \
                     --decay 0.5 \
                     --estop \
                     --estop-patience 3 \
