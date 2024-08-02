@@ -52,7 +52,7 @@ class MultiheadGAE(BaseModel):
 
         self.link_decoder = InnerOuterProductDecoder(num_features=self.encoder.out_channels)
 
-        self.node_decoder = NodeClassifierDecoder(num_features=self.encoder.out_channels)
+        self.node_decoder = NodeClassifierDecoder()
     
     def forward(self, 
                 x, 
@@ -87,12 +87,13 @@ class MultiheadGAE(BaseModel):
             all_alpha = None
         
         if self.subgraph:
-            x, edge_index, relations = self.detach(x, 
-                                                   edge_index, 
-                                                   relations, 
-                                                   x_is_injected, 
-                                                   edge_is_injected, 
-                                                   relations_is_injected)
+            (x, edge_index, relations,
+             injection_node, _, injection_relation) = self.detach(x, 
+                                                                edge_index, 
+                                                                relations, 
+                                                                x_is_injected, 
+                                                                edge_is_injected, 
+                                                                relations_is_injected)
         
         if all:
             out_link = self.link_decoder.forward_all(x, relations, sigmoid=sigmoid)

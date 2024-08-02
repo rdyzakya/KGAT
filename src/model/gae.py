@@ -146,13 +146,29 @@ class InnerOuterProductDecoder(BaseModel):
         return torch.sigmoid(adj) if sigmoid else adj
 
 class NodeClassifierDecoder(BaseModel):
-    def __init__(self, num_features):
-        super().__init__(num_features=num_features)
-        # catch multi nuance importance, not only 1 domain, let say a graph with multi domain, this will not only consider 1 domain as the imoprtant one
-        self.cls = Linear(in_channels=num_features, out_channels=num_features, bias=False, weight_initializer="glorot")
-    
-    def forward(self, x, sigmoid=False):
-        x = self.cls(x)
-        x = x.sum(dim=1)
-        x = x.unsqueeze(-1)
+    def forward(self, x, injection_node, node_batch=None, injection_node_batch=None, sigmoid=False):
+        node_batch = torch.zeros(x.shape[0]) if node_batch is None else node_batch
+        injection_node_batch = torch.arange(0, injection_node.shape[0]) if injection_node_batch is None else injection_node_batch
+
+        unique_batch = torch.unique(node_batch)
+
+        # mm_result = torch.mm(x, injection_node.t())
+        
+        # result = []
+        # for b in unique_batch:
+        #     result.append(
+        #         mm_result[]
+        #     )
+        result = []
+        for b in unique_batch:
+            current_injection_node = injection_node[injection_node_batch == b]
+            mean_dot_product = []
+            for cin in current_injection_node:
+                dot_product = (x[node_batch == b] * cin).sum(1)
+                mean_dot_product.append(dot_product)
+            mean_dot_product = torch.stack(mean_dot_product).mean(0)
+            result.append(mean_dot_product)
+        result = torch.cat(result).unsqueeze(-1)
+
+
         return torch.sigmoid(x) if sigmoid else x

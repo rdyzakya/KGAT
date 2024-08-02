@@ -35,4 +35,5 @@ class Detach(BaseModel):
         edge_not_injected = edge_is_injected.logical_not()
         relations_not_injected = relations_is_injected.logical_not()
 
-        return x[x_not_injected], edge_index[:,edge_not_injected], relations[relations_not_injected]
+        return (x[x_not_injected], edge_index[:,edge_not_injected], relations[relations_not_injected],
+                x[x_is_injected.bool()], edge_index[:,edge_is_injected.bool()], relations[relations_is_injected.bool()])
