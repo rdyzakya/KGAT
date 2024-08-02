@@ -85,6 +85,10 @@ if __name__ == "__main__":
             out_pcot = model.text_embedding(index=args.index, **tokenized_pcot)
             out_ke = model.text_embedding(index=args.index, **tokenized_ke)
 
+            if args.index:
+                if args.index < 0:
+                    args.index = len(out_baseline) + args.index
+
         if not args.index:
             baseline_tensor.append(torch.stack(out_baseline).cpu())
             eol_tensor.append(torch.stack(out_eol).cpu())

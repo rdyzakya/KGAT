@@ -38,7 +38,7 @@ class LanguageModelForLMKBC(ABC):
 
         batch_size = input_ids.shape[0]
         # pooled_hidden_states = hidden_states[torch.arange(batch_size, device=hidden_states.device), sequence_lengths]
-        pooled_hidden_states = tuple(hidden_states[torch.arange(batch_size), sequence_lengths] for hidden_states in out.hidden_states[1:])
+        pooled_hidden_states = tuple(hidden_states[torch.arange(batch_size, device=hidden_states.device), sequence_lengths] for hidden_states in out.hidden_states[1:])
 
         return pooled_hidden_states if index is None else pooled_hidden_states[index]
     
