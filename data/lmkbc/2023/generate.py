@@ -88,7 +88,7 @@ test_dump = []
 
 for i, row in all_df.iterrows():
     entry = {}
-    text = f'subject : {row["SubjectEntity"]} | relation : {row["Relation"]}'
+    text = f'What objects that satisfy the following statement : (subject : {row["SubjectEntity"]} | relation : {row["Relation"]} | objects : ?)'
     if text not in all_texts:
         all_texts[text] = len(all_texts)
     entry["text"] = [all_texts[text]] # because subgraph gen is a list

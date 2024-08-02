@@ -1,0 +1,492 @@
+occupation
+country of citizenship
+cast member
+composer
+executive producer
+costume designer
+director
+screenwriter
+spouse
+director of photography
+film editor
+influenced by
+instance of
+founded by
+employer
+sibling
+sex or gender
+distributed by
+production company
+P40|wdt:P355
+follows
+followed by
+P162|wdt:P272
+parent organization
+owned by
+house publication
+father
+winner
+medical condition treated
+named after
+record held
+performer
+approved by
+made from material
+history of topic
+place of birth
+depicts
+student
+discoverer or inventor
+student of
+diplomatic relation
+participant
+shares border with
+twinned administrative body
+mother
+unmarried partner
+field of this occupation
+found in taxon
+habitat
+country
+capital
+regulated by
+medical examination
+narrative location
+fictional universe described in
+record label
+architect
+home venue
+award received
+conflict
+ammunition
+direction relative to location
+part of the series
+input device
+commanded by
+author
+patron saint
+location of formation
+designed by
+head of state
+office held by head of state
+creator
+original language of film or TV show
+affiliation
+contains the administrative territorial entity
+located in the administrative territorial entity
+used by
+notation
+has edition or translation
+platform
+coat of arms
+present in work
+based on
+languages spoken, written or signed
+has grammatical person
+opposite of
+sport
+uses
+heritage designation
+significant event
+replaces
+place of death
+team captain
+headquarters location
+field of work
+drug or therapy used for treatment
+has cause
+located in time zone
+facet of
+is a list of
+religion or worldview
+enclave within
+tributary
+located in or next to body of water
+day in year for periodic occurrence
+manifestation of
+family name
+head coach
+language regulatory body
+basin country
+nominated for
+time period
+participant in
+position held
+authority
+capital of
+ethnic group
+archives at
+location
+studied by
+doctoral advisor
+notable work
+geography of topic
+residence
+official language
+active ingredient in
+replaced by
+stock exchange
+applies to jurisdiction
+court
+pendant of
+has effect
+military branch
+has subsidiary
+child
+characters
+wears
+cardinality of this set
+input set
+organization directed by the office or position
+product or material produced
+continent
+mountain range
+regulates (molecular biology)
+genetic association
+writing system
+given name
+location of creation
+anatomical location
+located in/on physical feature
+religious order
+operator
+chairperson
+doctoral student
+place of publication
+language used
+member of
+said to be the same as
+officeholder
+route of administration
+is the study of
+practiced by
+executive body
+producer
+child astronomical body
+linguistic typology
+physically interacts with
+member of sports team
+league
+country of origin
+voice actor
+stepparent
+industry
+proved by
+member of political party
+office held by head of government
+owner of
+represents
+polymer of
+medical condition
+cites work
+crystal system
+taxon rank
+parent taxon
+location of discovery
+subject has role
+business division
+symptoms and signs
+coextensive with
+powered by
+manufacturer
+statement is subject of
+eye color
+hair color
+taxonomic type
+editor
+main regulatory text
+publisher
+has grammatical gender
+has fruit type
+measured physical quantity
+political ideology
+film crew member
+filming location
+different from
+developer
+organizer
+country for sport
+educated at
+instrument
+head of government
+director / manager
+takes place in fictional universe
+this taxon is source of
+contributed to creative work
+genre
+cuisine
+basic form of government
+host
+from narrative universe
+central bank/issuer
+currency
+month of the year
+contains settlement
+place of burial
+conjugate acid
+highest point
+vehicle normally used
+manner of death
+cause of death
+published in
+relative
+position played on team / speciality
+list of monuments
+airline hub
+dedicated to
+depends on software
+cover art by
+category for employees of the organization
+encoded by
+color
+work location
+monomer of
+mount
+armament
+endemic to
+UNESCO language status
+native language
+has anatomical branch
+arterial supply
+public holiday
+killed by
+architectural style
+culture
+connects with
+maintained by
+lyrics by
+antiparticle
+chief executive officer
+shape
+worshipped by
+family
+produced sound
+presenter
+convicted of
+structural engineer
+indigenous to
+partner in business or sport
+significant drug interaction
+natural product of taxon
+office held by head of the organization
+start point
+crew member(s)
+astronaut mission
+visitor centre
+movement
+item operated
+has facet polytope
+depicted by
+ortholog
+interaction
+season starts
+top-level Internet domain
+fabrication method
+category for films shot at this location
+immediate cause of
+parent astronomical body
+category of associated people
+narrator
+afflicts
+species kept
+standards body
+anthem
+rector
+honorific prefix
+tonality
+significant person
+measurement scale
+inspired by
+has active ingredient
+language of work or name
+discography
+means of locomotion
+domain of saint or deity
+noble title
+legislative body
+edition or translation of
+exhibition history
+appointed by
+mascot
+appears in the form of
+terminus location
+list of works
+has grammatical case
+academic thesis
+readable file format
+tracklist
+stated in
+partially coincident with
+official residence
+librettist
+cell component
+parent club
+health specialty
+chief operating officer
+mouth of the watercourse
+disease transmission process
+temporal range end
+lake outflow
+named by
+first aid measures
+safety classification and labelling
+copyright holder
+dual to
+base
+website account on
+occupant
+discovery method
+fictional or mythical analog of
+conferred by
+list of characters
+constellation
+programmed in
+streak color
+structure replaced by
+programming paradigm
+possible treatment
+Carnegie Classification of Institutions of Higher Education
+production statistics
+sports discipline competed in
+has immediate cause
+interested in
+secretary general
+consecrator
+located on street
+legal form
+commissioned by
+member of the crew of
+production designer
+type of orbit
+conjugate base
+professorship
+venous drainage
+lowest point
+central bank
+disjoint union of
+animal breed
+victory
+type locality (geology)
+first appearance
+operating system
+located in protected area
+filmography
+next crossing upstream
+allegiance
+point group
+space group
+operating area
+original broadcaster
+commemorates
+defendant
+choreographer
+located on astronomical body
+permanent duplicated item
+copyright license
+produced by
+has goal
+dialect of
+track gauge
+board member
+anatomical branch of
+terminus
+canonization status
+academic degree
+cause of destruction
+lifestyle
+place served by transport hub
+competition class
+GUI toolkit or framework
+sexually homologous with
+original combination
+official religion
+represented by
+plaintiff
+godparent
+connecting line
+adjacent station
+recorded at studio or venue
+signatory
+source of energy
+chromosome
+commander of (DEPRECATED)
+members have occupation
+biological phase
+has conjugation class
+crosses
+foundational text
+highest judicial authority
+encodes
+taxon synonym
+translator
+set in period
+open days
+military rank
+union of
+patient of
+sponsor
+record or record progression
+newspaper format
+contributing factor of
+territory claimed by
+has superpartner
+sidekick of
+after a work by
+solid solution series with
+sexual orientation
+collection
+software engine
+party chief representative
+writable file format
+target
+has pet
+develops from
+illustrator
+Ethnologue language status
+decays to
+World Heritage criteria
+game mode
+foods traditionally associated
+less than
+greater than
+permanent resident of
+location of first performance
+electrical plug type
+origin of the watercourse
+valid in period
+official symbol
+voice type
+blood type
+contributor to the creative work or subject
+next lower rank
+diocese
+depositary
+destination point
+NATO code for grade
+temporal range start
+radix
+follower of
+has facility
+activity policy in this place
+brand
+inflows
+lake on watercourse
+magnetic ordering
+exemplar of
+main building contractor
+computes solution to
+drainage basin
+vaccine for
+motto
+CPU
+feast day
+has contributing factor
+separated from
+pregnancy category
+diaspora
+muscle insertion
+solved by
+signed form
+astronomical filter
+spore print color
+dam
