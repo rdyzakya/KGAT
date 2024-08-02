@@ -90,10 +90,10 @@ if __name__ == "__main__":
                     args.index = len(out_baseline) + args.index
 
         if not args.index:
-            baseline_tensor.append(torch.stack(out_baseline).cpu())
-            eol_tensor.append(torch.stack(out_eol).cpu())
-            pcot_tensor.append(torch.stack(out_pcot).cpu())
-            ke_tensor.append(torch.stack(out_ke).cpu())
+            baseline_tensor.append(torch.stack([el.cpu() for el in out_baseline]))
+            eol_tensor.append(torch.stack([el.cpu() for el in out_eol]))
+            pcot_tensor.append(torch.stack([el.cpu() for el in out_pcot]))
+            ke_tensor.append(torch.stack([el.cpu() for el in out_ke]))
         else:
             baseline_tensor.append(out_baseline.unsqueeze(0).cpu())
             eol_tensor.append(out_eol.unsqueeze(0).cpu())
