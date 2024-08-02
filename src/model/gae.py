@@ -1,4 +1,5 @@
 from torch_geometric.nn import GATv2Conv
+from torch_geometric.nn.aggr import MeanAggregation
 from torch_geometric.nn.dense import Linear
 import torch
 from .base_model import BaseModel
@@ -146,29 +147,16 @@ class InnerOuterProductDecoder(BaseModel):
         return torch.sigmoid(adj) if sigmoid else adj
 
 class NodeClassifierDecoder(BaseModel):
+    def __init__(self):
+        super().__init__()
+        self.mean = MeanAggregation()
+
     def forward(self, x, injection_node, node_batch=None, injection_node_batch=None, sigmoid=False):
         node_batch = torch.zeros(x.shape[0]) if node_batch is None else node_batch
         injection_node_batch = torch.arange(0, injection_node.shape[0]) if injection_node_batch is None else injection_node_batch
-
-        unique_batch = torch.unique(node_batch)
-
-        # mm_result = torch.mm(x, injection_node.t())
-        
-        # result = []
-        # for b in unique_batch:
-        #     result.append(
-        #         mm_result[]
-        #     )
-        result = []
-        for b in unique_batch:
-            current_injection_node = injection_node[injection_node_batch == b]
-            mean_dot_product = []
-            for cin in current_injection_node:
-                dot_product = (x[node_batch == b] * cin).sum(1)
-                mean_dot_product.append(dot_product)
-            mean_dot_product = torch.stack(mean_dot_product).mean(0)
-            result.append(mean_dot_product)
-        result = torch.cat(result).unsqueeze(-1)
-
-
-        return torch.sigmoid(x) if sigmoid else x
+        result = torch.mm(x, injection_node.t())
+        result = self.mean(result.t(), index=injection_node_batch)
+        result = result.t()
+        result = result[torch.arange(0, result.shape[0]), node_batch]
+        result = result.unsqueeze(1)
+        return torch.sigmoid(result) if sigmoid else result

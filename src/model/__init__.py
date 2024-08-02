@@ -4,6 +4,7 @@ from .gae import GATv2Encoder, InnerOuterProductDecoder, NodeClassifierDecoder
 from .aggr import AttentionalAggregation, SoftmaxAggregation
 from .base_model import BaseModel
 from .graph_prefix import GraphPrefix
+from torch_geometric.nn.dense import Linear
 
 class MultiheadGAE(BaseModel):
     def __init__(self, 
@@ -52,8 +53,8 @@ class MultiheadGAE(BaseModel):
 
         self.link_decoder = InnerOuterProductDecoder(num_features=self.encoder.out_channels)
 
-        self.node_decoder = NodeClassifierDecoder()
-    
+        self.node_decoder = NodeClassifierDecoder() if subgraph else Linear(in_channels=self.encoder.out_channels, out_channels=1, bias=False, weight_initializer="glorot")
+
     def forward(self, 
                 x, 
                 edge_index, 
@@ -100,6 +101,14 @@ class MultiheadGAE(BaseModel):
         else:
             out_link = self.link_decoder.forward(x, edge_index, relations, sigmoid=sigmoid)
         
-        out_node = self.node_decoder(x, sigmoid=sigmoid)
+        if self.subgraph:
+            out_node = self.node_decoder(x, 
+                                        injection_node, 
+                                        node_batch=node_batch, 
+                                        injection_node_batch=injection_node_batch, 
+                                        sigmoid=sigmoid)
+        else:
+            out_node = self.node_decoder(x)
+            out_node = out_node.sigmoid() if sigmoid else out_node
 
         return x, all_adj, all_alpha, out_link, out_node

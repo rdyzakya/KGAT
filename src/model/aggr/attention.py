@@ -64,12 +64,13 @@ class AttentionalAggregation(Aggregation):
     def forward(self, x: Tensor, index: Optional[Tensor] = None,
                 ptr: Optional[Tensor] = None, dim_size: Optional[int] = None,
                 dim: int = -2,
-                return_gate: bool = False) -> Tensor:
+                return_gate: bool = False,
+                **kwargs) -> Tensor:
 
         if self.gate_mlp is not None:
-            gate = self.gate_mlp(x, batch=index, batch_size=dim_size)
+            gate = self.gate_mlp(x, batch=index, batch_size=dim_size, **kwargs)
         else:
-            gate = self.gate_nn(x)
+            gate = self.gate_nn(x, **kwargs)
 
         if self.mlp is not None:
             x = self.mlp(x, batch=index, batch_size=dim_size)
