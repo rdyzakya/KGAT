@@ -1,4 +1,4 @@
-python sg_train.py --data-dir ./data/subgraph-gen/webnlg \
+python sg_train.py --data-dir ./data/subgraph-gen/graphtextqa \
                     --n-ref-min 10 \
                     --n-ref-max 50 \
                     --stay-ratio-min 1.0 \

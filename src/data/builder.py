@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import json
 import os
+from tqdm import tqdm
 from ._data_utils import (
     bounded_random
 )
@@ -114,7 +115,7 @@ class DSBuilder:
         all_triple_idx = np.array([i for i in range(len(self.triples))]).astype(int)
 
         result = []
-        for i, row in self.ds.iterrows():
+        for i, row in tqdm(self.ds.iterrows()):
             triple_idx = np.array(row["triple"])
 
             # remove arbitrary
