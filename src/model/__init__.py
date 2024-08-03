@@ -80,7 +80,7 @@ class MultiheadGAE(BaseModel):
                        ReLU(),
                        Linear(in_channels=self.encoder.out_channels, out_channels=1, bias=False, weight_initializer="glorot"))
         
-        self.query_mlp = MLP(in_channels=in_channels, hidden_channels=hidden_channels, out_channels=out_channels, num_layers=num_layers)
+        # self.query_mlp = MLP(in_channels=in_channels, hidden_channels=hidden_channels, out_channels=out_channels, num_layers=num_layers)
         
     def forward(self, 
                 x, 
