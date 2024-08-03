@@ -37,7 +37,7 @@ class KGATDataset(Dataset):
         if texts_tensor_path is None:
             self.texts_attr = None
         else:
-            texts_attr = torch.load(texts_tensor_path)[sentence_emb_mode]
+            texts_attr = torch.load(texts_tensor_path, weights_only=True)[sentence_emb_mode]
             texts_attr = texts_attr[sentence_emb_index] if texts_attr.dim() == 3 else texts_attr
             assert texts_attr.dim() == 2
             self.texts_attr = texts_attr
@@ -45,7 +45,7 @@ class KGATDataset(Dataset):
         if entities_tensor_path is None:
             self.entities_attr = None
         else:
-            entities_attr = torch.load(entities_tensor_path)[sentence_emb_mode]
+            entities_attr = torch.load(entities_tensor_path, weights_only=True)[sentence_emb_mode]
             entities_attr = entities_attr[sentence_emb_index] if entities_attr.dim() == 3 else entities_attr
             assert entities_attr.dim() == 2
             self.entities_attr = entities_attr
@@ -53,7 +53,7 @@ class KGATDataset(Dataset):
         if relations_tensor_path is None:
             self.relations_attr = None
         else:
-            relations_attr = torch.load(relations_tensor_path)[sentence_emb_mode]
+            relations_attr = torch.load(relations_tensor_path, weights_only=True)[sentence_emb_mode]
             relations_attr = relations_attr[sentence_emb_index] if relations_attr.dim() == 3 else relations_attr
             assert relations_attr.dim() == 2
             self.relations_attr = relations_attr

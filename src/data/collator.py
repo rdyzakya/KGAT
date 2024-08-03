@@ -25,6 +25,13 @@ class SubgraphGenCollator:
             )
         node_batch = torch.cat(node_batch)
 
+        triple_batch = []
+        for i, el in enumerate(triples_idx):
+            triple_batch.append(
+                torch.full((len(el), ), i)
+            )
+        triple_batch = torch.cat(triple_batch)
+
         nodes_alias_idx = np.concatenate(nodes_alias_idx)
         nodes_alias_idx = nodes_alias_idx.flatten() # numpy array
         nodes_idx = [np.random.choice(el) if self.alias_idx is None else el[self.alias_idx] for el in self.ds.entities_alias.loc[nodes_alias_idx, "alias_idx"]]
@@ -32,18 +39,32 @@ class SubgraphGenCollator:
         relations_idx = np.concatenate(relations_idx)
         relations_idx = np.unique(relations_idx) # relation must unique
 
-        enttity_edge_idx_mapping = {
-            el : i for i, el in enumerate(nodes_alias_idx)
-        }
+
         relation_edge_idx_mapping = {
             el : i for i, el in enumerate(relations_idx)
         }
 
         triples_idx = np.concatenate(triples_idx)
-        triples = [self.ds.triples[ti] for ti in triples_idx]
-        triples = [
-            [enttity_edge_idx_mapping[el[0]], relation_edge_idx_mapping[el[1]], enttity_edge_idx_mapping[el[2]]] for el in triples
-        ]
+        triples = []
+        for i, ti in enumerate(triples_idx):
+            s, r, o = self.ds.triples[ti]
+            si, ri, oi = None, relation_edge_idx_mapping[r], None
+            # found_s = False
+            # found_o = False
+            for j, nai in enumerate(nodes_alias_idx):
+                if s == nai and node_batch[j] == triple_batch[i] and si is None:
+                    si = j
+                    # found_s = True
+                if o == nai and node_batch[j] == triple_batch[i] and oi is None:
+                    oi = j
+                    # found_o = True
+                if si is not None and oi is not None:
+                    break
+            if si is None or oi is None:
+                raise Exception("Not found!")
+            triples.append(
+                [si, ri, oi]
+            )
 
         edge_index = np.transpose(triples)
         edge_index = torch.from_numpy(edge_index)
@@ -53,6 +74,12 @@ class SubgraphGenCollator:
 
         node_cls_label = np.concatenate(node_cls_label)
         node_cls_label = torch.from_numpy(node_cls_label)
+
+        src_batch = node_batch[edge_index[0]]
+        tgt_batch = node_batch[edge_index[2]]
+
+        if (src_batch != tgt_batch).any():
+            raise ValueError(f"Intersection between batch, there are connection between different graph \n src_batch : {src_batch} \n tgt_batch : {tgt_batch}")
 
         return {
             "x" : self.ds.entities_attr[nodes_idx],
@@ -89,6 +116,13 @@ class LMKBCCollator:
             )
         node_batch = torch.cat(node_batch)
 
+        triple_batch = []
+        for i, el in enumerate(triples_idx):
+            triple_batch.append(
+                torch.full((len(el), ), i)
+            )
+        triple_batch = torch.cat(triple_batch)
+
         nodes_alias_idx = np.concatenate(nodes_alias_idx)
         nodes_alias_idx = nodes_alias_idx.flatten() # numpy array
         nodes_idx = [np.random.choice(el) if self.alias_idx is None else el[self.alias_idx] for el in self.ds.entities_alias.loc[nodes_alias_idx, "alias_idx"]]
@@ -96,18 +130,31 @@ class LMKBCCollator:
         relations_idx = np.concatenate(relations_idx)
         relations_idx = np.unique(relations_idx) # relation must unique
 
-        enttity_edge_idx_mapping = {
-            el : i for i, el in enumerate(nodes_alias_idx)
-        }
         relation_edge_idx_mapping = {
             el : i for i, el in enumerate(relations_idx)
         }
 
         triples_idx = np.concatenate(triples_idx)
-        triples = [self.ds.triples[ti] for ti in triples_idx]
-        triples = [
-            [enttity_edge_idx_mapping[el[0]], relation_edge_idx_mapping[el[1]], enttity_edge_idx_mapping[el[2]]] for el in triples
-        ]
+        triples = []
+        for i, ti in enumerate(triples_idx):
+            s, r, o = self.ds.triples[ti]
+            si, ri, oi = None, relation_edge_idx_mapping[r], None
+            # found_s = False
+            # found_o = False
+            for j, nai in enumerate(nodes_alias_idx):
+                if s == nai and node_batch[j] == triple_batch[i] and si is None:
+                    si = j
+                    # found_s = True
+                if o == nai and node_batch[j] == triple_batch[i] and oi is None:
+                    oi = j
+                    # found_o = True
+                if si is not None and oi is not None:
+                    break
+            if si is None or oi is None:
+                raise Exception("Not found!")
+            triples.append(
+                [si, ri, oi]
+            )
 
         edge_index = np.transpose(triples)
         edge_index = torch.from_numpy(edge_index)

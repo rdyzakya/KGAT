@@ -55,9 +55,10 @@ if args.gpu:
     os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
 
 from torch_geometric import seed_everything
-from data import DSBuilder, SubgraphGenDataset, SubgraphGenCollator
+from data import DSBuilder, LMKBCDataset, LMKBCCollator
 from torch.utils.data import DataLoader
-from model import MultiheadGAE
+from model import MultiheadGAE, AutoModelForLMKBC
+from transformers import AutoTokenizer
 import torch
 from tqdm import tqdm
 from sklearn.metrics import classification_report
@@ -79,10 +80,10 @@ def loop(model, dataloader, device, args, optimizer, criterion, pbar, val=False)
     else:
         model.train()
     
-    # all_out_node = []
+    all_out_node = []
     all_out_link = []
 
-    # label_node = []
+    label_node = []
     label_link = []
     for batch in dataloader:
         for k, v in batch.items():
@@ -92,76 +93,75 @@ def loop(model, dataloader, device, args, optimizer, criterion, pbar, val=False)
 
         if val:
             with torch.no_grad():
-                z, all_adj, all_alpha, out_link = model.forward(all=args.all, 
+                z, all_adj, all_alpha, out_link, out_node = model.forward(all=args.all, 
                                                                             sigmoid=False, 
                                                                             return_attention_weights=False, 
                                                                             **batch)
         else:
-            z, all_adj, all_alpha, out_link = model.forward(all=args.all, 
+            z, all_adj, all_alpha, out_link, out_node = model.forward(all=args.all, 
                                                                         sigmoid=False, 
                                                                         return_attention_weights=False, 
                                                                         **batch)
         
-        # out_node = out_node.view(-1)
+        out_node = out_node.view(-1)
         out_link = out_link.view(-1)
 
         node_cls_label = node_cls_label.float().view(-1)
         link_cls_label = create_adj_label(batch["x"].shape[0], batch["relations"].shape[0], batch["edge_index"], link_label=link_cls_label).view(-1) if args.all else link_cls_label.float().view(-1)
 
         if not val:
-            # loss_node = criterion(out_node, 
-            #                         node_cls_label)
+            loss_node = criterion(out_node, 
+                                    node_cls_label)
             loss_link = criterion(
                 out_link,
                 link_cls_label
             )
 
-            # loss = loss_node + loss_link
-            loss = loss_link
+            loss = loss_node + loss_link # because link cls is using a multiplication of 3 elements, N * R * N^T
 
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
         pbar.update()
 
-        # all_out_node.append(out_node.detach().cpu())
+        all_out_node.append(out_node.detach().cpu())
         all_out_link.append(out_link.detach().cpu())
 
-        # label_node.append(node_cls_label.cpu())
+        label_node.append(node_cls_label.cpu())
         label_link.append(link_cls_label.cpu())
     
     end_time = time.time()
 
     entry["time"] = end_time - start_time
 
-    # all_out_node = torch.cat(all_out_node)
+    all_out_node = torch.cat(all_out_node)
     all_out_link = torch.cat(all_out_link)
 
-    # label_node = torch.cat(label_node)
+    label_node = torch.cat(label_node)
     label_link = torch.cat(label_link)
 
-    # node_loss = criterion(all_out_node, label_node).item()
+    node_loss = criterion(all_out_node, label_node).item()
     link_loss = criterion(all_out_link, label_link).item()
 
-    # entry["node_loss"] = node_loss
+    entry["node_loss"] = node_loss
     entry["link_loss"] = link_loss
 
     # compute metrics
-    # report_train_node = classification_report(
-    #     y_pred=all_out_node.sigmoid().round(),
-    #     y_true=label_node.int(),
-    #     output_dict=True
-    # )
+    report_train_node = classification_report(
+        y_pred=all_out_node.sigmoid().round(),
+        y_true=label_node.int(),
+        output_dict=True
+    )
     report_train_link = classification_report(
         y_pred=all_out_link.sigmoid().round(),
         y_true=label_link.int(),
         output_dict=True
     )
 
-    # entry["node_accuracy"] = report_train_node["accuracy"]
-    # entry["node_precision"] = report_train_node["macro avg"]["precision"]
-    # entry["node_recall"] = report_train_node["macro avg"]["recall"]
-    # entry["node_f1"] = report_train_node["macro avg"]["f1-score"]
+    entry["node_accuracy"] = report_train_node["accuracy"]
+    entry["node_precision"] = report_train_node["macro avg"]["precision"]
+    entry["node_recall"] = report_train_node["macro avg"]["recall"]
+    entry["node_f1"] = report_train_node["macro avg"]["f1-score"]
 
     entry["link_accuracy"] = report_train_link["accuracy"]
     entry["link_precision"] = report_train_link["macro avg"]["precision"]
@@ -210,7 +210,7 @@ if __name__ == "__main__":
     relations_tensor_path = os.path.join(args.data_dir, f"relations.{args.lm.replace('/', '_')}.{args.sentence_emb_idx}.tensor")
     relations_tensor_path = relations_tensor_path if os.path.exists(relations_tensor_path) else os.path.join(args.data_dir, f"relations.{args.lm.replace('/', '_')}.tensor")
 
-    train_ds = SubgraphGenDataset(
+    train_ds = LMKBCDataset(
         train_builder,
         os.path.join(args.data_dir, "texts.txt"),
         os.path.join(args.data_dir, "entities.txt"),
@@ -223,7 +223,7 @@ if __name__ == "__main__":
         sentence_emb_index=args.sentence_emb_idx
     )
 
-    val_ds = SubgraphGenDataset(
+    val_ds = LMKBCDataset(
         val_builder,
         os.path.join(args.data_dir, "texts.txt"),
         os.path.join(args.data_dir, "entities.txt"),
@@ -246,7 +246,7 @@ if __name__ == "__main__":
     train_collator = SubgraphGenCollator(train_ds, alias_idx=args.alias_idx)
     val_collator = SubgraphGenCollator(val_ds, alias_idx=args.alias_idx)
 
-    train_dataloader = DataLoader(train_ds, batch_size=args.bsize, shuffle=False, collate_fn=train_collator)
+    train_dataloader = DataLoader(train_ds, batch_size=args.bsize, shuffle=True, collate_fn=train_collator)
     val_dataloader = DataLoader(val_ds, batch_size=args.bsize, shuffle=False, collate_fn=val_collator)
     
     ## MODEL

@@ -1,10 +1,13 @@
 from .lm import AutoModelForLMKBC
 from .injector import Injector, Detach
-from .gae import GATv2Encoder, InnerOuterProductDecoder, NodeClassifierDecoder
+from .gae import GATv2Encoder, InnerOuterProductDecoder, NodeClassifierDecoder, TripleRetrieval, generate_edge_index
 from .aggr import AttentionalAggregation, SoftmaxAggregation
 from .base_model import BaseModel
 from .graph_prefix import GraphPrefix
+
 from torch_geometric.nn.dense import Linear
+from torch.nn import Sequential, ReLU
+import torch
 
 class MultiheadGAE(BaseModel):
     def __init__(self, 
@@ -20,6 +23,7 @@ class MultiheadGAE(BaseModel):
                  share_weights=False,
                  subgraph=False,
                  **kwargs):
+        out_channels = out_channels or in_channels
         super().__init__(in_channels=in_channels, 
                  hidden_channels=hidden_channels, 
                  num_layers=num_layers, 
@@ -33,7 +37,7 @@ class MultiheadGAE(BaseModel):
                  subgraph=subgraph,
                  **kwargs)
         
-        self.injector = Injector(edge_dim=in_channels) if subgraph else None
+        self.injector = Injector(edge_dim=in_channels)
 
         self.encoder = GATv2Encoder(
             in_channels=in_channels,
@@ -51,9 +55,28 @@ class MultiheadGAE(BaseModel):
 
         self.detach = Detach()
 
-        self.link_decoder = InnerOuterProductDecoder(num_features=self.encoder.out_channels)
+        if num_layers > 1:
+            relation_mlp = [Linear(in_channels=in_channels, out_channels=hidden_channels, bias=True, weight_initializer="glorot"),
+                            ReLU()]
+            for _ in range(num_layers-2):
+                relation_mlp.append(Linear(in_channels=hidden_channels, out_channels=hidden_channels, bias=True, weight_initializer="glorot"))
+                relation_mlp.append(ReLU())
 
-        self.node_decoder = NodeClassifierDecoder() if subgraph else Linear(in_channels=self.encoder.out_channels, out_channels=1, bias=False, weight_initializer="glorot")
+            relation_mlp.append(Linear(in_channels=hidden_channels, out_channels=out_channels, bias=True, weight_initializer="glorot"))
+            self.relation_mlp = Sequential(*relation_mlp)
+        else:
+            self.relation_mlp = Linear(in_channels=in_channels, out_channels=out_channels, bias=True, weight_initializer="glorot")
+
+        # self.link_decoder = InnerOuterProductDecoder(num_features=self.encoder.out_channels)
+        # self.link_decoder = TripleRetrieval(num_features=self.encoder.out_channels) if subgraph else \
+        #     Sequential(Linear(in_channels=self.encoder.out_channels * 3, out_channels=self.encoder.out_channels, bias=False, weight_initializer="glorot"),
+        #                ReLU(),
+        #                Linear(in_channels=self.encoder.out_channels, out_channels=1, bias=False, weight_initializer="glorot"))
+        self.link_decoder = Sequential(Linear(in_channels=self.encoder.out_channels * 3, out_channels=self.encoder.out_channels, bias=False, weight_initializer="glorot"),
+                       ReLU(),
+                       Linear(in_channels=self.encoder.out_channels, out_channels=1, bias=False, weight_initializer="glorot"))
+
+        # self.node_decoder = NodeClassifierDecoder() if subgraph else Linear(in_channels=self.encoder.out_channels, out_channels=1, bias=False, weight_initializer="glorot")
 
     def forward(self, 
                 x, 
@@ -78,7 +101,7 @@ class MultiheadGAE(BaseModel):
                                                      injection_node, 
                                                      node_batch=node_batch, 
                                                      injection_node_batch=injection_node_batch)
-            
+           
         x = self.encoder(x, edge_index, relations, return_attention_weights=return_attention_weights)
         
         if return_attention_weights:
@@ -96,19 +119,55 @@ class MultiheadGAE(BaseModel):
                                                                 edge_is_injected, 
                                                                 relations_is_injected)
         
-        if all:
-            out_link = self.link_decoder.forward_all(x, relations, sigmoid=sigmoid)
-        else:
-            out_link = self.link_decoder.forward(x, edge_index, relations, sigmoid=sigmoid)
-        
-        if self.subgraph:
-            out_node = self.node_decoder(x, 
-                                        injection_node, 
-                                        node_batch=node_batch, 
-                                        injection_node_batch=injection_node_batch, 
-                                        sigmoid=sigmoid)
-        else:
-            out_node = self.node_decoder(x)
-            out_node = out_node.sigmoid() if sigmoid else out_node
+        relations = self.relation_mlp(relations)
+                
+        # if all:
+        #     out_link = self.link_decoder.forward_all(x, relations, sigmoid=sigmoid)
+        # else:
+        #     out_link = self.link_decoder.forward(x, edge_index, relations, sigmoid=sigmoid)
+        # if self.subgraph:
+        #     if all:
+        #         out_link = self.link_decoder.forward_all(x,
+        #                                                 relations, 
+        #                                                 injection_node, 
+        #                                                 node_batch=node_batch, 
+        #                                                 injection_node_batch=injection_node_batch, 
+        #                                                 sigmoid=sigmoid)
+        #     else:
+        #         out_link = self.link_decoder.forward(x, 
+        #                                             edge_index, 
+        #                                             relations, 
+        #                                             injection_node, 
+        #                                             node_batch=node_batch, 
+        #                                             injection_node_batch=injection_node_batch, 
+        #                                             sigmoid=sigmoid, 
+        #                                             allow_intersection=False)
+        # else:
+        #     link_edge_index = edge_index if not all else generate_edge_index(x.shape[0], relations.shape[0])
+        #     inputs = torch.hstack([
+        #         relations[link_edge_index[1]],
+        #         x[link_edge_index[0]],
+        #         x[link_edge_index[2]]
+        #     ])
 
-        return x, all_adj, all_alpha, out_link, out_node
+        #     out_link = self.link_decoder(inputs)
+        link_edge_index = edge_index if not all else generate_edge_index(x.shape[0], relations.shape[0])
+        inputs = torch.hstack([
+            relations[link_edge_index[1]],
+            x[link_edge_index[0]],
+            x[link_edge_index[2]]
+        ])
+
+        out_link = self.link_decoder(inputs)
+        
+        # if self.subgraph:
+        #     out_node = self.node_decoder(x, 
+        #                                 injection_node, 
+        #                                 node_batch=node_batch, 
+        #                                 injection_node_batch=injection_node_batch, 
+        #                                 sigmoid=sigmoid)
+        # else:
+        #     out_node = self.node_decoder(x)
+        #     out_node = out_node.sigmoid() if sigmoid else out_node
+
+        return x, all_adj, all_alpha, out_link #, out_node

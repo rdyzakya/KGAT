@@ -1,8 +1,20 @@
 from torch_geometric.nn import GATv2Conv
 from torch_geometric.nn.aggr import MeanAggregation
-from torch_geometric.nn.dense import Linear
 import torch
+from torch_geometric.nn.dense import Linear
 from .base_model import BaseModel
+from itertools import product
+
+class ReLUGATv2(GATv2Conv):
+    def forward(self, *args, **kwargs):
+        return_attention_weights = kwargs.get("return_attention_weights")
+        out = super().forward(*args, **kwargs)
+        if return_attention_weights:
+            z, (adj, alpha) = out
+            return z.relu(), (adj, alpha)
+        else:
+            z = out
+            return z.relu()
 
 class GATv2Sequential(torch.nn.Sequential):
     def forward(self, x, edge_index, edge_attr, return_attention_weights=None):
@@ -52,9 +64,10 @@ class GATv2Encoder(BaseModel): # using this, because models.GAT don't provide fo
             torch.randn(in_channels)
         )
 
-        module = [GATv2Conv(in_channels, 
-                    hidden_channels, 
-                    heads, 
+        module = [ReLUGATv2(
+                    in_channels=in_channels, 
+                    out_channels=hidden_channels ,
+                    heads=heads, 
                     concat=True,
                     edge_dim=in_channels, 
                     negative_slope=negative_slope,
@@ -64,9 +77,10 @@ class GATv2Encoder(BaseModel): # using this, because models.GAT don't provide fo
                     bias=bias,
                     share_weights=share_weights,
                     **kwargs)] + \
-        [GATv2Conv(hidden_channels*heads, 
-                    hidden_channels, 
-                    heads, 
+        [ReLUGATv2(
+                    in_channels=hidden_channels*heads, 
+                    out_channels=hidden_channels, 
+                    heads=heads, 
                     concat=True,
                     edge_dim=in_channels, 
                     negative_slope=negative_slope,
@@ -109,7 +123,6 @@ class GATv2Encoder(BaseModel): # using this, because models.GAT don't provide fo
 class InnerOuterProductDecoder(BaseModel):
     def __init__(self, num_features):
         super().__init__(num_features=num_features)
-        self.lin_edge = Linear(in_channels=num_features, out_channels=num_features, bias=False, weight_initializer="glorot")
         self.outer_weight = torch.nn.parameter.Parameter(torch.randn(num_features))
     
     def forward(self, x, edge_index, relations, sigmoid=False):
@@ -136,9 +149,8 @@ class InnerOuterProductDecoder(BaseModel):
         return out_all[edge_index[1], edge_index[0], edge_index[2]] # n_edge
     
     def forward_all(self, x, relations, sigmoid=False):
-        R = self.lin_edge(relations)
         R = torch.stack([
-            el.outer(self.outer_weight) / self.num_features**0.5 for el in R # normalization using dimension
+            el.outer(self.outer_weight) / self.num_features**0.5 for el in relations # normalization using dimension
         ])
         
         adj = torch.matmul(
@@ -162,3 +174,50 @@ class NodeClassifierDecoder(BaseModel):
         result = result[torch.arange(0, result.shape[0]), node_batch]
         result = result.unsqueeze(1)
         return torch.sigmoid(result) if sigmoid else result
+
+def generate_edge_index(n_node, n_relation):
+    return torch.tensor(list(product(range(n_node), range(n_relation), range(n_node))))
+
+class TripleRetrieval(BaseModel):
+    def __init__(self, num_features):
+        super().__init__(num_features=num_features)
+        self.lin_emb = Linear(in_channels=num_features*3, out_channels=num_features, bias=True, weight_initializer="glorot")
+        self.mean = MeanAggregation()
+    
+    def forward(self, x, edge_index, relations, injection_node, node_batch=None, injection_node_batch=None, sigmoid=False, allow_intersection=False):
+        node_batch = torch.zeros(x.shape[0]) if node_batch is None else node_batch
+        injection_node_batch = torch.arange(0, injection_node.shape[0]) if injection_node_batch is None else injection_node_batch
+
+        source_batch = node_batch[edge_index[0]]
+        tgt_batch = node_batch[edge_index[2]]
+        
+        if (source_batch != tgt_batch).any() and not allow_intersection:
+            raise ValueError(f"Intersection between batch, there are connection between different graph \n source_batch : {source_batch} \n tgt_batch : {tgt_batch}")
+        
+        triple_batch = source_batch
+        
+        triple_emb = self.triple_emb(x, edge_index, relations)
+
+        return self.retrieve(triple_emb, injection_node, triple_batch, injection_node_batch, sigmoid=sigmoid)
+    
+    def forward_all(self, x, relations, injection_node, node_batch=None, injection_node_batch=None, sigmoid=False):
+        edge_index = generate_edge_index(x.shape[0], relations.shape[0])
+        out = self.forward(x, edge_index, relations, injection_node, node_batch, injection_node_batch, sigmoid, allow_intersection=True)
+        adj = out.view(relations.shape[0], x.shape[0], x.shape[0])
+        return adj
+    
+    def triple_emb(self, x, edge_index, relations):
+        inputs = torch.hstack([
+            relations[edge_index[1]],
+            x[edge_index[0]],
+            x[edge_index[2]]
+        ])
+        return self.lin_emb(inputs)
+    
+    def retrieve(self, triple_emb, injection_node, triple_batch, injection_node_batch, sigmoid=False):
+        result = torch.mm(triple_emb, injection_node.t())
+        result = self.mean(result.t(), index=injection_node_batch)
+        result = result.t()
+        result = result[torch.arange(0, result.shape[0]), triple_batch]
+        result = result.unsqueeze(1)
+        return result.sigmoid() if sigmoid else result

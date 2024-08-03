@@ -13,7 +13,7 @@ python sg_train.py --data-dir ./data/subgraph-gen/webnlg \
                     --head 1 \
                     --epoch 5 \
                     --bsize 8 \
-                    --lr 0.0001 \
+                    --lr 0.001 \
                     --decay 0.5 \
                     --estop \
                     --estop-patience 3 \
