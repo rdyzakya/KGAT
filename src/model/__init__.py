@@ -55,7 +55,7 @@ class MultiheadGAE(BaseModel):
                  subgraph=subgraph,
                  **kwargs)
         
-        self.injector = Injector(edge_dim=in_channels)
+        # self.injector = Injector(edge_dim=in_channels)
 
         self.encoder = GATv2Encoder(
             in_channels=in_channels,
@@ -71,9 +71,9 @@ class MultiheadGAE(BaseModel):
             **kwargs
         )
 
-        self.detach = Detach()
+        # self.detach = Detach()
         
-        self.relation_mlp = MLP(in_channels=in_channels, hidden_channels=hidden_channels, out_channels=out_channels, num_layers=num_layers)
+        # self.relation_mlp = MLP(in_channels=in_channels, hidden_channels=hidden_channels, out_channels=out_channels, num_layers=num_layers)
 
         self.link_decoder = TripleRetrieval(num_features=self.encoder.out_channels) if subgraph else \
             Sequential(Linear(in_channels=self.encoder.out_channels * 3, out_channels=self.encoder.out_channels, bias=False, weight_initializer="glorot"),
@@ -93,18 +93,18 @@ class MultiheadGAE(BaseModel):
                 all=False, 
                 sigmoid=False):
         
-        if self.subgraph:
-            (x, 
-             edge_index, 
-             relations, 
-             x_is_injected, 
-             edge_is_injected, 
-             relations_is_injected) = self.injector(x, 
-                                                     edge_index, 
-                                                     relations, 
-                                                     injection_node, 
-                                                     node_batch=node_batch, 
-                                                     injection_node_batch=injection_node_batch)
+        # if self.subgraph:
+        #     (x, 
+        #      edge_index, 
+        #      relations, 
+        #      x_is_injected, 
+        #      edge_is_injected, 
+        #      relations_is_injected) = self.injector(x, 
+        #                                              edge_index, 
+        #                                              relations, 
+        #                                              injection_node, 
+        #                                              node_batch=node_batch, 
+        #                                              injection_node_batch=injection_node_batch)
            
         x = self.encoder(x, edge_index, relations, return_attention_weights=return_attention_weights)
         
@@ -114,16 +114,16 @@ class MultiheadGAE(BaseModel):
             all_adj = None
             all_alpha = None
         
-        if self.subgraph:
-            (x, edge_index, relations,
-             injection_node, _, injection_relation) = self.detach(x, 
-                                                                edge_index, 
-                                                                relations, 
-                                                                x_is_injected, 
-                                                                edge_is_injected, 
-                                                                relations_is_injected)
+        # if self.subgraph:
+        #     (x, edge_index, relations,
+        #      injection_node, _, injection_relation) = self.detach(x, 
+        #                                                         edge_index, 
+        #                                                         relations, 
+        #                                                         x_is_injected, 
+        #                                                         edge_is_injected, 
+        #                                                         relations_is_injected)
         
-        relations = self.relation_mlp(relations)
+        # relations = self.relation_mlp(relations)
                 
         # injection_node = self.query_mlp(injection_node)
 
