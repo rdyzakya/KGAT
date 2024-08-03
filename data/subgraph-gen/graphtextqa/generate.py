@@ -146,6 +146,6 @@ pd.DataFrame(test_pair).to_json("test.jsonl", orient="records", lines=True)
 
 alias = [None for i in range(len(all_qids))]
 for k, v in all_qids.items():
-    alias[v] = {"id" : k, "alias_idx" : entities_alias[k]}
+    alias[v] = {"id" : k, "alias_idx" : [all_entities[el] for el in entities_alias[k]]}
 
 pd.DataFrame(alias).to_json("entities_alias.jsonl", orient="records", lines=True)
