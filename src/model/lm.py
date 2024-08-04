@@ -27,18 +27,33 @@ class LanguageModelForLMKBC(ABC):
         for param in self.parameters():
             param.requires_grad = False
     
-    def text_embedding(self, input_ids, attention_mask, index=None):
-        out = self.backbone(input_ids=input_ids, attention_mask=attention_mask, output_hidden_states=True)
-        # hidden_states = out.hidden_states[index] # len(hidden_states) == self.config.n_layer + 1
-
+    def text_embedding(self, input_ids, attention_mask, index=None, n_tokens=1):
         # get last token hidden state, as how any left-to-right model with seq-cls head do
         sequence_lengths = torch.eq(input_ids, self.config.pad_token_id).int().argmax(-1) - 1
         sequence_lengths = sequence_lengths % input_ids.shape[-1]
-        # sequence_lengths = sequence_lengths.to(hidden_states.device)
-
+        
         batch_size = input_ids.shape[0]
-        # pooled_hidden_states = hidden_states[torch.arange(batch_size, device=hidden_states.device), sequence_lengths]
-        pooled_hidden_states = tuple(hidden_states[torch.arange(batch_size, device=hidden_states.device), sequence_lengths.to(hidden_states.device)] for hidden_states in out.hidden_states[1:])
+
+        inputs_embeds = self.embeddings(input_ids)
+
+        current_inputs_embeds = inputs_embeds.clone()
+        current_attention_mask = attention_mask.clone()
+        all_index = []
+        for i in range(n_tokens):
+            out = self.backbone(inputs_embeds=current_inputs_embeds, attention_mask=current_attention_mask, output_hidden_states=True)
+            last_hidden_state = out[0]
+
+            all_index.append(sequence_lengths + i)
+
+            added_inputs_embeds = last_hidden_state[torch.arange(batch_size, device=last_hidden_state.device), torch.stack(all_index).to(last_hidden_state.device)]
+            added_inputs_embeds = added_inputs_embeds.transpose(0,1)
+
+            current_inputs_embeds = torch.hstack([current_inputs_embeds, added_inputs_embeds])
+            current_attention_mask = torch.hstack([current_attention_mask, torch.ones(batch_size, 1, device=current_attention_mask.device)])
+
+        pooled_hidden_states = tuple(
+            hidden_states[torch.arange(batch_size, device=hidden_states.device),  torch.stack(all_index).to(hidden_states.device)].view(batch_size, -1)
+            for hidden_states in out.hidden_states[1:])
 
         return pooled_hidden_states if index is None else pooled_hidden_states[index]
     

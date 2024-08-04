@@ -10,6 +10,7 @@ def init_args():
     parser.add_argument("--score", action="store_true")
     parser.add_argument("-o", "--out", type=str, default=".")
     parser.add_argument("--index", type=int)
+    parser.add_argument("--n-token", type=int, default=1)
     
 
     args = parser.parse_args()
@@ -80,13 +81,13 @@ if __name__ == "__main__":
         tokenized_ke = tokenizer(ke_text[i:i+args.bsize], padding=True, return_tensors="pt").to(model.device)
 
         with torch.no_grad():
-            out_baseline = model.text_embedding(index=args.index, **tokenized_baseline) # N_LAYER * N_TEXT * N_DIM
-            out_eol = model.text_embedding(index=args.index, **tokenized_eol)
-            out_pcot = model.text_embedding(index=args.index, **tokenized_pcot)
-            out_ke = model.text_embedding(index=args.index, **tokenized_ke)
+            out_baseline = model.text_embedding(index=args.index, n_tokens=args.n_token, **tokenized_baseline) # N_LAYER * N_TEXT * N_DIM
+            out_eol = model.text_embedding(index=args.index, n_tokens=args.n_token, **tokenized_eol)
+            out_pcot = model.text_embedding(index=args.index, n_tokens=args.n_token, **tokenized_pcot)
+            out_ke = model.text_embedding(index=args.index, n_tokens=args.n_token, **tokenized_ke)
 
             if args.index:
-                if args.index < 0:
+                while args.index < 0:
                     args.index = len(out_baseline) + args.index
 
         if not args.index:
