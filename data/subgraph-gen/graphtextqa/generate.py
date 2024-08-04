@@ -2,6 +2,42 @@ import pandas as pd
 from tqdm import tqdm
 import json
 import requests
+import re
+
+unk = 0
+
+def get_wikidata_id(query):
+    search_url = "https://www.wikidata.org/w/api.php"
+    params = {
+        "action": "wbsearchentities",
+        "language": "en",
+        "format": "json",
+        "search": query
+    }
+    
+    response = requests.get(search_url, params=params)
+    
+    if response.status_code == 200:
+        data = response.json()
+        if 'search' in data:
+            if len(data['search']) > 0:
+                return data['search'][0]['id']
+    return None
+
+def my_disambiguation(input_str):
+    # Check if the string is an integer
+    try:
+        return int(input_str)
+    except ValueError:
+        pass
+
+    # If not an integer, try to get the Wikidata ID
+    wikidata_id = get_wikidata_id(input_str)
+    if wikidata_id:
+        return wikidata_id
+    
+    # If all else fails, return the original string
+    return input_str
 
 def get_wikidata_entity_name(entity_id):
     url = "https://www.wikidata.org/w/api.php"
@@ -22,6 +58,8 @@ def get_wikidata_entity_name(entity_id):
     return None
 
 def process(df):
+    global unk
+
     pair = []
     for i, row in tqdm(df.iterrows()):
         text = row["question"]
@@ -52,8 +90,7 @@ def process(df):
                 entities[i] = e
                 if e not in all_entities:
                     all_entities[e] = len(all_entities)
-        # if is_continue:
-        #     continue
+        
         for eid, e in zip(entity_ids, entities):
             if e is None:
                 continue
@@ -90,6 +127,26 @@ def process(df):
             if t not in all_triples:
                 all_triples[t] = len(all_triples)
             pair_entry["triple"].append(all_triples[t])
+        
+        answers = row["answers"]
+
+        for a in answers:
+            qid = my_disambiguation(a)
+            
+            if not re.match(r"Q\d+", qid):
+                qid = f"UNK_{unk}"
+                unk += 1
+            if qid not in all_qids:
+                all_qids[qid] = len(all_qids)
+            if qid not in entities_alias:
+                entities_alias[qid] = []
+            if a not in entities_alias[qid]:
+                entities_alias[qid].append(a)
+            if a not in entity2qid:
+                entity2qid[a] = qid
+            
+            if all_qids[qid] not in pair_entry["objects"]:
+                pair_entry["objects"].append(all_qids[qid])
         
         if not is_null:
             pair.append(pair_entry)
