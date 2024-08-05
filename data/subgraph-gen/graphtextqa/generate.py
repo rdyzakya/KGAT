@@ -75,7 +75,7 @@ def process(df):
             "text" : [],
             "subject" : None,
             "relation" : None,
-            "objects" : [],
+            "objects" : row["answers"],
             "triple" : [],
         }
 
@@ -83,7 +83,12 @@ def process(df):
         # entities
         for i, e in enumerate(entities):
             if e is None:
-                e = get_wikidata_entity_name(entity_ids[i])
+                while True:
+                    try:
+                        e = get_wikidata_entity_name(entity_ids[i])
+                        break
+                    except requests.exceptions.ConnectTimeout:
+                        pass
             if e is None:
                 is_null = True
             else:
@@ -128,13 +133,17 @@ def process(df):
                 all_triples[t] = len(all_triples)
             pair_entry["triple"].append(all_triples[t])
         
-        answers = row["answers"]
+        if not is_null:
+            pair.append(pair_entry)
 
-        for a in answers:
-            qid = my_disambiguation(a)
-            
-            if not re.match(r"Q\d+", qid):
-                qid = f"UNK_{unk}"
+    for i, row in tqdm(enumerate(pair)):
+        answers = row["objects"]
+        for j, a in enumerate(answers):
+            if a not in all_entities:
+                all_entities[a] = len(all_entities)
+            qid = entity2qid.get(a, f"UNK_{unk}")
+            if a not in entity2qid:
+                entity2qid[a] = qid
                 unk += 1
             if qid not in all_qids:
                 all_qids[qid] = len(all_qids)
@@ -142,14 +151,7 @@ def process(df):
                 entities_alias[qid] = []
             if a not in entities_alias[qid]:
                 entities_alias[qid].append(a)
-            if a not in entity2qid:
-                entity2qid[a] = qid
-            
-            if all_qids[qid] not in pair_entry["objects"]:
-                pair_entry["objects"].append(all_qids[qid])
-        
-        if not is_null:
-            pair.append(pair_entry)
+            pair[i]["objects"][j] = all_qids[entity2qid[a]]
     return pair
 
 train = pd.read_json("./raw/train.jsonl", lines=True)

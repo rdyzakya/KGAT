@@ -76,11 +76,11 @@ dump_texts = '\n'.join(dump_texts)
 dump_entities = '\n'.join(dump_entities)
 dump_relations = '\n'.join(dump_relations)
 
-with open("texts.txt", 'w') as fp:
+with open("texts.txt", 'w', encoding="utf-8") as fp:
     fp.write(dump_texts)
-with open("entities.txt", 'w') as fp:
+with open("entities.txt", 'w', encoding="utf-8") as fp:
     fp.write(dump_entities)
-with open("relations.txt", 'w') as fp:
+with open("relations.txt", 'w', encoding="utf-8") as fp:
     fp.write(dump_relations)
 
 with open("triples.json", 'w') as fp:
