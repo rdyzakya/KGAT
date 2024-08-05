@@ -108,7 +108,7 @@ if __name__ == "__main__":
 
     base_filename = f"{os.path.split(args.txt)[-1].replace('.txt','')}.{args.model.replace('/','_')}"
 
-    filename = f"{base_filename}.tensor" if not args.index else f"{base_filename}.{args.index}.tensor"
+    filename = f"{base_filename}.n_token={args.n_token}.tensor" if not args.index else f"{base_filename}.n_token={args.n_token}.index={args.index}.tensor"
 
     all_tensor = {
         "baseline" : baseline_tensor.squeeze(),

@@ -4,8 +4,8 @@ from model import (
     Detach,
     GATv2Encoder,
     InnerOuterProductDecoder,
-    NodeClassifierDecoder,
-    MultiheadGAE,
+    Retrieval,
+    MyModel,
     AttentionalAggregation,
     SoftmaxAggregation,
     GraphPrefix,
@@ -139,7 +139,7 @@ class ModelTestCase(unittest.TestCase):
         node_batch = torch.randint(0, N_BATCH, (N_NODE,))
         injection_node_batch = torch.arange(0,N_INJECTION_NODE)
 
-        mhgae = MultiheadGAE(in_channels=DIM, hidden_channels=H_DIM, num_layers=N_LAYERS, heads=N_HEAD, subgraph=True)
+        mhgae = MyModel(in_channels=DIM, hidden_channels=H_DIM, num_layers=N_LAYERS, heads=N_HEAD, subgraph=True)
 
         z, all_adj, all_alpha, out_link, out_node = mhgae.forward(x, 
                                                         edge_index, 
@@ -175,7 +175,7 @@ class ModelTestCase(unittest.TestCase):
 
         x = torch.randn(N_NODE, DIM)
 
-        node_decoder = NodeClassifierDecoder()
+        node_decoder = Retrieval()
 
         gprefix = GraphPrefix(num_features=DIM, hidden_channels=H_DIM, num_layers=N_LAYERS, n_tokens=N_TOKENS)
 

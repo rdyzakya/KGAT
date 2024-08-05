@@ -57,7 +57,7 @@ if args.gpu:
 from torch_geometric import seed_everything
 from data import DSBuilder, LMKBCDataset, LMKBCCollator
 from torch.utils.data import DataLoader
-from model import MultiheadGAE, AutoModelForLMKBC
+from model import MyModel, AutoModelForLMKBC
 from transformers import AutoTokenizer
 import torch
 from tqdm import tqdm
@@ -252,7 +252,7 @@ if __name__ == "__main__":
     ## MODEL
     n_features = train_ds.entities_attr.shape[1]
     hidden_channels = args.hidden or 2 * n_features
-    model = MultiheadGAE(
+    model = MyModel(
         in_channels=train_ds.entities_attr.shape[1], 
         hidden_channels=hidden_channels, 
         num_layers=args.layer, 

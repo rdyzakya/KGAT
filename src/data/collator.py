@@ -16,6 +16,7 @@ class SubgraphGenCollator:
             # Y
             link_cls_label,
             node_cls_label,
+            obj_alias_idx
         ) = zip(*batch)
 
         node_batch = []
@@ -80,16 +81,31 @@ class SubgraphGenCollator:
 
         if (src_batch != tgt_batch).any():
             raise ValueError(f"Intersection between batch, there are connection between different graph \n src_batch : {src_batch} \n tgt_batch : {tgt_batch}")
+        
+        
+        objects_batch = []
+        for i, el in enumerate(obj_alias_idx):
+            objects_batch.append(
+                torch.full((len(el), ), i)
+            )
+        objects_batch = torch.cat(objects_batch) if len(objects_batch) > 0 else torch.tensor([])
+
+        obj_alias_idx = np.concatenate(obj_alias_idx)
+        obj_alias_idx = obj_alias_idx.flatten() # numpy array
+        obj_idx = [np.random.choice(el) if self.alias_idx is None else el[self.alias_idx] for el in self.ds.entities_alias.loc[obj_alias_idx, "alias_idx"]]
+
 
         return {
             "x" : self.ds.entities_attr[nodes_idx],
             "edge_index" : edge_index,
             "relations" : self.ds.relations_attr[relations_idx],
-            "injection_node" : self.ds.texts_attr[list(text_idx)],
+            "query" : self.ds.texts_attr[list(text_idx)],
+            "values" : self.ds.entities_attr[obj_idx] if len(obj_idx) > 0 else None,
             "node_batch" : node_batch,
-            "injection_node_batch" : torch.arange(0, len(text_idx)),
+            "query_batch" : torch.arange(0, len(text_idx)),
+            "values_batch" : objects_batch if len(obj_idx) > 0 else None,
             "link_cls_label" : link_cls_label,
-            "node_cls_label" : node_cls_label
+            "node_cls_label" : node_cls_label,
         }
 
 class LMKBCCollator:

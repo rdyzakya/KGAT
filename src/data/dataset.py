@@ -94,6 +94,7 @@ class SubgraphGenDataset(KGATDataset):
                 relations_idx = row["reference_relation"] # relations
                 link_cls_label = row["link_cls_label"]
                 node_cls_label = row["node_cls_label"]
+                obj_alias_idx = row["objects"]
                 result.append((
                     # X
                     text_idx,
@@ -102,7 +103,8 @@ class SubgraphGenDataset(KGATDataset):
                     relations_idx,
                     # Y
                     link_cls_label,
-                    node_cls_label
+                    node_cls_label,
+                    obj_alias_idx
                 ))
         self.data = result
         return result
@@ -118,9 +120,12 @@ class SubgraphGenDataset(KGATDataset):
         relations_idx,
         # Y
         link_cls_label,
-        node_cls_label) =  self.data[idx]
+        node_cls_label,
+        obj_alias_idx) =  self.data[idx]
         
         nodes_idx = [np.random.choice(el) if alias_idx is None else el[alias_idx] for el in self.entities_alias.loc[nodes_alias_idx, "alias_idx"]]
+
+        obj_idx = [np.random.choice(el) if alias_idx is None else el[alias_idx] for el in self.entities_alias.loc[obj_alias_idx, "alias_idx"]]
 
         triples = [self.triples[ti] for ti in triples_idx]
 
@@ -142,11 +147,13 @@ class SubgraphGenDataset(KGATDataset):
             "x" : self.entities_attr[nodes_idx],
             "edge_index" : edge_index,
             "relations" : self.relations_attr[relations_idx],
-            "injection_node" : self.texts_attr[text_idx].unsqueeze(0),
+            "query" : self.texts_attr[text_idx].unsqueeze(0),
+            "values" : self.entities_attr[obj_idx] if len(obj_idx) > 0 else None,
             "node_batch" : torch.zeros(len(nodes_idx)).int(),
-            "injection_node_batch" : torch.zeros(1).int(),
+            "query_batch" : torch.zeros(1).int(),
+            "values_batch" : torch.zeros(len(obj_idx)).int() if len(obj_idx) > 0 else None,
             "link_cls_label" : torch.tensor(link_cls_label),
-            "node_cls_label" : torch.tensor(node_cls_label)
+            "node_cls_label" : torch.tensor(node_cls_label),
         }
 
 

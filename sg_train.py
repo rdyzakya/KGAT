@@ -18,6 +18,7 @@ def init_args():
     parser.add_argument("--lm", type=str, help="HF lm model name or path", default="openai-community/gpt2")
     parser.add_argument("--sentence-emb-idx", type=int, help="Sentence embedding index (layer index)")
     parser.add_argument("--alias-idx", type=int, help="Alias index (some entity have several aliases, affect the entity node attribute)")
+    parser.add_argument("--n-token", type=int, default=1)
 
     # MODEL RELATED
     parser.add_argument("--hidden", type=int, help="Hidden channel dimension") # based on gatv2 paper, for text embedding features, using 2 * input dim, but remember there is head
@@ -29,7 +30,6 @@ def init_args():
     parser.add_argument("--bsize", type=int, help="Batch size", default=8)
     parser.add_argument("--lr", type=float, help="Learning rate", default=1e-3) # based on default adam, also mentioned in gatv2 paper
     parser.add_argument("--decay", type=float, help="Weight decay", default=0.5) # based on gatv2 paper
-    parser.add_argument("--all", action="store_true", help="Return all score in the adjacency matrix if set, else only the links from edge_index")
     
     parser.add_argument("--estop", action="store_true", help="Perform early stopping")
     parser.add_argument("--estop-patience", type=int, help="Early stopping patience", default=3)
@@ -57,7 +57,7 @@ if args.gpu:
 from torch_geometric import seed_everything
 from data import DSBuilder, SubgraphGenDataset, SubgraphGenCollator
 from torch.utils.data import DataLoader
-from model import MultiheadGAE
+from model import MyModel
 import torch
 from tqdm import tqdm
 from sklearn.metrics import classification_report
@@ -78,95 +78,97 @@ def loop(model, dataloader, device, args, optimizer, criterion, pbar, val=False)
         model.eval()
     else:
         model.train()
-    
-    # all_out_node = []
-    all_out_link = []
 
-    # label_node = []
-    label_link = []
+    qr_out = []
+    qr_labels = []
+    rv_out = []
+    qv_out = []
     for batch in dataloader:
         for k, v in batch.items():
             batch[k] = v.to(device)
         link_cls_label = batch.pop("link_cls_label")
         node_cls_label = batch.pop("node_cls_label")
 
+        link_cls_label = link_cls_label.float()
+
         if val:
             with torch.no_grad():
-                z, all_adj, all_alpha, out_link = model.forward(all=args.all, 
-                                                                            sigmoid=False, 
-                                                                            return_attention_weights=False, 
-                                                                            **batch)
+                out = model.forward(sigmoid=False, 
+                                    allow_intersection=False, 
+                                    **batch)
         else:
-            z, all_adj, all_alpha, out_link = model.forward(all=args.all, 
-                                                                        sigmoid=False, 
-                                                                        return_attention_weights=False, 
-                                                                        **batch)
+            out = model.forward(sigmoid=False, 
+                                allow_intersection=False, 
+                                **batch)
         
-        # out_node = out_node.view(-1)
-        out_link = out_link.view(-1)
-
-        node_cls_label = node_cls_label.float().view(-1)
-        link_cls_label = create_adj_label(batch["x"].shape[0], batch["relations"].shape[0], batch["edge_index"], link_label=link_cls_label).view(-1) if args.all else link_cls_label.float().view(-1)
+        if len(out) > 1:
+            query_reference_out, reference_values_out, query_values_out = out
+            reference_values_out = reference_values_out.view(-1)
+            query_values_out= query_values_out.view(-1)
+        else:
+            query_reference_out = out
+        
+        query_reference_out = query_reference_out.view(-1)
 
         if not val:
-            # loss_node = criterion(out_node, 
-            #                         node_cls_label)
-            loss_link = criterion(
-                out_link,
+            qr_loss = criterion(
+                query_reference_out,
                 link_cls_label
             )
 
-            # loss = loss_node + loss_link
-            loss = loss_link
+            # kl_loss = model.vgae.kl_loss()
+
+            loss = qr_loss #+ kl_loss
+
+            if len(out) > 1:
+                rv_loss = criterion(
+                    reference_values_out,
+                    link_cls_label
+                )
+
+                qv_loss = criterion(
+                    query_values_out,
+                    torch.ones_like(query_values_out)
+                )
+
+                loss = loss + rv_loss + qv_loss
 
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
         pbar.update()
 
-        # all_out_node.append(out_node.detach().cpu())
-        all_out_link.append(out_link.detach().cpu())
+        qr_out.append(query_reference_out.detach().cpu())
+        qr_labels.append(link_cls_label.detach().cpu())
 
-        # label_node.append(node_cls_label.cpu())
-        label_link.append(link_cls_label.cpu())
+        if len(out) > 1:
+            rv_out.append(reference_values_out.detach().cpu())
+            qv_out.append(query_values_out.detach().cpu())
     
     end_time = time.time()
 
     entry["time"] = end_time - start_time
 
-    # all_out_node = torch.cat(all_out_node)
-    all_out_link = torch.cat(all_out_link)
+    qr_out = torch.cat(qr_out)
+    qr_labels = torch.cat(qr_labels)
 
-    # label_node = torch.cat(label_node)
-    label_link = torch.cat(label_link)
-
-    # node_loss = criterion(all_out_node, label_node).item()
-    link_loss = criterion(all_out_link, label_link).item()
-
-    # entry["node_loss"] = node_loss
-    entry["link_loss"] = link_loss
-
-    # compute metrics
-    # report_train_node = classification_report(
-    #     y_pred=all_out_node.sigmoid().round(),
-    #     y_true=label_node.int(),
-    #     output_dict=True
-    # )
-    report_train_link = classification_report(
-        y_pred=all_out_link.sigmoid().round(),
-        y_true=label_link.int(),
+    qr_report = classification_report(
+        y_pred=qr_out.sigmoid().round(),
+        y_true=qr_labels.int(),
         output_dict=True
     )
 
-    # entry["node_accuracy"] = report_train_node["accuracy"]
-    # entry["node_precision"] = report_train_node["macro avg"]["precision"]
-    # entry["node_recall"] = report_train_node["macro avg"]["recall"]
-    # entry["node_f1"] = report_train_node["macro avg"]["f1-score"]
+    entry["accuracy"] = qr_report["accuracy"]
+    entry["precision"] = qr_report["macro avg"]["precision"]
+    entry["recall"] = qr_report["macro avg"]["recall"]
+    entry["f1"] = qr_report["macro avg"]["f1-score"]
+    entry["qr_loss"] = criterion(qr_out, qr_labels).item()
 
-    entry["link_accuracy"] = report_train_link["accuracy"]
-    entry["link_precision"] = report_train_link["macro avg"]["precision"]
-    entry["link_recall"] = report_train_link["macro avg"]["recall"]
-    entry["link_f1"] = report_train_link["macro avg"]["f1-score"]
+    if len(rv_out) > 0 and len(qv_out) > 0:
+        rv_out = torch.cat(rv_out)
+        qv_out = torch.cat(qv_out)
+        entry["rv_loss"] = criterion(rv_out, qr_labels).item()
+        entry["qv_loss"] = criterion(qv_out, torch.ones_like(qv_out)).item()
 
     return entry
 
@@ -201,14 +203,14 @@ if __name__ == "__main__":
         load=bool(args.load_items)
     )
 
-    texts_tensor_path = os.path.join(args.data_dir, f"texts.{args.lm.replace('/', '_')}.{args.sentence_emb_idx}.tensor")
-    texts_tensor_path = texts_tensor_path if os.path.exists(texts_tensor_path) else os.path.join(args.data_dir, f"texts.{args.lm.replace('/', '_')}.tensor")
+    texts_tensor_path = os.path.join(args.data_dir, f"texts.{args.lm.replace('/', '_')}.n_token={args.n_token}.index={args.sentence_emb_idx}.tensor")
+    texts_tensor_path = texts_tensor_path if os.path.exists(texts_tensor_path) else os.path.join(args.data_dir, f"texts.{args.lm.replace('/', '_')}.n_token={args.n_token}.tensor")
 
-    entities_tensor_path = os.path.join(args.data_dir, f"entities.{args.lm.replace('/', '_')}.{args.sentence_emb_idx}.tensor")
-    entities_tensor_path = entities_tensor_path if os.path.exists(entities_tensor_path) else os.path.join(args.data_dir, f"entities.{args.lm.replace('/', '_')}.tensor")
+    entities_tensor_path = os.path.join(args.data_dir, f"entities.{args.lm.replace('/', '_')}.n_token={args.n_token}.index={args.sentence_emb_idx}.tensor")
+    entities_tensor_path = entities_tensor_path if os.path.exists(entities_tensor_path) else os.path.join(args.data_dir, f"entities.n_token={args.n_token}.tensor")
 
-    relations_tensor_path = os.path.join(args.data_dir, f"relations.{args.lm.replace('/', '_')}.{args.sentence_emb_idx}.tensor")
-    relations_tensor_path = relations_tensor_path if os.path.exists(relations_tensor_path) else os.path.join(args.data_dir, f"relations.{args.lm.replace('/', '_')}.tensor")
+    relations_tensor_path = os.path.join(args.data_dir, f"relations.{args.lm.replace('/', '_')}.n_token={args.n_token}.index={args.sentence_emb_idx}.tensor")
+    relations_tensor_path = relations_tensor_path if os.path.exists(relations_tensor_path) else os.path.join(args.data_dir, f"relations.n_token={args.n_token}.tensor")
 
     train_ds = SubgraphGenDataset(
         train_builder,
@@ -252,7 +254,7 @@ if __name__ == "__main__":
     ## MODEL
     n_features = train_ds.entities_attr.shape[1]
     hidden_channels = args.hidden or 2 * n_features
-    model = MultiheadGAE(
+    model = MyModel(
         in_channels=train_ds.entities_attr.shape[1], 
         hidden_channels=hidden_channels, 
         num_layers=args.layer, 
@@ -263,7 +265,6 @@ if __name__ == "__main__":
         add_self_loops=True, 
         bias=True, 
         share_weights=False,
-        subgraph=True,
     )
     
     ## TRAIN LOOP
