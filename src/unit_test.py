@@ -4,7 +4,7 @@ from model import (
     Detach,
     GATv2Encoder,
     InnerOuterProductDecoder,
-    Retrieval,
+    KGATRetrieval,
     MyModel,
     AttentionalAggregation,
     SoftmaxAggregation,
@@ -175,7 +175,7 @@ class ModelTestCase(unittest.TestCase):
 
         x = torch.randn(N_NODE, DIM)
 
-        node_decoder = Retrieval()
+        node_decoder = KGATRetrieval()
 
         gprefix = GraphPrefix(num_features=DIM, hidden_channels=H_DIM, num_layers=N_LAYERS, n_tokens=N_TOKENS)
 

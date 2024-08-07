@@ -21,9 +21,13 @@ def init_args():
     parser.add_argument("--n-token", type=int, default=1)
 
     # MODEL RELATED
-    parser.add_argument("--hidden", type=int, help="Hidden channel dimension") # based on gatv2 paper, for text embedding features, using 2 * input dim, but remember there is head
-    parser.add_argument("--layer", type=int, help="Number of layers (1..)", default=2) # based on VGAE paper and training details in GATv2
-    parser.add_argument("--head", type=int, help="Number of attention heads", default=1) # based on gatv2 paper
+    parser.add_argument("--d-ff", type=int, help="FFN dimension", default=2048)
+    parser.add_argument("--head", type=int, help="Number of attention heads", default=1)
+    parser.add_argument("--dropout", type=float, help="Dropout value", default=0.0)
+    parser.add_argument("--beta", action="store_true")
+    parser.add_argument("--bias", action="store_true")
+    parser.add_argument("--relation", action="store_true")
+    parser.add_argument("--n-block", type=int, default=1)
 
     # TRAINING RELATED
     parser.add_argument("--epoch", type=int, help="Epoch", default=10)
@@ -57,7 +61,7 @@ if args.gpu:
 from torch_geometric import seed_everything
 from data import DSBuilder, SubgraphGenDataset, SubgraphGenCollator
 from torch.utils.data import DataLoader
-from model import MyModel
+from model import KGATModel
 import torch
 from tqdm import tqdm
 from sklearn.metrics import classification_report
@@ -252,20 +256,14 @@ if __name__ == "__main__":
     val_dataloader = DataLoader(val_ds, batch_size=args.bsize, shuffle=False, collate_fn=val_collator)
     
     ## MODEL
-    n_features = train_ds.entities_attr.shape[1]
-    hidden_channels = args.hidden or 2 * n_features
-    model = MyModel(
-        in_channels=train_ds.entities_attr.shape[1], 
-        hidden_channels=hidden_channels, 
-        num_layers=args.layer, 
-        heads=args.head, 
-        out_channels=None, 
-        negative_slope=0.2, # based on the gat v1 paper
-        dropout=0.0, 
-        add_self_loops=True, 
-        bias=True, 
-        share_weights=False,
-    )
+    model = KGATModel(d_model=train_ds.entities_attr.shape[1],
+                    d_ff=args.d_ff,
+                    heads=args.head,
+                    beta=args.beta,
+                    dropout=args.dropout,
+                    bias=args.bias,
+                    transform_relation=args.relation,
+                    num_block=args.n_block,)
     
     ## TRAIN LOOP
     os.makedirs(args.out, exist_ok=True)

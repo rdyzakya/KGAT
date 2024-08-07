@@ -8,13 +8,16 @@ python sg_train.py --data-dir ./data/subgraph-gen/graphtextqa \
                     --lm openai-community/gpt2 \
                     --sentence-emb-idx 11 \
                     --alias-idx 0 \
-                    --hidden 768 \
-                    --layer 2 \
+                    --d-ff 768 \
                     --head 1 \
+                    --n-block 2 \
+                    --bias \
+                    --relation \
+                    --dropout 0.3 \
                     --epoch 3 \
                     --bsize 8 \
                     --lr 0.001 \
-                    --decay 0.5 \
+                    --decay 0.0005 \
                     --estop \
                     --estop-patience 3 \
                     --estop-delta 0.05 \
@@ -24,6 +27,7 @@ python sg_train.py --data-dir ./data/subgraph-gen/graphtextqa \
                     --test \
                     --seed 42 \
                     --load-items
+                    # --beta \
                     # --super-set
                     # --all
                     # --gpu 0,1,2,3

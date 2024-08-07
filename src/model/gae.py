@@ -1,237 +1,144 @@
-from torch_geometric.nn import GATv2Conv
+from torch_geometric.nn import TransformerConv
 from torch_geometric.nn.dense import Linear
 from torch_geometric.nn.aggr import MeanAggregation
 import torch
-# from torch_geometric.nn.dense import Linear
+from torch.nn import ReLU, Sequential, LayerNorm, ModuleList
+from torch_geometric.nn.dense import Linear
 from .base_model import BaseModel
-from itertools import product
 
-class ReLUGATv2(BaseModel):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        in_channels = kwargs.get("in_channels")
-        out_channels = kwargs.get("out_channels")
-        heads = kwargs.get("heads")
-        bias = kwargs.get("bias")
-        self.lin = Linear(in_channels=in_channels, out_channels=out_channels*heads, bias=bias, weight_initializer="glorot")
-        self.gatv2 = GATv2Conv(*args, **kwargs)
-
-    def forward(self, *args, **kwargs):
-        return_attention_weights = kwargs.get("return_attention_weights")
-        x = args[0]
-        out = self.gatv2.forward(*args, **kwargs)
-        if return_attention_weights:
-            z, (adj, alpha) = out
-            return z.relu() + self.lin(x), (adj, alpha)
-            # return z.relu(), (adj, alpha)
-        else:
-            z = out
-            return z.relu() + self.lin(x)
-            # return z.relu()
-
-class GATv2Sequential(torch.nn.Sequential):
-    def forward(self, x, edge_index, edge_attr, return_attention_weights=None):
-        if not return_attention_weights:
-            return_attention_weights = None
-        all_adj = tuple()
-        all_alpha = tuple()
-        for module in self._modules.values():
-            if return_attention_weights:
-                x, (adj, alpha) = module(x, edge_index, edge_attr, return_attention_weights=return_attention_weights)
-                all_adj = all_adj + (adj,)
-                all_alpha = all_alpha + (alpha,)
-            else:
-                x = module(x, edge_index, edge_attr, return_attention_weights=return_attention_weights)
-        
-        if return_attention_weights:
-            return x, (all_adj, all_alpha)
-        return x
-
-class GATv2Encoder(BaseModel): # using this, because models.GAT don't provide forward method using attention weights
-    def __init__(self, 
-                 in_channels, 
-                 hidden_channels, 
-                 num_layers, 
-                 heads, 
-                 out_channels=None, 
-                 negative_slope=0.2, 
-                 dropout=0.0, 
-                 add_self_loops=True, 
-                 bias=True, 
-                 share_weights=False,
+class KGATEncoderBlock(BaseModel):
+    def __init__(self,
+                 d_model,
+                 d_ff,
+                 heads=1,
+                 beta=False,
+                 dropout=0.0,
+                 bias=True,
+                 transform_relation=False,
                  **kwargs):
-        out_channels = out_channels or in_channels
-        super().__init__(in_channels=in_channels, 
-                 hidden_channels=hidden_channels, 
-                 num_layers=num_layers, 
-                 heads=heads, 
-                 out_channels=out_channels, 
-                 negative_slope=negative_slope, 
-                 dropout=dropout, 
-                 add_self_loops=add_self_loops, 
-                 bias=bias, 
-                 share_weights=share_weights,
-                 **kwargs)
+        super().__init__(
+            d_model=d_model,
+            d_ff=d_ff,
+            heads=heads,
+            beta=beta,
+            dropout=dropout,
+            bias=bias,
+            transform_relation=transform_relation,
+            **kwargs
+        )
+        d_v = d_model // heads
+        self.att_gnn = TransformerConv(
+            in_channels=d_model,
+            out_channels=d_v,
+            heads=heads,
+            concat=True,
+            beta=beta,
+            dropout=dropout,
+            edge_dim=d_model,
+            bias=bias,
+            root_weight=True,
+            **kwargs
+        )
+        self.lin_o = Linear(in_channels=d_v*heads, out_channels=d_model)
+        self.layer_norm1 = LayerNorm(normalized_shape=d_model)
+        self.ffn = Sequential(
+            Linear(in_channels=d_model, out_channels=d_ff),
+            ReLU(),
+            Linear(in_channels=d_ff, out_channels=d_model)
+        )
+        self.layer_norm2 = LayerNorm(normalized_shape=d_model)
+    
+    def forward(self, x, edge_index, relations, return_attention_weights=False):
+        edge_attr = relations[edge_index[1]]
+        ei = edge_index[[0,2]].long()
+
+        out = self.att_gnn(x, ei, edge_attr, return_attention_weights=return_attention_weights if return_attention_weights else None)
+        if return_attention_weights:
+            out, (ei, alpha) = out
         
-        self.self_loop_edge_attr = torch.nn.parameter.Parameter(
-            torch.randn(in_channels)
+        out = self.lin_o(out) + x # skip conn
+        out = self.layer_norm1(out)
+
+        out = self.ffn(out) + out # skip conn
+        out = self.layer_norm2(out)
+
+        if self.transform_relation:
+            out_rel = self.att_gnn.lin_skip(relations)
+            out_rel = self.lin_o(out_rel) + relations
+            out_rel = self.layer_norm1(out_rel)
+
+            out_rel = self.ffn(out_rel) + out_rel
+            out_rel = self.layer_norm2(out_rel)
+
+            relations = out_rel
+
+        if return_attention_weights:
+            return out, relations, (ei, alpha)
+        else:
+            return out, relations
+
+class KGATEncoder(BaseModel):
+    def __init__(self,
+                 d_model,
+                 d_ff,
+                 heads=1,
+                 beta=False,
+                 dropout=0.0,
+                 bias=True,
+                 transform_relation=False,
+                 num_block=1,
+                 **kwargs):
+        super().__init__(
+            d_model=d_model,
+            d_ff=d_ff,
+            heads=heads,
+            beta=beta,
+            dropout=dropout,
+            bias=bias,
+            transform_relation=transform_relation,
+            num_block=num_block,
+            **kwargs
         )
 
-        module = [ReLUGATv2(
-                    in_channels=in_channels, 
-                    out_channels=hidden_channels ,
-                    heads=heads, 
-                    concat=True,
-                    edge_dim=in_channels, 
-                    negative_slope=negative_slope,
-                    dropout=dropout,
-                    add_self_loops=add_self_loops,
-                    fill_value=self.self_loop_edge_attr,
-                    bias=bias,
-                    share_weights=share_weights,
-                    **kwargs)] + \
-        [ReLUGATv2(
-                    in_channels=hidden_channels*heads, 
-                    out_channels=hidden_channels, 
-                    heads=heads, 
-                    concat=True,
-                    edge_dim=in_channels, 
-                    negative_slope=negative_slope,
-                    dropout=dropout,
-                    add_self_loops=add_self_loops,
-                    fill_value=self.self_loop_edge_attr,
-                    bias=bias,
-                    share_weights=share_weights,
-                    **kwargs) for _ in range(num_layers-2)] + \
-        [ReLUGATv2(
-                    in_channels=hidden_channels*heads, 
-                    out_channels=out_channels,
-                    heads=heads, 
-                    concat=False, # output layer out channels, concat = False
-                    edge_dim=in_channels, 
-                    negative_slope=negative_slope,
-                    dropout=dropout,
-                    add_self_loops=add_self_loops,
-                    fill_value=self.self_loop_edge_attr,
-                    bias=bias,
-                    share_weights=share_weights,
-                    **kwargs)] if num_layers > 1 else [
-                    ReLUGATv2(in_channels, 
-                    out_channels,
-                    heads, 
-                    concat=False, # output layer out channels, concat = False
-                    edge_dim=in_channels, 
-                    negative_slope=negative_slope,
-                    dropout=dropout,
-                    add_self_loops=add_self_loops,
-                    fill_value=self.self_loop_edge_attr,
-                    bias=bias,
-                    share_weights=share_weights,
-                    **kwargs)
-                    ]
-        
-        self.gnn = GATv2Sequential(*module)
-
-    def forward(self, x, edge_index, relations, return_attention_weights=None):
-        edge_attr = relations[edge_index[1]]
-        ei = edge_index[[0,2]]
-        out = self.gnn(x, ei, edge_attr, return_attention_weights=return_attention_weights)
-        return out
-
-class VariationalEncoder(BaseModel):
-    def __init__(self, 
-                 in_channels, 
-                 hidden_channels, 
-                 num_layers, 
-                 heads, 
-                 out_channels=None, 
-                 negative_slope=0.2, 
-                 dropout=0.0, 
-                 add_self_loops=True, 
-                 bias=True, 
-                 share_weights=False,
-                 **kwargs):
-        out_channels = out_channels or in_channels
-        super().__init__(in_channels=in_channels, 
-                 hidden_channels=hidden_channels, 
-                 num_layers=num_layers, 
-                 heads=heads, 
-                 out_channels=out_channels, 
-                 negative_slope=negative_slope, 
-                 dropout=dropout, 
-                 add_self_loops=add_self_loops, 
-                 bias=bias, 
-                 share_weights=share_weights,
-                 **kwargs)
-        self.encoder_mu = GATv2Encoder(in_channels=in_channels, 
-                 hidden_channels=hidden_channels, 
-                 num_layers=num_layers, 
-                 heads=heads, 
-                 out_channels=out_channels, 
-                 negative_slope=negative_slope, 
-                 dropout=dropout, 
-                 add_self_loops=add_self_loops, 
-                 bias=bias, 
-                 share_weights=share_weights,
-                 **kwargs)
-        self.encoder_std = GATv2Encoder(in_channels=in_channels, 
-                 hidden_channels=hidden_channels, 
-                 num_layers=num_layers, 
-                 heads=heads, 
-                 out_channels=out_channels, 
-                 negative_slope=negative_slope, 
-                 dropout=dropout, 
-                 add_self_loops=add_self_loops, 
-                 bias=bias, 
-                 share_weights=share_weights,
-                 **kwargs)
-        
-    def forward(self, x, edge_index, relations):
-        mu = self.encoder_mu(x, edge_index, relations, return_attention_weights=False)
-        std = self.encoder_std(x, edge_index, relations, return_attention_weights=False)
-        return mu, std
-
-# class InnerOuterProductDecoder(BaseModel):
-#     def __init__(self, num_features):
-#         super().__init__(num_features=num_features)
-#         self.outer_weight = torch.nn.parameter.Parameter(torch.randn(num_features))
+        self.encoder = ModuleList([
+            KGATEncoderBlock(d_model=d_model,
+            d_ff=d_ff,
+            heads=heads,
+            beta=beta,
+            dropout=dropout,
+            bias=bias,
+            transform_relation=transform_relation,
+            **kwargs) for _ in range(num_block)
+        ])
     
-#     def forward(self, x, edge_index, relations, sigmoid=False):
-#         """
-#         R = torch.stack([
-#             el.outer(self.outer_weight) for el in relations
-#         ])
+    def forward(self, x, edge_index, relations, return_attention_weights=False):
+        z = x
 
-#         x_R = x[edge_index[0]].matmul(R)
+        for enc in self.encoder:
+            out = enc(z, edge_index, relations, return_attention_weights=return_attention_weights)
+            if return_attention_weights:
+                z, relations, (ei, alpha) = out
+            else:
+                z, relations = out
+        if return_attention_weights:
+            return z, relations, (ei, alpha) 
+        else:
+            return z, relations
 
-#         x_R_x = x_R * x[edge_index[2]]
-#         x_R_x = x_R_x.sum(dim=2)
-#         x_R_x = x_R_x[edge_index[1], torch.arange(0,edge_index.shape[1])]
-
-#         atau
-
-#         x_R = x[edge_index[0]].matmul(R[edge_index[1]])
-
-#         x_R_x = x_R * x[edge_index[2]]
-#         x_R_x = x_R_x.sum(dim=2)
-#         x_R_x = x_R_x.diagonal()
-#         """
-#         out_all = self.forward_all(x, relations, sigmoid)
-#         return out_all[edge_index[1], edge_index[0], edge_index[2]] # n_edge
+class KGATTripleEmb(BaseModel):
+    def __init__(self, d_model, bias=True):
+        super().__init__(d_model=d_model, bias=bias)
+        self.lin = Linear(in_channels=d_model*3, out_channels=d_model, bias=bias, weight_initializer="glorot")
     
-#     def forward_all(self, x, relations, sigmoid=False):
-#         R = torch.stack([
-#             el.outer(self.outer_weight) / self.num_features**0.5 for el in relations # normalization using dimension
-#         ])
-        
-#         adj = torch.matmul(
-#             torch.matmul(x, R),
-#             x.transpose(0,1)
-#         ) # n_relation * n_node * n_node
+    def forward(self, z, edge_index, relations):
+        inputs = torch.hstack([
+            z[edge_index[0]],
+            relations[edge_index[1]],
+            z[edge_index[2]]
+        ])
+        return self.lin(inputs)
 
-#         return torch.sigmoid(adj) if sigmoid else adj
-
-class Retrieval(BaseModel):
+class KGATRetrieval(BaseModel):
     def __init__(self):
         super().__init__()
         self.mean = MeanAggregation()
@@ -246,49 +153,115 @@ class Retrieval(BaseModel):
         result = result.unsqueeze(1)
         return torch.sigmoid(result) if sigmoid else result
 
-def generate_edge_index(n_node, n_relation):
-    return torch.tensor(list(product(range(n_node), range(n_relation), range(n_node))))
+class KGATModel(BaseModel):
+    def __init__(self,
+                 d_model,
+                 d_ff,
+                 heads=1,
+                 beta=False,
+                 dropout=0.0,
+                 bias=True,
+                 transform_relation=False,
+                 num_block=1,
+                 **kwargs):
+        super().__init__(
+            d_model=d_model,
+            d_ff=d_ff,
+            heads=heads,
+            beta=beta,
+            dropout=dropout,
+            bias=bias,
+            transform_relation=transform_relation,
+            num_block=num_block,
+            **kwargs
+        )
 
-# class TripleRetrieval(BaseModel):
-#     def __init__(self, num_features):
-#         super().__init__(num_features=num_features)
-#         self.lin_emb = Linear(in_channels=num_features*3, out_channels=num_features, bias=True, weight_initializer="glorot")
-#         self.mean = MeanAggregation()
-    
-#     def forward(self, x, edge_index, relations, injection_node, node_batch=None, injection_node_batch=None, sigmoid=False, allow_intersection=False):
-#         node_batch = torch.zeros(x.shape[0]) if node_batch is None else node_batch
-#         injection_node_batch = torch.arange(0, injection_node.shape[0]) if injection_node_batch is None else injection_node_batch
+        self.encoder = KGATEncoder(
+            d_model=d_model,
+            d_ff=d_ff,
+            heads=heads,
+            beta=beta,
+            dropout=dropout,
+            bias=bias,
+            transform_relation=transform_relation,
+            num_block=num_block,
+            **kwargs
+        )
 
-        # source_batch = node_batch[edge_index[0]]
-        # tgt_batch = node_batch[edge_index[2]]
+        self.teta_q = Linear(in_channels=d_model,
+                            out_channels=d_model,
+                            bias=bias,
+                            weight_initializer="glorot")
         
-        # if (source_batch != tgt_batch).any() and not allow_intersection:
-        #     raise ValueError(f"Intersection between batch, there are connection between different graph \n source_batch : {source_batch} \n tgt_batch : {tgt_batch}")
-        
-        # triple_batch = source_batch
-        
-#         triple_emb = self.triple_emb(x, edge_index, relations)
+        self.teta_t = KGATTripleEmb(d_model=d_model,
+                                    bias=bias)
 
-#         return self.retrieve(triple_emb, injection_node, triple_batch, injection_node_batch, sigmoid=sigmoid)
+        self.decoder = KGATRetrieval()
     
-#     def forward_all(self, x, relations, injection_node, node_batch=None, injection_node_batch=None, sigmoid=False):
-#         edge_index = generate_edge_index(x.shape[0], relations.shape[0])
-#         out = self.forward(x, edge_index, relations, injection_node, node_batch, injection_node_batch, sigmoid, allow_intersection=True)
-#         adj = out.view(relations.shape[0], x.shape[0], x.shape[0])
-#         return adj
+    def encode(self,
+               x,
+               edge_index,
+               relations,
+               return_attention_weights=False):
+        out = self.encoder(x, edge_index, relations, return_attention_weights=return_attention_weights)
+        return out
     
-#     def triple_emb(self, x, edge_index, relations):
-#         inputs = torch.hstack([
-#             relations[edge_index[1]],
-#             x[edge_index[0]],
-#             x[edge_index[2]]
-#         ])
-#         return self.lin_emb(inputs)
+    def decode(self,
+               value, 
+               query, 
+               value_batch=None, 
+               query_batch=None, 
+               sigmoid=False):
+        return self.decoder(value, query, value_batch=value_batch, query_batch=query_batch, sigmoid=sigmoid)
     
-#     def retrieve(self, triple_emb, injection_node, triple_batch, injection_node_batch, sigmoid=False):
-#         result = torch.mm(triple_emb, injection_node.t())
-#         result = self.mean(result.t(), index=injection_node_batch)
-#         result = result.t()
-#         result = result[torch.arange(0, result.shape[0]), triple_batch]
-#         result = result.unsqueeze(1)
-#         return result.sigmoid() if sigmoid else result
+    def forward(self, 
+                x, # reference 
+                edge_index, 
+                relations, 
+                query,
+                values=None,
+                node_batch=None, 
+                query_batch=None,
+                values_batch=None,
+                sigmoid=False,
+                allow_intersection=False):
+        
+        z, relations = self.encode(x, edge_index, relations, return_attention_weights=False)
+
+        reference_triples = self.teta_t(z, edge_index, relations)
+
+        source_batch = node_batch[edge_index[0]]
+        tgt_batch = node_batch[edge_index[2]]
+        
+        if (source_batch != tgt_batch).any() and not allow_intersection:
+            raise ValueError(f"Intersection between batch, there are connection between different graph \n source_batch : {source_batch} \n tgt_batch : {tgt_batch}")
+        
+        reference_batch = source_batch
+
+        qr_out = self.decode(reference_triples,
+                             query,
+                             value_batch=reference_batch,
+                             query_batch=query_batch,
+                             sigmoid=sigmoid)
+        
+        out = (qr_out,)
+
+        query = self.teta_q(query)
+        
+        if values is not None:
+            if len(values) > 0:
+                rv_out = self.decode(reference_triples,
+                             values,
+                             value_batch=reference_batch,
+                             query_batch=values_batch,
+                             sigmoid=sigmoid)
+                
+                qv_out = self.decode(query,
+                             values,
+                             value_batch=query_batch,
+                             query_batch=values_batch,
+                             sigmoid=sigmoid)
+
+                out += (rv_out, qv_out)
+        
+        return out[0] if len(out) == 1 else out
