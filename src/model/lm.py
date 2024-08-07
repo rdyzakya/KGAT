@@ -38,25 +38,46 @@ class LanguageModelForLMKBC(ABC):
 
         current_inputs_embeds = inputs_embeds.clone()
         current_attention_mask = attention_mask.clone()
-        all_index = []
         for i in range(n_tokens):
             out = self.backbone(inputs_embeds=current_inputs_embeds, attention_mask=current_attention_mask, output_hidden_states=True)
             last_hidden_state = out[0]
 
-            all_index.append(sequence_lengths + i)
+            added_inputs_embeds = []
 
-            added_inputs_embeds = last_hidden_state[torch.arange(batch_size, device=last_hidden_state.device), torch.stack(all_index).to(last_hidden_state.device)]
-            added_inputs_embeds = added_inputs_embeds.transpose(0,1)
-            added_inputs_embeds = added_inputs_embeds.to(current_inputs_embeds.device)
+            for j in range(i+1):
+                seq_len = sequence_lengths + j
+                last_emb = last_hidden_state[torch.arange(batch_size, device=last_hidden_state.device), seq_len.to(last_hidden_state.device)]
+                added_inputs_embeds.append(last_emb)
             
-            current_inputs_embeds = torch.hstack([current_inputs_embeds, added_inputs_embeds])
-            current_attention_mask = torch.hstack([current_attention_mask, torch.ones(batch_size, 1, device=current_attention_mask.device)])
+            added_inputs_embeds = torch.stack(added_inputs_embeds)
+            added_inputs_embeds = added_inputs_embeds.transpose(0,1)
+            added_inputs_embeds.to(inputs_embeds.device)
+
+            current_inputs_embeds = torch.hstack([inputs_embeds, added_inputs_embeds])
+            current_attention_mask = torch.hstack([attention_mask, torch.ones(batch_size, i+1, device=attention_mask.device)])
+
+            assert current_inputs_embeds.shape[1] == inputs_embeds.shape[1] + (i+1)
+            assert current_attention_mask.shape[1] == attention_mask.shape[1] + (i+1)
 
         pooled_hidden_states = tuple(
-            hidden_states[torch.arange(batch_size, device=hidden_states.device),  torch.stack(all_index).to(hidden_states.device)].view(batch_size, -1)
-            for hidden_states in out.hidden_states[1:])
+            self.pool(hidden_state, sequence_lengths=sequence_lengths, n_tokens=n_tokens)
+            for hidden_state in out.hidden_states[1:])
 
         return pooled_hidden_states if index is None else pooled_hidden_states[index]
+    
+    def pool(self, hidden_state, sequence_lengths, n_tokens):
+        result = []
+        batch_size = hidden_state.shape[0]
+        for i in range(n_tokens):
+            seq_len = sequence_lengths + i
+            seq_len.to(hidden_state.device)
+            result.append(
+                hidden_state[torch.arange(batch_size, device=hidden_state.device), seq_len]
+            )
+        result = torch.stack(result) # N TOKEN, N BATCH, DIM
+        result = result.transpose(0,1)
+        result = result.reshape(batch_size, -1) # N BATCH , N TOKEN * DIM
+        return result
     
     def prepare_tokenizer(self, tokenizer):
         # Add padding

@@ -122,7 +122,9 @@ class LMKBCCollator:
             triples_idx,
             relations_idx,
             # TEXT
-            prompt
+            prompt,
+            # WEIGHT
+            weight
         ) = zip(*batch)
 
         node_batch = []
@@ -185,9 +187,10 @@ class LMKBCCollator:
             "x" : self.ds.entities_attr[nodes_idx],
             "edge_index" : edge_index,
             "relations" : self.ds.relations_attr[relations_idx],
-            "injection_node" : self.ds.texts_attr[list(text_idx)],
+            "query" : self.ds.texts_attr[list(text_idx)],
             "node_batch" : node_batch,
-            "injection_node_batch" : torch.arange(0, len(text_idx)),
+            "query_batch" : torch.arange(0, len(text_idx)),
             "input_ids" : tokenized["input_ids"],
-            "attention_mask" : tokenized["attention_mask"]
+            "attention_mask" : tokenized["attention_mask"],
+            "weights" : torch.tensor(weight).float()
         }

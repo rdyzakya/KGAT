@@ -196,13 +196,17 @@ class LMKBCDataset(KGATDataset):
             subject_alias_ids = self.entities_alias.loc[row["subject"],"alias_idx"]
             subject_aliases = [self.entities[sid] for sid in subject_alias_ids]
             relation = self.relations[row["relation"]]
+            nodes_alias_idx = row["reference_node"] # x
+            triples_idx = row["reference_triple"] # edge_index
+            relations_idx = row["reference_relation"] # relations
+            
+            len_pos_sample = len(row["objects"])
+            len_pos_sample = 1 if len_pos_sample == 0 else len_pos_sample
+
+            len_neg_sample = len(self.negative_objects[i])
 
             for s_alias in subject_aliases:
-                nodes_alias_idx = row["reference_node"] # x
-                triples_idx = row["reference_triple"] # edge_index
-                relations_idx = row["reference_relation"] # relations
                 if len(row["objects"]) == 0:
-
                     prompt, pid = self.prompt.pick(subject=s_alias,
                                                     relation=relation,
                                                     object=EMPTY_OBJECT,
@@ -220,6 +224,8 @@ class LMKBCDataset(KGATDataset):
                         relations_idx,
                         ## TEXT
                         prompt,
+                        ## WEIGHT
+                        1/(len_pos_sample + len_neg_sample)
                     ))
                 else:
                     for obj_idx in row["objects"]:
@@ -244,6 +250,8 @@ class LMKBCDataset(KGATDataset):
                                 relations_idx,
                                 ## TEXT
                                 prompt,
+                                ## WEIGHT
+                                1/(len_pos_sample + len_neg_sample)
                             ))
                 for n_obj in self.negative_objects[i]:
                     prompt, pid = self.prompt.pick(subject=s_alias,
@@ -263,6 +271,8 @@ class LMKBCDataset(KGATDataset):
                         relations_idx,
                         ## TEXT
                         prompt,
+                        ## WEIGHT
+                        1/(len_pos_sample + len_neg_sample)
                     ))
 
         self.data = result
@@ -327,7 +337,7 @@ class LMKBCDataset(KGATDataset):
             self.negative_objects.append(entry)
         return self.negative_objects
     
-    def get(self, idx, alias_idx=None, inference=False):
+    def get(self, idx, alias_idx=None):
         (
             # x
             ## GRAPH
@@ -337,6 +347,8 @@ class LMKBCDataset(KGATDataset):
             relations_idx,
             ## TEXT
             prompt,
+            ## WEIGHT
+            weight
         ) =  self.data[idx]
         
         nodes_idx = [np.random.choice(el) if alias_idx is None else el[alias_idx] for el in self.entities_alias.loc[nodes_alias_idx, "alias_idx"]]
@@ -368,9 +380,10 @@ class LMKBCDataset(KGATDataset):
             "x" : self.entities_attr[nodes_idx],
             "edge_index" : edge_index,
             "relations" : self.relations_attr[relations_idx],
-            "injection_node" : self.texts_attr[text_idx].unsqueeze(0),
+            "query" : self.texts_attr[text_idx].unsqueeze(0),
             "node_batch" : torch.zeros(len(nodes_idx)).int(),
-            "injection_node_batch" : torch.zeros(1).int(),
+            "query_batch" : torch.zeros(1).int(),
             "input_ids" : tokenized["input_ids"],
-            "attention_mask" : tokenized["attention_mask"]
+            "attention_mask" : tokenized["attention_mask"],
+            "weight" : torch.tensor(weight).float()
         }
