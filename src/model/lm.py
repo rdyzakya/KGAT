@@ -70,7 +70,7 @@ class LanguageModelForLMKBC(ABC):
         batch_size = hidden_state.shape[0]
         for i in range(n_tokens):
             seq_len = sequence_lengths + i
-            seq_len.to(hidden_state.device)
+            seq_len = seq_len.to(hidden_state.device)
             result.append(
                 hidden_state[torch.arange(batch_size, device=hidden_state.device), seq_len]
             )
