@@ -51,7 +51,7 @@ class LanguageModelForLMKBC(ABC):
             
             added_inputs_embeds = torch.stack(added_inputs_embeds)
             added_inputs_embeds = added_inputs_embeds.transpose(0,1)
-            added_inputs_embeds.to(inputs_embeds.device)
+            added_inputs_embeds = added_inputs_embeds.to(inputs_embeds.device)
 
             current_inputs_embeds = torch.hstack([inputs_embeds, added_inputs_embeds])
             current_attention_mask = torch.hstack([attention_mask, torch.ones(batch_size, i+1, device=attention_mask.device)])
