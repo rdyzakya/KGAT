@@ -74,7 +74,7 @@ class SaveAndLoad:
         
         # DELETE
         if self.max_ckpt and is_ckpt:
-            ckpt_folders = [el for el in os.listdir(self.out_dir) if el.startswith("ckpt-") and os.path.isdir(el)]
+            ckpt_folders = [el for el in os.listdir(self.out_dir) if el.startswith("ckpt-") and os.path.isdir(os.path.join(self.out_dir, el))]
             if len(ckpt_folders) > self.max_ckpt:
                 epochs = list(range(len(history)))
                 metrics = [el[self.metrics_name] for el in history]
