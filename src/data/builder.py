@@ -55,7 +55,7 @@ class DSBuilder:
                   n_pick=1):
         unrelated_triple_idx = all_triple_idx[~np.isin(all_triple_idx, triple_idx) & ~np.isin(all_triple_idx, reference_idx)]
         prob = np.random.rand() if len(reference_idx) > 0 else bounded_random(0.35 + 1e-12, 1)
-        if prob <= 0.35 and len(reference_idx) > 0: # 35% related node
+        if prob <= 0.495 and len(reference_idx) > 0: # 49.5% neighbor
             reference_triple = self.triples[reference_idx]
             reference_subject = reference_triple[:,0]
             reference_object = reference_triple[:,2]
@@ -70,11 +70,11 @@ class DSBuilder:
             picked_idx = self._choice(unrelated_triple_idx[isin_reference], n_pick)
 
             return picked_idx
-        elif prob <= 0.85 and len(reference_idx) > 0: # 50% related relation
-            # 60% same relation with stay triple
-            # 40% with reference
+        elif prob <= 0.985 and len(reference_idx) > 0: # 49% similar relation
+            # 50% same relation with stay triple
+            # 50% with reference
             relation_prob = np.random.rand()
-            if relation_prob <= 0.6 and len(stay_triple_idx) > 0:
+            if relation_prob <= 0.5 and len(stay_triple_idx) > 0:
                 stay_triple = self.triples[stay_triple_idx]
                 stay_relations = np.unique(stay_triple[:,1])
 
@@ -97,7 +97,7 @@ class DSBuilder:
 
                 picked_idx = self._choice(unrelated_triple_idx[isin_reference], n_pick)
                 return picked_idx
-        else: # 15% random
+        else: # 1.5% random
             picked_idx = self._choice(unrelated_triple_idx, n_pick)
             return picked_idx
     
