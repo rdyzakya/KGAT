@@ -87,3 +87,49 @@ class SaveAndLoad:
                     folder_path = os.path.join(self.out_dir, f"ckpt-{epoch+1}")
                     if os.path.exists(folder_path):
                         shutil.rmtree(folder_path)
+
+def prepare_tokenizer(tokenizer):
+    # Add padding
+    tokenizer.pad_token_id = tokenizer.eos_token_id
+    # self.config.pad_token_id = tokenizer.pad_token_id
+    tokenizer.padding_side = "left"
+
+    # Add KG special token
+    # self.config.kg_token = KG_MASK
+    tokenizer.kg_token = KG_MASK
+    tokenizer.add_special_tokens({
+        "additional_special_tokens" : [KG_MASK]
+    })
+
+    vocab = tokenizer.get_vocab()
+    kg_token_id = vocab[KG_MASK]
+    # self.config.kg_token_id = kg_token_id
+    tokenizer.kg_token_id = kg_token_id
+
+    # self.config.eos_token = tokenizer.eos_token
+    # self.config.eos_token_id = tokenizer.eos_token_id
+
+    return tokenizer
+
+def prepare_model(model, tokenizer):
+    # Add padding
+    # tokenizer.pad_token_id = tokenizer.eos_token_id
+    model.config.pad_token_id = tokenizer.pad_token_id
+    # tokenizer.padding_side = "left"
+
+    # Add KG special token
+    model.config.kg_token = KG_MASK
+    # tokenizer.kg_token = KG_MASK
+    # tokenizer.add_special_tokens({
+    #     "additional_special_tokens" : [KG_MASK]
+    # })
+
+    vocab = tokenizer.get_vocab()
+    kg_token_id = vocab[KG_MASK]
+    model.config.kg_token_id = kg_token_id
+    # tokenizer.kg_token_id = kg_token_id
+
+    model.config.eos_token = tokenizer.eos_token
+    model.config.eos_token_id = tokenizer.eos_token_id
+
+    return model

@@ -252,7 +252,7 @@ if __name__ == "__main__":
     train_collator = SubgraphGenCollator(train_ds, alias_idx=args.alias_idx)
     val_collator = SubgraphGenCollator(val_ds, alias_idx=args.alias_idx)
 
-    train_dataloader = DataLoader(train_ds, batch_size=args.bsize, shuffle=False, collate_fn=train_collator)
+    train_dataloader = DataLoader(train_ds, batch_size=args.bsize, shuffle=True, collate_fn=train_collator)
     val_dataloader = DataLoader(val_ds, batch_size=args.bsize, shuffle=False, collate_fn=val_collator)
     
     ## MODEL

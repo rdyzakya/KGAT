@@ -229,6 +229,7 @@ class KGATModel(BaseModel):
         z, relations = self.encode(x, edge_index, relations, return_attention_weights=False)
 
         reference_triples = self.teta_t(z, edge_index, relations)
+        query = self.teta_q(query)
 
         source_batch = node_batch[edge_index[0]]
         tgt_batch = node_batch[edge_index[2]]
@@ -246,7 +247,6 @@ class KGATModel(BaseModel):
         
         out = (qr_out,)
 
-        query = self.teta_q(query)
         
         if values is not None:
             if len(values) > 0:
@@ -265,3 +265,10 @@ class KGATModel(BaseModel):
                 out += (rv_out, qv_out)
         
         return out[0] if len(out) == 1 else out
+    
+    @staticmethod
+    def load(path):
+        dump = torch.load(path)
+        model = KGATModel(**dump["attribute"])
+        model.load_state_dict(dump["state_dict"])
+        return model

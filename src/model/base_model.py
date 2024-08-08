@@ -37,3 +37,7 @@ class BaseModel(Module):
         for el in self.attr_name:
             result[el] = self.__getattribute__(el)
         return result
+    
+    def freeze(self):
+        for param in self.parameters():
+            param.requires_grad = False

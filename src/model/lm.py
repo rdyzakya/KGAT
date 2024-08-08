@@ -78,29 +78,6 @@ class LanguageModelForLMKBC(ABC):
         result = result.transpose(0,1)
         result = result.reshape(batch_size, -1) # N BATCH , N TOKEN * DIM
         return result
-    
-    def prepare_tokenizer(self, tokenizer):
-        # Add padding
-        tokenizer.pad_token_id = tokenizer.eos_token_id
-        self.config.pad_token_id = tokenizer.pad_token_id
-        tokenizer.padding_side = "left"
-
-        # Add KG special token
-        self.config.kg_token = KG_MASK
-        tokenizer.kg_token = self.config.kg_token
-        tokenizer.add_special_tokens({
-            "additional_special_tokens" : [self.config.kg_token]
-        })
-
-        vocab = tokenizer.get_vocab()
-        kg_token_id = vocab[self.config.kg_token]
-        self.config.kg_token_id = kg_token_id
-        tokenizer.kg_token_id = kg_token_id
-
-        self.config.eos_token = tokenizer.eos_token
-        self.config.eos_token_id = tokenizer.eos_token_id
-
-        return tokenizer
 
     def prepare_lmkbc(self, input_ids, attention_mask, graph_embeddings):
         mask = input_ids == self.config.kg_token_id

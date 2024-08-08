@@ -15,10 +15,13 @@ def init_args():
     parser.add_argument("--save-items", action="store_true", help="Save items (jsonl)")
     parser.add_argument("--load-items", action="store_true", help="Load items")
     parser.add_argument("--sentence-emb-mode", type=str, help="Sentence embedding mode", default="baseline")
-    parser.add_argument("--lm", type=str, help="HF lm model name or path", default="openai-community/gpt2")
+    parser.add_argument("--lm", type=str, help="HF lm model name or path", default="openai-community/gpt2") # and model
     parser.add_argument("--sentence-emb-idx", type=int, help="Sentence embedding index (layer index)")
     parser.add_argument("--alias-idx", type=int, help="Alias index (some entity have several aliases, affect the entity node attribute)")
     parser.add_argument("--n-token", type=int, default=1)
+
+    # MODEL
+    parser.add_argument("--kgat", type=str, help="Model path", required=True)
 
     # TRAINING RELATED
     parser.add_argument("--epoch", type=int, help="Epoch", default=10)
@@ -50,9 +53,10 @@ if args.gpu:
     os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
 
 from torch_geometric import seed_everything
-from data import DSBuilder, SubgraphGenDataset, SubgraphGenCollator
+from data import DSBuilder, LMKBCDataset, LMKBCCollator
 from torch.utils.data import DataLoader
-from model import KGATModel
+from model import KGATModel, AutoModelForLMKBC, GraphPrefix
+from transformers import AutoTokenizer
 import torch
 from tqdm import tqdm
 from sklearn.metrics import classification_report
@@ -169,6 +173,10 @@ def loop(model, dataloader, device, args, optimizer, criterion, pbar, val=False)
 
 if __name__ == "__main__":
     seed_everything(args.seed)
+    ## TOKENIZER
+    tokenizer = AutoTokenizer.from_pretrained(args.lm)
+    tokenizer = utils.prepare_tokenizer(tokenizer)
+    
     ## DATASET
     train_builder = DSBuilder(
         triples_path=os.path.join(args.data_dir, "triples.json"),
@@ -207,12 +215,14 @@ if __name__ == "__main__":
     relations_tensor_path = os.path.join(args.data_dir, f"relations.{args.lm.replace('/', '_')}.n_token={args.n_token}.index={args.sentence_emb_idx}.tensor")
     relations_tensor_path = relations_tensor_path if os.path.exists(relations_tensor_path) else os.path.join(args.data_dir, f"relations.n_token={args.n_token}.tensor")
 
-    train_ds = SubgraphGenDataset(
+    train_ds = LMKBCDataset(
         train_builder,
         os.path.join(args.data_dir, "texts.txt"),
         os.path.join(args.data_dir, "entities.txt"),
         os.path.join(args.data_dir, "relations.txt"),
         os.path.join(args.data_dir, "entities_alias.jsonl"),
+        n_tokens=args.n_token,
+        tokenizer=tokenizer,
         texts_tensor_path=texts_tensor_path,
         entities_tensor_path=entities_tensor_path,
         relations_tensor_path=relations_tensor_path,
@@ -220,12 +230,14 @@ if __name__ == "__main__":
         sentence_emb_index=args.sentence_emb_idx
     )
 
-    val_ds = SubgraphGenDataset(
+    val_ds = LMKBCDataset(
         val_builder,
         os.path.join(args.data_dir, "texts.txt"),
         os.path.join(args.data_dir, "entities.txt"),
         os.path.join(args.data_dir, "relations.txt"),
         os.path.join(args.data_dir, "entities_alias.jsonl"),
+        n_tokens=args.n_token,
+        tokenizer=tokenizer,
         texts_tensor_path=None,
         entities_tensor_path=None,
         relations_tensor_path=None,
@@ -237,30 +249,29 @@ if __name__ == "__main__":
     val_ds.entities_attr = train_ds.entities_attr
     val_ds.relations_attr = train_ds.relations_attr
 
-    train_ds.prepare_train()
-    val_ds.prepare_eval()
+    train_ds.prepare_train(prompt_idx=)
+    val_ds.prepare_eval(prompt_idx=)
 
-    train_collator = SubgraphGenCollator(train_ds, alias_idx=args.alias_idx)
-    val_collator = SubgraphGenCollator(val_ds, alias_idx=args.alias_idx)
+    train_collator = LMKBCCollator(train_ds, tokenizer, alias_idx=args.alias_idx)
+    val_collator = LMKBCCollator(val_ds, tokenizer, alias_idx=args.alias_idx)
 
-    train_dataloader = DataLoader(train_ds, batch_size=args.bsize, shuffle=False, collate_fn=train_collator)
+    train_dataloader = DataLoader(train_ds, batch_size=args.bsize, shuffle=True, collate_fn=train_collator)
     val_dataloader = DataLoader(val_ds, batch_size=args.bsize, shuffle=False, collate_fn=val_collator)
     
     ## MODEL
-    model = KGATModel(d_model=train_ds.entities_attr.shape[1],
-                    d_ff=args.d_ff,
-                    heads=args.head,
-                    beta=args.beta,
-                    dropout=args.dropout,
-                    bias=args.bias,
-                    transform_relation=args.relation,
-                    num_block=args.n_block,)
+    kgat_model = KGATModel.load(args.kgat)
+
+    language_model = AutoModelForLMKBC.from_pretrained(args.lm, device_map="auto")
+    language_model = utils.prepare_model(language_model, tokenizer)
+    language_model.freeze()
+    
+    graph_prefix = GraphPrefix(in_channels=train_ds.texts_attr.shape[1], d_model=language_model.embed_dim, n_token=args.n_token, bias=args.bias)
     
     ## TRAIN LOOP
     os.makedirs(args.out, exist_ok=True)
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    model.to(device)
+    kgat_model.to(device)
 
     criterion = torch.nn.BCEWithLogitsLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
