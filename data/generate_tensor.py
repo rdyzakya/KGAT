@@ -29,6 +29,7 @@ from tqdm import tqdm
 import pandas as pd
 from itertools import combinations
 import json
+import utils
 
 # sentence -> quoted string for universality
 def baseline_template(text):
@@ -63,7 +64,8 @@ if __name__ == "__main__":
     # MODEL
     model = AutoModelForLMKBC.from_pretrained(args.model, device_map="auto")
     tokenizer = AutoTokenizer.from_pretrained(args.model)
-    model.prepare_tokenizer(tokenizer)
+    tokenizer = utils.prepare_tokenizer(tokenizer)
+    model = utils.prepare_model(model, tokenizer)
 
     baseline_tensor = []
     eol_tensor = []
