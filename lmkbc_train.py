@@ -18,13 +18,16 @@ def init_args():
     parser.add_argument("--lm", type=str, help="HF lm model name or path", default="openai-community/gpt2") # and model
     parser.add_argument("--sentence-emb-idx", type=int, help="Sentence embedding index (layer index)")
     parser.add_argument("--alias-idx", type=int, help="Alias index (some entity have several aliases, affect the entity node attribute)")
+    parser.add_argument("--prompt-idx", type=int, help="Prompt index")
     parser.add_argument("--n-token", type=int, default=1)
 
     # MODEL
     parser.add_argument("--kgat", type=str, help="Model path", required=True)
 
     # TRAINING RELATED
-    parser.add_argument("--epoch", type=int, help="Epoch", default=10)
+    parser.add_argument("--freeze-kgat", action="store_true")
+    parser.add_argument("--first-epoch", type=int, help="First epoch", default=5)
+    parser.add_argument("--second-epoch", type=int, help="Second epoch", default=10)
     parser.add_argument("--bsize", type=int, help="Batch size", default=8)
     parser.add_argument("--lr", type=float, help="Learning rate", default=1e-3) # based on default adam, also mentioned in unimp paper
     parser.add_argument("--decay", type=float, help="Weight decay", default=0.0005) # based on unimp paper
@@ -55,7 +58,7 @@ if args.gpu:
 from torch_geometric import seed_everything
 from data import DSBuilder, LMKBCDataset, LMKBCCollator
 from torch.utils.data import DataLoader
-from model import KGATModel, AutoModelForLMKBC, GraphPrefix
+from model import KGATModel, AutoModelForLMKBC, GraphPrefix, Pipeline
 from transformers import AutoTokenizer
 import torch
 from tqdm import tqdm
@@ -63,6 +66,7 @@ from sklearn.metrics import classification_report
 import time
 import utils
 import json
+from disambiguation import my_disambiguation
 
 def create_adj_label(n_node, n_relation, edge_index, link_label):
     adj = torch.zeros(n_relation, n_node, n_node).float()
@@ -183,8 +187,8 @@ if __name__ == "__main__":
         data_path=os.path.join(args.data_dir, "all.jsonl" if args.super_set else "train.jsonl"),
         n_reference_min=args.n_ref_min,
         n_reference_max=args.n_ref_max,
-        stay_ratio_min=args.stay_ratio_min,
-        stay_ratio_max=args.stay_ratio_max,
+        stay_ratio_min=0.0,
+        stay_ratio_max=0.0,
         random_state=args.seed,
         n_pick=1,
         items_path="./train-items.jsonl",
@@ -197,8 +201,8 @@ if __name__ == "__main__":
         data_path=os.path.join(args.data_dir, "dev.jsonl"),
         n_reference_min=args.n_ref_min,
         n_reference_max=args.n_ref_max,
-        stay_ratio_min=1.0,
-        stay_ratio_max=1.0,
+        stay_ratio_min=0.0,
+        stay_ratio_max=0.0,
         random_state=args.seed,
         n_pick=1,
         items_path="./dev-items.jsonl",
@@ -249,8 +253,8 @@ if __name__ == "__main__":
     val_ds.entities_attr = train_ds.entities_attr
     val_ds.relations_attr = train_ds.relations_attr
 
-    train_ds.prepare_train(prompt_idx=)
-    val_ds.prepare_eval(prompt_idx=)
+    train_ds.prepare_train(prompt_idx=args.prompt_idx)
+    val_ds.prepare_eval(prompt_idx=0)
 
     train_collator = LMKBCCollator(train_ds, tokenizer, alias_idx=args.alias_idx)
     val_collator = LMKBCCollator(val_ds, tokenizer, alias_idx=args.alias_idx)
@@ -260,73 +264,133 @@ if __name__ == "__main__":
     
     ## MODEL
     kgat_model = KGATModel.load(args.kgat)
+    if args.freeze_kgat:
+        kgat_model.freeze()
 
     language_model = AutoModelForLMKBC.from_pretrained(args.lm, device_map="auto")
     language_model = utils.prepare_model(language_model, tokenizer)
     language_model.freeze()
     
     graph_prefix = GraphPrefix(in_channels=train_ds.texts_attr.shape[1], d_model=language_model.embed_dim, n_token=args.n_token, bias=args.bias)
+
+    pipe = Pipeline(kgat_model=kgat_model, graph_prefix=graph_prefix, language_model=language_model)
     
     ## TRAIN LOOP
     os.makedirs(args.out, exist_ok=True)
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    kgat_model.to(device)
+    pipe.kgat_model.to(device)
+    pipe.graph_prefix.to(device)
 
-    criterion = torch.nn.BCEWithLogitsLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
+    criterion = torch.nn.CrossEntropyLoss()
+    optimizer = torch.optim.Adam(pipe.parameters(), lr=args.lr)
 
     metrics_name = "val_" + args.best_metrics if not args.best_metrics.startswith("val_") else args.best_metrics
     greater_is_better = False if "loss" in metrics_name else True
     
     early_stopper = utils.EarlyStopper(args.estop_patience, args.estop_delta, greater_is_better)
-    saveload = utils.SaveAndLoad(model, args.out, metrics_name, args.max_ckpt, greater_is_better)
+    saveload1 = utils.SaveAndLoad(pipe.kgat_model, os.path.join(args.out, "kgat", "first"), metrics_name, args.max_ckpt, greater_is_better)
+    saveload2 = utils.SaveAndLoad(pipe.graph_prefix, os.path.join(args.out, "graph_prefix", "first"), metrics_name, args.max_ckpt, greater_is_better)
 
-    train_bar = tqdm(total=args.epoch*len(train_dataloader), desc="Training")
+    train_bar = tqdm(total=args.first_epoch*len(train_dataloader), desc="Training")
 
     history = []
-    for e in range(args.epoch):
+    for e in range(args.first_epoch):
         entry = {"epoch" : e+1}
         
-        train_entry = loop(model, train_dataloader, device, args, optimizer, criterion, train_bar, val=False)
+        train_entry = loop(pipe, train_dataloader, device, args, optimizer, criterion, train_bar, val=False)
         for k, v in train_entry.items():
             entry[f"train_{k}"] = v
         
         val_bar = tqdm(total=len(val_dataloader), desc="Val")
-        val_entry = loop(model, val_dataloader, device, args, None, criterion, val_bar, val=True)
+        val_entry = loop(pipe, val_dataloader, device, args, None, criterion, val_bar, val=True)
         for k, v in val_entry.items():
             entry[f"val_{k}"] = v
         
         print(entry)
 
         history.append(entry)
-        saveload.save(history, is_ckpt=True)
+        saveload1.save(history, is_ckpt=True)
+        saveload2.save(history, is_ckpt=True)
 
-    saveload.load_best(history)
-    saveload.save(history, is_ckpt=False)
+    ## AUGMENT
+    train_ds.prepare_augment(prompt_idx=0)
+
+    augment_collator = LMKBCCollator(train_ds, tokenizer, alias_idx=args.alias_idx)
+    augment_dataloader = DataLoader(train_ds, batch_size=args.bsize, shuffle=False, collate_fn=augment_collator)
+
+    aug_bar = tqdm(total=len(augment_dataloader), desc="Augmentation")
+    aug_entry = loop(pipe, augment_dataloader, device, args, None, criterion, aug_bar, val=True)
+
+    predictions = aug_entry["predictions"]
+
+    train_ds.augment(predictions)
+
+    ## SECOND PHASE TRAIN
+    train_ds.prepare_train(prompt_idx=args.prompt_idx)
+
+    train_collator = LMKBCCollator(train_ds, tokenizer, alias_idx=args.alias_idx)
+    val_collator = LMKBCCollator(val_ds, tokenizer, alias_idx=args.alias_idx)
+
+    train_dataloader = DataLoader(train_ds, batch_size=args.bsize, shuffle=True, collate_fn=train_collator)
+    val_dataloader = DataLoader(val_ds, batch_size=args.bsize, shuffle=False, collate_fn=val_collator)
+
+    criterion = torch.nn.CrossEntropyLoss()
+    optimizer = torch.optim.Adam(pipe.parameters(), lr=args.lr)
+
+    metrics_name = "val_" + args.best_metrics if not args.best_metrics.startswith("val_") else args.best_metrics
+    greater_is_better = False if "loss" in metrics_name else True
+    
+    early_stopper = utils.EarlyStopper(args.estop_patience, args.estop_delta, greater_is_better)
+    saveload1 = utils.SaveAndLoad(pipe.kgat_model, os.path.join(args.out, "kgat", "second"), metrics_name, args.max_ckpt, greater_is_better)
+    saveload2 = utils.SaveAndLoad(pipe.graph_prefix, os.path.join(args.out, "graph_prefix", "second"), metrics_name, args.max_ckpt, greater_is_better)
+
+    train_bar = tqdm(total=args.second_epoch*len(train_dataloader), desc="Training")
+
+    history = []
+    for e in range(args.second_epoch):
+        entry = {"epoch" : e+1}
+        
+        train_entry = loop(pipe, train_dataloader, device, args, optimizer, criterion, train_bar, val=False)
+        for k, v in train_entry.items():
+            entry[f"train_{k}"] = v
+        
+        val_bar = tqdm(total=len(val_dataloader), desc="Val")
+        val_entry = loop(pipe, val_dataloader, device, args, None, criterion, val_bar, val=True)
+        for k, v in val_entry.items():
+            entry[f"val_{k}"] = v
+        
+        print(entry)
+
+        history.append(entry)
+        saveload1.save(history, is_ckpt=True)
+        saveload2.save(history, is_ckpt=True)
 
     ## EVALUATION
     if args.test:
+        # use dev
         test_builder = DSBuilder(
             triples_path=os.path.join(args.data_dir, "triples.json"),
-            data_path=os.path.join(args.data_dir, "test.jsonl"),
+            data_path=os.path.join(args.data_dir, "dev.jsonl"),
             n_reference_min=args.n_ref_min,
             n_reference_max=args.n_ref_max,
-            stay_ratio_min=1.0,
-            stay_ratio_max=1.0,
+            stay_ratio_min=0.0,
+            stay_ratio_max=0.0,
             random_state=args.seed,
             n_pick=1,
-            items_path="./test-items.jsonl",
+            items_path="./dev-items.jsonl",
             save_items=bool(args.save_items),
             load=bool(args.load_items)
         )
 
-        test_ds = SubgraphGenDataset(
+        test_ds = LMKBCDataset(
             test_builder,
             os.path.join(args.data_dir, "texts.txt"),
             os.path.join(args.data_dir, "entities.txt"),
             os.path.join(args.data_dir, "relations.txt"),
             os.path.join(args.data_dir, "entities_alias.jsonl"),
+            n_tokens=args.n_token,
+            tokenizer=tokenizer,
             texts_tensor_path=None,
             entities_tensor_path=None,
             relations_tensor_path=None,
@@ -338,13 +402,13 @@ if __name__ == "__main__":
         test_ds.entities_attr = train_ds.entities_attr
         test_ds.relations_attr = train_ds.relations_attr
 
-        test_ds.prepare_eval()
+        test_ds.prepare_eval(prompt_idx=0)
 
-        test_collator = SubgraphGenCollator(test_ds, alias_idx=args.alias_idx)
+        test_collator = LMKBCCollator(test_ds, tokenizer, alias_idx=args.alias_idx)
         test_dataloader = DataLoader(test_ds, batch_size=args.bsize, shuffle=False, collate_fn=test_collator)
 
         test_bar = tqdm(total=len(test_dataloader), desc="Test")
-        test_result = loop(model, test_dataloader, device, args, None, criterion, test_bar, val=True)
+        test_result = loop(pipe, test_dataloader, device, args, None, criterion, test_bar, val=True)
 
         with open(os.path.join(args.out, "test_metrics.json"), 'w') as fp:
             json.dump(test_result, fp)

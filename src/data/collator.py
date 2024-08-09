@@ -124,7 +124,9 @@ class LMKBCCollator:
             # TEXT
             prompt,
             # WEIGHT
-            weight
+            weight,
+            # OBJECTS
+            object_qids
         ) = zip(*batch)
 
         node_batch = []
@@ -192,5 +194,6 @@ class LMKBCCollator:
             "query_batch" : torch.arange(0, len(text_idx)),
             "input_ids" : tokenized["input_ids"],
             "attention_mask" : tokenized["attention_mask"],
-            "weights" : torch.tensor(weight).float()
+            "weights" : torch.tensor(weight).float(),
+            "objects" : list(object_qids)
         }
