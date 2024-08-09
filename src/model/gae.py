@@ -114,14 +114,19 @@ class KGATEncoder(BaseModel):
     def forward(self, x, edge_index, relations, return_attention_weights=False):
         z = x
 
+        all_ei = []
+        all_alpha = []
+
         for enc in self.encoder:
             out = enc(z, edge_index, relations, return_attention_weights=return_attention_weights)
             if return_attention_weights:
                 z, relations, (ei, alpha) = out
+                all_ei.append(ei)
+                all_alpha.append(alpha)
             else:
                 z, relations = out
         if return_attention_weights:
-            return z, relations, (ei, alpha) 
+            return z, relations, (all_ei, all_alpha) 
         else:
             return z, relations
 
