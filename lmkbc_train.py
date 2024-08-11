@@ -31,6 +31,8 @@ def init_args():
     parser.add_argument("--bsize", type=int, help="Batch size", default=8)
     parser.add_argument("--lr", type=float, help="Learning rate", default=1e-3) # based on default adam, also mentioned in unimp paper
     parser.add_argument("--decay", type=float, help="Weight decay", default=0.0005) # based on unimp paper
+    parser.add_argument("--weighted", action="store_true")
+    parser.add_argument("--beam", type=int, default=6)
     
     parser.add_argument("--estop", action="store_true", help="Perform early stopping")
     parser.add_argument("--estop-patience", type=int, help="Early stopping patience", default=3)
@@ -74,106 +76,93 @@ def create_adj_label(n_node, n_relation, edge_index, link_label):
     adj[true_edge_index[1], true_edge_index[0], true_edge_index[2]] = 1.0
     return adj
 
-def loop(model, dataloader, device, args, optimizer, criterion, pbar, val=False): # train/val loop
+def loop(pipe, dataloader, device, args, optimizer, criterion, pbar, val=False): # train/val loop
     entry = {}
     start_time = time.time()
     if val:
-        model.eval()
+        pipe.eval()
     else:
-        model.train()
+        pipe.train()
 
-    qr_out = []
-    qr_labels = []
-    rv_out = []
-    qv_out = []
+    total_loss = 0
+    numel = 0
+
     for batch in dataloader:
         for k, v in batch.items():
-            batch[k] = v.to(device)
-        link_cls_label = batch.pop("link_cls_label")
-        node_cls_label = batch.pop("node_cls_label")
+            if isinstance(v, torch.Tensor):
+                batch[k] = v.to(device)
 
-        link_cls_label = link_cls_label.float()
+        labels = batch.pop("labels")
+        weights = batch.pop("weights")
+        batch["n_token"] = args.n_token
 
         if val:
             with torch.no_grad():
-                out = model.forward(sigmoid=False, 
-                                    allow_intersection=False, 
-                                    **batch)
+                out = pipe.forward_lmkbc(**batch)
         else:
-            out = model.forward(sigmoid=False, 
-                                allow_intersection=False, 
-                                **batch)
+            out = pipe.forward_lmkbc(**batch)
         
-        if len(out) > 1:
-            query_reference_out, reference_values_out, query_values_out = out
-            reference_values_out = reference_values_out.view(-1)
-            query_values_out= query_values_out.view(-1)
-        else:
-            query_reference_out = out
-        
-        query_reference_out = query_reference_out.view(-1)
+        logits = out.logits
+
+        shift_logits = logits[..., :-1, :].contiguous()
+        shift_labels = labels[..., 1:].contiguous()
+
+        weights = weights.repeat(shift_labels.shape[1], 1).transpose(0,1).reshape(-1)
+
+        shift_logits = shift_logits.view(-1, pipe.language_model.config.vocab_size)
+        shift_labels = shift_labels.view(-1)
+
 
         if not val:
-            qr_loss = criterion(
-                query_reference_out,
-                link_cls_label
-            )
+            loss = criterion(shift_logits, shift_labels)
 
-            # kl_loss = model.vgae.kl_loss()
+            if args.weighted:
+                loss = loss * weights
+            
+            loss = loss[shift_labels != -100]
+            mean_loss = loss.mean()
 
-            loss = qr_loss #+ kl_loss
-
-            if len(out) > 1:
-                rv_loss = criterion(
-                    reference_values_out,
-                    link_cls_label
-                )
-
-                qv_loss = criterion(
-                    query_values_out,
-                    torch.ones_like(query_values_out)
-                )
-
-                loss = loss + rv_loss + qv_loss
+            total_loss = loss.sum().item() + total_loss
+            numel += loss.numel()
 
             optimizer.zero_grad()
-            loss.backward()
+            mean_loss.backward()
             optimizer.step()
         pbar.update()
-
-        qr_out.append(query_reference_out.detach().cpu())
-        qr_labels.append(link_cls_label.detach().cpu())
-
-        if len(out) > 1:
-            rv_out.append(reference_values_out.detach().cpu())
-            qv_out.append(query_values_out.detach().cpu())
     
     end_time = time.time()
 
     entry["time"] = end_time - start_time
-
-    qr_out = torch.cat(qr_out)
-    qr_labels = torch.cat(qr_labels)
-
-    qr_report = classification_report(
-        y_pred=qr_out.sigmoid().round(),
-        y_true=qr_labels.int(),
-        output_dict=True
-    )
-
-    entry["accuracy"] = qr_report["accuracy"]
-    entry["precision"] = qr_report["macro avg"]["precision"]
-    entry["recall"] = qr_report["macro avg"]["recall"]
-    entry["f1"] = qr_report["macro avg"]["f1-score"]
-    entry["qr_loss"] = criterion(qr_out, qr_labels).item()
-
-    if len(rv_out) > 0 and len(qv_out) > 0:
-        rv_out = torch.cat(rv_out)
-        qv_out = torch.cat(qv_out)
-        entry["rv_loss"] = criterion(rv_out, qr_labels).item()
-        entry["qv_loss"] = criterion(qv_out, torch.ones_like(qv_out)).item()
+    entry["loss"] = total_loss / numel
 
     return entry
+
+def generate(pipe, tokenizer, dataloader, device, args, pbar):
+    pipe.eval()
+    start_time = time.time()
+
+    preds = []
+
+    for batch in dataloader:
+        for k, v in batch.items():
+            if isinstance(v, torch.Tensor):
+                batch[k] = v.to(device)
+        
+        batch["n_token"] = args.n_token
+
+        batch_size = batch["input_ids"].shape[0]
+        
+        out = pipe.generate_lmkbc(num_beams=args.beam, num_return_sequences=args.beam, **batch)
+
+        out = out.view(batch_size, args.beam, -1)
+
+        text_out = tokenizer.batch_decode(out, skip_special_tokens=True)
+
+        preds.extend(text_out)
+        
+        pbar.update()
+    
+    return preds
 
 if __name__ == "__main__":
     seed_everything(args.seed)
@@ -282,7 +271,7 @@ if __name__ == "__main__":
     pipe.kgat_model.to(device)
     pipe.graph_prefix.to(device)
 
-    criterion = torch.nn.CrossEntropyLoss()
+    criterion = torch.nn.CrossEntropyLoss(reduction="none")
     optimizer = torch.optim.Adam(pipe.parameters(), lr=args.lr)
 
     metrics_name = "val_" + args.best_metrics if not args.best_metrics.startswith("val_") else args.best_metrics
@@ -316,13 +305,12 @@ if __name__ == "__main__":
     ## AUGMENT
     train_ds.prepare_augment(prompt_idx=0)
 
-    augment_collator = LMKBCCollator(train_ds, tokenizer, alias_idx=args.alias_idx)
+    augment_collator = LMKBCCollator(train_ds, tokenizer, alias_idx=args.alias_idx, generate=True)
     augment_dataloader = DataLoader(train_ds, batch_size=args.bsize, shuffle=False, collate_fn=augment_collator)
 
     aug_bar = tqdm(total=len(augment_dataloader), desc="Augmentation")
-    aug_entry = loop(pipe, augment_dataloader, device, args, None, criterion, aug_bar, val=True)
 
-    predictions = aug_entry["predictions"]
+    predictions = generate(pipe, tokenizer, augment_dataloader, device, args, aug_bar)
 
     train_ds.augment(predictions)
 
@@ -335,7 +323,7 @@ if __name__ == "__main__":
     train_dataloader = DataLoader(train_ds, batch_size=args.bsize, shuffle=True, collate_fn=train_collator)
     val_dataloader = DataLoader(val_ds, batch_size=args.bsize, shuffle=False, collate_fn=val_collator)
 
-    criterion = torch.nn.CrossEntropyLoss()
+    criterion = torch.nn.CrossEntropyLoss(reduction="none")
     optimizer = torch.optim.Adam(pipe.parameters(), lr=args.lr)
 
     metrics_name = "val_" + args.best_metrics if not args.best_metrics.startswith("val_") else args.best_metrics
@@ -408,7 +396,8 @@ if __name__ == "__main__":
         test_dataloader = DataLoader(test_ds, batch_size=args.bsize, shuffle=False, collate_fn=test_collator)
 
         test_bar = tqdm(total=len(test_dataloader), desc="Test")
-        test_result = loop(pipe, test_dataloader, device, args, None, criterion, test_bar, val=True)
-
-        with open(os.path.join(args.out, "test_metrics.json"), 'w') as fp:
-            json.dump(test_result, fp)
+        
+        predictions = generate(pipe, tokenizer, test_dataloader, device, args, test_bar)
+        
+        with open(os.path.join(args.out, "preds.json"), 'w') as fp:
+            json.dump(predictions, fp)

@@ -56,10 +56,12 @@ class Pipeline(BaseModel):
     
     def forward_lmkbc(self, x, edge_index, relations, query, node_batch, query_batch, n_token, input_ids, attention_mask, batch=None):
         virtual_token = self.forward(x, edge_index, relations, query, node_batch, query_batch, n_token)
+        virtual_token = virtual_token.to(self.language_model.device)
         return self.language_model.forward_lmkbc(input_ids, attention_mask, virtual_token, batch)
     
     def generate_lmkbc(self, x, edge_index, relations, query, node_batch, query_batch, n_token, input_ids, attention_mask, batch=None, **kwargs):
         virtual_token = self.forward(x, edge_index, relations, query, node_batch, query_batch, n_token)
+        virtual_token = virtual_token.to(self.language_model.device)
         return self.language_model.generate_lmkbc(input_ids, attention_mask, virtual_token, batch, **kwargs)
     
     def reduce(self, x, index = None,

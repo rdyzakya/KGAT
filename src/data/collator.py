@@ -109,10 +109,11 @@ class SubgraphGenCollator:
         }
 
 class LMKBCCollator:
-    def __init__(self, ds, tokenizer=None, alias_idx=None):
+    def __init__(self, ds, tokenizer=None, alias_idx=None, generate=False):
         self.ds = ds
         self.tokenizer = self.ds.tokenizer or tokenizer
         self.alias_idx = alias_idx # recommend : 0
+        self.generate = generate
     
     def __call__(self, batch):
         (
@@ -126,7 +127,7 @@ class LMKBCCollator:
             # WEIGHT
             weight,
             # OBJECTS
-            object_qids
+            # object_qids
         ) = zip(*batch)
 
         node_batch = []
@@ -181,19 +182,36 @@ class LMKBCCollator:
 
         tokenized = self.tokenizer(prompt, padding=True, return_tensors="pt")
 
-        if (tokenized["input_ids"][:,-1] == self.tokenizer.eos_token_id).all().logical_not():
+        if (tokenized["input_ids"][:,-1] == self.tokenizer.eos_token_id).all().logical_not() and not self.generate:
             tokenized["input_ids"] = torch.cat([tokenized["input_ids"], torch.full((len(prompt),1), self.tokenizer.eos_token_id)], dim=1)
             tokenized["attention_mask"] = torch.cat([tokenized["attention_mask"], torch.ones(len(prompt),1, dtype=tokenized["attention_mask"].dtype)], dim=1)
+        
+        labels = tokenized["input_ids"].clone()
+        labels[tokenized["attention_mask"] == 0] = -100
+        labels[labels == self.tokenizer.kg_token_id] = -100
 
-        return {
-            "x" : self.ds.entities_attr[nodes_idx],
-            "edge_index" : edge_index,
-            "relations" : self.ds.relations_attr[relations_idx],
-            "query" : self.ds.texts_attr[list(text_idx)],
-            "node_batch" : node_batch,
-            "query_batch" : torch.arange(0, len(text_idx)),
-            "input_ids" : tokenized["input_ids"],
-            "attention_mask" : tokenized["attention_mask"],
-            "weights" : torch.tensor(weight).float(),
-            "objects" : list(object_qids)
-        }
+        if not self.generate:
+            return {
+                "x" : self.ds.entities_attr[nodes_idx],
+                "edge_index" : edge_index,
+                "relations" : self.ds.relations_attr[relations_idx],
+                "query" : self.ds.texts_attr[list(text_idx)],
+                "node_batch" : node_batch,
+                "query_batch" : torch.arange(0, len(text_idx)),
+                "input_ids" : tokenized["input_ids"],
+                "attention_mask" : tokenized["attention_mask"],
+                "labels" : labels,
+                "weights" : torch.tensor(weight).float(),
+                # "objects" : list(object_qids)
+            }
+        else:
+            return {
+                "x" : self.ds.entities_attr[nodes_idx],
+                "edge_index" : edge_index,
+                "relations" : self.ds.relations_attr[relations_idx],
+                "query" : self.ds.texts_attr[list(text_idx)],
+                "node_batch" : node_batch,
+                "query_batch" : torch.arange(0, len(text_idx)),
+                "input_ids" : tokenized["input_ids"],
+                "attention_mask" : tokenized["attention_mask"],
+            }

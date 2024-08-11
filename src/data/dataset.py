@@ -239,7 +239,7 @@ class LMKBCDataset(KGATDataset):
                         ## WEIGHT
                         1/(len_pos_sample + len_neg_sample),
                         ## OBJECTS
-                        object_qids
+                        # object_qids
                     ))
                 else:
                     for obj_idx in row["objects"]:
@@ -267,7 +267,7 @@ class LMKBCDataset(KGATDataset):
                                 ## WEIGHT
                                 1/(len_pos_sample + len_neg_sample),
                                 ## OBJECTS
-                                object_qids
+                                # object_qids
                             ))
                 for n_obj in self.negative_objects[i]:
                     prompt, pid = self.prompt.pick(subject=s_alias,
@@ -292,7 +292,7 @@ class LMKBCDataset(KGATDataset):
                         ## WEIGHT
                         1/(len_pos_sample + len_neg_sample),
                         ## OBJECTS
-                        object_qids
+                        # object_qids
                     ))
 
         self.data = result
@@ -329,17 +329,17 @@ class LMKBCDataset(KGATDataset):
                                             idx=prompt_idx)
             all_prompt_idx.append(pid)
 
-            objects = row["objects"]
-            object_qids = []
-            for o_id in objects:
-                qid = self.entities_alias.loc[o_id, "id"]
-                if not re.match(r"Q\d+", qid):
-                    for e_id in self.entities_alias.loc[o_id, "alias_idx"]:
-                        entity_name = self.entities[e_id]
-                        qid = my_disambiguation(entity_name)
-                        if re.match(r"Q\d+", qid):
-                            break
-                object_qids.append(qid)
+            # objects = row["objects"]
+            # object_qids = []
+            # for o_id in objects:
+            #     qid = self.entities_alias.loc[o_id, "id"]
+            #     if not re.match(r"Q\d+", qid):
+            #         for e_id in self.entities_alias.loc[o_id, "alias_idx"]:
+            #             entity_name = self.entities[e_id]
+            #             qid = my_disambiguation(entity_name)
+            #             if re.match(r"Q\d+", qid):
+            #                 break
+            #     object_qids.append(qid)
             result.append((
                 # x
                 ## GRAPH
@@ -352,7 +352,7 @@ class LMKBCDataset(KGATDataset):
                 ## WEIGHT
                 1/(len_pos_sample + len_neg_sample),
                 ## OBJECTS
-                object_qids
+                # object_qids
             ))
         self.data = result
         self.prompt_idx = all_prompt_idx
@@ -393,8 +393,8 @@ class LMKBCDataset(KGATDataset):
             prompt,
             ## WEIGHT
             weight,
-            ## OBJECTS
-            object_qids
+            # ## OBJECTS
+            # object_qids
         ) =  self.data[idx]
         
         nodes_idx = [np.random.choice(el) if alias_idx is None else el[alias_idx] for el in self.entities_alias.loc[nodes_alias_idx, "alias_idx"]]
@@ -421,6 +421,10 @@ class LMKBCDataset(KGATDataset):
         if (tokenized["input_ids"][:,-1] == self.tokenizer.eos_token_id).all().logical_not():
             tokenized["input_ids"] = torch.cat([tokenized["input_ids"], torch.full((1,1), self.tokenizer.eos_token_id)], dim=1)
             tokenized["attention_mask"] = torch.cat([tokenized["attention_mask"], torch.ones(1,1, dtype=tokenized["attention_mask"].dtype)], dim=1)
+        
+        labels = tokenized["input_ids"].clone()
+        labels[labels == self.tokenizer.pad_token_id] = -100
+        labels[labels == self.tokenizer.kg_token_id] = -100
 
         return {
             "x" : self.entities_attr[nodes_idx],
@@ -431,6 +435,7 @@ class LMKBCDataset(KGATDataset):
             "query_batch" : torch.zeros(1).int(),
             "input_ids" : tokenized["input_ids"],
             "attention_mask" : tokenized["attention_mask"],
+            "labels" : labels,
             "weight" : torch.tensor(weight).float(),
-            "objects" : [object_qids]
+            # "objects" : [object_qids]
         }
