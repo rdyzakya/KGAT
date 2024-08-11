@@ -180,7 +180,7 @@ if __name__ == "__main__":
         stay_ratio_max=0.0,
         random_state=args.seed,
         n_pick=1,
-        items_path="./train-items.jsonl",
+        items_path="./lmkbc-train-items.jsonl",
         save_items=bool(args.save_items),
         load=bool(args.load_items)
     )
@@ -194,7 +194,7 @@ if __name__ == "__main__":
         stay_ratio_max=0.0,
         random_state=args.seed,
         n_pick=1,
-        items_path="./dev-items.jsonl",
+        items_path="./lmkbc-dev-items.jsonl",
         save_items=bool(args.save_items),
         load=bool(args.load_items)
     )
@@ -366,7 +366,7 @@ if __name__ == "__main__":
             stay_ratio_max=0.0,
             random_state=args.seed,
             n_pick=1,
-            items_path="./dev-items.jsonl",
+            items_path="./lmkbc-dev-items.jsonl",
             save_items=bool(args.save_items),
             load=bool(args.load_items)
         )
