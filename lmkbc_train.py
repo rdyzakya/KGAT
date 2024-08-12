@@ -23,6 +23,7 @@ def init_args():
 
     # MODEL
     parser.add_argument("--kgat", type=str, help="Model path", required=True)
+    parser.add_argument("--bias", action="store_true")
 
     # TRAINING RELATED
     parser.add_argument("--freeze-kgat", action="store_true")
@@ -33,6 +34,7 @@ def init_args():
     parser.add_argument("--decay", type=float, help="Weight decay", default=0.0005) # based on unimp paper
     parser.add_argument("--weighted", action="store_true")
     parser.add_argument("--beam", type=int, default=6)
+    parser.add_argument("--max-new-tokens", type=int, default=32)
     
     parser.add_argument("--estop", action="store_true", help="Perform early stopping")
     parser.add_argument("--estop-patience", type=int, help="Early stopping patience", default=3)
@@ -113,18 +115,18 @@ def loop(pipe, dataloader, device, args, optimizer, criterion, pbar, val=False):
         shift_labels = shift_labels.view(-1)
 
 
+        loss = criterion(shift_logits, shift_labels)
+
+        if args.weighted:
+            loss = loss * weights
+        
+        loss = loss[shift_labels != -100]
+        mean_loss = loss.mean()
+
+        total_loss = loss.sum().item() + total_loss
+        numel += loss.numel()
+
         if not val:
-            loss = criterion(shift_logits, shift_labels)
-
-            if args.weighted:
-                loss = loss * weights
-            
-            loss = loss[shift_labels != -100]
-            mean_loss = loss.mean()
-
-            total_loss = loss.sum().item() + total_loss
-            numel += loss.numel()
-
             optimizer.zero_grad()
             mean_loss.backward()
             optimizer.step()
@@ -139,7 +141,6 @@ def loop(pipe, dataloader, device, args, optimizer, criterion, pbar, val=False):
 
 def generate(pipe, tokenizer, dataloader, device, args, pbar):
     pipe.eval()
-    start_time = time.time()
 
     preds = []
 
@@ -152,11 +153,14 @@ def generate(pipe, tokenizer, dataloader, device, args, pbar):
 
         batch_size = batch["input_ids"].shape[0]
         
-        out = pipe.generate_lmkbc(num_beams=args.beam, num_return_sequences=args.beam, **batch)
+        out = pipe.generate_lmkbc(num_beams=args.beam, num_return_sequences=args.beam, max_new_tokens=args.max_new_tokens, **batch)
 
         out = out.view(batch_size, args.beam, -1)
 
-        text_out = tokenizer.batch_decode(out, skip_special_tokens=True)
+        text_out = []
+        for o in out:
+            to = tokenizer.batch_decode(o, skip_special_tokens=True)
+            text_out.append(to)
 
         preds.extend(text_out)
         
@@ -390,9 +394,9 @@ if __name__ == "__main__":
         test_ds.entities_attr = train_ds.entities_attr
         test_ds.relations_attr = train_ds.relations_attr
 
-        test_ds.prepare_eval(prompt_idx=0)
+        test_ds.prepare_augment(prompt_idx=0)
 
-        test_collator = LMKBCCollator(test_ds, tokenizer, alias_idx=args.alias_idx)
+        test_collator = LMKBCCollator(test_ds, tokenizer, alias_idx=args.alias_idx, generate=True)
         test_dataloader = DataLoader(test_ds, batch_size=args.bsize, shuffle=False, collate_fn=test_collator)
 
         test_bar = tqdm(total=len(test_dataloader), desc="Test")

@@ -79,4 +79,6 @@ class Prompt:
     def regex(self, idx, text):
         pattern = self.prompts[idx]["regex"]
         m = pattern.match(text)
+        if m is None:
+            return None, None
         return m.group(1).strip(), m.group(2)

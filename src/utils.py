@@ -115,6 +115,7 @@ def prepare_model(model, tokenizer):
     # Add padding
     # tokenizer.pad_token_id = tokenizer.eos_token_id
     model.config.pad_token_id = tokenizer.pad_token_id
+    model.generation_config.pad_token_id = tokenizer.pad_token_id
     # tokenizer.padding_side = "left"
 
     # Add KG special token

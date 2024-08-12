@@ -11,14 +11,16 @@ python lmkbc_train.py --data-dir ./data/lmkbc/2022 \
                     --prompt-idx 0 \
                     --n-token 1 \
                     --kgat ./out/model.pth \
+                    --bias \
                     --freeze-kgat \
-                    --first-epoch 5 \
-                    --second-epoch 5 \
+                    --first-epoch 1 \
+                    --second-epoch 1 \
                     --bsize 8 \
                     --lr 0.00001 \
                     --decay 0.0005 \
                     --weighted \
                     --beam 3 \
+                    --max-new-tokens 32 \
                     --estop \
                     --estop-patience 3 \
                     --estop-delta 0.05 \

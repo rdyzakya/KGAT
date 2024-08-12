@@ -375,6 +375,8 @@ class LMKBCDataset(KGATDataset):
                         ground_truth_qids.append(my_disambiguation(o))
             for out in outputs[i]:
                 obj, true_or_false = self.prompt.regex(self.prompt_idx[i], out)
+                if obj is None:
+                    continue
                 predicted_qid = my_disambiguation(obj)
                 if predicted_qid not in ground_truth_qids:
                     entry.append(obj)

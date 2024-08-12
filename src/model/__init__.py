@@ -46,7 +46,7 @@ class Pipeline(BaseModel):
                              sigmoid=False)
         
         gate = softmax(gate, index=reference_batch, ptr=None, num_nodes=None, dim=0)
-        virtual_token = self.reduce(gate * reference_triples, index=reference_batch, ptr=None, num_nodes=None, dim=0)
+        virtual_token = self.reduce(gate * reference_triples, index=reference_batch, ptr=None, dim_size=None, dim=0, reduce="sum")
 
         virtual_token = self.graph_prefix(virtual_token)
 
