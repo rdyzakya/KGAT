@@ -19,7 +19,8 @@ def init_args():
     parser.add_argument("--sentence-emb-idx", type=int, help="Sentence embedding index (layer index)")
     parser.add_argument("--alias-idx", type=int, help="Alias index (some entity have several aliases, affect the entity node attribute)")
     parser.add_argument("--prompt-idx", type=int, help="Prompt index")
-    parser.add_argument("--n-token", type=int, default=1)
+    parser.add_argument("--n-token-tensor", type=int, default=1)
+    parser.add_argument("--n-token-gp", type=int, default=1)
 
     # MODEL
     parser.add_argument("--kgat", type=str, help="Model path", required=True)
@@ -96,7 +97,7 @@ def loop(pipe, dataloader, device, args, optimizer, criterion, pbar, val=False):
 
         labels = batch.pop("labels")
         weights = batch.pop("weights")
-        batch["n_token"] = args.n_token
+        batch["n_token"] = args.n_token_gp
 
         if val:
             with torch.no_grad():
@@ -149,7 +150,7 @@ def generate(pipe, tokenizer, dataloader, device, args, pbar):
             if isinstance(v, torch.Tensor):
                 batch[k] = v.to(device)
         
-        batch["n_token"] = args.n_token
+        batch["n_token"] = args.n_token_gp
 
         batch_size = batch["input_ids"].shape[0]
         
@@ -203,14 +204,14 @@ if __name__ == "__main__":
         load=bool(args.load_items)
     )
 
-    texts_tensor_path = os.path.join(args.data_dir, f"texts.{args.lm.replace('/', '_')}.n_token={args.n_token}.index={args.sentence_emb_idx}.tensor")
-    texts_tensor_path = texts_tensor_path if os.path.exists(texts_tensor_path) else os.path.join(args.data_dir, f"texts.{args.lm.replace('/', '_')}.n_token={args.n_token}.tensor")
+    texts_tensor_path = os.path.join(args.data_dir, f"texts.{args.lm.replace('/', '_')}.n_token={args.n_token_tensor}.index={args.sentence_emb_idx}.tensor")
+    texts_tensor_path = texts_tensor_path if os.path.exists(texts_tensor_path) else os.path.join(args.data_dir, f"texts.{args.lm.replace('/', '_')}.n_token={args.n_token_tensor}.tensor")
 
-    entities_tensor_path = os.path.join(args.data_dir, f"entities.{args.lm.replace('/', '_')}.n_token={args.n_token}.index={args.sentence_emb_idx}.tensor")
-    entities_tensor_path = entities_tensor_path if os.path.exists(entities_tensor_path) else os.path.join(args.data_dir, f"entities.n_token={args.n_token}.tensor")
+    entities_tensor_path = os.path.join(args.data_dir, f"entities.{args.lm.replace('/', '_')}.n_token={args.n_token_tensor}.index={args.sentence_emb_idx}.tensor")
+    entities_tensor_path = entities_tensor_path if os.path.exists(entities_tensor_path) else os.path.join(args.data_dir, f"entities.n_token={args.n_token_tensor}.tensor")
 
-    relations_tensor_path = os.path.join(args.data_dir, f"relations.{args.lm.replace('/', '_')}.n_token={args.n_token}.index={args.sentence_emb_idx}.tensor")
-    relations_tensor_path = relations_tensor_path if os.path.exists(relations_tensor_path) else os.path.join(args.data_dir, f"relations.n_token={args.n_token}.tensor")
+    relations_tensor_path = os.path.join(args.data_dir, f"relations.{args.lm.replace('/', '_')}.n_token={args.n_token_tensor}.index={args.sentence_emb_idx}.tensor")
+    relations_tensor_path = relations_tensor_path if os.path.exists(relations_tensor_path) else os.path.join(args.data_dir, f"relations.n_token={args.n_token_tensor}.tensor")
 
     train_ds = LMKBCDataset(
         train_builder,
@@ -218,7 +219,7 @@ if __name__ == "__main__":
         os.path.join(args.data_dir, "entities.txt"),
         os.path.join(args.data_dir, "relations.txt"),
         os.path.join(args.data_dir, "entities_alias.jsonl"),
-        n_tokens=args.n_token,
+        n_tokens=args.n_token_gp,
         tokenizer=tokenizer,
         texts_tensor_path=texts_tensor_path,
         entities_tensor_path=entities_tensor_path,
@@ -233,7 +234,7 @@ if __name__ == "__main__":
         os.path.join(args.data_dir, "entities.txt"),
         os.path.join(args.data_dir, "relations.txt"),
         os.path.join(args.data_dir, "entities_alias.jsonl"),
-        n_tokens=args.n_token,
+        n_tokens=args.n_token_gp,
         tokenizer=tokenizer,
         texts_tensor_path=None,
         entities_tensor_path=None,
@@ -264,7 +265,7 @@ if __name__ == "__main__":
     language_model = utils.prepare_model(language_model, tokenizer)
     language_model.freeze()
     
-    graph_prefix = GraphPrefix(in_channels=train_ds.texts_attr.shape[1], d_model=language_model.embed_dim, n_token=args.n_token, bias=args.bias)
+    graph_prefix = GraphPrefix(in_channels=train_ds.texts_attr.shape[1], d_model=language_model.embed_dim, n_token=args.n_token_gp, bias=args.bias)
 
     pipe = Pipeline(kgat_model=kgat_model, graph_prefix=graph_prefix, language_model=language_model)
     
@@ -381,7 +382,7 @@ if __name__ == "__main__":
             os.path.join(args.data_dir, "entities.txt"),
             os.path.join(args.data_dir, "relations.txt"),
             os.path.join(args.data_dir, "entities_alias.jsonl"),
-            n_tokens=args.n_token,
+            n_tokens=args.n_token_gp,
             tokenizer=tokenizer,
             texts_tensor_path=None,
             entities_tensor_path=None,
