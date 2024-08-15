@@ -317,6 +317,9 @@ if __name__ == "__main__":
 
     predictions = generate(pipe, tokenizer, augment_dataloader, device, args, aug_bar)
 
+    with open(os.path.join(args.out, "augment.json"), 'w') as fp:
+            json.dump(predictions, fp)
+
     train_ds.augment(predictions)
 
     ## SECOND PHASE TRAIN
