@@ -1,4 +1,5 @@
 import requests
+import time
 
 # Disambiguation baseline
 def disambiguation_baseline(item):
@@ -41,7 +42,13 @@ def my_disambiguation(input_str):
         pass
 
     # If not an integer, try to get the Wikidata ID
-    wikidata_id = get_wikidata_id(input_str)
+    while True:
+        try:
+            wikidata_id = get_wikidata_id(input_str)
+            break
+        except requests.exceptions.ConnectionError as e:
+            print("Get wikidata id request timeout, redo request...")
+            time.sleep(10)
     if wikidata_id:
         return wikidata_id
     
