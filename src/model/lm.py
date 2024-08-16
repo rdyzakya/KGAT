@@ -4,6 +4,7 @@ from transformers import (
     LlamaForCausalLM,
     MistralForCausalLM,
     OPTForCausalLM,
+    Gemma2ForCausalLM,
     AutoConfig,
 )
 import torch
@@ -139,12 +140,23 @@ class OPTForLMKBC(LanguageModelForLMKBC, OPTForCausalLM):
     def embeddings(self):
         return self.model.decoder.embed_tokens
 
+### GEMMA 2
+class Gemma2ForLMKBC(LanguageModelForLMKBC, Gemma2ForCausalLM):
+    @property
+    def backbone(self):
+        return self.model
+    
+    @property
+    def embeddings(self):
+        return self.model.embed_tokens
+
 ### AUTO
 MAPPING = {
     "gpt2" : GPT2ForLMKBC,
     "llama" : LlamaForLMKBC,
     "mistral" : MistralForLMKBC,
-    "opt" : OPTForLMKBC
+    "opt" : OPTForLMKBC,
+    "gemma2" : Gemma2ForLMKBC
 }
 
 class AutoModelForLMKBC:
