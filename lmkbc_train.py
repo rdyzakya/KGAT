@@ -143,7 +143,7 @@ def loop(pipe, dataloader, device, args, optimizer, criterion, pbar, val=False):
 def generate(pipe, tokenizer, dataloader, device, args, pbar):
     pipe.eval()
 
-    preds = []
+    result = []
 
     for batch in dataloader:
         for k, v in batch.items():
@@ -154,20 +154,34 @@ def generate(pipe, tokenizer, dataloader, device, args, pbar):
 
         batch_size = batch["input_ids"].shape[0]
         
-        out = pipe.generate_lmkbc(num_beams=args.beam, num_return_sequences=args.beam, max_new_tokens=args.max_new_tokens, **batch)
+        out = pipe.generate_lmkbc(num_beams=args.beam, num_return_sequences=args.beam, max_new_tokens=args.max_new_tokens, 
+                                  return_dict_in_generate=True, output_scores=True, **batch)
+        
+        sequence_ids = out.sequences
 
-        out = out.view(batch_size, args.beam, -1)
+        transition_scores = pipe.labnguage_model.compute_transition_scores(
+            out.sequences, out.scores, out.beam_indices, normalize_logits=False
+        )
+
+        transition_scores = transition_scores.sum(-1) / (transition_scores != 0.0).sum(-1) # 0.0 is for padding token
+
+        sequence_ids = sequence_ids.view(batch_size, args.beam, -1)
+        transition_scores = transition_scores.view(batch_size, args.beam)
 
         text_out = []
-        for o in out:
-            to = tokenizer.batch_decode(o, skip_special_tokens=True)
-            text_out.append(to)
+        for s_id, ts in zip(sequence_ids, transition_scores):
+            to = tokenizer.batch_decode(s_id, skip_special_tokens=True)
+            # text_out.append(to)
+            result.append({
+                "text" : to,
+                "score" : ts
+            })
 
-        preds.extend(text_out)
+        # preds.extend(text_out)
         
         pbar.update()
     
-    return preds
+    return result
 
 if __name__ == "__main__":
     seed_everything(args.seed)
@@ -320,7 +334,7 @@ if __name__ == "__main__":
     with open(os.path.join(args.out, "augment.json"), 'w') as fp:
             json.dump(predictions, fp)
 
-    train_ds.augment(predictions)
+    train_ds.augment([el["text"] for el in predictions])
 
     ## SECOND PHASE TRAIN
     train_ds.prepare_train(prompt_idx=args.prompt_idx)

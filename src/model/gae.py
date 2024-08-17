@@ -236,6 +236,8 @@ class KGATModel(BaseModel):
         reference_triples = self.teta_t(z, edge_index, relations)
         query = self.teta_q(query)
 
+        node_batch = torch.zeros(x.shape[0]).int() if node_batch is None else node_batch
+
         source_batch = node_batch[edge_index[0]]
         tgt_batch = node_batch[edge_index[2]]
         
