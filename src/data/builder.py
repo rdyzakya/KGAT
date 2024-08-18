@@ -54,7 +54,7 @@ class DSBuilder:
                   reference_idx,
                   n_pick=1):
         unrelated_triple_idx = all_triple_idx[~np.isin(all_triple_idx, triple_idx) & ~np.isin(all_triple_idx, reference_idx)]
-        prob = np.random.rand() if len(reference_idx) > 0 else bounded_random(0.35 + 1e-12, 1)
+        prob = np.random.rand() if len(reference_idx) > 0 else bounded_random(0.495 + 1e-12, 1)
         if prob <= 0.495 and len(reference_idx) > 0: # 49.5% neighbor
             reference_triple = self.triples[reference_idx]
             reference_subject = reference_triple[:,0]

@@ -81,6 +81,8 @@ class LanguageModelForLMKBC(ABC):
         return result
 
     def prepare_lmkbc(self, input_ids, attention_mask, graph_embeddings):
+        input_ids = input_ids.clone()
+        
         mask = input_ids == self.config.kg_token_id
 
         input_ids[mask] = 0 # change to 0, because we don't resize the params
