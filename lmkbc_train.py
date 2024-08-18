@@ -23,7 +23,8 @@ def init_args():
     parser.add_argument("--n-token-gp", type=int, default=1)
 
     # MODEL
-    parser.add_argument("--kgat", type=str, help="Model path", required=True)
+    parser.add_argument("--kgat", type=str, help="KGAT model path", required=True)
+    parser.add_argument("--gp", type=str, help="Path to graph prefix checkpoint if exist")
     parser.add_argument("--bias", action="store_true")
 
     # TRAINING RELATED
@@ -34,8 +35,12 @@ def init_args():
     parser.add_argument("--lr", type=float, help="Learning rate", default=1e-3) # based on default adam, also mentioned in unimp paper
     parser.add_argument("--decay", type=float, help="Weight decay", default=0.0005) # based on unimp paper
     parser.add_argument("--weighted", action="store_true")
-    parser.add_argument("--beam", type=int, default=6)
+    parser.add_argument("--beam-augment", type=int, default=6)
+    parser.add_argument("--beam-predict", type=int, default=6)
     parser.add_argument("--max-new-tokens", type=int, default=32)
+
+    # parser.add_argument("--train1", action="store_true") kalo skip pake first epoch 0
+    # parser.add_argument("--train2", action="store_true") kalo skip pake second epoch 0
     
     parser.add_argument("--estop", action="store_true", help="Perform early stopping")
     parser.add_argument("--estop-patience", type=int, help="Early stopping patience", default=3)
@@ -140,7 +145,9 @@ def loop(pipe, dataloader, device, args, optimizer, criterion, pbar, val=False):
 
     return entry
 
-def generate(pipe, tokenizer, dataloader, device, args, pbar):
+def generate(pipe, tokenizer, dataloader, device, args, pbar, augment=False):
+    beam = args.beam_augment if augment else args.beam_predict
+
     pipe.eval()
 
     result = []
@@ -154,7 +161,7 @@ def generate(pipe, tokenizer, dataloader, device, args, pbar):
 
         batch_size = batch["input_ids"].shape[0]
         
-        out = pipe.generate_lmkbc(num_beams=args.beam, num_return_sequences=args.beam, max_new_tokens=args.max_new_tokens, 
+        out = pipe.generate_lmkbc(num_beams=beam, num_return_sequences=beam, max_new_tokens=args.max_new_tokens, 
                                   return_dict_in_generate=True, output_scores=True, **batch)
         
         sequence_ids = out.sequences
@@ -165,8 +172,8 @@ def generate(pipe, tokenizer, dataloader, device, args, pbar):
 
         transition_scores = transition_scores.sum(-1) / (transition_scores != 0.0).sum(-1) # 0.0 is for padding token
 
-        sequence_ids = sequence_ids.view(batch_size, args.beam, -1)
-        transition_scores = transition_scores.view(batch_size, args.beam)
+        sequence_ids = sequence_ids.view(batch_size, beam, -1)
+        transition_scores = transition_scores.view(batch_size, beam)
 
         text_out = []
         for s_id, ts in zip(sequence_ids, transition_scores):
@@ -199,7 +206,7 @@ if __name__ == "__main__":
         stay_ratio_max=0.0,
         random_state=args.seed,
         n_pick=1,
-        items_path="./lmkbc-train-items.jsonl",
+        items_path=os.path.join(args.data_dir, "train-items.jsonl"),
         save_items=bool(args.save_items),
         load=bool(args.load_items)
     )
@@ -213,7 +220,7 @@ if __name__ == "__main__":
         stay_ratio_max=0.0,
         random_state=args.seed,
         n_pick=1,
-        items_path="./lmkbc-dev-items.jsonl",
+        items_path=os.path.join(args.data_dir, "dev-items.jsonl"),
         save_items=bool(args.save_items),
         load=bool(args.load_items)
     )
@@ -279,7 +286,9 @@ if __name__ == "__main__":
     language_model = utils.prepare_model(language_model, tokenizer)
     language_model.freeze()
     
-    graph_prefix = GraphPrefix(in_channels=train_ds.texts_attr.shape[1], d_model=language_model.embed_dim, n_token=args.n_token_gp, bias=args.bias)
+    graph_prefix = GraphPrefix(in_channels=train_ds.texts_attr.shape[1], 
+                               d_model=language_model.embed_dim, 
+                               n_token=args.n_token_gp, bias=args.bias) if not args.gp else GraphPrefix.load(args.gp)
 
     pipe = Pipeline(kgat_model=kgat_model, graph_prefix=graph_prefix, language_model=language_model)
     
@@ -322,19 +331,26 @@ if __name__ == "__main__":
         saveload2.save(history, is_ckpt=True)
 
     ## AUGMENT
-    train_ds.prepare_augment(prompt_idx=0)
+    if args.beam_augment > 0:
+        train_ds.prepare_generate(prompt_idx=0)
 
-    augment_collator = LMKBCCollator(train_ds, tokenizer, alias_idx=args.alias_idx, generate=True)
-    augment_dataloader = DataLoader(train_ds, batch_size=args.bsize, shuffle=False, collate_fn=augment_collator)
+        augment_collator = LMKBCCollator(train_ds, tokenizer, alias_idx=args.alias_idx, generate=True)
+        augment_dataloader = DataLoader(train_ds, batch_size=args.bsize, shuffle=False, collate_fn=augment_collator)
 
-    aug_bar = tqdm(total=len(augment_dataloader), desc="Augmentation")
+        aug_bar = tqdm(total=len(augment_dataloader), desc="Augmentation")
 
-    predictions = generate(pipe, tokenizer, augment_dataloader, device, args, aug_bar)
+        raw_predictions = generate(pipe, tokenizer, augment_dataloader, device, args, aug_bar, augment=True)
 
-    with open(os.path.join(args.out, "augment.json"), 'w') as fp:
+
+        train_ds.augment([el["text"] for el in raw_predictions])
+
+        predictions = {
+            "raw" : raw_predictions,
+            "negative_objects" : train_ds.negative_objects
+        }
+
+        with open(os.path.join(args.out, "augment.json"), 'w') as fp:
             json.dump(predictions, fp)
-
-    train_ds.augment([el["text"] for el in predictions])
 
     ## SECOND PHASE TRAIN
     train_ds.prepare_train(prompt_idx=args.prompt_idx)
@@ -378,17 +394,17 @@ if __name__ == "__main__":
 
     ## EVALUATION
     if args.test:
-        # use dev
+        # TEST
         test_builder = DSBuilder(
             triples_path=os.path.join(args.data_dir, "triples.json"),
-            data_path=os.path.join(args.data_dir, "dev.jsonl"),
+            data_path=os.path.join(args.data_dir, "test.jsonl"),
             n_reference_min=args.n_ref_min,
             n_reference_max=args.n_ref_max,
             stay_ratio_min=0.0,
             stay_ratio_max=0.0,
             random_state=args.seed,
             n_pick=1,
-            items_path="./lmkbc-dev-items.jsonl",
+            items_path=os.path.join(args.data_dir, "test-items.jsonl"),
             save_items=bool(args.save_items),
             load=bool(args.load_items)
         )
@@ -412,14 +428,28 @@ if __name__ == "__main__":
         test_ds.entities_attr = train_ds.entities_attr
         test_ds.relations_attr = train_ds.relations_attr
 
-        test_ds.prepare_augment(prompt_idx=0)
+        test_ds.prepare_generate(prompt_idx=0)
 
         test_collator = LMKBCCollator(test_ds, tokenizer, alias_idx=args.alias_idx, generate=True)
         test_dataloader = DataLoader(test_ds, batch_size=args.bsize, shuffle=False, collate_fn=test_collator)
 
-        test_bar = tqdm(total=len(test_dataloader), desc="Test")
+        test_bar = tqdm(total=len(test_dataloader), desc="Predict test")
         
-        predictions = generate(pipe, tokenizer, test_dataloader, device, args, test_bar)
+        predictions = generate(pipe, tokenizer, test_dataloader, device, args, test_bar, augment=False)
         
-        with open(os.path.join(args.out, "preds.json"), 'w') as fp:
+        with open(os.path.join(args.out, "preds-test.json"), 'w') as fp:
+            json.dump(predictions, fp)
+
+        # val
+        
+        val_ds.prepare_generate(prompt_idx=0)
+
+        val_collator = LMKBCCollator(val_ds, tokenizer, alias_idx=args.alias_idx, generate=True)
+        val_dataloader = DataLoader(val_ds, batch_size=args.bsize, shuffle=False, collate_fn=val_collator)
+
+        val_bar = tqdm(total=len(val_dataloader), desc="Predict val")
+        
+        predictions = generate(pipe, tokenizer, val_bar, device, args, val_bar, augment=False)
+        
+        with open(os.path.join(args.out, "preds-val.json"), 'w') as fp:
             json.dump(predictions, fp)

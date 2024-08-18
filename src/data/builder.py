@@ -71,11 +71,11 @@ class DSBuilder:
 
             return picked_idx
         elif prob <= 0.985 and len(reference_idx) > 0: # 49% similar relation
-            # 50% same relation with stay triple
-            # 50% with reference
+            # 90% same relation with stay triple
+            # 10% with reference
             relation_prob = np.random.rand()
-            if relation_prob <= 0.5 and len(stay_triple_idx) > 0:
-                stay_triple = self.triples[stay_triple_idx]
+            if relation_prob <= 0.9 and len(triple_idx) > 0:
+                stay_triple = self.triples[triple_idx] # change to triple idx
                 stay_relations = np.unique(stay_triple[:,1])
 
                 unrelated_triple = self.triples[unrelated_triple_idx]

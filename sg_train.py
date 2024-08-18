@@ -188,7 +188,7 @@ if __name__ == "__main__":
         stay_ratio_max=args.stay_ratio_max,
         random_state=args.seed,
         n_pick=1,
-        items_path="./sg-train-items.jsonl",
+        items_path=os.path.join(args.data_dir, "train-items.jsonl"),
         save_items=bool(args.save_items),
         load=bool(args.load_items)
     )
@@ -202,7 +202,7 @@ if __name__ == "__main__":
         stay_ratio_max=1.0,
         random_state=args.seed,
         n_pick=1,
-        items_path="./sg-dev-items.jsonl",
+        items_path=os.path.join(args.data_dir, "dev-items.jsonl"),
         save_items=bool(args.save_items),
         load=bool(args.load_items)
     )
@@ -314,7 +314,7 @@ if __name__ == "__main__":
             stay_ratio_max=1.0,
             random_state=args.seed,
             n_pick=1,
-            items_path="./sg-test-items.jsonl",
+            items_path=os.path.join(args.data_dir, "test-items.jsonl"),
             save_items=bool(args.save_items),
             load=bool(args.load_items)
         )

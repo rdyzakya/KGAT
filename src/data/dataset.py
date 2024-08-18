@@ -302,7 +302,7 @@ class LMKBCDataset(KGATDataset):
     def prepare_eval(self, prompt_idx=None):
         return self.prepare_train(prompt_idx=prompt_idx)
     
-    def prepare_augment(self, prompt_idx=None):
+    def prepare_generate(self, prompt_idx=None):
         result = []
         all_prompt_idx = []
         for i, row in tqdm(self.items.iterrows()):
