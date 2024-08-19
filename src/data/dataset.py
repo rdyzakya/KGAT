@@ -380,7 +380,7 @@ class LMKBCDataset(KGATDataset):
                 if obj.strip().lower() == EMPTY_OBJECT.lower():
                     continue
                 predicted_qid = my_disambiguation(obj)
-                if predicted_qid not in ground_truth_qids:
+                if predicted_qid not in ground_truth_qids and obj not in entry:
                     entry.append(obj)
             self.negative_objects.append(entry)
         return self.negative_objects

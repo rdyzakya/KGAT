@@ -12,6 +12,11 @@ class Prompt:
     def __init__(self):
         self.prompts = [
             {
+                "prefix" : lambda subject, relation, n_tokens=1 : f"Based on the knowledge graph `{KG_MASK*n_tokens}` => (subject : {subject} | relation : {relation} | object : ",
+                "suffix" : lambda object, negative_sample=False : f"{object} | {TRUE_FLAG if not negative_sample else FALSE_FLAG})",
+                "regex" : re.compile(rf"([^|]+) \| ({TRUE_FLAG}|{FALSE_FLAG})")
+            },
+            {
                 "prefix" : lambda subject, relation, n_tokens=1 : f"Based on the knowledge graph `{KG_MASK*n_tokens}`, complete the following triple with the format (subject : SUBJECT | relation : RELATION | object : OBJECT | T/F) and stop after close bracket, fill OBJECT with {EMPTY_OBJECT} if nothing satisfy, fill T/F with {TRUE_FLAG} if you think the triple is true else fill with {FALSE_FLAG} : (subject : {subject} | relation : {relation} | object : ",
                 "suffix" : lambda object, negative_sample=False : f"{object} | {TRUE_FLAG if not negative_sample else FALSE_FLAG})",
                 "regex" : re.compile(rf"([^|]+) \| ({TRUE_FLAG}|{FALSE_FLAG})")
