@@ -11,13 +11,18 @@ import re
 class Prompt:
     def __init__(self, tokenizer):
         self.prompts = [
+            # {
+            #     "prefix" : lambda subject, relation, n_tokens=1 : f"Format: (subject | relation | object | {TRUE_FLAG}/{FALSE_FLAG}){tokenizer.eos_token}\nReference: {KG_MASK*n_tokens}\nResult: ({subject} | {relation} | ",
+            #     "suffix" : lambda object, negative_sample=False : f"{object} | {TRUE_FLAG if not negative_sample else FALSE_FLAG})",
+            #     "regex" : re.compile(rf"([^|]+) \| ({TRUE_FLAG}|{FALSE_FLAG})")
+            # },
+            # {
+            #     "prefix" : lambda subject, relation, n_tokens=1 : f"Based on the knowledge graph `{KG_MASK*n_tokens}` => (subject : {subject} | relation : {relation} | object : ",
+            #     "suffix" : lambda object, negative_sample=False : f"{object} | {TRUE_FLAG if not negative_sample else FALSE_FLAG})",
+            #     "regex" : re.compile(rf"([^|]+) \| ({TRUE_FLAG}|{FALSE_FLAG})")
+            # },
             {
-                "prefix" : lambda subject, relation, n_tokens=1 : f"Format: (subject | relation | object | {TRUE_FLAG}/{FALSE_FLAG}){tokenizer.eos_token}\nReference: {KG_MASK*n_tokens}\nResult: ({subject} | {relation} | ",
-                "suffix" : lambda object, negative_sample=False : f"{object} | {TRUE_FLAG if not negative_sample else FALSE_FLAG})",
-                "regex" : re.compile(rf"([^|]+) \| ({TRUE_FLAG}|{FALSE_FLAG})")
-            },
-            {
-                "prefix" : lambda subject, relation, n_tokens=1 : f"Based on the knowledge graph `{KG_MASK*n_tokens}` => (subject : {subject} | relation : {relation} | object : ",
+                "prefix" : lambda subject, relation, n_tokens=1 : f"Based on the knowledge graph `{KG_MASK*n_tokens}`, complete the following triple with the format (subject | relation | object | {TRUE_FLAG} / {FALSE_FLAG}){tokenizer.eos_token}, fill object with {EMPTY_OBJECT} if nothing satisfy : ({subject} | {relation} | ",
                 "suffix" : lambda object, negative_sample=False : f"{object} | {TRUE_FLAG if not negative_sample else FALSE_FLAG})",
                 "regex" : re.compile(rf"([^|]+) \| ({TRUE_FLAG}|{FALSE_FLAG})")
             },
