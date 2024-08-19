@@ -186,7 +186,7 @@ class LMKBCDataset(KGATDataset):
         self.tokenizer = tokenizer
         self.n_tokens = n_tokens
         self.negative_objects = [list() for _ in range(self.items.shape[0])]
-        self.prompt = Prompt()
+        self.prompt = Prompt(tokenizer)
     
     def prepare_train(self, prompt_idx=None):
         result = []

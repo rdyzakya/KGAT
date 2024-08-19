@@ -7,8 +7,8 @@ EOS_MASK = "<EOS>"
 EMPTY_OBJECT = "NONE"
 
 VALID_MASK = "<VALID>"
-TRUE_FLAG = "TRUE"
-FALSE_FLAG = "FALSE"
+TRUE_FLAG = "true"
+FALSE_FLAG = "false"
 
 class EarlyStopper:
     def __init__(self, patience=1, min_delta=0, greater_is_better=False):
