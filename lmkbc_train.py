@@ -166,7 +166,7 @@ def generate(pipe, tokenizer, dataloader, device, args, pbar, augment=False):
         
         sequence_ids = out.sequences
 
-        transition_scores = pipe.labnguage_model.compute_transition_scores(
+        transition_scores = pipe.language_model.compute_transition_scores(
             out.sequences, out.scores, out.beam_indices, normalize_logits=False
         )
 
