@@ -181,7 +181,7 @@ def generate(pipe, tokenizer, dataloader, device, args, pbar, augment=False):
             # text_out.append(to)
             result.append({
                 "text" : to,
-                "score" : ts
+                "score" : ts.tolist()
             })
 
         # preds.extend(text_out)
