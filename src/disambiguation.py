@@ -54,3 +54,21 @@ def my_disambiguation(input_str):
     
     # If all else fails, return the original string
     return input_str
+
+def get_wikidata_entity_name(entity_id):
+    url = "https://www.wikidata.org/w/api.php"
+    params = {
+        "action": "wbgetentities",
+        "ids": entity_id,
+        "format": "json",
+        "languages": "en"
+    }
+    
+    response = requests.get(url, params=params)
+    data = response.json()
+
+    if 'entities' in data and entity_id in data['entities']:
+        entity = data['entities'][entity_id]
+        if 'labels' in entity and 'en' in entity['labels']:
+            return entity['labels']['en']['value']
+    return None
