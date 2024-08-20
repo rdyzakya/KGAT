@@ -71,9 +71,13 @@ if __name__ == "__main__":
 
         # TRAIN, DEV, SPLIT
         def incr_df(df):
+            def handle_none(val, incr):
+                if val is None:
+                    return None
+                return val + incr
             df.text = df.text.apply(lambda x: [el + len_texts_before for el in x])
-            df.subject = df.subject.apply(lambda x: x + len_entities_before)
-            df.relation = df.relation.apply(lambda x: x + len_relations_before)
+            df.subject = df.subject.apply(lambda x: handle_none(x, len_entities_before))
+            df.relation = df.relation.apply(lambda x: handle_none(x, len_relations_before))
             df.objects = df.objects.apply(lambda x: [el + len_entities_before for el in x])
             df.triple = df.text.apply(lambda x: [el + len_triples_before for el in x])
             return df
