@@ -6,7 +6,7 @@ sys.path.append("./src")
 def init_args():
     parser = ArgumentParser()
     # DATA RELATED
-    parser.add_argument("--train-data-dir", type=str, help="Data directory", default="./data/subgraph-gen/webnlg")
+    parser.add_argument("--data-dir", type=str, help="Data directory", default="./data/subgraph-gen/webnlg")
     parser.add_argument("--super-set", action="store_true", help="Train super set")
     parser.add_argument("--n-ref-min", type=int, help="N reference min", default=10)
     parser.add_argument("--n-ref-max", type=int, help="N reference max", default=50)
