@@ -6,7 +6,7 @@ from .prompt import Prompt
 from ._data_utils import (
     read_txt
 )
-from utils import EMPTY_OBJECT
+from utils import EMPTY_OBJECT, FALSE_FLAG
 from disambiguation import my_disambiguation
 from tqdm import tqdm
 import re
@@ -187,6 +187,11 @@ class LMKBCDataset(KGATDataset):
         self.n_tokens = n_tokens
         self.negative_objects = [list() for _ in range(self.items.shape[0])]
         self.prompt = Prompt(tokenizer)
+
+        false_flag_id = tokenizer.encode(FALSE_FLAG)
+        false_flag_id = [el for el in false_flag_id if el not in tokenizer.all_special_ids]
+        assert len(false_flag_id) == 1
+        self.false_flag_id = false_flag_id[0]
     
     def prepare_train(self, prompt_idx=None):
         result = []
@@ -238,8 +243,8 @@ class LMKBCDataset(KGATDataset):
                         prompt,
                         ## WEIGHT
                         1/(len_pos_sample + len_neg_sample),
-                        ## OBJECTS
-                        # object_qids
+                        ## NON NEGATIVE SAMPLE
+                        1
                     ))
                 else:
                     for obj_idx in row["objects"]:
@@ -266,8 +271,8 @@ class LMKBCDataset(KGATDataset):
                                 prompt,
                                 ## WEIGHT
                                 1/(len_pos_sample + len_neg_sample),
-                                ## OBJECTS
-                                # object_qids
+                                ## NON NEGATIVE SAMPLE
+                                1
                             ))
                 for n_obj in self.negative_objects[i]:
                     prompt, pid = self.prompt.pick(subject=s_alias,
@@ -291,8 +296,8 @@ class LMKBCDataset(KGATDataset):
                         prompt,
                         ## WEIGHT
                         1/(len_pos_sample + len_neg_sample),
-                        ## OBJECTS
-                        # object_qids
+                        ## NEGATIVE SAMPLE
+                        0
                     ))
 
         self.data = result
@@ -351,8 +356,8 @@ class LMKBCDataset(KGATDataset):
                 prompt,
                 ## WEIGHT
                 1/(len_pos_sample + len_neg_sample),
-                ## OBJECTS
-                # object_qids
+                ## NON NEGATIVE SAMPLE
+                1
             ))
         self.data = result
         self.prompt_idx = all_prompt_idx
@@ -397,8 +402,8 @@ class LMKBCDataset(KGATDataset):
             prompt,
             ## WEIGHT
             weight,
-            # ## OBJECTS
-            # object_qids
+            # FLAG
+            flag
         ) =  self.data[idx]
         
         nodes_idx = [np.random.choice(el) if alias_idx is None else el[alias_idx] for el in self.entities_alias.loc[nodes_alias_idx, "alias_idx"]]
@@ -429,6 +434,11 @@ class LMKBCDataset(KGATDataset):
         labels = tokenized["input_ids"].clone()
         labels[labels == self.tokenizer.pad_token_id] = -100
         labels[labels == self.tokenizer.kg_token_id] = -100
+
+        flag = torch.tensor([flag]).long()
+        temp = labels[flag == 0]
+        temp[temp != self.false_flag_id] = -100
+        labels[flag == 0] = temp
 
         return {
             "x" : self.entities_attr[nodes_idx],

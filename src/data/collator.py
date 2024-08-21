@@ -126,8 +126,8 @@ class LMKBCCollator:
             prompt,
             # WEIGHT
             weight,
-            # OBJECTS
-            # object_qids
+            # FLAG
+            flag
         ) = zip(*batch)
 
         node_batch = []
@@ -189,6 +189,11 @@ class LMKBCCollator:
         labels = tokenized["input_ids"].clone()
         labels[tokenized["attention_mask"] == 0] = -100
         labels[labels == self.tokenizer.kg_token_id] = -100
+
+        flag = torch.tensor(flag).long()
+        temp = labels[flag == 0]
+        temp[temp != self.false_flag_id] = -100 # mask
+        labels[flag == 0] = temp
 
         if not self.generate:
             return {
