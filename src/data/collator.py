@@ -192,7 +192,7 @@ class LMKBCCollator:
 
         flag = torch.tensor(flag).long()
         temp = labels[flag == 0]
-        temp[temp != self.false_flag_id] = -100 # mask
+        temp[temp != self.ds.false_flag_id] = -100 # mask
         labels[flag == 0] = temp
 
         if not self.generate:
