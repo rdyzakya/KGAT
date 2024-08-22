@@ -1,5 +1,6 @@
 import requests
 import time
+import re
 
 # Disambiguation baseline
 def disambiguation_baseline(item):
@@ -56,6 +57,9 @@ def my_disambiguation(input_str):
     return input_str
 
 def get_wikidata_entity_name(entity_id):
+    entity_id = str(entity_id)
+    if not re.match(r"Q\d+", entity_id):
+        return entity_id
     url = "https://www.wikidata.org/w/api.php"
     params = {
         "action": "wbgetentities",

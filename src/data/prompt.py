@@ -12,9 +12,9 @@ class Prompt:
     def __init__(self, tokenizer):
         self.prompts = [
             {
-                "prefix" : lambda subject, relation, n_tokens=1 : f"Based on the reference `{KG_MASK*n_tokens}`, complete the following triple with the format ( subject : S | relation : R | object : O | {TRUE_FLAG} / {FALSE_FLAG} ){tokenizer.eos_token}, fill object with {EMPTY_OBJECT} if nothing satisfy : ( subject : {subject} | relation : {relation} | object : ",
-                "suffix" : lambda object, negative_sample=False : f"{object} | {TRUE_FLAG if not negative_sample else FALSE_FLAG} )",
-                "regex" : re.compile(rf"([^|]+) \| ({TRUE_FLAG}|{FALSE_FLAG})")
+                "prefix" : lambda subject, relation, n_tokens=1 : f"Use english, based on the reference `{KG_MASK*n_tokens}`, complete the following triple with the format ( subject : S | relation : R | object : O | valid : {TRUE_FLAG} / {FALSE_FLAG} ){tokenizer.eos_token}, fill object with {EMPTY_OBJECT} if nothing satisfy : ( subject : {subject} | relation : {relation} | object : ",
+                "suffix" : lambda object, negative_sample=False : f"{object} | valid : {TRUE_FLAG if not negative_sample else FALSE_FLAG} )",
+                "regex" : re.compile(rf"([^|]+) \| valid : ({TRUE_FLAG}|{FALSE_FLAG})")
             },
             # {
             #     "prefix" : lambda subject, relation, n_tokens=1 : f"Based on the knowledge graph `{KG_MASK*n_tokens}`, complete the following triple with the format (subject : SUBJECT | relation : RELATION | object : OBJECT | T/F) and stop after close bracket, fill OBJECT with {EMPTY_OBJECT} if nothing satisfy, fill T/F with {TRUE_FLAG} if you think the triple is true else fill with {FALSE_FLAG} : (subject : {subject} | relation : {relation} | object : ",
@@ -79,7 +79,7 @@ class Prompt:
         
         suffix = chosen_prompt["suffix"](object, negative_sample=negative_sample)
 
-        return prefix + suffix, idx
+        return prefix, suffix, idx
     
     def regex(self, idx, text):
         pattern = self.prompts[idx]["regex"]

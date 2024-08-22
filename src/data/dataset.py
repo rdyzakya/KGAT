@@ -6,8 +6,8 @@ from .prompt import Prompt
 from ._data_utils import (
     read_txt
 )
-from utils import EMPTY_OBJECT, FALSE_FLAG
-from disambiguation import my_disambiguation
+from utils import EMPTY_OBJECT, FALSE_FLAG, TRUE_FLAG
+from disambiguation import my_disambiguation, get_wikidata_entity_name
 from tqdm import tqdm
 import re
 
@@ -224,7 +224,7 @@ class LMKBCDataset(KGATDataset):
 
             for s_alias in subject_aliases:
                 if len(row["objects"]) == 0:
-                    prompt, pid = self.prompt.pick(subject=s_alias,
+                    prefix, suffix, pid = self.prompt.pick(subject=s_alias,
                                                     relation=relation,
                                                     object=EMPTY_OBJECT,
                                                     n_tokens=self.n_tokens,
@@ -240,7 +240,8 @@ class LMKBCDataset(KGATDataset):
                         triples_idx,
                         relations_idx,
                         ## TEXT
-                        prompt,
+                        prefix,
+                        suffix,
                         ## WEIGHT
                         1/(len_pos_sample + len_neg_sample),
                         ## NON NEGATIVE SAMPLE
@@ -251,7 +252,7 @@ class LMKBCDataset(KGATDataset):
                         object_alias_ids = self.entities_alias.loc[obj_idx, "alias_idx"]
                         object_aliases = [self.entities[oid] for oid in object_alias_ids]
                         for o_alias in object_aliases:
-                            prompt, pid = self.prompt.pick(subject=s_alias,
+                            prefix, suffix, pid = self.prompt.pick(subject=s_alias,
                                                             relation=relation,
                                                             object=o_alias,
                                                             n_tokens=self.n_tokens,
@@ -268,14 +269,15 @@ class LMKBCDataset(KGATDataset):
                                 triples_idx,
                                 relations_idx,
                                 ## TEXT
-                                prompt,
+                                prefix,
+                                suffix,
                                 ## WEIGHT
                                 1/(len_pos_sample + len_neg_sample),
                                 ## NON NEGATIVE SAMPLE
                                 1
                             ))
                 for n_obj in self.negative_objects[i]:
-                    prompt, pid = self.prompt.pick(subject=s_alias,
+                    prefix, suffix, pid = self.prompt.pick(subject=s_alias,
                                                     relation=relation,
                                                     object=n_obj,
                                                     n_tokens=self.n_tokens,
@@ -293,7 +295,8 @@ class LMKBCDataset(KGATDataset):
                         triples_idx,
                         relations_idx,
                         ## TEXT
-                        prompt,
+                        prefix,
+                        suffix,
                         ## WEIGHT
                         1/(len_pos_sample + len_neg_sample),
                         ## NEGATIVE SAMPLE
@@ -325,7 +328,7 @@ class LMKBCDataset(KGATDataset):
 
             s_alias = self.entities[subject_ids[0]]
 
-            prompt, pid = self.prompt.pick(subject=s_alias,
+            prefix, suffix, pid = self.prompt.pick(subject=s_alias,
                                             relation=relation,
                                             object=None,
                                             n_tokens=self.n_tokens,
@@ -334,17 +337,6 @@ class LMKBCDataset(KGATDataset):
                                             idx=prompt_idx)
             all_prompt_idx.append(pid)
 
-            # objects = row["objects"]
-            # object_qids = []
-            # for o_id in objects:
-            #     qid = self.entities_alias.loc[o_id, "id"]
-            #     if not re.match(r"Q\d+", qid):
-            #         for e_id in self.entities_alias.loc[o_id, "alias_idx"]:
-            #             entity_name = self.entities[e_id]
-            #             qid = my_disambiguation(entity_name)
-            #             if re.match(r"Q\d+", qid):
-            #                 break
-            #     object_qids.append(qid)
             result.append((
                 # x
                 ## GRAPH
@@ -353,7 +345,8 @@ class LMKBCDataset(KGATDataset):
                 triples_idx,
                 relations_idx,
                 ## TEXT
-                prompt,
+                prefix,
+                suffix,
                 ## WEIGHT
                 1/(len_pos_sample + len_neg_sample),
                 ## NON NEGATIVE SAMPLE
@@ -384,8 +377,11 @@ class LMKBCDataset(KGATDataset):
                     continue
                 if obj.strip().lower() == EMPTY_OBJECT.lower():
                     continue
+                if TRUE_FLAG in obj or FALSE_FLAG in obj:
+                    continue
                 predicted_qid = my_disambiguation(obj)
                 if predicted_qid not in ground_truth_qids and obj not in entry:
+                    # entry.append(get_wikidata_entity_name(predicted_qid))
                     entry.append(obj)
             self.negative_objects.append(entry)
         return self.negative_objects
@@ -399,7 +395,8 @@ class LMKBCDataset(KGATDataset):
             triples_idx,
             relations_idx,
             ## TEXT
-            prompt,
+            prefix,
+            suffix,
             ## WEIGHT
             weight,
             # FLAG
@@ -424,16 +421,34 @@ class LMKBCDataset(KGATDataset):
         edge_index = np.transpose(triples)
         edge_index = torch.from_numpy(edge_index)
 
-        # return self.texts_attr[text_idx], self.entities_attr[nodes_idx], edge_index, self.relations_attr[relations_idx], link_cls_label, node_cls_label
-        tokenized = self.tokenizer(prompt, padding=True, return_tensors="pt")
+        prefix = [prefix.split()]
+        suffix = [suffix.split()]
 
-        if (tokenized["input_ids"][:,-1] == self.tokenizer.eos_token_id).all().logical_not():
-            tokenized["input_ids"] = torch.cat([tokenized["input_ids"], torch.full((1,1), self.tokenizer.eos_token_id)], dim=1)
-            tokenized["attention_mask"] = torch.cat([tokenized["attention_mask"], torch.ones(1,1, dtype=tokenized["attention_mask"].dtype)], dim=1)
+        prompt = [el1 + el2 for el1, el2 in zip(prefix, suffix)]
+
+        tokenized = self.tokenizer(prompt, padding=True, return_tensors="pt", is_split_into_words=True)
+
         
         labels = tokenized["input_ids"].clone()
         labels[labels == self.tokenizer.pad_token_id] = -100
         labels[labels == self.tokenizer.kg_token_id] = -100
+
+        for i in range(len(labels)):
+            p = prefix[i]
+            s = suffix[i]
+
+            suffix_indices = torch.arange(len(p), len(p)+len(s))
+            word_ids = tokenized.word_ids(i)
+            word_ids = torch.tensor([el if el is not None else -1 for el in word_ids])
+
+            temp = labels[i]
+            temp[~torch.isin(word_ids, suffix_indices)] = -100
+            labels[i] = temp
+
+        if (tokenized["input_ids"][:,-1] == self.tokenizer.eos_token_id).all().logical_not():
+            tokenized["input_ids"] = torch.cat([tokenized["input_ids"], torch.full((1,1), self.tokenizer.eos_token_id)], dim=1)
+            tokenized["attention_mask"] = torch.cat([tokenized["attention_mask"], torch.ones(1,1, dtype=tokenized["attention_mask"].dtype)], dim=1)
+            labels = torch.cat([labels, torch.full((1,1), self.tokenizer.eos_token_id)], dim=1)
 
         flag = torch.tensor([flag]).long()
         temp = labels[flag == 0]
@@ -451,5 +466,4 @@ class LMKBCDataset(KGATDataset):
             "attention_mask" : tokenized["attention_mask"],
             "labels" : labels,
             "weight" : torch.tensor(weight).float(),
-            # "objects" : [object_qids]
         }
