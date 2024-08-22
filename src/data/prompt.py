@@ -73,7 +73,7 @@ class Prompt:
         prefix = chosen_prompt["prefix"](subject, relation, n_tokens=n_tokens)
         
         if inference:
-            return prefix, idx
+            return prefix, "", idx
         
         assert object is not None
         
