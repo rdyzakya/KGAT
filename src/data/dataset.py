@@ -220,7 +220,7 @@ class LMKBCDataset(KGATDataset):
                     for e_id in self.entities_alias.loc[o_id, "alias_idx"]:
                         entity_name = self.entities[e_id]
                         qid = my_disambiguation(entity_name)
-                        if re.match(r"Q\d+", qid):
+                        if re.match(r"Q\d+", str(qid)):
                             break
                 object_qids.append(qid)
 
