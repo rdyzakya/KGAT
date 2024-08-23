@@ -421,12 +421,12 @@ class LMKBCDataset(KGATDataset):
         edge_index = np.transpose(triples)
         edge_index = torch.from_numpy(edge_index)
 
-        prefix = [prefix.split()]
-        suffix = [suffix.split()]
+        prefix = [prefix]
+        suffix = [suffix]
 
         prompt = [el1 + el2 for el1, el2 in zip(prefix, suffix)]
 
-        tokenized = self.tokenizer(prompt, padding=True, return_tensors="pt", is_split_into_words=True)
+        tokenized = self.tokenizer(prompt, padding=True, return_tensors="pt", is_split_into_words=False)
 
         
         labels = tokenized["input_ids"].clone()
@@ -434,16 +434,13 @@ class LMKBCDataset(KGATDataset):
         labels[labels == self.tokenizer.kg_token_id] = -100
 
         for i in range(len(labels)):
-            p = prefix[i]
             s = suffix[i]
-
-            suffix_indices = torch.arange(len(p), len(p)+len(s))
-            word_ids = tokenized.word_ids(i)
-            word_ids = torch.tensor([el if el is not None else -1 for el in word_ids])
-
-            temp = labels[i]
-            temp[~torch.isin(word_ids, suffix_indices)] = -100
-            labels[i] = temp
+            start_suffix = -1
+            tokenized_suffix = self.tokenizer.decode(labels[i][start_suffix:], skip_special_tokens=True)
+            while tokenized_suffix.strip() != s.strip():
+                start_suffix -= 1
+                tokenized_suffix = self.tokenizer.decode(labels[i][start_suffix:], skip_special_tokens=True)
+            labels[i][:start_suffix] = -100
 
         if (tokenized["input_ids"][:,-1] == self.tokenizer.eos_token_id).all().logical_not():
             tokenized["input_ids"] = torch.cat([tokenized["input_ids"], torch.full((1,1), self.tokenizer.eos_token_id)], dim=1)
