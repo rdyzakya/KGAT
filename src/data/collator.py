@@ -203,6 +203,11 @@ class LMKBCCollator:
                 assert start_suffix*-1 <= len(labels[i])
             labels[i][:start_suffix] = -100
 
+        if (tokenized["input_ids"][:,-1] == self.tokenizer.eos_token_id).all() and self.generate:
+            tokenized["input_ids"] = tokenized["input_ids"][...,:-1]
+            tokenized["attention_mask"] = tokenized["attention_mask"][...,:-1]
+            labels = labels[...,:-1]
+            
         if (tokenized["input_ids"][:,-1] == self.tokenizer.eos_token_id).all().logical_not() and not self.generate:
             tokenized["input_ids"] = torch.cat([tokenized["input_ids"], torch.full((len(prompt),1), self.tokenizer.eos_token_id)], dim=1)
             tokenized["attention_mask"] = torch.cat([tokenized["attention_mask"], torch.ones(len(prompt),1, dtype=tokenized["attention_mask"].dtype)], dim=1)

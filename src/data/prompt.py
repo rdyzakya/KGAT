@@ -12,8 +12,8 @@ class Prompt:
     def __init__(self, tokenizer):
         self.prompts = [
             {
-                "prefix" : lambda subject, relation, n_tokens=1 : f"Use english, based on the reference `{KG_MASK*n_tokens}`, complete the following triple with the format ( subject : S | relation : R | object : O | valid : {TRUE_FLAG} / {FALSE_FLAG} ){tokenizer.eos_token}, fill object with {EMPTY_OBJECT} if nothing satisfy : ( subject : {subject} | relation : {relation} | object : ",
-                "suffix" : lambda object, negative_sample=False : f"{object} | valid : {TRUE_FLAG if not negative_sample else FALSE_FLAG} )",
+                "prefix" : lambda subject, relation, n_tokens=1 : f"Use english, based on the reference `{KG_MASK*n_tokens}`, complete the following triple with the format ( subject : S | relation : R | object : O | valid : {TRUE_FLAG} / {FALSE_FLAG} ){tokenizer.eos_token}, fill object with {EMPTY_OBJECT} if nothing satisfy : ( subject : {subject} | relation : {relation} | object :",
+                "suffix" : lambda object, negative_sample=False : f" {object} | valid : {TRUE_FLAG if not negative_sample else FALSE_FLAG} )",
                 "regex" : re.compile(rf"([^|]+)\s?\|\s?valid\s?:\s?({TRUE_FLAG}|{FALSE_FLAG})")
             },
             # {

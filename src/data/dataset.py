@@ -192,8 +192,10 @@ class LMKBCDataset(KGATDataset):
         false_flag_id = [el for el in false_flag_id if el not in tokenizer.all_special_ids]
         assert len(false_flag_id) == 1
         self.false_flag_id = false_flag_id[0]
+        self.generate = False
     
     def prepare_train(self, prompt_idx=None):
+        self.generate = False
         result = []
         all_prompt_idx = []
         for i, row in tqdm(self.items.iterrows()):
@@ -311,6 +313,7 @@ class LMKBCDataset(KGATDataset):
         return self.prepare_train(prompt_idx=prompt_idx)
     
     def prepare_generate(self, prompt_idx=None):
+        self.generate = True
         result = []
         all_prompt_idx = []
         for i, row in tqdm(self.items.iterrows()):
@@ -442,7 +445,12 @@ class LMKBCDataset(KGATDataset):
                 tokenized_suffix = self.tokenizer.decode(labels[i][start_suffix:], skip_special_tokens=True)
             labels[i][:start_suffix] = -100
 
-        if (tokenized["input_ids"][:,-1] == self.tokenizer.eos_token_id).all().logical_not():
+        if (tokenized["input_ids"][:,-1] == self.tokenizer.eos_token_id).all() and self.generate:
+            tokenized["input_ids"] = tokenized["input_ids"][...,:-1]
+            tokenized["attention_mask"] = tokenized["attention_mask"][...,:-1]
+            labels = labels[...,:-1]
+        
+        if (tokenized["input_ids"][:,-1] == self.tokenizer.eos_token_id).all().logical_not() and not self.generate:
             tokenized["input_ids"] = torch.cat([tokenized["input_ids"], torch.full((1,1), self.tokenizer.eos_token_id)], dim=1)
             tokenized["attention_mask"] = torch.cat([tokenized["attention_mask"], torch.ones(1,1, dtype=tokenized["attention_mask"].dtype)], dim=1)
             labels = torch.cat([labels, torch.full((1,1), self.tokenizer.eos_token_id)], dim=1)
