@@ -200,6 +200,7 @@ class LMKBCCollator:
             while tokenized_suffix.strip() != s.strip():
                 start_suffix -= 1
                 tokenized_suffix = self.tokenizer.decode(labels[i][start_suffix:], skip_special_tokens=True)
+                assert start_suffix*-1 <= len(labels[i])
             labels[i][:start_suffix] = -100
 
         if (tokenized["input_ids"][:,-1] == self.tokenizer.eos_token_id).all().logical_not() and not self.generate:
