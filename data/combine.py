@@ -34,8 +34,8 @@ if __name__ == "__main__":
     all_entities_alias = []
     all_triples = []
     all_train = []
-    all_dev = []
-    all_test = []
+    all_dev = {}
+    all_test = {}
 
     for i, el in tqdm(enumerate(args.dir)):
         # READ
@@ -79,7 +79,7 @@ if __name__ == "__main__":
             df.subject = df.subject.apply(lambda x: handle_none(x, len_entities_before))
             df.relation = df.relation.apply(lambda x: handle_none(x, len_relations_before))
             df.objects = df.objects.apply(lambda x: [el + len_entities_before for el in x])
-            df.triple = df.text.apply(lambda x: [el + len_triples_before for el in x])
+            df.triple = df.triple.apply(lambda x: [el + len_triples_before for el in x])
             return df
         
         train = incr_df(train)
@@ -87,13 +87,11 @@ if __name__ == "__main__":
         test = incr_df(test)
 
         all_train.append(train)
-        all_dev.append(dev)
-        all_test.append(test)
+        all_dev[os.path.split(el)[-1]] = dev
+        all_test[os.path.split(el)[-1]] = test
     
     all_entities_alias = pd.concat(all_entities_alias)
     all_train = pd.concat(all_train)
-    all_dev = pd.concat(all_dev)
-    all_test = pd.concat(all_test)
 
     # SAVE
     all_entities_txt = '\n'.join(all_entities_txt)
@@ -114,5 +112,8 @@ if __name__ == "__main__":
         json.dump(all_triples, fp)
 
     all_train.to_json(os.path.join(args.out, "train.jsonl"), orient="records", lines=True)
-    all_dev.to_json(os.path.join(args.out, "dev.jsonl"), orient="records", lines=True)
-    all_test.to_json(os.path.join(args.out, "test.jsonl"), orient="records", lines=True)
+
+    for k, v in all_dev.items():
+        v.to_json(os.path.join(args.out, f"{k}.dev.jsonl"), orient="records", lines=True)
+    for k, v in all_test.items():
+        v.to_json(os.path.join(args.out, f"{k}.test.jsonl"), orient="records", lines=True)
