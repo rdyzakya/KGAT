@@ -68,7 +68,13 @@ def get_wikidata_entity_name(entity_id):
         "languages": "en"
     }
     
-    response = requests.get(url, params=params)
+    while True:
+        try:
+            response = requests.get(url, params=params)
+            break
+        except requests.exceptions.ProxyError as e:
+            print("Get wikidata name request timeout, redo request...")
+            time.sleep(10)
     data = response.json()
 
     if 'entities' in data and entity_id in data['entities']:

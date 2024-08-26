@@ -38,9 +38,6 @@ def init_args():
     parser.add_argument("--beam-augment", type=int, default=6)
     parser.add_argument("--beam-predict", type=int, default=6)
     parser.add_argument("--max-new-tokens", type=int, default=32)
-
-    # parser.add_argument("--train1", action="store_true") kalo skip pake first epoch 0
-    # parser.add_argument("--train2", action="store_true") kalo skip pake second epoch 0
     
     parser.add_argument("--estop", action="store_true", help="Perform early stopping")
     parser.add_argument("--estop-patience", type=int, help="Early stopping patience", default=3)
@@ -441,45 +438,6 @@ if __name__ == "__main__":
             json.dump(predictions, fp)
 
         # val
-
-        # val_builder = DSBuilder(
-        #     triples_path=os.path.join(args.data_dir, "triples.json"),
-        #     data_path=os.path.join(args.data_dir, "dev.jsonl"),
-        #     n_reference_min=args.n_ref_min,
-        #     n_reference_max=args.n_ref_max,
-        #     stay_ratio_min=0.0,
-        #     stay_ratio_max=0.0,
-        #     random_state=args.seed,
-        #     n_pick=1,
-        #     items_path=os.path.join(args.data_dir, "dev-items.jsonl"),
-        #     save_items=bool(args.save_items),
-        #     load=bool(args.load_items)
-        # )
-
-        # val_ds = LMKBCDataset(
-        #     val_builder,
-        #     os.path.join(args.data_dir, "texts.txt"),
-        #     os.path.join(args.data_dir, "entities.txt"),
-        #     os.path.join(args.data_dir, "relations.txt"),
-        #     os.path.join(args.data_dir, "entities_alias.jsonl"),
-        #     n_tokens=args.n_token_gp,
-        #     tokenizer=tokenizer,
-        #     texts_tensor_path=None,
-        #     entities_tensor_path=None,
-        #     relations_tensor_path=None,
-        #     sentence_emb_mode=args.sentence_emb_mode,
-        #     sentence_emb_index=args.sentence_emb_idx
-        # )
-
-        # val_ds.texts_attr = train_ds.texts_attr
-        # val_ds.entities_attr = train_ds.entities_attr
-        # val_ds.relations_attr = train_ds.relations_attr
-
-        # val_ds.prepare_eval(prompt_idx=0)
-
-        # val_collator = LMKBCCollator(val_ds, tokenizer, alias_idx=args.alias_idx)
-
-        # val_dataloader = DataLoader(val_ds, batch_size=args.bsize, shuffle=False, collate_fn=val_collator)
         
         val_ds.prepare_generate(prompt_idx=0)
 

@@ -6,18 +6,19 @@ import re
 from utils import TRUE_FLAG, FALSE_FLAG
 from disambiguation import my_disambiguation, get_wikidata_entity_name
 from tqdm import tqdm
+from io import StringIO
 
-jsonl_path = r"D:\Second Brain\Projects\Tesis\Eksperimen\KGAT\data\lmkbc\2022\raw\train.jsonl"
-preds_path = "augment.json"
-disambiguate = False
+jsonl_path = "./data/lmkbc/2023/raw/test.jsonl"
+preds_path = "./lmkbc2023-llama3.1/preds-test.json"
+disambiguate = True
 
-pattern = re.compile(rf"([^|]+) \| ({TRUE_FLAG}|{FALSE_FLAG})")
+pattern = re.compile(rf"([^|]+)\s?\|\s?valid\s?:\s?({TRUE_FLAG}|{FALSE_FLAG})")
 
 df = pd.read_json(jsonl_path, lines=True)
 preds = json.load(open(preds_path, 'r'))
 
 
-assert len(df) == len(preds["raw"])
+assert len(df) == len(preds)
 
 res = []
 
@@ -25,7 +26,7 @@ for i in tqdm(range(len(df))):
     subject_entity = df.loc[i, "SubjectEntity"]
     relation = df.loc[i, "Relation"]
     
-    row_preds = preds["raw"][i]
+    row_preds = preds[i]
 
     text = row_preds["text"]
     score = row_preds["score"]
@@ -64,12 +65,14 @@ for i in tqdm(range(len(df))):
         flag = max(v, key=v.get)
         if flag == TRUE_FLAG:
             if not disambiguate and isinstance(k, str):
-                entry[obj_key].append(get_wikidata_entity_name(k))
+                entity_name = get_wikidata_entity_name(k)
+                if entity_name:
+                    entry[obj_key].append(entity_name.lower())
             else:
                 entry[obj_key].append(str(k))
     
     res.append(entry)
 
-with open("predictions.jsonl", "w") as f:
+with open("predictions-test-2023.jsonl", "w") as f:
     for row in res:
         f.write(json.dumps(row) + "\n")
