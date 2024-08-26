@@ -431,44 +431,98 @@ class LMKBCDataset(KGATDataset):
 
         tokenized = self.tokenizer(prompt, padding=True, return_tensors="pt", is_split_into_words=False)
 
-        
-        labels = tokenized["input_ids"].clone()
-        labels[labels == self.tokenizer.pad_token_id] = -100
-        labels[labels == self.tokenizer.kg_token_id] = -100
+        if not self.generate:
+            labels = tokenized["input_ids"].clone()
+            labels[tokenized["attention_mask"] == 0] = -100
+            labels[labels == self.tokenizer.kg_token_id] = -100
 
-        for i in range(len(labels)):
-            s = suffix[i]
-            start_suffix = -1
-            tokenized_suffix = self.tokenizer.decode(labels[i][start_suffix:], skip_special_tokens=True)
-            while tokenized_suffix.strip() != s.strip():
-                start_suffix -= 1
+            for i in range(len(labels)):
+                s = suffix[i]
+                start_suffix = -1
                 tokenized_suffix = self.tokenizer.decode(labels[i][start_suffix:], skip_special_tokens=True)
-            labels[i][:start_suffix] = -100
+                while tokenized_suffix.strip() != s.strip():
+                    start_suffix -= 1
+                    tokenized_suffix = self.tokenizer.decode(labels[i][start_suffix:], skip_special_tokens=True)
+                    assert start_suffix*-1 <= len(labels[i])
+                labels[i][:start_suffix] = -100
+            
+            if (tokenized["input_ids"][:,-1] == self.tokenizer.eos_token_id).all().logical_not() and not self.generate:
+                tokenized["input_ids"] = torch.cat([tokenized["input_ids"], torch.full((len(prompt),1), self.tokenizer.eos_token_id)], dim=1)
+                tokenized["attention_mask"] = torch.cat([tokenized["attention_mask"], torch.ones(len(prompt),1, dtype=tokenized["attention_mask"].dtype)], dim=1)
+                labels = torch.cat([labels, torch.full((len(prompt),1), self.tokenizer.eos_token_id)], dim=1)
+            
+            flag = torch.tensor(flag).long()
+            temp = labels[flag == 0]
+            temp[temp != self.ds.false_flag_id] = -100 # mask
+            labels[flag == 0] = temp
 
-        if (tokenized["input_ids"][:,-1] == self.tokenizer.eos_token_id).all() and self.generate:
-            tokenized["input_ids"] = tokenized["input_ids"][...,:-1]
-            tokenized["attention_mask"] = tokenized["attention_mask"][...,:-1]
-            labels = labels[...,:-1]
+            return {
+                "x" : self.entities_attr[nodes_idx],
+                "edge_index" : edge_index,
+                "relations" : self.relations_attr[relations_idx],
+                "query" : self.texts_attr[text_idx].unsqueeze(0),
+                "node_batch" : torch.zeros(len(nodes_idx)).long(),
+                "query_batch" : torch.zeros(1).long(),
+                "input_ids" : tokenized["input_ids"],
+                "attention_mask" : tokenized["attention_mask"],
+                "labels" : labels,
+                "weights" : torch.tensor(weight).float(),
+                # "objects" : list(object_qids)
+            }
+        else:
+            if (tokenized["input_ids"][:,-1] == self.tokenizer.eos_token_id).all():
+                tokenized["input_ids"] = tokenized["input_ids"][...,:-1]
+                tokenized["attention_mask"] = tokenized["attention_mask"][...,:-1]
+            return {
+                "x" : self.entities_attr[nodes_idx],
+                "edge_index" : edge_index,
+                "relations" : self.relations_attr[relations_idx],
+                "query" : self.texts_attr[text_idx].unsqueeze(0),
+                "node_batch" : torch.zeros(len(nodes_idx)).long(),
+                "query_batch" : torch.zeros(1).long(),
+                "input_ids" : tokenized["input_ids"],
+                "attention_mask" : tokenized["attention_mask"],
+            }
+
         
-        if (tokenized["input_ids"][:,-1] == self.tokenizer.eos_token_id).all().logical_not() and not self.generate:
-            tokenized["input_ids"] = torch.cat([tokenized["input_ids"], torch.full((1,1), self.tokenizer.eos_token_id)], dim=1)
-            tokenized["attention_mask"] = torch.cat([tokenized["attention_mask"], torch.ones(1,1, dtype=tokenized["attention_mask"].dtype)], dim=1)
-            labels = torch.cat([labels, torch.full((1,1), self.tokenizer.eos_token_id)], dim=1)
+        # labels = tokenized["input_ids"].clone()
+        # labels[tokenized["attention_mask"] == 0] = -100
+        # labels[labels == self.tokenizer.kg_token_id] = -100
 
-        flag = torch.tensor([flag]).long()
-        temp = labels[flag == 0]
-        temp[temp != self.false_flag_id] = -100
-        labels[flag == 0] = temp
+        # for i in range(len(labels)):
+        #     s = suffix[i]
+        #     start_suffix = -1
+        #     tokenized_suffix = self.tokenizer.decode(labels[i][start_suffix:], skip_special_tokens=True)
+        #     while tokenized_suffix.strip() != s.strip():
+        #         start_suffix -= 1
+        #         tokenized_suffix = self.tokenizer.decode(labels[i][start_suffix:], skip_special_tokens=True)
+        #         assert start_suffix*-1 <= len(labels[i])
+        #     labels[i][:start_suffix] = -100
 
-        return {
-            "x" : self.entities_attr[nodes_idx],
-            "edge_index" : edge_index,
-            "relations" : self.relations_attr[relations_idx],
-            "query" : self.texts_attr[text_idx].unsqueeze(0),
-            "node_batch" : torch.zeros(len(nodes_idx)).long(),
-            "query_batch" : torch.zeros(1).long(),
-            "input_ids" : tokenized["input_ids"],
-            "attention_mask" : tokenized["attention_mask"],
-            "labels" : labels,
-            "weight" : torch.tensor(weight).float(),
-        }
+        # if (tokenized["input_ids"][:,-1] == self.tokenizer.eos_token_id).all() and self.generate:
+        #     tokenized["input_ids"] = tokenized["input_ids"][...,:-1]
+        #     tokenized["attention_mask"] = tokenized["attention_mask"][...,:-1]
+        #     labels = labels[...,:-1]
+        
+        # if (tokenized["input_ids"][:,-1] == self.tokenizer.eos_token_id).all().logical_not() and not self.generate:
+        #     tokenized["input_ids"] = torch.cat([tokenized["input_ids"], torch.full((1,1), self.tokenizer.eos_token_id)], dim=1)
+        #     tokenized["attention_mask"] = torch.cat([tokenized["attention_mask"], torch.ones(1,1, dtype=tokenized["attention_mask"].dtype)], dim=1)
+        #     labels = torch.cat([labels, torch.full((1,1), self.tokenizer.eos_token_id)], dim=1)
+
+        # flag = torch.tensor([flag]).long()
+        # temp = labels[flag == 0]
+        # temp[temp != self.false_flag_id] = -100
+        # labels[flag == 0] = temp
+
+        # return {
+        #     "x" : self.entities_attr[nodes_idx],
+        #     "edge_index" : edge_index,
+        #     "relations" : self.relations_attr[relations_idx],
+        #     "query" : self.texts_attr[text_idx].unsqueeze(0),
+        #     "node_batch" : torch.zeros(len(nodes_idx)).long(),
+        #     "query_batch" : torch.zeros(1).long(),
+        #     "input_ids" : tokenized["input_ids"],
+        #     "attention_mask" : tokenized["attention_mask"],
+        #     "labels" : labels,
+        #     "weight" : torch.tensor(weight).float(),
+        # }

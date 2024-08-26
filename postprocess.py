@@ -3,7 +3,7 @@ sys.path.append("./src")
 import json
 import pandas as pd
 import re
-from utils import TRUE_FLAG, FALSE_FLAG
+from utils import TRUE_FLAG, FALSE_FLAG, EMPTY_OBJECT
 from disambiguation import my_disambiguation, get_wikidata_entity_name
 from tqdm import tqdm
 from io import StringIO
@@ -40,6 +40,9 @@ for i in tqdm(range(len(df))):
         obj = m.group(1).strip()
         flag = m.group(2)
 
+        if obj.lower() == EMPTY_OBJECT.lower():
+            continue
+
         q_id = my_disambiguation(obj)
 
         if not re.match(r"Q\d+", str(q_id)) and not isinstance(q_id, int):
@@ -66,6 +69,7 @@ for i in tqdm(range(len(df))):
         if flag == TRUE_FLAG:
             if not disambiguate and isinstance(k, str):
                 entity_name = get_wikidata_entity_name(k)
+                
                 if entity_name:
                     entry[obj_key].append(entity_name.lower())
             else:
