@@ -160,9 +160,9 @@ def generate(pipe, tokenizer, dataloader, device, args, pbar, augment=False):
         
         out = pipe.generate_lmkbc(num_beams=beam, 
                                   num_return_sequences=beam, 
-                                  do_sample=False,
-                                  top_p=None,
-                                  temperature=None,
+                                #   do_sample=False,
+                                #   top_p=None,
+                                #   temperature=None,
                                   max_new_tokens=args.max_new_tokens, 
                                   return_dict_in_generate=True, 
                                   output_scores=True, 
